@@ -29,15 +29,18 @@ import android.view.accessibility.AccessibilityNodeInfo
 import android.view.accessibility.AccessibilityNodeInfo.ACTION_CLICK
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import com.tribalfs.gmh.AccessibilityPermission.allowAccessibility
 import com.tribalfs.gmh.callbacks.AccessibilityCallback
 import com.tribalfs.gmh.helpers.CacheSettings
 import com.tribalfs.gmh.helpers.CacheSettings.adaptiveAccessTimeout
 import com.tribalfs.gmh.helpers.CacheSettings.adaptiveDelayMillis
 import com.tribalfs.gmh.helpers.CacheSettings.applyAdaptiveMod
+import com.tribalfs.gmh.helpers.CacheSettings.hasWriteSecureSetPerm
 import com.tribalfs.gmh.helpers.CacheSettings.isFakeAdaptiveValid
 import com.tribalfs.gmh.helpers.CacheSettings.isNsNotifOn
 import com.tribalfs.gmh.helpers.CacheSettings.isOfficialAdaptive
 import com.tribalfs.gmh.helpers.CacheSettings.isScreenOn
+import com.tribalfs.gmh.helpers.CacheSettings.isSpayInstalled
 import com.tribalfs.gmh.helpers.CacheSettings.lowestHzCurMode
 import com.tribalfs.gmh.helpers.CacheSettings.lrrPref
 import com.tribalfs.gmh.helpers.CacheSettings.prrActive
@@ -49,6 +52,8 @@ import com.tribalfs.gmh.hertz.HzServiceHelperStn
 import com.tribalfs.gmh.netspeed.NetSpeedServiceHelperStn
 import com.tribalfs.gmh.profiles.ProfilesObj.isProfilesLoaded
 import com.tribalfs.gmh.receivers.GmhBroadcastReceivers
+import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmh
+import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmh.Companion.NOT_USING
 import kotlinx.coroutines.*
 import java.lang.Runnable
 import kotlin.coroutines.CoroutineContext
@@ -322,15 +327,13 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         }
     }
 
-    override fun onUnbind(intent: Intent?): Boolean {
+  /*  override fun onUnbind(intent: Intent?): Boolean {
         //job.cancel()
-        AccessibilityPermission.allowAccessibility(
-            applicationContext,
-            GalaxyMaxHzAccess::class.java,
-            true
-        )
+        if (hasWriteSecureSetPerm && isSpayInstalled == false) {
+            allowAccessibility(applicationContext, GalaxyMaxHzAccess::class.java, true)
+        }
         return false//super.onUnbind(intent)
-    }
+    }*/
 
 
 

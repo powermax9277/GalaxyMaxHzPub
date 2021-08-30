@@ -280,6 +280,13 @@ class MyApplication : Application() {
             withContext(Dispatchers.IO){ cacheSettings()} //suspend function
             delay(6500)//DON'T reduce
             checkAccessibility()
+            applicationContext.startService(
+                Intent(applicationContext, GalaxyMaxHzAccess::class.java).apply {
+                    putExtra(SETUP_ADAPTIVE, true)
+                    putExtra(SETUP_NETWORK_CALLBACK, true)
+                    putExtra(SWITCH_AUTO_SENSORS, mUtilsPrefsGmh.gmhPrefSensorsOff)
+                }
+            )
         }
 
         HzServiceHelperStn.instance(applicationContext).startHertz(null, null, null)
@@ -301,23 +308,6 @@ class MyApplication : Application() {
         }
     }
 
-
-    private fun checkAccessibility(){
-        if ((isSpayInstalled == false || mUtilsPrefsGmh.hzPrefUsingSPay == NOT_USING) && hasWriteSecureSetPerm) {
-            allowAccessibility(
-                applicationContext,
-                GalaxyMaxHzAccess::class.java,
-                true
-            )
-            applicationContext.startService(
-                Intent(applicationContext, GalaxyMaxHzAccess::class.java).apply {
-                    putExtra(SETUP_ADAPTIVE, true)
-                    putExtra(SETUP_NETWORK_CALLBACK, true)
-                    putExtra(SWITCH_AUTO_SENSORS, mUtilsPrefsGmh.gmhPrefSensorsOff)
-                }
-            )
-        }
-    }
 
 
     @SuppressLint("NewApi")
@@ -411,8 +401,25 @@ class MyApplication : Application() {
     }
 
 
+    private fun checkAccessibility(): Boolean{
+        return if (
+            (isSpayInstalled == false || mUtilsPrefsGmh.hzPrefUsingSPay == NOT_USING)
+            && hasWriteSecureSetPerm
+        ) {
+            allowAccessibility(
+                applicationContext,
+                GalaxyMaxHzAccess::class.java,
+                true
+            )
+            true
+        }else{
+            false
+        }
+    }
+
+
     private fun notifyUserEffectOfAccessibility() = applicationScope.launch{
-        if (hasWriteSecureSetPerm) {
+        if (checkAccessibility()) {
             //Check if using Access requiring features
             val featuresOn = mutableListOf<String>()
             if (mUtilsPrefsGmh.gmhPrefForceLowestSoIsOn) {
@@ -443,12 +450,12 @@ class MyApplication : Application() {
                         Toast.LENGTH_LONG
                     ).show()
                 }
-                allowAccessibility(
+
+            }/*   allowAccessibility(
                     applicationContext,
                     GalaxyMaxHzAccess::class.java,
                     true
-                )
-            }
+                )*/
         } else {
             launch(Dispatchers.Main) {
                 Toast.makeText(
@@ -459,6 +466,11 @@ class MyApplication : Application() {
             }
             mUtilsPrefsGmh.gmhPrefForceLowestSoIsOn = false
             mUtilsPrefsGmh.gmhPrefDisableSyncIsOn = false
+            if (isFakeAdaptive.get() == true && isOfficialAdaptive) {
+                lrrPref.set(STANDARD_REFRESH_RATE_HZ)
+                mUtilsPrefsGmh.gmhPrefMinHzAdapt = STANDARD_REFRESH_RATE_HZ
+            }
+            mUtilsPrefsGmh.gmhPrefSensorsOff = false
         }
     }
 
@@ -502,5 +514,4 @@ private val displayListener: DisplayListener = object:DisplayListener{
     val setHiddenApiExemptions = getDeclaredMethod.invoke(vmRuntimeClass, "setHiddenApiExemptions", arrayOf(arrayOf<String>()::class.java)) as Method
     val vmRuntime = getRuntime.invoke(null)
     setHiddenApiExemptions.invoke(vmRuntime, arrayOf("L"))*/
-
 }

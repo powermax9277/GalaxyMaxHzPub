@@ -91,7 +91,13 @@ class GmhBroadcastReceivers(context: Context, private val accessibilityCallback:
                 scope.launch {
                     if (mUtilsPrefsGmh.gmhPrefPsmIsOffCache) {
                         //Not ignored
-                        Settings.Global.putString(context.applicationContext.contentResolver, LOW_POWER, LOW_POWER_OFF)
+                            try {
+                                Settings.Global.putString(
+                                    context.applicationContext.contentResolver,
+                                    LOW_POWER,
+                                    LOW_POWER_OFF
+                                )
+                            }catch(_: Exception){}
                     }
                 }
             } else {
@@ -130,9 +136,12 @@ class GmhBroadcastReceivers(context: Context, private val accessibilityCallback:
         Runnable {
             if (screenOffRefreshRateMode != currentRefreshRateMode.get()) {
                 ignoreRrmChange = true
-                mUtilsRefreshRate.setRefreshRateMode(screenOffRefreshRateMode!!)
-                mUtilsRefreshRate.setRefreshRate(lowestHzForAllMode)
-
+                if (mUtilsRefreshRate.setRefreshRateMode(screenOffRefreshRateMode!!)) {
+                    mUtilsRefreshRate.setRefreshRate(lowestHzForAllMode)
+                }else{
+                    mUtilsRefreshRate.setRefreshRate(lowestHzCurMode)
+                    ignoreRrmChange = false
+                }
             }else {
                 mUtilsRefreshRate.setRefreshRate(lowestHzCurMode)
             }
@@ -197,7 +206,6 @@ class GmhBroadcastReceivers(context: Context, private val accessibilityCallback:
 
                 scope.launch {
                     mUtilsRefreshRate.setRefreshRate(prrActive.get()!!)
-
                     currentRefreshRateMode.get()?.let {
                         if (screenOffRefreshRateMode != it) {
                             //ignoreRrmChange = true
@@ -264,7 +272,13 @@ class GmhBroadcastReceivers(context: Context, private val accessibilityCallback:
         //Log.d(TAG, "turnOnPowerSaving: $on")
         ignorePowerModeChange.set(true)
 
-        Settings.Global.putString( mContentResolver, LOW_POWER, if (psmOn) LOW_POWER_ON else LOW_POWER_OFF)
+        if (hasWriteSecureSetPerm) {
+            Settings.Global.putString(
+                mContentResolver,
+                LOW_POWER,
+                if (psmOn) LOW_POWER_ON else LOW_POWER_OFF
+            )
+        }
 
         if (turnOff5GOnPsm == true) {
             val pnm = (Settings.Global.getString(mContentResolver, PREFERRED_NETWORK_MODE)
@@ -278,9 +292,13 @@ class GmhBroadcastReceivers(context: Context, private val accessibilityCallback:
                 }else{
                     PREF_NET_TYPE_LTE_GSM_WCDMA.toString()
                 }
-                Settings.Global.putString(mContentResolver,
-                    "$PREFERRED_NETWORK_MODE${idxOf5G+1}",
-                    (if (psmOn) alt else PREF_NET_TYPE_5G_LTE_GSM_WCDMA).toString())
+                if (hasWriteSecureSetPerm) {
+                    Settings.Global.putString(
+                        mContentResolver,
+                        "$PREFERRED_NETWORK_MODE${idxOf5G + 1}",
+                        (if (psmOn) alt else PREF_NET_TYPE_5G_LTE_GSM_WCDMA).toString()
+                    )
+                }
             }
 
         }

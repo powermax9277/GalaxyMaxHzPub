@@ -446,7 +446,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
 
             mBinding.swSoForceLowestHz.id -> {
                 mBinding.swSoForceLowestHz.isChecked.let { checked ->
-                    if (checked && !checkAccessibilityPerm()) {
+                    if (checked && !checkAccessibilityPerm(true)) {
                         mBinding.swSoForceLowestHz.isChecked = false
                     } else {
                         mUtilsPrefsGmh.gmhPrefForceLowestSoIsOn = checked
@@ -498,7 +498,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
             }
 
             mBinding.swSoPsm.id -> {
-                if ((v as Switch).isChecked && !checkAccessibilityPerm()) {
+                if ((v as Switch).isChecked && !checkAccessibilityPerm(hasWriteSecureSetPerm)) {
                     mBinding.swSoPsm.isChecked = false
                 } else {
                     mBinding.swSoPsm.isChecked.let {isChecked ->
@@ -586,7 +586,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
 
             mBinding.swKeepMode.id -> {
                 (v as Switch).isChecked.let { checked ->
-                    if (checked && !checkAccessibilityPerm()) {
+                    if (checked && !checkAccessibilityPerm(hasWriteSecureSetPerm)) {
                         keepModeOnPowerSaving = false
                         mBinding.swKeepMode.isChecked = false
                         return
@@ -599,9 +599,9 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
             }
 
             mBinding.chHigh.id -> {
-                mUtilsRefreshRate.tryPrefRefreshRateMode(REFRESH_RATE_MODE_ALWAYS, null).let {
+                mUtilsRefreshRate.tryPrefRefreshRateMode(REFRESH_RATE_MODE_ALWAYS, null)/*.let {
                     if (it) mUtilsPrefsGmh.gmhPrefRefreshRateModePref = REFRESH_RATE_MODE_ALWAYS
-                }
+                }*/
 
             }
 
@@ -610,18 +610,15 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
                     return
                 }
 
-                if (!isOfficialAdaptive) {
-                    if (!checkAccessibilityPerm()) {
-                        mBinding.chHigh.isChecked = true
-                        showLoading(false)
-                        return
-                    }
+                if (!isOfficialAdaptive && !checkAccessibilityPerm(hasWriteSecureSetPerm)) {
+                    mBinding.chHigh.isChecked = true
+                    return
                     /*showSbMsg(
                         getString(R.string.adp_mod_inf), null, null, null
                     )*/
                 }
 
-                mUtilsRefreshRate.tryPrefRefreshRateMode(REFRESH_RATE_MODE_SEAMLESS, null)
+                /*mBinding.chAdaptive.isChecked = */mUtilsRefreshRate.tryPrefRefreshRateMode(REFRESH_RATE_MODE_SEAMLESS, null)
             }
 
 
@@ -661,23 +658,11 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
 
             mBinding.swAutoOffSync.id ->{
                 (v as Switch).isChecked.let { checked ->
-                    if (!isAccessibilityEnabled(
-                            applicationContext,
-                            GalaxyMaxHzAccess::class.java
-                        )
-                    ) {
-                        if (hasWriteSecureSetPerm) {
-                            allowAccessibility(
-                                applicationContext,
-                                GalaxyMaxHzAccess::class.java,
-                                true
-                            )
-                        }else{
-                            mUtilsPrefsGmh.gmhPrefDisableSyncIsOn = false
-                            v.isChecked = false
-                            showEnableAccessibilityIns()
-                            return
-                        }
+                    if (!checkAccessibilityPerm(true)){
+                        mUtilsPrefsGmh.gmhPrefDisableSyncIsOn = false
+                        v.isChecked = false
+                        // showEnableAccessibilityIns()
+                        return
                     }
                     mUtilsPrefsGmh.gmhPrefDisableSyncIsOn = checked
                 }
@@ -764,19 +749,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
 
         launch {
             delay(2000)
-            if ((isSpayInstalled != true || mUtilsPrefsGmh.hzPrefUsingSPay == NOT_USING) && hasWriteSecureSetPerm) {
-                if (!isAccessibilityEnabled(
-                        applicationContext,
-                        GalaxyMaxHzAccess::class.java
-                    )
-                ) {
-                    allowAccessibility(
-                        applicationContext,
-                        GalaxyMaxHzAccess::class.java,
-                        true
-                    )
-                }
-            }
+            checkAccessibilityPerm(false)
         }
         showLoading(false)
     }
@@ -855,7 +828,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
 
     private fun initDisableAutoSync(adFree: Boolean?){
         //Disable if not Ad-free
-        if (adFree?:viewModel.isValidAdFree.value != true || !hasWriteSecureSetPerm) {
+        if (adFree?:viewModel.isValidAdFree.value != true || !checkAccessibilityPerm(false)) {
             mUtilsPrefsGmh.gmhPrefDisableSyncIsOn = false
         }else{
             mBinding.swAutoOffSync.isChecked = mUtilsPrefsGmh.gmhPrefDisableSyncIsOn
@@ -1265,21 +1238,23 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
 
 
     private fun checkIfUsingSpay(){
-        launch(Dispatchers.Main) {
-            if (isSpayInstalled == true && mUtilsPrefsGmh.hzPrefUsingSPay == NOT_ASKED) {
+        if (isSpayInstalled == true && mUtilsPrefsGmh.hzPrefUsingSPay == NOT_ASKED) {
+            launch(Dispatchers.Main) {
                 DialogUsingSpay().show(supportFragmentManager, null)
             }
         }
     }
 
 
-    private fun checkAccessibilityPerm(): Boolean{
+    private fun checkAccessibilityPerm(showRequest: Boolean): Boolean{
         return if (!isAccessibilityEnabled(applicationContext, GalaxyMaxHzAccess::class.java)){
             if (hasWriteSecureSetPerm && (isSpayInstalled == false ||  mUtilsPrefsGmh.hzPrefUsingSPay == NOT_USING)) {
                 allowAccessibility(applicationContext, GalaxyMaxHzAccess::class.java, true)
                 true
             }else{
-                showEnableAccessibilityIns()
+                if (showRequest) {
+                    showEnableAccessibilityIns()
+                }
                 false
             }
         }else{
@@ -1294,9 +1269,11 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
             Snackbar.LENGTH_INDEFINITE,
             android.R.string.ok
         ) {
-            val intent = Intent(ACTION_ACCESSIBILITY_SETTINGS)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            startActivity(intent)
+            launch(Dispatchers.Main) {
+                val intent = Intent(ACTION_ACCESSIBILITY_SETTINGS)
+                /*intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK*/
+                startActivity(intent)
+            }
         }
     }
 
@@ -1371,14 +1348,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
             mBinding.sbPeakHz.min = lowestHzCurMode
             mBinding.sbPeakHz.max = highestHzForAllMode
             //initial value
-            mBinding.sbPeakHz.progress = mUtilsPrefsGmh.hzPrefMaxRefreshRate/*.let {
-                if (it != -1) {
-                    it*//*.coerceAtLeast(forceLowestHz)*//*
-                } else {
-                    mUtilsPrefsGmh.hzPrefMaxRefreshRate = highestHzForAllMode
-                    highestHzForAllMode
-                }
-            }*/
+            mBinding.sbPeakHz.progress = mUtilsPrefsGmh.hzPrefMaxRefreshRate
         }
     }
 
@@ -1454,7 +1424,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
             override fun onStopTrackingTouch(seekBar: SeekBar) {
                 if (isOfficialAdaptive) {
                     if (seekBar.progress != STANDARD_REFRESH_RATE_HZ) {
-                        if (!checkAccessibilityPerm()) {
+                        if (!checkAccessibilityPerm(true)) {
                             seekBar.progress = STANDARD_REFRESH_RATE_HZ
                             return
                         }
@@ -1486,7 +1456,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
                         mBinding.minHzAdaptive = STANDARD_REFRESH_RATE_HZ
                     }
                 } else {
-                    if (!checkAccessibilityPerm()) {
+                    if (!checkAccessibilityPerm(true)) {
                         seekBar.progress = STANDARD_REFRESH_RATE_HZ
                         return
                     }
@@ -1833,8 +1803,8 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
     private fun setupForceHzOnSo() {
 //Note: Place after Hz status observer
         mBinding.swSoForceLowestHz.isChecked =
-            mUtilsPrefsGmh.gmhPrefForceLowestSoIsOn && (hasWriteSecureSetPerm ||
-                    isAccessibilityEnabled(applicationContext, GalaxyMaxHzAccess::class.java))
+            mUtilsPrefsGmh.gmhPrefForceLowestSoIsOn && (checkAccessibilityPerm(false) /*hasWriteSecureSetPerm ||
+                    isAccessibilityEnabled(applicationContext, GalaxyMaxHzAccess::class.java)*/)
     }
 
 
