@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="lbl_enable_msm">Povolit hladkost pohybu</string>
+    <string name="show_hz">Obnovovací Frekvence Monitoru</string>
+    <string name="buy_adfree">Koupit Premium</string>
+  <!--  <string name="info_expired">V tomto videu a dostat aktivované rychlé nastavení dlaždice na dalších %d dní.</string>-->
+    <string name="resolution">Rozlišení a Hladkost Pohybu Toggle</string>
+    <string name="act">Aktivovat Premium|Trial</string>
+    <string name="max_hz">Max Hz</string>
+    <string name="max_hz_holder">Max %s Hz</string>
+    <string name="feat_n_a" tools:keep="@string/feat_n_a">Změna rozlišení není podporováno</string>
+    <string name="unknown_mode">Unidentified Režim Obnovovací frekvence</string>
+<!--    <string name="qs_active">Rychlé nastavení Dlaždice úspěšně aktivována</string>-->
+    <string name="min_hz_for_toggle">Spodní mez přepínač (Hz)</string>
+    <string name="adaptive">Adaptivní</string>
+    <string name="high">Vysoký</string>
+    <string name="show_refresh_rate">Monitor Obnovovací Frekvence</string>
+    <string name="left">Levá</string>
+    <string name="right">Pravá</string>
+    <string name="top">Horní</string>
+    <string name="bottom">Spodní</string>
+    <string name="use_qstile_reso_switch">Pomocí dodávaného rychlé nastavení dlaždice k rychlému rezoluce spínačů a režimy pohybu hladkost.</string>
+    <string name="center">Centrum</string>
+    <string name="info_qs_max_hz">Zahrnuje rychlé nastavení dlaždice pro přepínání max Hz</string>
+    <string name="info_qs_rtrr">To může mírně zvýšit spotřebu baterie aplikace. Zahrnuje dlaždici rychlého nastavení pro zapnutí monitoru obnovovací frekvence.</string>
+    <string name="s_off_mod">Off obnovovací frekvence obrazovky</string>
+    <string name="force_hz_mod">Síla na nejnižší Hz</string>
+    <string name="s_off_hz_inf">
+       Tím se nastaví obnovovací frekvence vypnutí obrazovky nebo AOD na nejnižší, aby se zlepšilo využití pohotovostní baterie.
+       \nScreen-off refresh rate: %s
+    </string>
+    <string name="chng_res_stng">
+        %s rozlišením nepodporuje nastavení vysoké / adaptivní obnovovací frekvenci.
+        První změnu režimu rozlišení pohybu hladkost v nastavení.
+        \n\nTato aplikace může snadno přepínat rozlišení a pohyb hladkost režim pomocí rychlých
+        nastavení dlaždice jedenáct setup ADB je provést.
+    </string>
+    <string name="chng_res_qs">
+        %s rozlišením nepodporuje nastavení vysoké / adaptivní obnovovací frekvenci.
+        Můžete změnit rozlišení pomocí rychle rychlé nastavení dlaždice součástí této aplikace.
+    </string>
+    <string name="psm_on_inf">
+        Power Mode Úspory se v současné době směna. To vypnout v nastavení nejprve v září a režimu videosekvencí
+        hladkost na Adaptive / Vysoká.
+        \n\n Tato aplikace je možné změnit Motion Smoothness snadno adaptivním režimu / režimu vysoké úspory energie
+        i na jedenáct setup ADB se neprovádí.
+    </string>
+    <string name="rrm_std_inf">
+        Motion hladkost režim je aktuálně nastavena na Standard. Změnit v nastavení první.
+        \n\nTato aplikace může změnit Motion Smoothness snadno Adaptive Mode / High jedenáct nastavení ADB se provádí.
+        Toto funguje i na režim úspory energie.
+    </string>
+    <string name="input_ac_inf">Pokud ztratíte prémii v důsledku resetování tohoto zařízení, můžete ji znovu aktivovat zadáním aktivačního kódu zaslaného na váš e-mail.
+    </string>
+<!--    <string name="failed_show_ad">Neprokázala videoreklamu. Prosím zkuste to znovu.</string>-->
+<!--    <string name="failed_load_ad">-->
+<!--        Nepodařilo se zatížení videoreklamy. Zkontrolujte prosím připojení k internetu a zkuste to znovu.-->
+<!--    </string>-->
+    <string name="show_ns">Ukáže rychloměr Čistá</string>
+    <string name="combined">Kombinovaný</string>
+    <string name="upload">Nahrát</string>
+    <string name="download">Stažení</string>
+    <string name="font_size">Velikost písma overlay</string>
+    <string name="overlay_pos">Překrytí umístění</string>
+    <string name="overlay">Obložit</string>
+    <string name="statusbar">Stavový řádek</string>
+    <string name="perm_appx">
+        \n\nPokud setup ADB se provádí, můžete udělat následující Díky této aplikaci:
+        \n- Rychle rozlišeních přepínač obrazovky
+        \n- Použít Adaptive High motion hladkost nebo dokonce na úsporném režimu
+        \n- Když je obrazovka vypnutá, automaticky použije režim úspory energie
+        \n- Použijte režim rychlého doze (premium)
+        \n- Aplikovat režim adaptivní obnovovací frekvence i na zařízení, která nejsou podporována nativně (premium)
+        \n- Automatické senzory vypnuty (premium)
+    </string>
+    <string name="ac_none">Jste zadali bez aktivačního kódu.</string>
+    <string name="in_bd">Zadání aktivačního kódu</string>
+    <string name="apply">Aplikovat</string>
+    <string name="psm_on">Úsporný režim je zapnut</string>
+    <string name="chng_res">Rozlišení změna</string>
+    <string name="open_settings">Otevřené Nastavení</string>
+<!--    <string name="qst_exp">Rychlé nastavení Dlaždice vypršel</string>-->
+<!--    <string name="ad_starting_in">"Video začíná v "</string>-->
+<!--    <string name="no_thanks">Ne, díky!</string>-->
+    <string name="chng_res_failed">Nepodařilo se rozhodnutí změnit.</string>
+    <string name="one_res_def">Pouze jeden rozlišení v systému definováno.</string>
+    <string name="rrp_not_loaded">K dispozici obnovovací frekvence není dosud načten. Zkus to znovu.</string>
+    <string name="sot_no_perm">Show na vrcholu povolení není pravda!</string>
+  <!--  <string name="error_opening_settings">Nastavení Chyba při otevírání.</string>-->
+    <string name="cie">Chyba! Zkontrolujte prosím připojení k internetu a zkuste to znovu.</string>
+    <string name="aca">Neplatný kód aktivace.</string>
+    <string name="afa">Prémium úspěšně aktivováno!</string>
+    <string name="afu">Prémiová zkušební verze již byla použita a její platnost vypršela.</string>
+    <plurals name="aha">
+        <item quantity="one">Prémiová zkušební verze aktivována: %d den zbývá.</item>
+        <item quantity="few">Prémiová zkušební verze aktivována: %d dny zbývá.</item>
+    </plurals>
+    <string name="nlh">Pro toto zařízení nebyla nalezena žádná prémiová licence:%s</string>
+    <string name="edit">Upravit</string>
+    <string name="quick_doz_mod">Rychlé Doze Mod</string>
+    <string name="quick_mod_inf">Tato funkce přepne zařízení do režimu úspory energie a vstoupí do doze režim rychleji při vypnutí obrazovky, aby se zlepšilo využití pohotovostní baterie.</string>
+    <string name="adp_min_hz">Min Hz pro Adaptivní</string>
+    <string name="enable_as_inf">V okně, které se zobrazí, klikněte na „Instalované služby“ a poté aktivujte službu „Galaxy Max Hz“</string>
+    <string name="adp_delay">Adaptivní zpoždění nízké Hz (sekundy)</string>
+    <string name="cur_rr_h">Aktuální obnovovací frekvence: %s Hz</string>
+    <string name="show_ns_card">Zobrazit nástroj netspeed</string>
+    <string name="lbl_rrm">Obnovovací Frekvence Mods</string>
+    <string name="prr_psm">Udržujte plynulost pohybu v režimu úspory energie</string>
+    <string name="actvt_trial">Aktivovat bezplatnou zkušební verzi</string>
+    <string name="auto_psm">Režim úspory energie při vypnutí obrazovky</string>
+    <string name="reso_opts">Možnosti přepínání rozlišení obrazovky</string>
+
+    <string name="requires_ws_perm_h">
+        %1$s k provedení této funkce potřebuje zvláštní povolení.
+        Postup se dozvíte kliknutím na odkaz nastavení ADB níže
+        \n\nTLDR: Run \'adb shell pm grant %2$s android.permission.WRITE_SECURE_SETTINGS\'
+        \n\nToto je jednorázový postup.
+    </string>
+    <string name="std">Standard</string>
+    <string name="lbl_profiles_h">%sProfily rozlišení obrazovky a obnovovací frekvence</string>
+    <string name="high_mode">Vysoký režim</string>
+    <string name="std_mode">Standardní režime</string>
+    <string name="adp_mode">Adaptivní režim</string>
+    <string name="perm_reqd">Je vyžadováno povolení</string>
+    <string name="adb_setup">Nastavení ADB</string>
+    <string name="dismiss">Zavrhnout</string>
+    <string name="help">Pomoc</string>
+    <string name="reload_profiles">Znovu načíst profily</string>
+    <string name="options">Možnosti</string>
+    <string name="psm_options"><u>Možnosti režimu úspory energie</u></string>
+    <string name="disable_sync_on_so">Zakázat automatickou sync, když je obrazovka vypnutá</string>
+    <string name="autosync_settings"><u>Nastavení automatické sync</u></string>
+    <string name="apps_bat_opt_settings"><u>Nastavení optimalizace baterie</u></string>
+    <string name="quick_doz_mod_inf2">Režim Doze prodlužuje výdrž baterie tím, že odloží aktivitu CPU a sítě na pozadí.
+        Zatímco je v doze, zařízení pravidelně vstupuje do okna údržby (MW),
+        během kterého mohou aplikace dokončit čekající práci (synchronizace, úkoly atd.).
+        Zařízení bude v tomto cyklu pokračovat a pokaždé zdvojnásobí délku rozsahu MW.
+        Čím delší je interval MW, tím lepší je úspora baterie. Režim Doze může v některých aplikacích způsobit zpoždění oznámení.
+        Neovlivní to SMS, FCM s vysokou prioritou ani aplikace, které mají vypnutou optimalizaci baterie.
+        Po odemčení zařízení se režim Doze vypne.</string>
+    <string name="quick_doz_mod_mwi">Interval úvodního okna údržby v minutách (0 = žádné okno údržby)</string>
+    <string name="brightness_threshold">Minimální jas pro adaptivní</string>
+    <string name="sensor_off_info">Senzory zařízení se automaticky vypnou, když je obrazovka vypnutá, dokud se zařízení neodemkne. To pomáhá minimalizovat pohybem vyvolané probuzení, které vybíjí baterii.</string>
+    <string name="sensors_off_note">Důležitá poznámka: Když zapnete dlaždici SensorsOff, nebudete mít přístup k fotoaparátu, mikrofonu a dalším senzorům zařízení. Na některých zařízeních to ovlivní odemykání obličejem a zvuk volání. Zkontrolujte, zda je váš hlas během hovoru slyšet nebo ne. Pokud není slyšet a vy přijmete hovor, když je zařízení zamčené, můžete stisknutím a podržením dlaždice SensorsOff zařízení odemknout a vypnout dlaždici SensorsOff-po stisknutí tlačítka pro přijetí hovoru.</string>
+</resources>

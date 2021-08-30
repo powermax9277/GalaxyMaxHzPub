@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="lbl_enable_msm">Включить плавность движения</string>
+    <string name="show_hz">"Монитор обновления частоты "</string>
+    <string name="buy_adfree">Купить Премиум</string>
+<!--    <string name="info_expired">Посмотрите это видео и активируйте плитки быстрой настройки еще на %d дней.</string>-->
+    <string name="resolution">Переключатель разрешения и плавности движения</string>
+    <string name="act">Активировать Премиум</string>
+    <string name="max_hz">Макс Hz</string>
+    <string name="max_hz_holder">Макс %s Hz</string>
+    <string name="feat_n_a" tools:keep="@string/feat_n_a">Изменить разрешение не поддерживается</string>
+    <string name="unknown_mode">Неопознанный режим частоты обновления</string>
+<!--    <string name="qs_active">Плитки быстрых настроек успешно активированы</string>-->
+    <string name="min_hz_for_toggle">Мин. Гц для кнопки переключения</string>
+    <string name="adaptive">Адаптивный</string>
+    <string name="high">Высоко</string>
+    <string name="show_refresh_rate">Монитор частоты обновления</string>
+    <string name="left">Левая</string>
+    <string name="right">Правая</string>
+    <string name="bottom">Дно</string>
+    <string name="use_qstile_reso_switch">Используйте прилагаемую плитку быстрых настроек (qs) для быстрого переключения разрешения экрана.</string>
+    <string name="center">Центр</string>
+    <string name="info_qs_max_hz">Включает плитку быстрой настройки для переключения максимального герца.</string>
+    <string name="info_qs_rtrr">Это может немного увеличить расход заряда батареи приложения. Включает плитку быстрой настройки для включения монитора частоты обновления.</string>
+    <string name="s_off_mod">Отключение экрана mods</string>
+    <string name="force_hz_mod">Принудительно наименьшая Hz</string>
+    <string name="s_off_hz_inf">
+        Это приведет к установке самой низкой частоты обновления, когда экран выключен или AOD включен, чтобы улучшить использование батареи в режиме ожидания.
+        \nScreen-off обновления частота: %s
+    </string>
+    <string name="chng_res_stng">%s настройка разрешения не поддерживает высокое/адаптивное
+        Частота обновления. Сначала измените разрешение в настройках.
+        \n\nЭто приложение может легко переключать настройки разрешения с помощью плитки
+        быстрых настроек после выполнения настройки ADB.
+    </string>
+    <string name="chng_res_qs">%s настройка разрешения не поддерживает высокую/адаптивную
+        частоту обновления. Вы можете быстро изменить разрешение, используя плитку быстрой настройки,
+        включенную в это приложение.
+    </string>
+    <string name="psm_on_inf">В настоящее время включен режим энергосбережения.
+        Сначала отключите его в настройках и установите режим плавности движения на Адаптивный/Высокий.
+        \n\nЭто приложение может легко изменить режим плавности движения на адаптивный/высокий
+        даже в режиме энергосбережения после выполнения настройки ADB.</string>
+    <string name="rrm_std_inf">
+        Для motion smoothness mode в настоящее время установлено значение Standard. Сначала измените его в настройках.
+        \n\nЭто приложение может легко изменить режим плавности движения на адаптивный / высокий
+        после выполнения настройки ADB. Это работает даже в режиме энергосбережения.
+    </string>
+    <string name="input_ac_inf">Если вы потеряете премиум в результате сброса настроек этого устройства, вы можете повторно активировать его, введя код активации, отправленный на вашу электронную почту.
+    </string>
+<!--    <string name="failed_show_ad">Не удалось показать видеообъявление. Пожалуйста, попробуйте еще раз.</string>-->
+<!--    <string name="failed_load_ad">Не удалось загрузить видеообъявление. Пожалуйста, проверьте Интернет и попробуйте еще раз.</string>-->
+    <string name="show_ns">Показать индикатор чистой скорости</string>
+    <string name="combined">Комбинированный</string>
+    <string name="upload">Загрузить</string>
+    <string name="download">Скачать</string>
+    <string name="font_size">Размер шрифта наложения</string>
+    <string name="overlay_pos">Расположение наложения</string>
+    <string name="overlay">Оверлей</string>
+    <string name="statusbar">Статус бар</string>
+    <string name="perm_appx">\n\nКогда настройка adb выполнена, вы можете делать следующее с этим приложением:
+        \n- Быстрое переключение разрешений экрана
+        \n- Установите адаптивную / высокую плавность движения даже в режиме энергосбережения
+        \n- Автоматически применять режим энергосбережения, когда экран выключен
+        \n- Используйте мод quick doze (премиум)
+        \n- Применяйте адаптивную частоту обновления даже на устройстве, не поддерживающем изначально (премиум)
+        \n- Автоматическое отключение датчиков (премиум)
+    </string>
+    <string name="ac_none">Код активации не может быть пустым.</string>
+    <string name="in_bd">Введите код активации</string>
+    <string name="apply">применить</string>
+    <string name="psm_on">Включен режим энергосбережения</string>
+    <string name="chng_res">Изменить разрешение экрана</string>
+    <string name="open_settings">Открыть настройки</string>
+<!--    <string name="qst_exp">Срок действия плиток быстрых настроек истек</string>-->
+<!--    <string name="ad_starting_in">"Видео начинается в "</string>-->
+<!--    <string name="no_thanks">Спасибо, не надо!</string>-->
+    <string name="chng_res_failed">Не удалось изменить разрешение.</string>
+    <string name="one_res_def">В системе определено только одно разрешение.</string>
+    <string name="rrp_not_loaded">Доступные частоты обновления еще не загружены. Попробуй снова.</string>
+    <string name="sot_no_perm">Не разрешено показывать сверху!</string>
+<!--    <string name="error_opening_settings">Ошибка открытия настроек.</string>-->
+    <string name="cie">Не удалось! Пожалуйста, проверьте ваше интернет-соединение и попробуйте еще раз.</string>
+    <string name="aca">Неверный код активации.</string>
+    <string name="top">Верхний</string>
+    <string name="afa">Премиум успешно активирован!</string>
+    <string name="afu">Пробная версия уже использовалась, и срок ее действия истек.</string>
+    <plurals name="aha">
+        <item quantity="one">Премиум-пробная версия активирована: остался %d день</item>
+        <item quantity="few">Премиум-пробная версия активирована: осталось %d дня</item>
+        <item quantity="many">Премиум-пробная версия активирована: осталось %d дня</item>
+    </plurals>
+   <!-- <string name="eta">Ошибка активации пробной версии без рекламы!</string>-->
+    <string name="nlh">Для этого устройства не найдено премиум-лицензий:%s</string>
+    <string name="edit">Редактировать</string>
+    <string name="quick_doz_mod">Быстрый Doze Mod</string>
+    <string name="quick_mod_inf">Это быстро переведет ваше устройство в спящий режим при выключенном экране, чтобы уменьшить расход заряда батареи в режиме ожидания.</string>
+    <string name="adp_min_hz">Минимальная Hz для Адаптивный</string>
+    <string name="enable_as_inf">В появившемся окне нажмите «Установленные службы», а затем включите службу «Galaxy Max Hz».</string>
+    <string name="adp_delay">Адаптивный минимум герц задержка в секундах</string>
+    <string name="cur_rr_h">Текущая частота обновления: %s Hz</string>
+    <string name="show_ns_card">Показать инструмент Netspeed</string>
+    <string name="lbl_rrm">Частота обновления mods</string>
+    <string name="prr_psm">Держите motion smoothness в режиме энергосбережения</string>
+    <string name="actvt_trial">Активировать бесплатную пробную версию?</string>
+    <string name="auto_psm">Режим энергосбережения при выключенном экране</string>
+    <string name="reso_opts">Параметры включены</string>
+    <string name="requires_ws_perm_h">
+        %1$s разрешения особых потребностей выполнить ЭСТ функцию.
+        Щелкните ссылку настройки ADB ниже, чтобы узнать, как это сделать.
+        \n\nTLDR: Run \'adb shell pm grant %2$s android.permission.WRITE_SECURE_SETTINGS\'
+        \n\n>Это разовая процедура.
+    </string>
+    <string name="std">стандарт</string>
+    <string name="lbl_profiles_h">%sПрофили разрешения экрана и частоты обновления</string>
+    <string name="high_mode">Режим высокой</string>
+    <string name="std_mode">Стандартный режим</string>
+    <string name="adp_mode">Адаптивный режим</string>
+    <string name="perm_reqd">Требуется разрешение</string>
+    <string name="adb_setup">Настроить ADB</string>
+    <string name="dismiss">Отмена</string>
+    <string name="help">Помощь</string>
+    <string name="reload_profiles">Обновить профили</string>
+    <string name="options">Параметры</string>
+    <string name="psm_options"><u>Параметры режима энергосбережения</u></string>
+    <string name="disable_sync_on_so">Отключить автосинхронизацию при выключенном экране</string>
+    <string name="autosync_settings"><u>Настройки автосинхронизации</u></string>
+    <string name="apps_bat_opt_settings"><u>Настройки оптимизации батареи</u></string>
+    <string name="quick_doz_mod_inf2">
+        Режим дремоты продлевает срок службы батареи, откладывая фоновую активность ЦП и сетевой активности приложения.
+        Находясь в дремоте, устройство периодически входит в период обслуживания (MW), в течение которого приложения могут выполнять ожидающую работу (синхронизацию, задания и т. Д.).
+        Устройство продолжит этот цикл, каждый раз удваивая длину интервала MW. Чем больше интервал MW, тем лучше экономия заряда батареи.
+        Режим дремоты может вызывать задержки уведомлений в некоторых приложениях. Это не повлияет на SMS, High Priority FCM и приложения, в которых отключена оптимизация батареи.
+        Дозовый режим деактивируется после разблокировки устройства.
+    </string>
+    <string name="quick_doz_mod_mwi">Интервал начального окна обслуживания в минутах (0 = нет окна обслуживания)</string>
+    <string name="brightness_threshold">Минимальная яркость для адаптивного мода</string>
+    <string name="sensor_off_info">Датчики устройства автоматически отключаются при выключении экрана до тех пор, пока устройство не будет разблокировано. Это помогает свести к минимуму блокировки пробуждения, вызванные движением, которые разряжают аккумулятор.</string>
+    <string name="sensors_off_note">Важное примечание: когда плитка SensorsOff включена, камера (-ы) и микрофон (-ы) устройства, среди других датчиков, становятся недоступными. Проверьте, слышен ли ваш голос во время разговора. Если его не слышно и вы принимаете вызов, когда устройство заблокировано, вы можете нажать и удерживать плитку SensorsOff, чтобы разблокировать устройство, и выключить плитку SensorsOff - после нажатия кнопки приема вызова.</string>
+</resources>

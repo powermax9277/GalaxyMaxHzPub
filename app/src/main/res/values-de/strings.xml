@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="lbl_enable_msm">Bildwiederholrate ändern</string>
+    <string name="show_hz">Bildwiederholrate Überwachen</string>
+    <string name="buy_adfree">Premium kaufen</string>
+    <!--  <string name="info_expired">
+          Sehen Sie sich dieses Video an um die Schnelleinstellungskacheln für weitere %d Tage zu aktivieren.
+      </string>-->
+    <string name="resolution">Auflösung und Bildwiederholrate umschalten</string>
+    <string name="act">Werbefrei aktivieren</string>
+    <string name="max_hz">Bildwiederholrate</string>
+    <string name="max_hz_holder">Bildwiederholrate: %s Hz</string>
+    <string name="feat_n_a" tools:keep="@string/feat_n_a">Diese Auflösung wird nicht unterstützt</string>
+    <string name="unknown_mode">Nicht identifizierter Bildwiederholratenmodus</string>
+    <!--    <string name="qs_active">Schnelleinstellungskacheln erfolgreich aktiviert</string>-->
+    <string name="min_hz_for_toggle">Min Hz für das Umschalten</string>
+    <string name="adaptive">Adaptiv</string>
+    <string name="high">Hoch</string>
+    <string name="show_refresh_rate">Bildwiederholrate Überwachen</string>
+    <string name="left">Links</string>
+    <string name="right">Rechts</string>
+    <string name="top">Oben</string>
+    <string name="bottom">Unten</string>
+    <string name="center">Mitte</string>
+    <string name="use_qstile_reso_switch">Verwenden Sie die Schnelleinstellungskachel, um die Auflösungs.</string>
+    <string name="info_qs_max_hz">Bietet eine Schnelleinstellungskachel zum wechseln der Bildwiederholrate.</string>
+    <string name="info_qs_rtrr">
+        Dies kann den Akkuverbrauch der App leicht erhöhen. Bietet eine Schnelleinstellungskachel zum Ein- und Ausschalten der Überwachung.
+    </string>
+    <string name="s_off_mod">Mods für ausgeschalteten Bildschrirm</string>
+    <string name="force_hz_mod">Niedrigste Bildwiederholrate erzwingen</string>
+    <string name="s_off_hz_inf">
+        Dadurch wird die Bildwiederholrate bei ausgeschaltetem Display auf %s hz eingestellt, um die Akkulaufzeit zu verbessern.
+    </string>
+    <string name="chng_res_stng">
+        Die Einstellung für die %s -Auflösung unterstützt nicht die hohe/adaptive
+        Bildwiederholrate. Ändern Sie zuerst die Auflösung in den Einstellungen.
+        \n\nDiese App kann die Auflösungseinstellungen mithilfe der Schnelleinstellungskachel einfach ändern,
+        sobald das ADB-Setup durchgeführt wurde.
+    </string>
+    <string name="chng_res_qs">
+        Die Einstellung für die %s -Auflösung unterstützt nicht die hohe/adaptive
+        Bildwiederholrate. Ändern Sie zuerst die Auflösung in den Einstellungen.
+        \n\nSie können die Auflösung schnell ändern, indem Sie die in dieser App
+        enthaltene Schnelleinstellungskachel verwenden.
+    </string>
+    <string name="psm_on_inf">Der Energiesparmodus ist derzeit aktiviert.
+        Deaktivieren Sie diesen zuerst in den Einstellungen und stellen Sie die Bildwiederholrate auf Adaptiv/Hoch.
+        \n\nDiese App kann die Bildwiederholrate auch im Energiesparmodus nach Abschluss des ADB-Setups
+        problemlos auf Adaptive/Hoch ändern</string>
+    <string name="rrm_std_inf">Die Bildwiederholrate ist derzeit auf Standard eingestellt.
+        Ändern Sie dies zuerst in den Einstellungen.
+        \n\nDiese App kann die Bildwiederholrate einfach auf Adaptiv/Hoch ändern,
+        sobald das ADB-Setup durchgeführt wurde. Dies funktioniert auch im Energiesparmodus.
+    </string>
+    <string name="input_ac_inf">Wenn Sie durch das Zurücksetzen dieses Geräts die Premiumversion verlieren, können Sie es durch Eingabe des Aktivierungscodes, der Ihnen per E-Mail zugesandt wurde, erneut aktivieren.
+    </string>
+    <!--    <string name="failed_show_ad">Die Videoanzeige konnte nicht angezeigt werden. Bitte versuchen Sie es erneut.</string>-->
+    <!--    <string name="failed_load_ad">-->
+    <!--        Die Videoanzeige konnte nicht geladen werden. Bitte überprüfen Sie die Internetverbindung und versuchen Sie es dann erneut.-->
+    <!--    </string>-->
+    <string name="show_ns">Datennutzung Überwachen</string>
+    <string name="combined">Kombiniert</string>
+    <string name="upload">Hochladen</string>
+    <string name="download">Herunterladen</string>
+    <string name="font_size">Schriftgröße überlagern</string>
+    <string name="overlay_pos">Überlagerungsort</string>
+    <string name="overlay">Überlagerung</string>
+    <string name="statusbar">Statusleiste</string>
+    <string name="perm_appx">
+        \n\nNachdem das ADB-Setup durchgeführt wurde, können Sie mit dieser App Folgendes tun:
+        \n- Schnell die Bildschirmauflösung wechseln
+        \n- Adaptive/hohe Bildwiederholrate auch im Energiesparmodus
+        \n- Automatisches anwenden des Energiesparmodus bei ausgeschaltetem Bildschirm
+        \n- Verwenden des Quick-Doze-Mod (Premium)
+        \n- Aktivieren der adaptiven Bildwiederholrate auch bei Geräten bei denen dies nativ nicht unterstützt wird (Premium)
+        \n- Sensoren bei ausgeschaltetem Display automatisch ausschalten (Premium)
+    </string>
+    <string name="ac_none">Aktivierungscode darf nicht leer sein.</string>
+    <string name="in_bd">Gib den Aktivierungscode ein</string>
+    <string name="apply">Anwenden</string>
+    <string name="psm_on">Der Energiesparmodus ist eingeschaltet</string>
+    <string name="chng_res">Auflösung ändern</string>
+    <string name="open_settings">Einstellungen öffnen</string>
+    <!--    <string name="qst_exp">Schnelleinstellungskacheln abgelaufen</string>-->
+    <!--    <string name="ad_starting_in">"Video startet in "</string>-->
+    <!--    <string name="no_thanks">Nein danke</string>-->
+    <string name="chng_res_failed">Die Auflösung konnte nicht geändert werden.</string>
+    <string name="one_res_def">Es ist nur eine Auflösung im System definiert.</string>
+    <string name="rrp_not_loaded">
+        Verfügbare Bildwiederholrate noch nicht geladen. Versuchen Sie es noch einmal.
+    </string>
+    <string name="sot_no_perm">Die Erlaubnis zum Anzeigen oben wird nicht erteilt!</string>
+    <!--    <string name="error_opening_settings">Fehler beim Öffnen der Einstellungen.</string>-->
+    <string name="cie">Fehler! Bitte überprüfen sie die Internetverbindung und versuchen Sie es dann erneut.</string>
+    <string name="aca">Ungültiger Aktivierungscode.</string>
+    <string name="afa">Premium erfolgreich aktiviert!</string>
+    <string name="afu">Premium-Testversion bereits verwendet und abgelaufen.</string>
+    <plurals name="aha">
+        <item quantity="one">Premium-Testversion aktiviert:% d verbleibende Tag.</item>
+        <item quantity="other">Premium-Testversion aktiviert:% d verbleibende Tage.</item>
+    </plurals>
+    <!--    <string name="eta">Fehler beim Aktivieren der werbefreien Testversion!</string>-->
+    <string name="nlh">Keine Premium-Lizenz für dieses Gerät gefunden: %s</string>
+    <string name="edit">Bearbeiten</string>
+    <string name="quick_doz_mod">Schnell in den Doze-Modus</string>
+    <string name="quick_mod_inf">Diese Funktion versetzt das Gerät schnell in den Doze-Modus, wenn der Bildschirm ausgeschaltet wird, um den Akkuverbrauch bei ausgeschaltetem Display zu minimieren.</string>
+        <string name="adp_min_hz">Geringste Bildwiederholrate im adaptiven Modus</string>
+    <string name="enable_as_inf">Klicken Sie im angezeigten Fenster auf \"Dienste installieren\" und aktivieren Sie den Dienst \"Galaxy Max Hz\"</string>
+    <string name="brightness_threshold">Mindesthelligkeit für adaptive Bildwiederholrate</string>
+    <string name="adp_delay">Wartezeit bis geringste Bildwiederholrate aktiviert wird (in Sekunden)</string>
+    <string name="cur_rr_h">Aktuelle Bildwiederholrate: %s Hz</string>
+    <string name="show_ns_card">Datennutzungstool</string>
+    <string name="prr_psm">Hohe/Adpative Bildwiederholrate trotz Energiesparmodus</string>
+    <string name="lbl_rrm">Bildwiederholraten Mods</string>
+    <string name="actvt_trial">Kostenlose Testversion aktivieren</string>
+    <string name="auto_psm">Energiesparmodus bei ausgeschaltetem Bildschirm</string>
+    <string name="reso_opts">Aktivierte Optionen</string>
+
+    <string name="requires_ws_perm_h">
+        %1$s benötigt eine spezielle Berechtigung, um diese Funktion auszuführen.
+        Klicken Sie unten auf den unten angegebenen Link um zu erfahren wie Sie die Berechtigung erteilen können.
+        \n\nTLDR: Run \'adb shell pm grant %2$s android.permission.WRITE_SECURE_SETTINGS\'
+        \n\nDies ist eine einmalige Prozedur.
+    </string>
+    <string name="std">Standard</string>
+    <string name="lbl_profiles_h">%sBildschirmauflösung und Bildwiederholrate</string>
+    <string name="high_mode">Hoher Modus</string>
+    <string name="std_mode" tools:ignore="Typos">Standart Modus</string>
+    <string name="adp_mode">Adaptiver Modus</string>
+    <string name="perm_reqd">Erlaubnis erforderlich erteilt</string>
+    <string name="adb_setup">ADB konfigurieren</string>
+    <string name="dismiss">Abbrechen</string>
+    <string name="help">Hilfe</string>
+    <string name="reload_profiles">Profile neu laden</string>
+    <string name="options">Optionen</string>
+    <string name="psm_options"><u>Optionen für den Energiesparmodus</u></string>
+    <string name="disable_sync_on_so">Automatische Synchronisation deaktivieren, wenn der Bildschirm ausgeschaltet ist.</string>
+    <string name="autosync_settings"><u>Einstellungen zur automatischen Synchronisation</u></string>
+    <string name="apps_bat_opt_settings"><u>Einstellungen zur Akkuoptimierung</u></string>
+    <string name="quick_doz_mod_inf2">
+        Der Doze-Modus ist die Situation, in der sich jedes Gerät während einer langen Zeit im Standby-Modus befindet.
+        Dieser Modus startet, nachdem der Benutzer die Seitentaste des Android-Geräts gedrückt hat oder das Gerät für längere Zeit (wie nachts) nicht benutzt.
+        Nach einiger Zeit lässt dieser Modus keine regelmäßigen Benachrichtigungen mehr zu, außer in Wartungsfenstern. Mit der Zeit verlängert sich die Zeit bis zum nächsten Wartungsfenster.
+        Je länger das Wartungsfenster-Intervall, desto geringer der Akkuverbrauch.
+    </string>
+    <string name="quick_doz_mod_mwi">Zeit bis zum ersten Wartungsfenster (in Minuten, 0 = kein Wartungsfenster)</string>
+
+    <string name="sensor_off_info">Die Gerätesensoren werden beim Ausschalten des Bildschirms automatisch ausgeschaltet, bis das Gerät entsperrt wird. Dies trägt dazu bei, bewegungsinduzierte Bildschirmeinschaltungen zu minimieren, was den Akkuverbrauch reduziert.
+    </string>
+    <string name="sensors_off_note">Wichtiger Hinweis: Wenn die Kachel \'Sensoren deaktivieren\' aktiviert ist, sind die Kamera(s) und das/die Mikrofon(e) des Geräts sowie andere Sensoren nicht zugänglich. Dies wirkt sich auf die Gesichtsentsperrung und auf einigen Geräten auf das Audio bei Anrufen aus. Prüfen Sie, ob Sie während des Gesprächs zu hören sind oder nicht. Wenn dies nicht der Fall ist und Sie einen Anruf erhalten, während das Gerät gesperrt ist, können Sie die Kachel lange drücken, um das Gerät zu entsperren, und die Kachel deaktivieren - nachdem Sie die Taste gedrückt haben, um Anrufe zu empfangen.</string>
+</resources>

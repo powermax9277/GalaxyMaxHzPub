@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="lbl_enable_msm">Activa la suavitat del moviment</string>
+    <string name="show_hz">Monitor de velocitat d’actualització</string>
+    <string name="buy_adfree">Compra Premium</string>
+  <!--  <string name="info_expired">Mireu aquest vídeo i activeu les rajoles de configuració ràpida per a %d dies més.</string>-->
+    <string name="resolution">Commutació de resolució i suavitat del moviment</string>
+    <string name="act">Activeu Premium | Prova</string>
+    <string name="max_hz">Max Hz</string>
+    <string name="max_hz_holder">Max%s Hz</string>
+    <string name="feat_n_a" tools:keep="@string/feat_n_a">No s\'admet</string>
+    <string name="unknown_mode">Mode de velocitat d’actualització no identificat</string>
+<!--    <string name="qs_active">Configuració ràpida Rajoles activades correctament.</string>-->
+    <string name="min_hz_for_toggle">Límit inferior del commutador(Hz)</string>
+    <string name="adaptive">Adaptive</string>
+    <string name="high">High</string>
+    <string name="show_refresh_rate">Monitor de velocitat d’actualització</string>
+    <string name="left">Esquerra</string>
+    <string name="right">Dret</string>
+    <string name="top">Part superior</string>
+    <string name="bottom">Part inferior</string>
+    <string name="use_qstile_reso_switch">Utilitzeu el mosaic de configuració ràpida (qs) inclòs per canviar ràpidament la resolució de la pantalla</string>
+    <string name="center">Centre</string>
+    <string name="info_qs_max_hz">Inclou un mosaic de configuració ràpida per canviar el màxim de hz</string>
+    <string name="info_qs_rtrr">Això pot augmentar lleugerament el consum de bateria de l\'aplicació. Inclou un mosaic de configuració ràpida per activar el monitor de freqüència d’actualització.</string>
+    <string name="s_off_mod">Freqüència d’actualització quan la pantalla està apagada</string>
+    <string name="force_hz_mod">Força al Mínim Hz</string>
+    <string name="s_off_hz_inf">
+        Això establirà la freqüència d’actualització de la pantalla o “A.O.D” a la mínima per millorar l’ús de la bateria en espera.
+        \nScreen-off refresh rate: %s
+    </string>
+    <string name="chng_res_stng">
+        %s la configuració de resolució no admet una freqüència d\'actualització alta o adaptativa.
+        Canvieu primer el mode de resolució i suavitat del moviment a la configuració.
+        \n\nAquesta aplicació pot canviar fàcilment el mode de resolució i suavitat del moviment mitjançant el mosaic
+        de configuració ràpida un cop realitzada la configuració de l\'ADB
+    </string>
+    <string name="chng_res_qs">
+        %s la configuració de resolució no admet una freqüència d\'actualització alta o adaptativa.
+        Podeu canviar ràpidament la resolució mitjançant el mosaic de configuració ràpida inclosa aquesta aplicació.
+    </string>
+    <string name="psm_on_inf">
+        El mode d\'estalvi d\'energia està activat actualment. Desactiveu-lo primer a la configuració i
+        configureu el mode de suavitat del moviment a Adaptatiu o Alt.
+        \n\nAquesta aplicació pot canviar fàcilment el mode de suavitat del moviment a
+        Adaptatiu o Alt fins i tot en mode d\'estalvi d’energia una vegada que es realitza la configuració de l’ADB.
+    </string>
+    <string name="rrm_std_inf">
+        El mode de suavitat del moviment està configurat actualment a Estàndard. Canvieu-lo primer a la configuració.
+        \n\nAquesta aplicació pot canviar fàcilment el mode de suavitat del moviment a Adaptatiu o Alt
+        quan es realitzi la configuració de l\'ADB
+        Això funciona fins i tot en mode d\'estalvi d\'energia.</string>
+    <string name="input_ac_inf">Si perdeu la prima per restablir aquest dispositiu, introduïu el codi d\'activació que s\'envia al vostre correu electrònic per reactivar la prima.
+    </string>
+<!--    <string name="failed_show_ad">No s\'ha pogut mostrar l\'anunci de vídeo. Siusplau torna-ho a provar.</string>-->
+<!--    <string name="failed_load_ad">No s\'ha pogut carregar l\'anunci de vídeo. Comproveu Internet i torneu-ho a provar.</string>-->
+    <string name="show_ns">Mostra l\'indicador de velocitat d\'Internet</string>
+    <string name="combined">Combinat</string>
+    <string name="upload">Pujar</string>
+    <string name="download">Descarregar</string>
+    <string name="font_size">Mida del tipus de lletra superposada</string>
+    <string name="overlay_pos">Posició de superposada</string>
+    <string name="overlay">Superposada</string>
+    <string name="statusbar">Barra d\'estat</string>
+    <string name="perm_appx">
+        \n\nQuan es realitzi la configuració d\'adb, podeu fer el següent amb aquesta aplicació:
+        \n- Canvieu ràpidament les resolucions de pantalla
+        \n- (Auto)aplica/manté una suavitat adaptativa o de moviment elevat en mode d\'estalvi d\'ene
+        \n- Aplicar automàticament el mode d\'estalvi d\'energia en apagar la pantalla
+        \n- Utilitzeu una modificació ràpida de doze (premium)
+        \n- Apliqueu una freqüència d’actualització de la pantalla adaptativa fins i tot en dispositius que no siguin compatibles de manera nativa (premium)
+        \n- Auto Sensors Off(premium)
+    </string>
+    <string name="ac_none">No heu introduït cap codi d\'activació.</string>
+    <string name="in_bd">Introduïu el codi d\'activació</string>
+    <string name="apply">Aplicar</string>
+    <string name="psm_on">El mode d\'estalvi d\'energia està activat</string>
+    <string name="chng_res">Resolució de canvis</string>
+    <string name="open_settings">Obre Configuració</string>
+<!--    <string name="qst_exp">Els botons de configuració ràpida han caducat.</string>-->
+<!--    <string name="ad_starting_in">"Vídeo que comença a "</string>-->
+<!--    <string name="no_thanks">No gràcies!</string>-->
+    <string name="chng_res_failed">No s\'ha pogut canviar la resolució.</string>
+    <string name="one_res_def">Només es defineix una resolució al sistema.</string>
+    <string name="rrp_not_loaded">
+        Les taxes d\'actualització disponibles encara no s\'han carregat.
+        Siusplau torna-ho a provar.</string>
+    <string name="sot_no_perm">No es concedeix el permís Show on top.</string>
+<!--    <string name="error_opening_settings">Error en obrir la configuració.</string>-->
+    <string name="cie">Error! Comproveu la connexió a Internet i torneu-ho a provar.</string>
+    <string name="aca">Codi d\'activació no vàlid.</string>
+    <string name="afa">Premium activat correctament.</string>
+    <string name="afu">Prova premium ja utilitzada i caducada.</string>
+    <plurals name="aha">
+        <item quantity="one">Prova Premium activada: %d dia restant</item>
+        <item quantity="other">Prova Premium activada: %d dies restants</item>
+    </plurals>
+  <!--  <string name="eta">Error en activar la prova sense anuncis.</string>-->
+    <string name="nlh">No s\'ha trobat cap llicència premium per a aquest dispositiu::%s</string>
+    <string name="edit">Edita</string>
+    <string name="quick_doz_mod">Ràpid Doze Mod</string>
+    <string name="quick_mod_inf">Accediu ràpidament al mode de doze quan la pantalla està apagada per millorar el consum de bateria en espera.</string>
+    <string name="adp_min_hz">Hz mín per a Adaptive</string>
+    <string name="enable_as_inf">Feu clic a \"Serveis instal·lats\" a la finestra que apareix i, a continuació, activeu el servei \"Galaxy Max Hz\"</string>
+    <string name="adp_delay">Adaptive min Hz delay(seconds)</string>
+    <string name="cur_rr_h">Current Refresh Rate: %s Hz</string>
+    <string name="show_ns_card">Show Netspeed Tool</string>
+    <string name="lbl_rrm">Refresh Rate Mods</string>
+    <string name="prr_psm">Keep Motion Smoothness on Power Saving Mode</string>
+    <string name="actvt_trial">Voleu activar la prova gratuïta</string>
+    <string name="auto_psm">Mode d\'estalvi d\'energia en apagar la pantalla</string>
+    <string name="reso_opts">Opcions habilitades</string>
+
+    <string name="requires_ws_perm_h">
+        %1$s necessita un permís especial per executar aquesta funció.
+        Feu clic a l’enllaç de configuració de l’ADB següent per obtenir informació sobre com fer-ho.
+        \n\nTLDR: Run \'adb shell pm grant %2$s android.permission.WRITE_SECURE_SETTINGS\'
+        \n\nEs tracta d’un procediment únic.
+    </string>
+    <string name="std">Standard</string>
+    <string name="lbl_profiles_h">%sPerfils de resolució de pantalla i percentatge d’actualització</string>
+    <string name="high_mode">Mode Alt</string>
+    <string name="std_mode">Mode Estàndard</string>
+    <string name="adp_mode">Mode Adaptatiu</string>
+    <string name="perm_reqd">Es requereix permís</string>
+    <string name="adb_setup">Configuració ADB</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="help">Ajuda</string>
+    <string name="reload_profiles">Recarregar Perfils</string>
+    <string name="options">Opcions</string>
+    <string name="psm_options"><u>Opcions de mode d\'estalvi d\'energia</u></string>
+    <string name="disable_sync_on_so">" Desactiveu la sinc automàtica en apagar la pantalla"</string>
+    <string name="autosync_settings"><u>Configuració de sinc automàtica</u></string>
+    <string name="apps_bat_opt_settings"><u>Configuració d’optimització de la bateria</u></string>
+    <string name="quick_doz_mod_inf2">
+        El mode Doze amplia la durada de la bateria diferint l\'activitat de la CPU i de la xarxa en segon pla.
+        Mentre està dormit, el dispositiu entra periòdicament en una finestra de manteniment (MW),
+        durant la qual les aplicacions poden completar la feina pendent (sincronitzacions, feines, etc.).
+        El dispositiu continuarà aquest cicle, duplicant la longitud de l\'interval de MW cada vegada.
+        Com més llarg sigui l\'interval de MW, millor serà l\'estalvi de la bateria.
+        El mode Doze pot provocar retards en les notificacions en algunes aplicacions.
+        No afectarà els SMS, el FCM d\'alta prioritat ni les aplicacions que tinguin desactivades les optimitzacions de bateria.
+        El mode Doze es desactivarà un cop el dispositiu estigui desbloquejat.
+    </string>
+    <string name="quick_doz_mod_mwi">Interval inicial de la finestra de manteniment en minuts (0 = cap finestra de manteniment)</string>
+    <string name="brightness_threshold">Brillantor mínima per a Adaptive</string>
+    <string name="sensor_off_info">Els sensors del dispositiu s\'apaguen automàticament quan s\'apaga la pantalla fins que es desbloqueja el dispositiu. Això ajuda a minimitzar els panys de despertar induïts pel moviment que esgoten la bateria.
+    </string>
+    <string name="sensors_off_note">Nota important: quan activeu el mosaic SensorsOff, no podreu accedir a la càmera, al micròfon i a altres sensors del dispositiu. Això afectarà el desbloqueig facial i l\'audibilitat durant les trucades en alguns dispositius. Comproveu si la vostra veu es pot sentir o no durant la trucada. Si no es pot escoltar i rebre trucades quan el dispositiu està bloquejat, podeu mantenir premuda la pestanya SensorsOff per desbloquejar el dispositiu i desactivar la pestanya SensorsOff després de prémer el botó de resposta de trucada.</string>
+</resources>

@@ -1,0 +1,22 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24"
+    android:tint="?attr/colorControlNormal"
+    tools:keep="@drawable/ic_baseline_fhd_24">
+    <group android:scaleX="0.10500"
+        android:scaleY="0.105000"
+        android:translateY="2.3666933"
+        android:translateX="2">
+        <group android:translateY="141.67969">
+            <path android:pathData="M45,-101L19,-101L19,-60L43,-60L43,-51L19,-51L19,-0L9,-0L9,-110L45,-110L45,-101Z"
+                android:fillColor="@android:color/white"/>
+            <path android:pathData="M106,0L96,0L96,-53L69,-53L69,0L59,0L59,-110L69,-110L69,-62L96,-62L96,-110L106,-110L106,0Z"
+                android:fillColor="@android:color/white"/>
+            <path android:pathData="M170,-19.890625Q170,-11.421875,164.1875,-5.703125Q158.375,0,149.53125,0L124,0L124,-110L149.53125,-110Q158.45312,-110,164.21875,-104.28125Q170,-98.578125,170,-90.109375L170,-19.890625ZM160,-21.140625L160,-89Q160,-94.375,156.5625,-97.6875Q153.125,-101,147.67188,-101L134,-101L134,-9L147.10938,-9Q152.84375,-9,156.42188,-12.234375Q160,-15.484375,160,-21.140625Z"
+                android:fillColor="@android:color/white"/>
+        </group>
+    </group>
+</vector>

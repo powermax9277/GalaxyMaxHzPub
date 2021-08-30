@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="appupdater_app_update">%1$s Mise à jour</string>
+    <string name="appupdater_update_available_description_dialog">v%1$s Changements:\n%2$s</string>
+    <string name="appupdater_update_available_description_snackbar">Mise à jour v%1$s disponible!</string>
+    <string name="appupdater_update_not_available">Aucune mise à jour disponible</string>
+    <string name="appupdater_btn_update">Installer</string>
+</resources>

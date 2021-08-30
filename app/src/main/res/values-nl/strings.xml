@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="lbl_enable_msm">Schakel bewegingsgladheid in</string>
+    <string name="show_hz">Vernieuwingsfrequentie-Monitor</string>
+    <string name="buy_adfree">Koop Premium</string>
+ <!--   <string name="info_expired">Bekijk deze video en ontvang geactiveerde tegels voor snelle instellingen voor nog eens %d dagen.</string>-->
+    <string name="resolution">Schakelen tussen resolutie en vloeiende beweging</string>
+    <string name="act">Activeer Premium|Trial</string>
+    <string name="max_hz">Max Hz</string>
+    <string name="max_hz_holder">Max %s Hz</string>
+    <string name="feat_n_a" tools:keep="@string/feat_n_a">Wijzigingsresolutie niet ondersteund</string>
+    <string name="unknown_mode">Niet-geïdentificeerde vernieuwingsfrequentiemodus</string>
+<!--    <string name="qs_active">Quick Settings Tiles succesvol geactiveerd</string>-->
+    <string name="min_hz_for_toggle">Min. Hz voor de Toggle</string>
+    <string name="adaptive">Adaptieve</string>
+    <string name="high">Hoge</string>
+    <string name="show_refresh_rate">Toon Real-time Vernieuwingsfrequentie</string>
+    <string name="left">Links</string>
+    <string name="right">Rechtsaf</string>
+    <string name="top">Bovenkant</string>
+    <string name="bottom">Onderkant</string>
+    <string name="use_qstile_reso_switch">Gebruik de meegeleverde tegel voor snelle instellingen om snel te schakelen tussen resoluties.</string>
+    <string name="center">Midden </string>
+    <string name="info_qs_max_hz">Bevat een tegel voor snelle instelling om de max. Hz in te schakelen</string>
+    <string name="info_qs_rtrr">Bevat een tegel voor snelle instellingen om de vernieuwingsfrequentie in realtime weer te geven</string>
+    <string name="s_off_mod">Scherm uit Vernieuwingsfrequentie</string>
+    <string name="force_hz_mod">Forceer op Laagste Hz</string>
+    <string name="s_off_hz_inf">
+       Hierdoor wordt de scherm-uit- of AOD -verversingssnelheid op de laagste ingesteld om het gebruik van de standby-batterij te verbeteren.
+       \nScreen-off vernieuwingsfrequentie %s
+    </string>
+    <string name="chng_res_stng">%s resolutie-instelling ondersteunt geen hoog/adaptief
+        vernieuwingsfrequentie. Verander eerst de resolutie in de instellingen.
+        \n\nDeze app kan de resolutie-instellingen eenvoudig wijzigen met de tegel voor snelle instellingen
+      zodra de ADB-installatie bezig is.
+    </string>
+    <string name="chng_res_qs">%s resolutie-instelling ondersteunt geen hoog/adaptief
+        vernieuwingsfrequentie. U kunt de resolutie snel wijzigen met de tegel voor snelle instellingen die bij deze app is geleverd.
+    </string>
+    <string name="psm_on_inf">De energiebesparingsmodus is momenteel ingeschakeld.
+        Schakel het eerst uit in de instellingen en stel de bewegingsgladheidsmodus in op Adaptief/Hoog.
+        \n\nDeze app kan de Motion Smoothness-modus eenvoudig wijzigen in Adaptive / High
+        zelfs in de energiebesparingsmodus zodra de ADB-installatie is uitgevoerd.</string>
+    <string name="rrm_std_inf">De modus Bewegingsgladheid is momenteel ingesteld op Standaard.
+        Verander het eerst in de instellingen.
+        \n\nDeze app kan eenvoudig de Motion Smoothness-modus wijzigen
+        naar Adaptief / Hoog zodra de ADB-installatie is uitgevoerd. Dit werkt zelfs in de energiebesparingsmodus.
+    </string>
+    <string name="input_ac_inf">
+        Als u uw premie verliest als gevolg van het resetten van dit apparaat, kunt u opnieuw activeren door de activeringscode in te voeren die naar uw e-mail is verzonden.
+    </string>
+<!--    <string name="failed_show_ad">Videoadvertentie kan niet worden weergegeven. Probeer het a.u.b. opnieuw.</string>-->
+<!--    <string name="failed_load_ad">Kan videoadvertentie niet laden. Controleer internet en probeer het opnieuw.</string>-->
+    <string name="show_ns">Geef de internetsnelheidsindicator weer</string>
+    <string name="combined">Gecombineerd</string>
+    <string name="upload">Uploaden</string>
+    <string name="download">Downloaden</string>
+    <string name="font_size">Lettergrootte van overlay</string>
+    <string name="overlay_pos">Locatie van overlay</string>
+    <string name="overlay">Overlay</string>
+    <string name="statusbar">Statusbalk</string>
+    <string name="perm_appx">\n\nWanneer ADB-instellingen zijn uitgevoerd, kunt u het volgende doen met deze app:
+        \n- Schakel snel tussen schermresoluties
+        \n- (Aotu)pas Adaptive of High motion smoothness toe, zelfs in de energiebesparende modus
+        \n- Pas automatisch de energiebesparende modus toe wanneer het scherm is uitgeschakeld
+        \n- Gebruik de snelle doze-mod (premium)
+        \n- Pas Adaptive of High motion smoothness toe, zelfs op niet-native ondersteund apparaat (premium)
+        \n- Automatische sensoren uit (premium)
+    </string>
+    <string name="ac_none">Activeringscode mag niet leeg zijn.</string>
+    <string name="in_bd">Voer activatiecode in</string>
+    <string name="apply">Van toepassing zijn</string>
+    <string name="psm_on">Energiebesparende modus is ingeschakeld</string>
+    <string name="chng_res">Verander resolutie</string>
+    <string name="open_settings">Open instellingen</string>
+<!--    <string name="qst_exp">Tegels voor snelle instellingen verlopen</string>-->
+<!--    <string name="ad_starting_in">"Video begint over "</string>-->
+<!--    <string name="no_thanks">Nee bedankt!</string>-->
+    <string name="chng_res_failed">Resolutie wijzigen is mislukt.</string>
+    <string name="one_res_def">Slechts één resolutie gedefinieerd in het systeem.</string>
+    <string name="rrp_not_loaded">Beschikbare verversingssnelheden nog niet geladen. Probeer het opnieuw.</string>
+    <string name="sot_no_perm">Toestemming om bovenaan weer te geven is niet verleend!</string>
+<!--    <string name="error_opening_settings">Fout bij openen van instellingen.</string>-->
+    <string name="cie">Mislukking! Controleer de internetverbinding en probeer het opnieuw.</string>
+    <string name="aca">Ongeldige activatiecode.</string>
+    <string name="afa">Premium succesvol geactiveerd!</string>
+    <string name="afu">Premium-proefversie al gebruikt en verlopen.</string>
+    <plurals name="aha">
+        <item quantity="one">Premium-proefversie geactiveerd: nog %d dag</item>
+        <item quantity="other">Premium-proefversie geactiveerd: nog %d dagen</item>
+    </plurals>
+    <!-- <string name="eta">Fout bij activeren van proefperiode zonder advertenties!</string>-->
+    <string name="nlh">Geen premium licentie gevonden voor dit apparaat:%s</string>
+    <string name="edit">Bewerk</string>
+    <string name="quick_doz_mod">Snel Doze Mod</string>
+    <string name="quick_mod_inf">Deze functie zorgt ervoor dat het apparaat snel in de sluimermodus gaat terwijl het scherm wordt uitgeschakeld om het verbruik van de standby-batterij te verbeteren.</string>
+    <string name="adp_min_hz">Min. Hz voor Adaptive</string>
+    <string name="enable_as_inf">Klik in het venster dat verschijnt op \"Geïnstalleerde services\" en activeer vervolgens de \"Galaxy Max Hz\" -service</string>
+    <string name="adp_delay">Adaptieve minimale hertz-vertraging (seconden)</string>
+    <string name="cur_rr_h">Huidige vernieuwingsfrequentie: %s Hz</string>
+    <string name="show_ns_card">Toon Netspeed Tool</string>
+    <string name="lbl_rrm">Vernieuwingsfrequentie-mods</string>
+    <string name="prr_psm">Handhaaf motion smoothness in energiebesparende modus</string>
+    <string name="actvt_trial">Gratis proefversie activeren</string>
+    <string name="auto_psm">Energiebesparende modus bij het uitschakelen van het scherm</string>
+    <string name="reso_opts">Geactiveerde opties</string>
+
+    <string name="requires_ws_perm_h">
+        %1$s heeft speciale toestemming nodig om deze functie uit te voeren.
+        Klik op de onderstaande ADB opzetten voor meer informatie.
+        \n\nTLDR: Run \'adb shell pm grant %2$s android.permission.WRITE_SECURE_SETTINGS\'
+        \n\nDit is een eenmalige procedure.
+    </string>
+    <string name="std">Standaard</string>
+    <string name="lbl_profiles_h">%sSchermresolutie en Vernieuwingsfrequentieprofielen</string>
+    <string name="high_mode">Hoge Modus</string>
+    <string name="std_mode">Standaardmodus</string>
+    <string name="adp_mode">Adaptieve Modus</string>
+    <string name="perm_reqd">Toestemming vereist</string>
+    <string name="adb_setup">ADB opzetten</string>
+    <string name="dismiss">Uitgang</string>
+    <string name="help">Helpen</string>
+    <string name="reload_profiles">Laad profielen opnieuw</string>
+    <string name="options">Opties</string>
+    <string name="psm_options"><u>Opties voor energiebesparende modus</u></string>
+    <string name="disable_sync_on_so">Schakel automatische sync uit wanneer het scherm is uitgeschakeld</string>
+    <string name="autosync_settings"><u>Autosync-instellingen</u></string>
+    <string name="apps_bat_opt_settings"><u>Instellingen voor batterijoptimalisatie</u></string>
+    <string name="quick_doz_mod_inf2">
+        De doze-modus verlengt de levensduur van de batterij door de achtergrond-CPU en netwerkactiviteit van de app uit te stellen.
+        Tijdens het dutten komt het apparaat periodiek in een onderhoudsvenster (MW), waarin apps wachtende werkzaamheden kunnen voltooien (synchronisaties, taken, enz.).
+        Het apparaat zal deze cyclus voortzetten, waarbij de lengte van het MW-interval telkens wordt verdubbeld. Hoe langer het MW-interval, hoe beter de batterijbesparing.
+        De doze-modus kan bij sommige apps vertragingen bij meldingen veroorzaken. Het heeft geen invloed op sms, FCM met hoge prioriteit en apps waarvoor batterijoptimalisaties zijn uitgeschakeld.
+        De doze-modus wordt gedeactiveerd zodra het apparaat is ontgrendeld.
+    </string>
+    <string name="quick_doz_mod_mwi">Interval eerste onderhoudsvenster in minuten (0 = geen onderhoudsvenster)</string>
+    <string name="brightness_threshold">Minimale helderheid voor adaptief</string>
+    <string name="sensor_off_info">De apparaatsensoren worden automatisch uitgeschakeld wanneer het scherm wordt uitgeschakeld totdat het apparaat wordt ontgrendeld. Dit helpt bewegingsgeïnduceerde wake locks die de batterij leegmaken te minimaliseren.</string>
+    <string name="sensors_off_note">Belangrijke opmerking: terwijl de tegel SensorsUit AAN is, worden de camera(\'s) en microfoon van het apparaat, naast andere sensoren, ontoegankelijk. Dit is van invloed op gezichtsontgrendeling en, op sommige apparaten, audio bij oproepen. Controleer of u hoorbaar bent tijdens een oproep of niet. Als dit niet het geval is en u ontvangt een oproep terwijl het apparaat is vergrendeld, kunt u lang op de SensorOff-tegel drukken om het apparaat te ontgrendelen en de SensorOff-tegel uit te schakelen - nadat u op de knop voor het ontvangen van oproepen hebt gedrukt.</string>
+</resources>

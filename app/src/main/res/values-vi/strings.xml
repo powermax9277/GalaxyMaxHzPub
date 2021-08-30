@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="lbl_enable_msm">Bật tính năng mượt mà của chuyển động</string>
+    <string name="show_hz">Máy đo tốc độ làm mới</string>
+    <string name="buy_adfree">Mua cao cấp</string>
+<!--    <string name="info_expired">Xem video này và nhận được kích hoạt gạch thiết lập nhanh chóng cho một %d ngày.</string>-->
+    <string name="resolution">Kiểm soát độ phân giải và độ mượt của chuyển động</string>
+    <string name="act">Kích hoạt phí bảo hiểm</string>
+    <string name="max_hz">Max Hz</string>
+    <string name="max_hz_holder">Max %s Hz</string>
+    <string name="feat_n_a" tools:keep="@string/feat_n_a">Thay đổi độ phân giải không được hỗ trợ</string>
+    <string name="unknown_mode">Không xác định chế độ Refresh Rate</string>
+<!--    <string name="qs_active">Nhanh Cài đặt gạch kích hoạt thành công</string>-->
+    <string name="min_hz_for_toggle">Thấp hơn giới hạn của chuyển đổi (Hz)</string>
+    <string name="adaptive">Adaptive</string>
+    <string name="high">Cao</string>
+    <string name="show_refresh_rate">Tốc độ làm mới theo thời gian thực</string>
+    <string name="left">Trái</string>
+    <string name="right">Phải</string>
+    <string name="top">Phía trên</string>
+    <string name="bottom">Dưới cùng</string>
+    <string name="use_qstile_reso_switch">Thao tác này sẽ đặt thiết bị của bạn ở chế độ tiết kiệm pin và nhanh chóng vào chế độ doze trong khi tắt màn hình để cải thiện mức tiêu thụ pin ở chế độ chờ.
+    </string>
+    <string name="center">Trung tâm</string>
+    <string name="info_qs_max_hz">Bao gồm một ngói thiết lập nhanh chóng để chuyển đổi hz max</string>
+    <string name="info_qs_rtrr">Bao gồm một ngói thiết lập nhanh chóng để hiển thị tốc độ làm tươi theo thời gian thực</string>
+    <string name="s_off_mod">Screen-off Mods</string>
+    <string name="force_hz_mod">Buộc Hz thấp nhất</string>
+    <string name="s_off_hz_inf">
+        Điều này sẽ đặt tốc độ làm mới khi tắt màn hình thành Hz thấp nhất hiện có để cải thiện việc sử dụng pin ở chế độ chờ.
+       \nTốc độ làm mới khi tắt màn hình: %s
+    </string>
+    <string name="chng_res_stng">
+        Độ phân giải %s không hỗ trợ đặt tốc độ làm mới cao / thích nghi.
+        Thay đổi độ phân giải và chế độ chuyển động mượt mà trước tiên trong cài đặt.
+        \n\nỨng dụng có thể dễ dàng chuyển đổi độ phân giải và chế độ chuyển động mượt mà
+        bằng cách sử dụng ô cài đặt nhanh sau khi thiết lập xong ADB.</string>
+    <string name="chng_res_qs">
+        Độ phân giải %s không hỗ trợ đặt tốc độ làm mới cao / thích nghi.
+        Bạn có thể thay đổi độ phân giải bằng cách sử dụng ô cài đặt nhanh do ứng dụng này cung cấp.
+    </string>
+    <string name="psm_on_inf">
+        Chế độ tiết kiệm năng lượng hiện đang được bật. Trước tiên, hãy tắt nó trong cài đặt và đặt
+        chế độ mượt mà của chuyển động thành Thích nghi hoặc Cao.
+        \n\nỨng dụng này có thể dễ dàng thay đổi Độ mượt chuyển động sang Chế độ Thích nghi hoặc Cao
+        thậm chí qua Chế độ tiết kiệm năng lượng sau khi thiết lập ADB được thực hiện.
+    </string>
+    <string name="rrm_std_inf">
+        Chế độ mượt mà chuyển động hiện được đặt thành Tiêu chuẩn. Thay đổi nó đầu tiên trong cài đặt.
+        \n\nỨng dụng này có thể dễ dàng thay đổi Chế độ mượt mà chuyển động thành
+        Tính năng này hoạt động ngay cả trên Chế độ tiết kiệm năng lượng.
+    </string>
+    <string name="input_ac_inf">Nếu bạn mất phí bảo hiểm do đặt lại thiết bị này, hãy nhập mã kích hoạt được gửi đến email của bạn để kích hoạt lại phí bảo hiểm.
+    </string>
+<!--    <string name="failed_show_ad">Không thể hiển thị quảng cáo video. Vui lòng thử lại.</string>-->
+<!--    <string name="failed_load_ad">Không thể quảng cáo video tải. Vui lòng kiểm tra internet và thử lại.</string>-->
+    <string name="show_ns">Hiện Internet Tốc độ Chỉ số</string>
+    <string name="combined">Kết hợp</string>
+    <string name="upload">Tải lên</string>
+    <string name="download">Tải xuống</string>
+    <string name="font_size">Lớp phủ cỡ chữ</string>
+    <string name="overlay_pos">Lớp phủ vị trí</string>
+    <string name="overlay">Lớp phủ</string>
+    <string name="statusbar">Thanh trạng thái</string>
+    <string name="perm_appx">
+        \n\nKhi thiết lập adb được thực hiện, bạn có thể làm những điều sau đây Với ứng dụng này:
+        \n- Nhanh chóng độ phân giải màn hình switch
+        \n- Áp dụng chuyển động êm ái thích ứng cao hoặc thậm chí trên Chế độ tiết kiệm năng lượng
+        \n- Tự động áp dụng chế độ tiết kiệm năng lượng khi màn hình tắt
+        \n- Sử dụng mod doze nhanh chóng (tính năng cao cấp)
+        \n- Áp dụng mod tốc độ làm mới thích ứng ngay cả trên thiết bị không được hỗ trợ nguyên bản (tính năng cao cấp)
+        \n- Cảm biến tự động tắt(tính năng cao cấp)
+    </string>
+    <string name="ac_none">Bạn nhập không có mã kích hoạt.</string>
+    <string name="in_bd">Nhập mã kích hoạt</string>
+    <string name="apply">Áp dụng</string>
+    <string name="psm_on">Chế độ tiết kiệm năng lượng đang bật</string>
+    <string name="chng_res">Thay đổi nghị quyết</string>
+    <string name="open_settings">Mở cài đặt</string>
+<!--    <string name="qst_exp">Nhanh Cài đặt gạch hết hạn</string>-->
+<!--    <string name="ad_starting_in">"Video bắt đầu từ năm "</string>-->
+<!--    <string name="no_thanks">Không, cám ơn!</string>-->
+    <string name="chng_res_failed">Thất bại trong việc giải quyết sự thay đổi.</string>
+    <string name="one_res_def">Chỉ có một độ phân giải được xác định trong hệ thống.</string>
+    <string name="rrp_not_loaded">Mức độ refresh sẵn chưa nạp. Thử lại.</string>
+    <string name="sot_no_perm">Hiển thị trên phép đầu không được Cấp!</string>
+<!--    <string name="error_opening_settings">Thiết lập Lỗi khi mở.</string>-->
+    <string name="cie">Lỗi! Vui lòng kiểm tra kết nối internet và thử lại.</string>
+    <string name="aca">Mã kích hoạt không hợp lệ.</string>
+    <string name="afa">Phí bảo hiểm đã được kích hoạt thành công!</string>
+    <string name="afu">Phiên bản dùng thử đã được sử dụng và đã hết hạn.</string>
+    <plurals name="aha">
+        <item quantity="other">Đã kích hoạt bản dùng thử đặc biệt: %d ngày còn lại</item>
+    </plurals>
+   <!-- <string name="eta">Lỗi thử kích hoạt không có quảng cáo miễn phí!</string>-->
+    <string name="nlh">Không tìm thấy giấy phép cao cấp nào cho thiết bị này: %s</string>
+    <string name="edit">Biên tập</string>
+    <string name="quick_doz_mod">Nhanh Doze Mod</string>
+    <string name="quick_mod_inf">"Điều này sẽ giúp thiết bị của bạn nhập doze mode nhanh hơn bình thường khi tắt màn hình"</string>
+    <string name="adp_min_hz">Hz tối thiểu cho Adaptive</string>
+    <string name="enable_as_inf">Trong cửa sổ xuất hiện, nhấp vào \"Dịch vụ đã cài đặt\" rồi bật dịch vụ \"Galaxy Max Hz\"</string>
+    <string name="adp_delay">Adaptive độ trễ hertz tối thiểu(giây)</string>
+    <string name="cur_rr_h">Tốc độ làm mới hiện tại: %s Hz</string>
+    <string name="show_ns_card">Hiển thị công cụ Netspeed</string>
+    <string name="lbl_rrm">Tốc độ làm mới mods</string>
+    <string name="prr_psm">Giữ motion smoothness trên Chế độ tiết kiệm năng lượng</string>
+    <string name="actvt_trial">Kích hoạt bản dùng thử miễn phí?</string>
+    <string name="auto_psm">Chế độ tiết kiệm năng lượng khi màn hình tắt</string>
+    <string name="reso_opts">Thay đổi tùy chọn độ phân giải</string>
+
+    <string name="requires_ws_perm_h">
+        %1$s cần một quyền đặc biệt để thực thi tính năng này.
+        Nhấp vào liên kết thiết lập ADB bên dưới để tìm hiểu cách thực hiện.
+        \n\nTLDR: Run \'adb shell pm grant %2$s android.permission.WRITE_SECURE_SETTINGS\'
+        \n\nĐây là một thủ tục một lần.
+    </string>
+    <string name="std">Tiêu chuẩn</string>
+    <string name="lbl_profiles_h">%sĐộ phân giải màn hình và cấu hình tốc độ làm mới</string>
+    <string name="high_mode">Chế độ cao</string>
+    <string name="std_mode">Chế độ căn bản</string>
+    <string name="adp_mode">Chế độ thích ứng</string>
+    <string name="perm_reqd">Yêu cầu quyền</string>
+    <string name="adb_setup">Thiết lập ADB</string>
+    <string name="dismiss">Bỏ qua</string>
+    <string name="help">Cứu giúp</string>
+    <string name="reload_profiles">Tải lại hồ sơ</string>
+    <string name="options">Tùy chọn</string>
+    <string name="psm_options"><u>Tùy chọn chế độ tiết kiệm năng lượng</u></string>
+    <string name="disable_sync_on_so">Tắt tự động đồng bộ hóa khi màn hình tắt</string>
+    <string name="autosync_settings"><u>Cài đặt tự động đồng bộ hóa</u></string>
+    <string name="apps_bat_opt_settings"><u>Cài đặt tối ưu hóa pin</u></string>
+    <string name="quick_doz_mod_inf2">
+        Chế độ ngủ gật kéo dài tuổi thọ pin bằng cách trì hoãn hoạt động mạng và CPU nền của ứng dụng.
+        Trong khi ngủ gật, thiết bị định kỳ vào cửa sổ bảo trì (MW), trong đó các ứng dụng có thể hoàn thành công việc đang chờ xử lý (đồng bộ hóa, công việc, v.v.).
+        Thiết bị sẽ tiếp tục chu kỳ này, tăng gấp đôi độ dài của khoảng thời gian MW mỗi lần. Khoảng thời gian MW càng dài thì tiết kiệm pin càng tốt.
+        Chế độ ngủ gật có thể gây ra sự chậm trễ thông báo trên một số ứng dụng. Nó sẽ không ảnh hưởng đến SMS, FCM mức độ ưu tiên cao và các ứng dụng đã tắt tối ưu hóa pin.
+        Chế độ ngủ gật sẽ tắt sau khi thiết bị được mở khóa.
+    </string>
+    <string name="quick_doz_mod_mwi">Khoảng thời gian bảo trì ban đầu tính bằng phút (0 = không có cửa sổ bảo trì)</string>
+    <string name="brightness_threshold">Độ sáng tối thiểu cho chế độ thích ứng</string>
+    <string name="sensor_off_info">Các cảm biến của thiết bị sẽ tự động tắt khi tắt màn hình cho đến khi thiết bị được mở khóa. Điều này giúp giảm thiểu tình trạng khóa chế độ thức do chuyển động gây ra tiêu hao pin.</string>
+    <string name="sensors_off_note">Lưu ý quan trọng: Khi ô Tắt cảm biến được BẬT, (các) máy ảnh và micrô của thiết bị, trong số các cảm biến khác, sẽ không thể truy cập được. Điều này ảnh hưởng đến tính năng mở khóa bằng khuôn mặt và âm thanh cuộc gọi trên một số thiết bị. Kiểm tra xem bạn có bị tắt tiếng trong khi gọi hay không. Nếu trường hợp này xảy ra và bạn nhận cuộc gọi trong khi thiết bị bị khóa, bạn có thể nhấn và giữ ô SensorOff để mở khóa thiết bị và tắt ô SensorOff - sau khi nhấn nút nhận cuộc gọi.</string>
+</resources>

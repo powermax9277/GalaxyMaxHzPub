@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="appupdater_app_update">%1$s Aktualizace</string>
+    <string name="appupdater_update_available_description_dialog">v%1$s Změny:\n%2$s</string>
+    <string name="appupdater_update_available_description_snackbar">Aktualizace v%1$s je k dispozici!</string>
+    <string name="appupdater_update_not_available">Žádná aktualizace není dostupná</string>
+    <string name="appupdater_btn_update">Nainstalujte</string>
+</resources>

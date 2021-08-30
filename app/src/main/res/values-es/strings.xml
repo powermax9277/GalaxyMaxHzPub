@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="lbl_enable_msm">Activar suavidad de movimiento</string>
+    <string name="show_hz">" Monitor de frecuencia de actualización"</string>
+    <string name="buy_adfree">Comprar Premium|Cofee</string>
+  <!--  <string name="info_expired">Mire este video y obtenga mosaicos de configuración rápida activados por otros %d días.</string>-->
+    <string name="resolution">" Alternar resolución y suavidad de movimiento"</string>
+    <string name="act">Activar Premium|Trial</string>
+    <string name="max_hz">Hz máx</string>
+    <string name="max_hz_holder">%s Hz máx.</string>
+    <string name="feat_n_a" tools:keep="@string/feat_n_a">No se admite el cambio de resolución</string>
+    <string name="unknown_mode">Modo de frecuencia de actualización no identificado</string>
+<!--    <string name="qs_active">Azulejos de configuración rápida activados correctamente</string>-->
+    <string name="min_hz_for_toggle">Min. Hz para alternar</string>
+    <string name="adaptive">Adaptativo</string>
+    <string name="high">Alto</string>
+    <string name="show_refresh_rate">Mostrar frecuencia de actualización en tiempo real</string>
+    <string name="left">Izquierda</string>
+    <string name="right">Derecha</string>
+    <string name="top">Cima</string>
+    <string name="bottom">Abajo</string>
+    <string name="use_qstile_reso_switch">Utilice el mosaico de configuración rápida incluido para cambiar rápidamente las resoluciones.</string>
+    <string name="center">Centrar</string>
+    <string name="info_qs_max_hz">Incluye un mosaico de configuración rápida para alternar max hz</string>
+    <string name="info_qs_rtrr">Incluye un mosaico de configuración rápida para mostrar la frecuencia de actualización en tiempo real</string>
+    <string name="s_off_mod">Screen-off mods</string>
+    <string name="force_hz_mod">Forzar el Hz más bajo</string>
+    <string name="s_off_hz_inf">
+        Esto establecerá la frecuencia de actualización de la pantalla en los Hz más bajos cuando la pantalla esté apagada o en AOD para mejorar el uso de la batería en el modo de espera.
+        \nScreen-off frecuencia de actualización: %s
+    </string>
+    <string name="chng_res_stng">%s la configuración de resolución no admite una frecuencia
+        de actualización alta / adaptativa. Primero cambie la resolución en la configuración.
+        \n\nEsta aplicación puede cambiar fácilmente la configuración de resolución utilizando el
+        mosaico de configuración rápida una vez que se realiza la configuración de ADB.
+    </string>
+    <string name="chng_res_qs">%s La configuración de resolución no admite una frecuencia
+        de actualización alta / adaptativa. Puede cambiar rápidamente la resolución utilizando el mosaico
+        de configuración rápida incluido en esta aplicación.
+    </string>
+    <string name="psm_on_inf">El modo de ahorro de energía está activado actualmente.
+        Apáguelo en la configuración primero y configure el modo de suavidad de movimiento en Adaptable/Alto.
+        Esta aplicación puede cambiar fácilmente el modo de suavidad de movimiento a adaptativo / alto
+        incluso en el modo de ahorro de energía una vez que se realiza la configuración de ADB.</string>
+    <string name="rrm_std_inf">El modo de suavidad de movimiento está configurado actualmente en Estándar.
+        Primero cámbielo en la configuración.
+        \n\nEsta aplicación puede cambiar fácilmente el modo de
+        suavidad de movimiento a Adaptive / High una vez que se realiza la configuración de ADB.
+        Esto funciona incluso en el modo de ahorro de energía.
+    </string>
+    <string name="input_ac_inf">Si perdió sin publicidad debido a restablecer este dispositivo, ingrese el código de activación
+        enviado a su correo electrónico para reactivar sin publicidad.</string>
+<!--    <string name="failed_show_ad">No se pudo mostrar el anuncio de video. Inténtalo de nuevo.</string>-->
+<!--    <string name="failed_load_ad">Failed to load video ad. Please check internet and try again.</string>-->
+    <string name="show_ns">Mostrar indicador de velocidad neta</string>
+    <string name="combined">Conjunto</string>
+    <string name="upload">Subir</string>
+    <string name="download">Descargar</string>
+    <string name="font_size">Tamaño de fuente superpuesto</string>
+    <string name="overlay_pos">Ubicación de superposición</string>
+    <string name="overlay">Cubrir</string>
+    <string name="statusbar">Barra de estado</string>
+    <string name="perm_appx">\n\nCuando se realiza la configuración de adb, puede hacer lo siguiente con esta aplicación:
+        \n- Cambie rápidamente las resoluciones de pantalla
+        \n- (Auto) aplica suavidad de movimiento adaptativo/alto, incluso en el modo de ahorro de energía
+        \n- Aplicar automáticamente el modo de ahorro de energía cuando la pantalla está apagada
+        \n- Utilice el modo rápido doze (premium)
+        \n- Aplicar el mod de frecuencia de actualización adaptable incluso en dispositivos no compatibles de forma nativa (premium)
+        \n- Sensores automáticos desactivados (premium)
+    </string>
+    <string name="ac_none">El código de activación no puede estar vacío.</string>
+    <string name="in_bd">Ingrese código de activación</string>
+    <string name="apply">Aplicar</string>
+    <string name="psm_on">El modo de ahorro de energía está activado</string>
+    <string name="chng_res">Cambiar resolución</string>
+    <string name="open_settings">Configuración abierta</string>
+<!--    <string name="qst_exp">Los mosaicos de configuración rápida expiraron</string>-->
+<!--    <string name="ad_starting_in">"Video que comienza en "</string>-->
+<!--    <string name="no_thanks">¡No, gracias!</string>-->
+    <string name="chng_res_failed">No se pudo cambiar la resolución.</string>
+    <string name="one_res_def">Solo una resolución definida en el sistema.</string>
+    <string name="rrp_not_loaded">Las frecuencias de actualización disponibles aún no se cargan. Inténtalo de nuevo.
+    </string>
+    <string name="sot_no_perm">¡Mostrar en la parte superior no se concede permiso!</string>
+<!--    <string name="error_opening_settings">Error al abrir la configuración.</string>-->
+    <string name="cie">¡Error! Compruebe la conexión a Internet y vuelva a intentarlo.</string>
+    <string name="aca">Código de activación inválido.</string>
+    <string name="afa">"¡Premium se ha activado con éxito! "</string>
+    <string name="afu">La versión de prueba ya se ha utilizado y ha caducado.</string>
+    <plurals name="aha">
+        <item quantity="one">Prueba premium activada: quedan %d día</item>
+        <item quantity="other">Prueba premium activada: quedan %d días</item>
+    </plurals>
+    <!--<string name="eta">¡Error al activar la prueba sin anuncios!</string>-->
+    <string name="nlh">No se encontró una licencia premium para este dispositivo: %s</string>
+    <string name="edit">Editar</string>
+    <string name="quick_doz_mod">Rápido Doze Mod</string>
+    <string name="quick_mod_inf">Esta función pondrá rápidamente el dispositivo en modo dormido al apagar la pantalla para mejorar el uso de la batería en el modo de espera.</string>
+    <string name="adp_min_hz">Hz mínimo para Adaptativo</string>
+    <string name="enable_as_inf">En la ventana que aparece, haga clic en \"Servicios instalados\" y luego habilite el servicio \"Galaxy Max Hz\"</string>
+    <string name="adp_delay">Retraso adaptativo min Hz (segundos)</string>
+    <string name="cur_rr_h">Frecuencia de actualización actual: %s Hz</string>
+    <string name="show_ns_card">Mostrar herramienta Netspeed</string>
+    <string name="lbl_rrm">Refresh Rate Mods</string>
+    <string name="prr_psm">Mantenga motion smoothness en modo de ahorro de energía</string>
+    <string name="actvt_trial">¿Activar prueba gratuita?</string>
+    <string name="auto_psm">Modo de ahorro de energía cuando la pantalla está apagada</string>
+    <string name="reso_opts">Opciones habilitadas</string>
+
+    <string name="requires_ws_perm_h">
+        %1$s necesita un permiso especial para realizar esta función.
+        Haga clic en el enlace de configuración de ADB a continuación para aprender cómo hacer esto.
+        \n\nTLDR: Run \'adb shell pm grant %2$s android.permission.WRITE_SECURE_SETTINGS\'\n\n
+        Este es un procedimiento de una sola vez.
+    </string>
+    <string name="std">Standard</string>
+    <string name="lbl_profiles_h">%sPerfiles de Resolución de Pantalla y Frecuencia de Actualización</string>
+    <string name="high_mode">Modo Alto</string>
+    <string name="std_mode">Modo Estandar</string>
+    <string name="adp_mode">Modo Adaptativo</string>
+    <string name="perm_reqd">Se requiere permiso</string>
+    <string name="adb_setup">Configuración de ADB</string>
+    <string name="dismiss">Descartar</string>
+    <string name="help">Ayudar</string>
+    <string name="reload_profiles">Recargar Perfiles</string>
+    <string name="options">Opciones</string>
+    <string name="psm_options"><u>Opciones del modo de ahorro de energía</u></string>
+    <string name="disable_sync_on_so">Desactiva la sinc automática cuando la pantalla está apagada</string>
+    <string name="autosync_settings"><u>Configuración de sinc automática</u></string>
+    <string name="apps_bat_opt_settings"><u>Configuración de optimización de la batería</u></string>
+    <string name="quick_doz_mod_inf2">
+        El modo Doze extiende la vida útil de la batería al diferir la actividad de la red y la CPU en segundo plano de la aplicación.
+        Mientras está dormido, el dispositivo ingresa periódicamente a una ventana de mantenimiento (MW), durante la cual las aplicaciones pueden completar el trabajo pendiente (sincronizaciones, trabajos, etc.).
+        El dispositivo continuará este ciclo, duplicando la duración del intervalo MW cada vez. Cuanto más largo sea el intervalo de MW, mejor será el ahorro de batería.
+        El modo Doze puede provocar retrasos en las notificaciones en algunas aplicaciones. No afectará a SMS, FCM de alta prioridad ni a las aplicaciones cuyas optimizaciones de batería estén desactivadas.
+        El modo Doze se desactivará una vez que el dispositivo esté desbloqueado.
+    </string>
+    <string name="quick_doz_mod_mwi">Intervalo de ventana de mantenimiento inicial en minutos (0 = sin ventana de mantenimiento)</string>
+    <string name="brightness_threshold">Brillo mínimo para adaptativo</string>
+    <string name="sensor_off_info">Los sensores del dispositivo se apagan automáticamente cuando se apaga la pantalla hasta que se desbloquea el dispositivo. Esto ayuda a minimizar los bloqueos de activación inducidos por el movimiento que agotan la batería.</string>
+    <string name="sensors_off_note">Nota importante: mientras el mosaico SensorsOff está ENCENDIDO, la (s) cámara (s) y el micrófono (s) del dispositivo, entre otros sensores, se vuelven inaccesibles. Compruebe si su voz se puede escuchar o no durante la llamada. Si no se puede escuchar y recibe una llamada mientras el dispositivo está bloqueado, puede presionar prolongadamente el mosaico SensorsOff para desbloquear el dispositivo y apagar el mosaico SensorsOff, después de presionar el botón Recibir llamada.</string>
+
+</resources>

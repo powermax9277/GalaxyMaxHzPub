@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/primary_color</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="android:alertDialogTheme">@style/AlertDialogTheme</item>
+        <item name="android:colorControlActivated">@color/primary_color</item>
+    </style>
+
+    <style name="cardViewStyle" parent="CardView">
+        <item name="android:background">@drawable/rounded_edge</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">@dimen/horizontal_spacing</item>
+        <item name="android:layout_marginEnd">@dimen/horizontal_spacing</item>
+        <item name="android:layout_marginTop">@dimen/vertical_spacing</item>
+        <item name="android:layout_marginBottom">@dimen/vertical_spacing</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:elevation">4dp</item>
+    </style>
+
+    <style name="AlertDialogTheme" parent="ThemeOverlay.MaterialComponents.Dialog.Alert">
+        <item name="android:buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
+        <item name="android:background">#434343</item>
+        <item name="android:buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
+    </style>
+
+    <style name="NegativeButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">#D32F2F</item>
+    </style>
+
+    <style name="PositiveButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/primary_color</item>
+    </style>
+
+</resources>

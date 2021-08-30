@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="lbl_enable_msm">Aktivera rörelsens jämnhet</string>
+    <string name="show_hz">Uppdateringsfrekvensövervakare</string>
+    <string name="buy_adfree">Köp Premium</string>
+<!--    <string name="info_expired">Titta på denna video och få aktiverade snabba inställningsplattor i ytterligare %d dagar.</string>-->
+    <string name="resolution">Upplösning och Motion Jämnhet Toggle</string>
+    <string name="act">Aktivera Premium</string>
+    <string name="max_hz">Max Hz</string>
+    <string name="max_hz_holder">Max %s Hz</string>
+    <string name="feat_n_a" tools:keep="@string/feat_n_a">Ändra upplösning stöds inte</string>
+    <string name="unknown_mode">Oidentifierat uppdateringsfrekvensläge</string>
+<!--    <string name="qs_active">Snabbinställningar tiles aktiverats</string>-->
+    <string name="min_hz_for_toggle">Lägre gränsen för toggle (Hz)</string>
+    <string name="adaptive">Adaptiv</string>
+    <string name="high">Hög</string>
+    <string name="show_refresh_rate">Visa Real-Time Uppdateringshastighet</string>
+    <string name="left">Vänster</string>
+    <string name="right">Höger</string>
+    <string name="top">Övre</string>
+    <string name="bottom">Under</string>
+    <string name="use_qstile_reso_switch">Använd den medföljande Snabbinställningar kakel för att snabbt växla resolutioner och rörelsernas smoothness lägen.</string>
+    <string name="center">Centrum</string>
+    <string name="info_qs_max_hz">Inkluderar en snabbinställningsknapp för att växla max hz</string>
+    <string name="info_qs_rtrr">Inkluderar en snabbinställningsknapp för att visa uppdateringsfrekvens i realtid</string>
+    <string name="s_off_mod">Screen-off mods</string>
+    <string name="force_hz_mod">Tvinga till Lägsta Hz</string>
+    <string name="s_off_hz_inf">
+        Detta ställer in uppdateringsfrekvensen medan skärmen är avstängd eller i AOD till lägsta hz för att förbättra standby-batterianvändningen.
+        \nScreen-off uppdateringsfrekvens: %s
+    </string>
+    <string name="chng_res_stng">
+        %s upplösning stöder inte inställning hög / adaptiv uppdateringsfrekvens.
+        Ändra upplösningen rörelse jämnhet läge i inställningarna först.
+        \n\nDenna app kan enkelt växla upplösning och rörelse jämnhet läge med användning av de
+        snabbinställningar kakel elva ADB inställning utförs.
+    </string>
+    <string name="chng_res_qs">
+        %s upplösning stöder inte inställning hög / adaptiv uppdateringsfrekvens.
+        Du kan ändra upplösning med snabbt snabbinställningen kakel ingår denna applikation.
+    </string>
+    <string name="psm_on_inf">Energisparläge är för närvarande aktiverat. Stäng av den i inställningarna först i och sätt motion smoothness -läget till Adaptiv / hög.
+        \n\nDen här appen kan ställa in läget motion smoothness till Adaptive / High även i energisparläge när ADB-inställningen har utförts.
+    </string>
+    <string name="rrm_std_inf">
+        Läget motion smoothness är inställt på Standard. Ändra det i inställningarna först.
+        \n\nDen här appen kan ställa in läget motion smoothness till Adaptive / High även i energisparläge när ADB-inställningen har utförts.
+    </string>
+    <string name="input_ac_inf">"         Om du förlorade annonsfri efter att du återställt den här enheten, ange aktiveringskoden som skickas till din e-post för att aktivera annonsfri.     "</string>
+<!--    <string name="failed_show_ad">Det gick inte att visa videoannonsen. Var god försök igen.</string>-->
+<!--    <string name="failed_load_ad">Det gick inte att lasten videoannons. Kontrollera internet och försök igen.</string>-->
+    <string name="show_ns">Visa Net Speed​Indikator</string>
+    <string name="combined">Kombinerad</string>
+    <string name="upload">Ladda upp</string>
+    <string name="download">Ladda ner</string>
+    <string name="font_size">Overlay Teckenstorlek</string>
+    <string name="overlay_pos">Overlay Plats</string>
+    <string name="overlay">Overlay</string>
+    <string name="statusbar">Statusfältet</string>
+    <string name="perm_appx">
+        \n\nNär ADB-installationen har utförts kan du göra följande med den här appen:
+        \n- Snabbt växla skärmupplösningar
+        \n- Använd adaptiva eller höga motion smoothness även i energisparläge
+        \n- Använd automatiskt energisparläge när skärmen är avstängd
+        \n- Använd det snabba doze-modet (premium)
+        \n- Tillämpa adaptiv uppdateringsfrekvensmod även på enheter som inte stöds av native (premium)
+        \n- Auto Sensors Off (premium)
+    </string>
+    <string name="ac_none">Du angav ingen aktiveringskod.</string>
+    <string name="in_bd">Ange aktiveringskod</string>
+    <string name="apply">Tillämpa</string>
+    <string name="psm_on">Energisparläge är på</string>
+    <string name="chng_res">Ändra upplösning</string>
+    <string name="open_settings">Öppna Inställningar</string>
+<!--    <string name="qst_exp">Snabbinställningar Tiles Utgånget</string>-->
+<!--    <string name="ad_starting_in">"Video start "</string>-->
+<!--    <string name="no_thanks">Nej tack!</string>-->
+    <string name="chng_res_failed">Det gick inte att ändra upplösning.</string>
+    <string name="one_res_def">Endast en upplösning som definieras i systemet.</string>
+    <string name="rrp_not_loaded">Tillgängliga uppdateringsfrekvenser ännu inte laddat. Försök igen.</string>
+    <string name="sot_no_perm">Visa överst tillåtelse beviljas inte!</string>
+<!--    <string name="error_opening_settings">Error öppningsinställningar.</string>-->
+    <string name="cie">Fel! Kontrollera internetanslutningen och försök igen.</string>
+    <string name="aca">Ogiltig aktiveringskod.</string>
+    <string name="afa">"Premium har aktiverats framgångsrikt! "</string>
+    <string name="afu">Testversionen har redan använts och har gått ut.</string>
+    <plurals name="aha">
+        <item quantity="one">Premiumprövning aktiverad:%d dag kvar</item>
+        <item quantity="other">Premiumprövning aktiverad:%d dagar kvar</item>
+    </plurals>
+    <!--<string name="eta">Error activating ad-free trial!</string>-->
+    <string name="nlh">Ingen premiumlicens hittades för den här enheten:%s</string>
+    <string name="edit">Redigera</string>
+    <string name="quick_doz_mod">Snabb Doze Mod</string>
+    <string name="quick_mod_inf">Detta gör att enheten snabbt går in i slumrande läge när skärmen är avstängd för att förbättra standby-batteriförbrukningen.</string>
+    <string name="adp_min_hz">Min. Hz för Adaptiv</string>
+    <string name="enable_as_inf">I fönstret som visas klickar du på \"Installerade tjänster\" och aktiverar sedan tjänsten \"Galaxy Max Hz\"</string>
+    <string name="adp_delay">Adaptiv minimum hertz delay in seconds</string>
+    <string name="cur_rr_h">Aktuell Refresh Rate: %s Hz</string>
+    <string name="show_ns_card">Visa Netspeed-verktyget</string>
+    <string name="lbl_rrm">Refresh Rate Mods</string>
+    <string name="prr_psm">Håll motion smoothness i energisparläge</string>
+    <string name="actvt_trial">Aktivera gratis provperiod?</string>
+    <string name="auto_psm">Energisparläge när Skärmen är Avstängd</string>
+    <string name="reso_opts">Alternativ för ändringsupplösning</string>
+    <string name="requires_ws_perm_h">
+        %1$s behöver ett särskilt tillstånd för att utföra den här funktionen.
+        Klicka på länken för ställ in ADB nedan för att lära dig hur.
+        \n\nTLDR: Run \'adb shell pm grant %2$s android.permission.WRITE_SECURE_SETTINGS\'
+        \n\nDetta är ett engångsförfarande.
+    </string>
+    <string name="std">Standard</string>
+    <string name="lbl_profiles_h">%sProfily Rozlíšenia Obrazovky a Obnovovacej Frekvencie</string>
+    <string name="high_mode">Högt Läge</string>
+    <string name="std_mode">Standard Läge</string>
+    <string name="adp_mode">Adaptivt Läge</string>
+    <string name="perm_reqd">Tillstånd krävs</string>
+    <string name="adb_setup">Ställ in ADB</string>
+    <string name="dismiss">Avfärda</string>
+    <string name="help">Hjälp</string>
+    <string name="reload_profiles">Ladda om Profiler</string>
+    <string name="options">Inställningar</string>
+    <string name="psm_options"><u>Alternativ för energisparläge</u></string>
+    <string name="disable_sync_on_so">Stäng av automatisk synk när skärmen är avstängd</string>
+    <string name="autosync_settings"><u>Autosync-inställningar</u></string>
+    <string name="apps_bat_opt_settings"><u>Inställningar för batterioptimering</u></string>
+    <string name="quick_doz_mod_inf2">
+        Doze-läge förlänger batteriets livslängd genom att skjuta upp app-bakgrunds-CPU och nätverksaktivitet.
+        Medan det är i slumrande går enheten regelbundet in i ett underhållsfönster (MW), under vilket appar kan slutföra pågående arbete (synkronisering, jobb etc.).
+        Enheten fortsätter denna cykel och fördubblar längden på MW-intervallet varje gång. Ju längre MW-intervall är, desto bättre sparar du batteriet.
+        Dåsläge kan orsaka förseningar i vissa appar. Det påverkar inte SMS, FCM med hög prioritet och appar vilka batterioptimeringar är inaktiverade.
+        Dåsläge inaktiveras när enheten är upplåst.
+    </string>
+    <string name="quick_doz_mod_mwi">Initialt underhållsintervall i minuter (0 = inget underhållsfönster)</string>
+    <string name="brightness_threshold">Minsta ljusstyrka för adaptiv</string>
+    <string name="sensor_off_info">Enhetssensorerna stängs av automatiskt när skärmen stängs av tills enheten är upplåst. Detta hjälper till att minimera rörelseinducerade vaklås som tömmer batteriet.</string>
+    <string name="sensors_off_note">Viktig anmärkning: Medan SensorsOff -brickan är PÅ blir enhetens kamera (er) och mikrofon (er), bland andra sensorer, otillgängliga. Kontrollera om din röst kan höras eller inte under samtalet. Om det inte kan höras och du tar emot samtal medan enheten är låst kan du trycka länge på SensorsOff -brickan för att låsa upp enheten och stänga av SensorsOff -brickan - efter att du har tryckt på knappen för mottagningssamtal.</string>
+</resources>

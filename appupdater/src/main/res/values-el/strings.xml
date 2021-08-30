@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="appupdater_app_update">%1$s Εκσυγχρονίζω</string>
+    <string name="appupdater_update_available_description_dialog">v%1$s Αλλαγές:\n%2$s</string>
+    <string name="appupdater_update_available_description_snackbar">Η ενημέρωση v%1$s είναι διαθέσιμη!</string>
+    <string name="appupdater_update_not_available">Δεν υπάρχουν νέες ενημερώσεις</string>
+    <string name="appupdater_btn_update">Εγκαθιστώ</string>
+</resources>

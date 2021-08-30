@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="lbl_enable_msm">Ενεργοποίηση Motion Smoothness</string>
+    <string name="show_hz">Ρυθμός ανανέωσης οθόνης</string>
+    <string name="buy_adfree">Αγορά Premium|Coffee</string>
+   <!-- <string name="info_expired">Παρακολουθήστε αυτό το βίντεο και να ενεργοποιηθεί γρήγορα πλακάκια ρύθμιση για ακόμη %d ημέρες.</string>-->
+    <string name="resolution">Ανάλυση και κίνησης Ομαλότητα Εναλλαγή</string>
+    <string name="act">Ενεργοποίηση Premium|Trial</string>
+    <string name="max_hz">Max Hz</string>
+    <string name="max_hz_holder">Max %s Hz</string>
+    <string name="feat_n_a" tools:keep="@string/feat_n_a">Αλλαγή ψήφισμα δεν υποστηρίζεται</string>
+    <string name="unknown_mode">Αγνώστων Λειτουργία Ρυθμός ανανέωσης</string>
+<!--    <string name="qs_active">Γρήγορες ρυθμίσεις Πλακάκια ενεργοποιηθεί με επιτυχία</string>-->
+    <string name="min_hz_for_toggle">Ελάχ. Hz για την εναλλαγή</string>
+    <string name="adaptive">Adaptive</string>
+    <string name="high">Υψηλός</string>
+    <string name="show_refresh_rate">Ανανέωση παρακολούθησης ρυθμού</string>
+    <string name="left">Αριστερή πλευρά</string>
+    <string name="right">Σωστη πλευρα</string>
+    <string name="top">Άνω-πλευρά</string>
+    <string name="bottom">Κάτω πλευρά</string>
+    <string name="use_qstile_reso_switch">Χρησιμοποιήστε το παρεχόμενο κεραμίδι γρήγορη ρυθμίσεις στα ψηφίσματα του διακόπτη γρήγορα και τρόπους ομαλότητα κίνησης.</string>
+    <string name="center">Κέντρο</string>
+    <string name="info_qs_max_hz">Περιλαμβάνει μια γρήγορη κεραμίδι ρύθμιση για εναλλαγή max hz</string>
+    <string name="info_qs_rtrr">Αυτό μπορεί να αυξήσει ελαφρώς την κατανάλωση μπαταρίας της εφαρμογής. Περιλαμβάνει ένα πλακίδιο γρήγορης ρύθμισης για να ενεργοποιήσετε την οθόνη ρυθμού ανανέωσης</string>
+    <string name="s_off_mod">Off Οθόνη Ρυθμός ανανέωσης</string>
+    <string name="force_hz_mod">Δύναμη στο χαμηλότερο Hz</string>
+    <string name="s_off_hz_inf">
+        Αυτό θα ρυθμίσει το ρυθμό ανανέωσης της οθόνης ή AOD στο χαμηλότερο για να βελτιώσει τη χρήση της μπαταρίας σε κατάσταση αναμονής.
+        \nScreen-off refresh rate: %s
+    </string>
+    <string name="chng_res_stng">
+        %s ψήφισμα δεν υποστηρίζει τον καθορισμό υψηλών / προσαρμοζόμενο ρυθμό ανανέωσης. Αλλαγή της λειτουργίας ομαλότητα ανάλυση της κίνησης σε ρυθμίσεις για πρώτη φορά.
+        \n\nΑυτό το app μπορεί να αλλάξει εύκολα τη λειτουργία ανάλυση και την ομαλότητα κίνησης χρησιμοποιώντας τις γρήγορες ρυθμίσεις κεραμίδι έντεκα ρύθμιση ADB γίνεται.
+    </string>
+    <string name="chng_res_qs">
+        %s ψήφισμα δεν υποστηρίζει τον καθορισμό υψηλών / προσαρμοζόμενο ρυθμό ανανέωσης. Μπορείτε να αλλάξετε την ανάλυση χρησιμοποιώντας Γρήγορα η γρήγορη κεραμίδι ρύθμιση που περιλαμβάνεται αυτό το app.</string>
+    <string name="psm_on_inf">
+        Ισχύς λειτουργίας Ταμιευτήριο είναι αυτή τη στιγμή inning. Κλείνετε τις ρυθμίσεις για πρώτη φορά το
+        Σεπτέμβριο και τον τρόπο κίνησης ομαλότητα στην Adaptive / High.
+        \n\nΑυτό το app μπορεί να αλλάξει την ομαλότητα κίνησης Εύκολα στην Adaptive Λειτουργία Λειτουργία / Υψηλής Ισχύος
+        Εξοικονόμηση ακόμη και σε έντεκα ρύθμιση ADB γίνεται.
+    </string>
+    <string name="rrm_std_inf">
+        Λειτουργία κίνησης ομαλότητα έχει οριστεί με το πρότυπο. Αλλάξτε τις ρυθμίσεις για πρώτη φορά.
+        \n\nΑυτό το app μπορεί να αλλάξει την ομαλότητα κίνησης Εύκολα στην Adaptive Λειτουργία / High έντεκα ρύθμιση ADB γίνεται.
+        Αυτό λειτουργεί ακόμα και σε λειτουργία Εξοικονόμηση ενέργειας.
+    </string>
+    <string name="input_ac_inf">Εάν χάσετε το ασφάλιστρο ως αποτέλεσμα της επαναφοράς αυτής της συσκευής, μπορείτε να την ενεργοποιήσετε ξανά εισάγοντας τον κωδικό ενεργοποίησης που στάλθηκε στο email σας.
+    </string>
+<!--    <string name="failed_show_ad">Αποτυχία να δείξει το βίντεο διαφήμισης. ΠΑΡΑΚΑΛΩ προσπαθησε ξανα.</string>-->
+<!--    <string name="failed_load_ad">Απέτυχε η διαφήμιση βίντεο φορτίου. Παρακαλώ ελέγξτε στο διαδίκτυο και δοκιμάστε ξανά.</string>-->
+    <string name="show_ns">Εμφάνιση Καθαρή Δείκτης Ταχύτητας</string>
+    <string name="combined">σε συνδυασμό</string>
+    <string name="upload">Μεταφόρτωση</string>
+    <string name="download">Κατεβάστε</string>
+    <string name="font_size">Επικάλυψη Μέγεθος γραμματοσειράς</string>
+    <string name="overlay_pos">Τοποθεσία επικάλυψης</string>
+    <string name="overlay">Overlay</string>
+    <string name="statusbar">Γραμμή κατάστασης</string>
+    <string name="perm_appx">
+        \n\nΜόλις οι εγκατάστασης ADB γίνεται, μπορείτε να κάνετε τα εξής Με αυτό το app:
+        \n- Αλλάξτε γρήγορα τις αναλύσεις της οθόνης
+        \n- (Αυτόματο) Εφαρμόστε Adaptive ή High motion smoothness ακόμα και σε λειτουργία εξοικονόμησης ενέργειας
+        \n- Εφαρμόστε αυτόματα τη λειτουργία εξοικονόμησης ενέργειας όταν η οθόνη είναι απενεργοποιημένη
+        \n- Χρησιμοποιήστε γρήγορο mod doze (premium)
+        \n- Εφαρμόστε το Adaptive refresh rate mod ακόμη και σε μη εγγενή υποστήριξη (premium)
+        \n- Αυτόματοι αισθητήρες απενεργοποιημένοι (premium)
+    </string>
+    <string name="ac_none">Μπορείτε καταχωρηθεί κανένα κωδικό ενεργοποίησης.</string>
+    <string name="in_bd">Εισάγετε τον κωδικό ενεργοποίησης</string>
+    <string name="apply">Ισχύουν</string>
+    <string name="psm_on">Η λειτουργία εξοικονόμησης ενέργειας είναι σε λειτουργία</string>
+    <string name="chng_res">Αλλαγή ανάλυσης οθόνης</string>
+    <string name="open_settings">Ανοίξτε τις Ρυθμίσεις</string>
+<!--    <string name="qst_exp">Γρήγορες ρυθμίσεις Πλακάκια Έληξε</string>-->
+<!--    <string name="ad_starting_in">"Βίντεο αρχής γενομένης από το "</string>-->
+<!--    <string name="no_thanks">Οχι ευχαριστώ!</string>-->
+    <string name="chng_res_failed">Απέτυχε η ανάλυση της αλλαγής.</string>
+    <string name="one_res_def">Μόνο ένα ψήφισμα που ορίζονται στο σύστημα.</string>
+    <string name="rrp_not_loaded">Διαθέσιμο ρυθμούς ανανέωσης δεν έχει ακόμα τοποθετηθεί. Προσπάθησε ξανά.</string>
+    <string name="sot_no_perm">Εμφάνιση στην κορυφή άδεια δεν χορηγείται!</string>
+    <!--<string name="error_opening_settings">Ρυθμίσεις Σφάλμα κατά το άνοιγμα.</string>-->
+    <string name="cie">Λάθος! Ελέγξτε τη σύνδεση στο διαδίκτυο και δοκιμάστε ξανά.</string>
+    <string name="aca">Μη έγκυρο κωδικό ενεργοποίησης.</string>
+    <string name="afa">Το Premium ενεργοποιήθηκε επιτυχώς!</string>
+    <string name="afu">Η δοκιμαστική έκδοση έχει ήδη χρησιμοποιηθεί και έχει λήξει.</string>
+    <plurals name="aha">
+        <item quantity="one">Η δοκιμαστική έκδοση Premium ενεργοποιήθηκε: %d ημέρα απομένουν</item>
+        <item quantity="other">Η δοκιμαστική έκδοση Premium ενεργοποιήθηκε: %d ημέρες απομένουν</item>
+    </plurals>
+   <!-- <string name="eta">Σφάλμα ad-δωρεάν δοκιμαστική ενεργοποίηση!</string>-->
+    <string name="nlh">Δεν βρέθηκε άδεια πριμοδότησης για αυτήν τη συσκευή: %s</string>
+    <string name="edit">Επεξεργασία</string>
+    <string name="quick_doz_mod">Γρήγορο Doze Mod</string>
+    <string name="quick_mod_inf">Αυτή η λειτουργία θα θέσει γρήγορα τη συσκευή σε κατάσταση αναμονής γρηγορότερα όταν απενεργοποιήσετε την οθόνη για να βελτιώσετε τη χρήση της μπαταρίας σε κατάσταση αναμονής.</string>
+    <string name="adp_min_hz">Ελάχιστο Hz για Adaptive</string>
+    <string name="enable_as_inf">Στο παράθυρο που εμφανίζεται, κάντε κλικ στο \"Εγκατεστημένες υπηρεσίες\" και, στη συνέχεια, ενεργοποιήστε την υπηρεσία \"Galaxy Max Hz\"</string>
+    <string name="adp_delay">Προσαρμοστική καθυστέρηση ελάχιστου hz (δευτερόλεπτα)</string>
+    <string name="cur_rr_h">Τρέχων Refresh Rate: %s Hz</string>
+    <string name="show_ns_card">Εμφάνιση εργαλείου Netspeed</string>
+    <string name="lbl_rrm">Refresh Rate Mods</string>
+    <string name="prr_psm">Διατηρήστε motion smoothness σε λειτουργία εξοικονόμησης ενέργειας</string>
+    <string name="actvt_trial">Ενεργοποίηση δωρεάν δοκιμής</string>
+    <string name="auto_psm">Λειτουργία εξοικονόμησης ενέργειας όταν η οθόνη είναι απενεργοποιημένη</string>
+    <string name="reso_opts">Επιλογές εναλλαγής Resoluton</string>
+    <string name="requires_ws_perm_h">%1$s χρειάζεται ειδική άδεια για την εκτέλεση αυτής της δυνατότητας.
+        Κάντε κλικ στον σύνδεσμο ρύθμισης ADB παρακάτω για να μάθετε πώς.
+        \n\nTLDR: Run \'adb shell pm grant %2$s android.permission.WRITE_SECURE_SETTINGS\'\n\n
+        Αυτή είναι μια εφάπαξ διαδικασία.
+    </string>
+    <string name="std">Τυπική</string>
+    <string name="lbl_profiles_h">%sΑνάλυση οθόνης και προφίλ ανανέωσης ρυθμού</string>
+    <string name="high_mode">Υψηλή λειτουργία</string>
+    <string name="std_mode">Τυπική λειτουργία</string>
+    <string name="adp_mode">Προσαρμοστική λειτουργία</string>
+    <string name="perm_reqd">Απαιτείται άδεια</string>
+    <string name="adb_setup">ADB Ρύθμιση</string>
+    <string name="dismiss">Απολύω</string>
+    <string name="help">Βοήθεια</string>
+    <string name="reload_profiles">Επαναφόρτωση προφίλ</string>
+    <string name="options">Επιλογές</string>
+    <string name="psm_options"><u>Επιλογές λειτουργίας εξοικονόμησης ενέργειας</u></string>
+    <string name="disable_sync_on_so">Απενεργοποιήστε τον αυτόματο συγχρονισμό όταν η οθόνη είναι απενεργοποιημένη</string>
+    <string name="autosync_settings"><u>Ρυθμίσεις αυτόματου συγχρονισμού</u></string>
+    <string name="apps_bat_opt_settings"><u>Ρυθμίσεις βελτιστοποίησης μπαταρίας</u></string>
+    <string name="quick_doz_mod_inf2">
+        Η λειτουργία Doze επεκτείνει τη διάρκεια ζωής της μπαταρίας, αναβάλλοντας την CPU στο φόντο της εφαρμογής και τη δραστηριότητα δικτύου.
+        Ενώ βρίσκεται σε ύπνο, η συσκευή εισέρχεται περιοδικά σε ένα παράθυρο συντήρησης (MW), κατά τη διάρκεια του οποίου οι εφαρμογές μπορούν να ολοκληρώσουν εκκρεμείς εργασίες (συγχρονισμοί, εργασίες κ.λπ.).
+        Η συσκευή θα συνεχίσει αυτόν τον κύκλο, διπλασιάζοντας το μήκος των διαστημάτων MW κάθε φορά. Όσο μεγαλύτερο είναι το διάστημα MW, τόσο καλύτερη είναι η εξοικονόμηση μπαταρίας.
+        Η λειτουργία ύπνου μπορεί να προκαλέσει καθυστερήσεις ειδοποίησης σε ορισμένες εφαρμογές. Δεν θα επηρεάσει SMS, υψηλής προτεραιότητας FCM και εφαρμογές στις οποίες απενεργοποιούνται οι βελτιστοποιήσεις μπαταρίας.
+        Η λειτουργία ύπνου θα απενεργοποιηθεί μόλις ξεκλειδωθεί η συσκευή.
+    </string>
+    <string name="quick_doz_mod_mwi">Αρχικό διάστημα παράθυρο συντήρησης σε λεπτά (0 = χωρίς παράθυρο συντήρησης)</string>
+    <string name="brightness_threshold">Ελάχιστη φωτεινότητα για προσαρμοστική</string>
+    <string name="sensor_off_info">જ્યારે ઉપકરણ અનલockedક ન થાય ત્યાં સુધી સ્ક્રીન બંધ હોય ત્યારે ઉપકરણ સેન્સર આપમેળે બંધ થાય છે. આ ગતિ-પ્રેરિત વેક તાળાઓને ઘટાડવામાં મદદ કરે છે જે બેટરીને ડ્રેઇન કરે છે.</string>
+    <string name="sensors_off_note">Σημαντική σημείωση: Εάν ο πίνακας SensorsOff είναι ενεργοποιημένος, οι κάμερες και το μικρόφωνο της συσκευής δεν είναι προσβάσιμα, όπως και άλλοι αισθητήρες. Αυτό επηρεάζει το ξεκλείδωμα προσώπου και, σε ορισμένες συσκευές, την ένταση ήχου κλήσης. Ελέγξτε αν μπορείτε να ακουστείτε κατά τη διάρκεια της κλήσης ή όχι. Εάν είναι το τελευταίο και λαμβάνετε μια κλήση ενώ η συσκευή είναι κλειδωμένη, μπορείτε να πατήσετε παρατεταμένα τον πίνακα SensorsOff για να ξεκλειδώσετε τη συσκευή και να απενεργοποιήσετε τον πίνακα SensorsOff - αφού πατήσετε το κουμπί κλήσης.</string>
+</resources>

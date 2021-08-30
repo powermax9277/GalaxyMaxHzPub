@@ -1,0 +1,3 @@
+include ':appupdater'
+include ':app'
+rootProject.name = "GalaxyMaxHz"

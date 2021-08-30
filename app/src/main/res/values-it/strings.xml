@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="lbl_enable_msm">Attiva Uniformità di Movimento</string>
+    <string name="show_hz">Monitoraggio Frequenza Di Aggiornamento</string>
+    <string name="buy_adfree">Acquista Premium</string>
+<!--    <string name="info_expired" tools:ignore="PluralsCandidate">Guarda questo video e ottieni altri %d giorni di attivazione dei pulsanti di impostazione rapida.</string>-->
+    <string name="resolution">Pulsante Risoluzione e Uniformità Di Movimento</string>
+    <string name="act">Attiva Premium|Prova</string>
+    <string name="max_hz">Hz Mass.</string>
+    <string name="max_hz_holder">%s Hz Mass.</string>
+    <string name="feat_n_a" tools:keep="@string/feat_n_a">Modifica Della Risoluzione Non Supportata</string>
+    <string name="unknown_mode">Modalità Frequenza Di Aggiornamento Non Identificata</string>
+<!--    <string name="qs_active">Pulsanti Di Impostazione Rapida attivati correttamente</string>-->
+    <string name="min_hz_for_toggle">Min. Hz per il Pulsante</string>
+    <string name="adaptive">Adattiva</string>
+    <string name="high">Alta</string>
+    <string name="show_refresh_rate">Mostra Frequenza Di Aggiornamento In Tempo reale</string>
+    <string name="left">Sinistra</string>
+    <string name="right">Destra</string>
+    <string name="top">Superiore</string>
+    <string name="bottom">Inferiore</string>
+    <string name="use_qstile_reso_switch">
+        Utilizza il pulsante di impostazione rapida incluso per modificare velocemente la modalità di risoluzione.
+    </string>
+    <string name="center">Centrale</string>
+    <string name="info_qs_max_hz">Include un pulsante per attivare rapidamente gli Hz massimi</string>
+    <string name="info_qs_rtrr">Include un pulsante per mostrare rapidamente la frequenza di aggiornamento in tempo reale</string>
+    <string name="s_off_mod">Mod. Schermo spento</string>
+    <string name="force_hz_mod">Forza Hz Minimi</string>
+    <string name="s_off_hz_inf">
+        Questo imposterà la frequenza di aggiornamento dello schermo Spento/AOD al più basso valore possibile per migliorare l\'utilizzo della batteria in standby.
+        \nFrequenza di aggiornamento a schermo spento %s
+    </string>
+    <string name="chng_res_stng">
+        L\'impostazione della risoluzione %s non supporta la frequenza di aggiornamento alta/adattiva.
+        Modifica prima la risoluzione e la modalità uniformità di movimento dalle impostazioni.
+        \n\nQuest\'app sarà in grado di modificare velocemente la risoluzione e la modalità uniformità
+        di movimento utilizzando il pulsante di impostazione rapida dopo aver eseguito la configurazione ADB.</string>
+    <string name="chng_res_qs">
+        L\'impostazione della risoluzione %s non supporta la frequenza di aggiornamento alta/adattiva.
+        È possibile modificare velocemente la risoluzione utilizzando il pulsante di impostazione rapida incluso in quest\'app.</string>
+    <string name="psm_on_inf">
+        La Modalità Di Risparmio Energetico è attualmente attiva. Prima disattivala dalle impostazioni dopodiché imposta
+        la modalità uniformità di movimento su Adattiva/Alta.
+        \n\nQuest\'app può impostare la Modalità Uniformità di Movimento su Adattiva/Alta anche con risparmio energetico
+        attivo una volta eseguita la configurazione ADB.
+    </string>
+    <string name="rrm_std_inf">
+        La modalità uniformità di movimento è attualmente impostata su Standard. Prima modificala dalle impostazioni.
+        \n\nQuest\'app sarà facilmente in grado di modificare la modalità Uniformità Di Movimento in Adattiva/Alta
+        una volta eseguita la configurazione ADB. Questa opzione funziona anche con risparmio energetico attivo.</string>
+    <string name="input_ac_inf">
+        Se perdi il premio a seguito del ripristino di questo dispositivo, puoi riattivarlo inserendo il codice di attivazione inviato alla tua email.
+    </string>
+<!--    <string name="failed_show_ad">Impossibile visualizzare l\'annuncio video. Si prega di riprovare.</string>-->
+<!--    <string name="failed_load_ad">Impossibile caricare l\'annuncio video. Si prega di verificare la connessione ad internet e riprovare.</string>-->
+    <string name="show_ns">Mostra Indicatore Velocità Internet</string>
+    <string name="combined">Combinata</string>
+    <string name="upload">Upload</string>
+    <string name="download">Download</string>
+    <string name="font_size">Overlay Dimensione Carattere</string>
+    <string name="overlay_pos">Punto di Sovrapposizione</string>
+    <string name="overlay">Sovrapposizione</string>
+    <string name="statusbar">Barra di stato</string>
+    <string name="perm_appx">
+        \n\nUna volta eseguita la configurazione adb, potrai effettuare le seguenti operazioni con quest\'app:
+        \n- Cambiare rapidamente le risoluzioni dello schermo
+        \n- Applica automaticamente la modalità di risparmio energetico quando lo schermo è spento
+        \n- Applicare l\'uniformità di movimento Adattiva o Alta anche con risparmio energetico attivo
+        \n- Utilizzare la modalità doze rapido (premium)
+        \n- Applica la modalità Adaptive refresh rate anche su dispositivi non supportati in modo nativo (premium)
+        \n- Sensori automatici disattivati (premium)
+    </string>
+    <string name="ac_none">Non hai immesso alcun codice di attivazione.</string>
+    <string name="aca">Codice di attivazione non valido.</string>
+    <string name="actvt_trial">Attiva periodo di prova gratuito</string>
+    <string name="adb_setup">Configurazione ADB</string>
+    <string name="adp_delay">Ritardo Min. Hz Adattivi (in secondi)</string>
+    <string name="adp_mode">Modalità Adattiva</string>
+    <string name="afa">Licenza Premium correttamente attivata!</string>
+    <string name="afu">Licenza Premium già utilizzata e scaduta.</string>
+    <string name="allow">Consenti</string>
+    <string name="allow_aot">Consenti Mostra in Alto</string>
+    <string name="allow_bg_act">
+        Affinché quest\'app funzioni in maniera stabile, attiva \'Consenti attività in background\' o disattiva \'Ottimizzazione utilizzo batteria\'.
+    </string>
+    <string name="aot_perm_inf">
+        Quest\'app necessita di un\'autorizzazione per essere mostrata in alto e funzionare correttamente.
+        Puoi disattivare questa notifica eseguendo una pressione prolungata e disattivando l\'interruttore che apparirà a schermo.</string>
+    <string name="apply">Applica</string>
+    <string name="apps_bat_opt_settings"><u>Impostazioni Ottimizzazione Batteria App</u></string>
+    <string name="as_desc">Questo servizio è necessario per far funzionare le mod di Galaxy Max Hz.</string>
+    <string name="auto_psm">Modalità di risparmio energetico a Schermo spento</string>
+    <string name="auto_sensors_off_exp">Disattivazione Automatica Sensori (sperimentale)</string>
+    <string name="autosync_settings"><u>Impostazioni Sincronizzazione automatica</u></string>
+    <string name="brightness_threshold">Luminosità Minima per Modalità Adattiva</string>
+    <string name="chng_res_failed">Modifica della risoluzione non riuscita.</string>
+    <string name="chng_res">Modifica Risoluzione</string>
+    <string name="cie">Errore! Si prega di verificare la connessione ad Internet e riprovare.</string>
+    <string name="cur_rr_h">Frequenza di Aggiornamento Attuale: %s Hz</string>
+    <string name="data_usage"><u>Utilizzo Dati</u></string>
+    <string name="dev_opt_setup_info">
+        Per attivare le opzioni sviluppatore, dirigiti su Impostazioni > Informazioni telefono > Informazioni software e clicca su \'Numero build\' per 7 volte.
+    </string>
+    <string name="disable_sync_on_so">Disattivazione automatica Sincronizzazione</string>
+    <string name="dismiss">Rimuovi</string>
+    <string name="edit">Modifica</string>
+    <string name="enable_as_inf">Clicca su \'Servizi installati\' nella finestra che apparirà, quindi attiva il servizio Galaxy Max Hz</string>
+    <string name="enable_write_settings">Attiva i permessi di modifica/scrittura nelle impostazioni di sistema per Galaxy Max Hz.</string>
+    <string name="adp_min_hz">Hz Min. per Modalità Adattiva</string>
+    <string name="help">Aiuto</string>
+    <string name="high_mode">Modalità Alta</string>
+    <string name="in_bd">Immetti Codice di Attivazione</string>
+    <string name="lbl_profiles_h">%sRisoluzione Schermo \n e Profili Frequenza di Aggiornamento</string>
+    <string name="lbl_rrm">Mod Frequenza di Aggiornamento</string>
+    <string name="nlh">Nessuna licenza premium rilevata per questo dispositivo: %s.</string>
+    <string name="one_res_def">Solo una risoluzione definita nel sistema.</string>
+    <string name="open_settings">Apri Impostazioni</string>
+    <string name="options">Opzioni</string>
+    <string name="quick_doz_mod">Mod Doze-Rapida</string>
+    <string name="quick_mod_inf">Attiva rapidamente la Modalità Doze quando lo schermo è spento, senza interruzioni causate da spostamenti, per migliorare l\'utilizzo della batteria in fase di inattività.</string>
+    <string name="quick_doz_mod_inf2">La Modalità Doze estende la durata della batteria posticipando l\'esecuzione di app in background, l\'attività di rete ed il carico di lavoro della CPU. Durante la fase di inattività,
+        il dispositivo entra periodicamente in una finestra di manutenzione (MW), durante la quale le app possono completare le operazioni in sospeso (sincronizzazioni, compiti, ecc.). Il dispositivo continuerà tale ciclo,
+        raddoppiando di volta in volta la lunghezza dell\'intervallo MW. Più lungo è l\'intervallo MW, migliore sarà il risparmio energetico. La Modalità Doze può causare ritardi nella ricezione delle notifiche da alcune app.
+        Non influirà su SMS, FCM ad alta priorità ed app con ottimizzazioni sui consumi disattivate. La Modalità Doze si disattiverà una volta sbloccato il dispositivo.</string>
+    <string name="quick_doz_mod_mwi">Intervallo finestra di manutenzione iniziale in minuti (0 = nessuna finestra di manutenzione)</string>
+    <string name="perm_reqd">Permesso Richiesto</string>
+    <string name="prr_psm">Uniformità di Movimento Persistente in Modalità Risparmio Energetico</string>
+    <string name="psm_on">Modalità Risparmio Energetico Attiva</string>
+     <string name="psm_options"><u>Opzioni Modalità Risparmio Energetico</u></string>
+    <string name="reload_profiles">Ricarica Profili</string>
+    <string name="requires_ws_perm_h">%1$s necessita di un permesso speciale per eseguire questa funzionalità. Clicca sul collegamento Configurazione ADB in basso per scoprire come.
+        \n\nTLDR: Esegui il comando \'adb shell pm grant %2$s android.permission.WRITE_SECURE_SETTINGS\'
+        \n\nQuesta è una procedura una tantum.</string>
+    <string name="rrp_not_loaded">Profilo Frequenza di Aggiornamento non ancora caricato. Riprova.</string>
+    <string name="reso_opts">Opzioni Abilitate</string>
+    <string name="sensor_off_info">I sensori del dispositivo si spegneranno automaticamente mentre lo schermo rimarrà spento finché il dispositivo non verrà sbloccato. Ciò aiuterà a ridurre al minimo quei wakelock attivati dal movimento che consumano batteria.</string>
+    <string name="sensor_off_setup_info">
+        Esegui prima questa operazione: attiva il pulsante \'Disattiva Sensori\' da Impostazioni > Opzioni sviluppatore > Impostazioni rapide pulsanti sviluppatore.</string>
+    <string name="sensors_off_note">
+        Nota importante: quando il riquadro \'Disattiva Sensori\' è attivo, la/le videocamera/e e il microfono/i del dispositivo, tra gli altri sensori, risultano inaccessibili. Assicurati che la tua voce venga rilevata in fase di chiamata.
+        Se ciò non dovesse accadere e ricevessi una chiamata mentre il dispositivo è bloccato, ti basterò effettuare una pressione prolungata sul pulsante \'Disattiva Sensori\' per sbloccare il dispositivo ed i relativi sensori - dopo aver premuto il pulsante per rispondere alla chiamata.</string>
+    <string name="show_ns_card">Mostra Strumento Velocità Rete</string>
+    <string name="sot_no_perm">Permesso Mostra in Alto non consentito!</string>
+    <string name="std">Standard</string>
+    <string name="std_mode">Modalità Standard</string>
+<!--    <string name="qst_exp">I Pulsanti Di Impostazione Rapida Sono Scaduti</string>-->
+<!--    <string name="ad_starting_in">"Il Video inizierà tra"</string>-->
+<!--    <string name="no_thanks">No, grazie!</string>-->
+   <!-- <string name="error_opening_settings">Errore nell\'apertura delle impostazioni.</string>-->
+    <plurals name="aha">
+        <item quantity="other">Periodo di prova premium attivo: %d giorni rimanenti</item>
+        <item quantity="one">Periodo di prova premium attivo: %d giorno rimanente</item>
+    </plurals>
+    <!-- <string name="eta">Errore di attivazione della rimozione pubblicitaria!</string>-->
+
+</resources>

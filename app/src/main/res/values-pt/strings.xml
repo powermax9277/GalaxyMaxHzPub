@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="lbl_enable_msm">Habilitar suavidade de movimento</string>
+    <string name="show_hz">Monitor de Taxa de Atualização</string>
+    <string name="buy_adfree">Compre Premium</string>
+<!--    <string name="info_expired">Veja este vídeo e obter telhas de ajuste rápidas ativadas por mais %d dias.</string>-->
+    <string name="resolution">Resolução e Movimento Suavidade Alternar</string>
+    <string name="act">Ativar Premium|Trial</string>
+    <string name="max_hz">Max Hz</string>
+    <string name="max_hz_holder">Max %s Hz</string>
+    <string name="feat_n_a" tools:keep="@string/feat_n_a">Resolução mudança não suportada</string>
+    <string name="unknown_mode">Unidentified Modo Refresh Rate</string>
+<!--    <string name="qs_active">Configurações rápida Tiles ativada com sucesso</string>-->
+    <string name="min_hz_for_toggle">Min. Hz para o botão de alternância</string>
+    <string name="adaptive">Adaptativo</string>
+    <string name="high">Alta</string>
+    <string name="show_refresh_rate">Mostrar Real-Time Taxa de actualização</string>
+    <string name="left">Esquerda</string>
+    <string name="right">Certa</string>
+    <string name="top">Superior</string>
+    <string name="bottom">Inferior</string>
+    <string name="use_qstile_reso_switch">Use as configurações rápidas telha incluído para resoluções alternar rapidamente e modos de movimento suavidade.</string>
+    <string name="center">Centro</string>
+    <string name="info_qs_max_hz">Inclui uma telha de ajuste rápido para alternar hz max</string>
+    <string name="info_qs_rtrr">Inclui uma telha de ajuste rápido para mostrar taxa de atualização em tempo real</string>
+    <string name="s_off_mod">Taxa de atualização quando a tela está desligada</string>
+    <string name="force_hz_mod">Forçar para Hz Mais Baixo</string>
+    <string name="s_off_hz_inf">
+        Esta vontade off Defina a taxa de atualização de tela para o mais baixo em quaisquer configurações do modo para
+        melhorar o uso da bateria de espera.
+        \nScreen-off Taxa de Atualização %s
+    </string>
+    <string name="chng_res_stng">
+        Resolução %s não suporta a definição alta taxa de atualização / adaptativo. Alterar o modo de suavidade
+        resolução movimento em ambientes em primeiro lugar.
+        \n\nEste aplicativo pode facilmente alternar modo de resolução e suavidade de movimento usando as
+        configurações rápidas telha onze configuração ADB é realizada.
+    </string>
+    <string name="chng_res_qs">
+        Resolução %s não suporta a definição alta taxa de atualização / adaptativo. Você pode alterar a resolução
+        usando rapidamente a telha de configuração rápida incluído neste aplicativo.
+    </string>
+    <string name="psm_on_inf">
+        Modo de economia de energia está Atualmente inning. Desligá-lo nas
+        configurações pela primeira vez em setembro e modo de movimento suavidade para Adaptive / alta.
+        \n\nEste aplicativo pode alterar a suavidade do movimento facilmente para o modo Adaptive Modo
+        de economia de energia alta / mesmo em onze configuração ADB é realizada.
+    </string>
+    <string name="rrm_std_inf">
+        Modo de movimento lisura está definido como padrão. Mudá-lo nas configurações de primeira.
+        \n\nEste aplicativo pode alterar a suavidade do movimento facilmente para Adaptive Mode / alta
+        onze configuração ADB é realizada. Isso funciona mesmo em modo de economia de energia.
+    </string>
+    <string name="input_ac_inf">Se você perder o prêmio como resultado da redefinição deste dispositivo, poderá reativá-lo digitando o código de ativação enviado para o seu e-mail.
+    </string>
+<!--    <string name="failed_show_ad">Falha ao mostrar anúncios em vídeo. Por favor, tente novamente.</string>-->
+<!--    <string name="failed_load_ad">Falha ao anúncio de vídeo de carga. Verifique internet e tente novamente.</string>-->
+    <string name="show_ns">Mostrar Indicador de velocidade gratuita</string>
+    <string name="combined">Combinado</string>
+    <string name="upload">Envio</string>
+    <string name="download">Download</string>
+    <string name="font_size">Tamanho overlay font</string>
+    <string name="overlay_pos">Sobreposição localização</string>
+    <string name="overlay">Sobreposição</string>
+    <string name="statusbar">Barra de status</string>
+    <string name="perm_appx">
+        \n\nQuando instalação ADB é realizada, você pode fazer o seguinte com este app:
+        \n- Rapidamente resoluções de tela opção
+        \n- Aplicar Adaptive alta suavidade de movimento ou até mesmo no Modo de Economia de Energia
+        \n- Aplicar automaticamente o modo de economia de energia quando a tela estiver desligada
+        \n- Use o mod rápido doze (premium)
+        \n- Aplicar o modo de taxa de atualização adaptável mesmo em dispositivos sem suporte nativo (premium)
+        \n- Sensores automáticos desligados (premium)
+    </string>
+    <string name="ac_none">Você digitou nenhum código de ativação.</string>
+    <string name="in_bd">Inserir código de ativação</string>
+    <string name="apply">Aplicar</string>
+    <string name="psm_on">Modo de economia de energia está ligada</string>
+    <string name="chng_res">resolução mudança</string>
+    <string name="open_settings">Abrir configurações</string>
+<!--    <string name="qst_exp">Configurações rápida Tiles Expired</string>-->
+<!--    <string name="ad_starting_in">"Vídeo a partir de "</string>-->
+<!--    <string name="no_thanks">Não, obrigado!</string>-->
+    <string name="chng_res_failed">Falha ao alterar a resolução.</string>
+    <string name="one_res_def">Apenas uma resolução definida no sistema.</string>
+    <string name="rrp_not_loaded">taxas de atualização disponíveis ainda não carregado. Tente novamente.</string>
+    <string name="sot_no_perm">Mostrar no permissão topo não é concedido!</string>
+<!--    <string name="error_opening_settings">configurações de abertura de erro.</string>-->
+    <string name="cie">Erro! Por favor, verifique a conexão de internet e tente novamente.</string>
+    <string name="aca">Código de ativação inválido.</string>
+    <string name="afa">Premium foi ativado com sucesso!</string>
+    <string name="afu">A versão de teste já foi usada e expirou.</string>
+    <plurals name="aha">
+        <item quantity="one">Avaliação premium ativada: %d dia restante</item>
+        <item quantity="other">Avaliação premium ativada: %d dias deixou</item>
+    </plurals>
+    <!--<string name="eta">Erro de teste de ativação ad-free!</string>-->
+    <string name="nlh">Nenhuma licença premium encontrada para este dispositivo: %s</string>
+    <string name="edit">Editar</string>
+    <string name="quick_doz_mod">Rápido doze mod</string>
+    <string name="quick_mod_inf">Isso configurará seu dispositivo para entrar rapidamente no modo doze durante a ausência da tela para melhorar o consumo da bateria no modo de espera.</string>
+    <string name="adp_min_hz">Hz mín. para Adaptativo</string>
+    <string name="enable_as_inf">Na janela que aparece, clique em \"Serviços Instalados\" e depois habilite o serviço \"Galaxy Max Hz\"</string>
+    <string name="adp_delay">Atraso de hertz mínimo adaptável (segundos)</string>
+    <string name="cur_rr_h">Taxa de atualização atual: %s Hz</string>
+    <string name="show_ns_card">Mostrar ferramenta Netspeed</string>
+    <string name="lbl_rrm">Mods de Taxa de Atualização</string>
+    <string name="prr_psm">Manter a suavidade do movimento no modo de economia de energia</string>
+    <string name="actvt_trial">Ativar avaliação gratuita?</string>
+    <string name="auto_psm">Modo de economia de energia quando a tela está desligada</string>
+    <string name="reso_opts">Opções de Mudança de Resolução</string>
+
+    <string name="requires_ws_perm_h">
+        %1$s necesita un permiso especial para ejecutar esta función.
+        Haga clic en el enlace a continuación para saber cómo configurar ADB.
+        \n\nTLDR: Run \'adb shell pm grant %2$s android.permission.WRITE_SECURE_SETTINGS\'
+        \n\nEste procedimiento solo se realiza una vez.
+    </string>
+    <string name="std">Padrão</string>
+    <string name="lbl_profiles_h">%sResolução de Tela e Perfis de Taxa de Atualização</string>
+    <string name="high_mode">Modo Alto</string>
+    <string name="std_mode">Modo Padrão</string>
+    <string name="adp_mode">Modo Adaptativo</string>
+    <string name="perm_reqd">Se requiere permiso</string>
+    <string name="adb_setup">Configurar ADB</string>
+    <string name="dismiss">Descart</string>
+    <string name="help">Ajuda</string>
+    <string name="reload_profiles">Recarregar Perfis</string>
+    <string name="options">Opções</string>
+    <string name="psm_options"><u>Opções do modo de economia de energia</u></string>
+    <string name="disable_sync_on_so">Desative a sinc automática quando a tela estiver desligada</string>
+    <string name="autosync_settings"><u>Configurações de sinc automática</u></string>
+    <string name="apps_bat_opt_settings"><u>Configurações de otimização de bateria</u></string>
+    <string name="quick_doz_mod_inf2">
+        O modo Soneca estende a vida útil da bateria ao adiar a CPU e a atividade de rede em segundo plano do aplicativo.
+        Enquanto cochila, o dispositivo entra periodicamente em uma janela de manutenção (MW), durante a qual os aplicativos podem concluir o trabalho pendente (sincronizações, trabalhos, etc.).
+        O dispositivo continuará este ciclo, dobrando a duração do intervalo MW a cada vez. Quanto mais longo for o intervalo MW, melhor será a economia da bateria.
+        O modo Soneca pode causar atrasos nas notificações em alguns aplicativos. Isso não afetará SMS, FCM de alta prioridade e aplicativos cujas otimizações de bateria estão desativadas.
+        O modo Soneca será desativado assim que o dispositivo for desbloqueado.
+    </string>
+    <string name="quick_doz_mod_mwi">Intervalo da janela de manutenção inicial em minutos (0 = sem janela de manutenção)</string>
+    <string name="brightness_threshold">Brilho mínimo para adaptável</string>
+    <string name="sensor_off_info">Os sensores do dispositivo são desligados automaticamente quando a tela é desligada até que o dispositivo seja desbloqueado. Isso ajuda a minimizar wake locks induzidos por movimento que drenam a bateria.</string>
+    <string name="sensors_off_note">Observação importante: enquanto o bloco SensorsOff está LIGADO, as câmeras e os microfones do dispositivo, entre outros sensores, ficam inacessíveis. Verifique se sua voz pode ser ouvida ou não durante a chamada. Se não puder ser ouvido e você receber uma chamada enquanto o dispositivo está bloqueado, você pode manter pressionado o bloco SensorsOff para desbloquear o dispositivo e desligar o bloco SensorsOff - depois de pressionar o botão de receber chamada.</string>
+</resources>

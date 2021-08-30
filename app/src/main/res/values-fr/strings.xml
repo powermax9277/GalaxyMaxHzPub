@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="lbl_enable_msm">Activer la fluidité du mouvement</string>
+    <string name="show_hz">Moniteur de taux de rafraîchissement</string>
+    <string name="buy_adfree">Acheter Premium</string>
+    <!--<string name="info_expired">Regardez cette vidéo et obtenez des vignettes de réglage rapide
+        activées pour une autre %d days.</string>-->
+    <string name="resolution">Bascule résolution et fluidité</string>
+    <string name="act">Activer Premium|Trial</string>
+    <string name="max_hz">Max Hz</string>
+    <string name="max_hz_holder">Max %s Hz</string>
+    <string name="feat_n_a" tools:keep="@string/feat_n_a">Modifier la résolution non prise en charge</string>
+    <string name="unknown_mode">Mode de taux de rafraîchissement non identifié</string>
+<!--    <string name="qs_active">Les vignettes de réglages rapides ont bien été activées</string>-->
+    <string name="min_hz_for_toggle">Min. Hz pour le toggle</string>
+    <string name="adaptive">Adaptatif</string>
+    <string name="high">Haut</string>
+    <string name="show_refresh_rate">Afficher le taux de rafraîchissement en temps réel</string>
+    <string name="left">La gauche</string>
+    <string name="right">À droite</string>
+    <string name="top">Plus haut</string>
+    <string name="bottom">En Bas</string>
+    <string name="use_qstile_reso_switch">Utilisez la vignette des paramètres rapides (qs) incluse pour changer rapidement de résolution d\'écran.</string>
+    <string name="center">Centre</string>
+    <string name="info_qs_max_hz">Comprend une tuile de réglage rapide pour basculer entre max hz</string>
+    <string name="info_qs_rtrr">Comprend un tuile de réglage rapide pour afficher le taux de rafraîchissement en temps réel</string>
+    <string name="s_off_mod">Taux de rafraîchissement de l\'écran désactivé</string>
+    <string name="force_hz_mod">Force au Plus Bas Hz</string>
+    <string name="s_off_hz_inf">
+        Cela définira le taux de rafraîchissement de l\'écran éteint ou AOD au plus bas pour améliorer l\'utilisation de la batterie en veille.
+        \nTaux de Rafraîchissement Screen-off %s
+    </string>
+    <string name="chng_res_stng">%s le paramètre de résolution ne prend pas en charge le taux de
+        rafraîchissement élevé / adaptatif. Modifiez d\'abord la résolution dans les paramètres.
+        \n\nCette application peut facilement changer les paramètres de résolution à l\'aide de la
+        vignette des paramètres rapides une fois la configuration ADB effectuée.
+    </string>
+    <string name="chng_res_qs">
+        %s le paramètre de résolution ne prend pas en charge le taux de rafraîchissement élevé / adaptatif.
+        Vous pouvez modifier rapidement la résolution à l\'aide de la vignette de réglage rapide
+        incluse dans cette application.
+    </string>
+    <string name="psm_on_inf">
+        Le mode d\'économie d\'énergie est actuellement activé. Désactivez-le d\'abord dans
+        les paramètres et réglez le mode de fluidité de mouvement sur Adaptatif / Elevé.
+        Cette application peut facilement changer le mode de douceur de mouvement en adaptatif / élevé,
+        même en mode d\'économie d\'énergie une fois la configuration ADB effectuée.
+    </string>
+    <string name="rrm_std_inf">
+        Le mode de fluidité de mouvement est actuellement réglé sur Standard.  Modifiez-le d\'abord dans les paramètres.
+        \n\nCette application peut facilement changer le mode de douceur de mouvement en adaptatif / élevé une
+        fois la configuration ADB effectuée. Cela fonctionne même en mode d\'économie d\'énergie.
+    </string>
+    <string name="input_ac_inf">Si vous perdez votre prime suite à la réinitialisation de cet appareil, vous pouvez le réactiver en saisissant le code d\'activation envoyé à votre adresse e-mail.
+    </string>
+<!--    <string name="failed_show_ad">Échec de la diffusion de l\'annonce vidéo. Veuillez réessayer.</string>-->
+<!--    <string name="failed_load_ad">-->
+<!--        Échec du chargement de l\'annonce vidéo. Veuillez vérifier Internet et réessayer.-->
+<!--    </string>-->
+    <string name="show_ns">Afficher l\'indicateur de vitesse Internet</string>
+    <string name="combined">Combiné</string>
+    <string name="upload">En amont</string>
+    <string name="download">En aval</string>
+    <string name="font_size">Taille de police de superposition</string>
+    <string name="overlay_pos">Emplacement de la superposition</string>
+    <string name="overlay">Superposition</string>
+    <string name="statusbar">Barre d\'état</string>
+    <string name="perm_appx">
+        \n\nLorsque la configuration adb est effectuée, vous pouvez effectuer les opérations suivantes avec cette application:
+        \n- Changer rapidement de résolution d\'écran
+        \n- (Auto)appliquer le mode de taux de rafraîchissement adaptatif ou élevé en mode d\'économie d\'énergie
+        \n- Appliquer automatiquement le mode d\'économie d\'énergie lorsque l\'écran est éteint
+        \n- Utilisez le mod Doze rapide (premium)
+        \n- Appliquez le mod de taux de rafraîchissement adaptatif même sur un appareil non pris en charge de manière native (premium)
+        \n- Capteurs automatiques désactivés (premium)
+    </string>
+    <string name="ac_none">Aucun code d\'activation entré.</string>
+    <string name="in_bd">Entrer le code d\'activation</string>
+    <string name="apply">Appliquer</string>
+    <string name="psm_on">Le mode d\'économie d\'énergie est activé</string>
+    <string name="chng_res">Changer la résolution</string>
+    <string name="open_settings">Ouvrir les paramètres</string>
+<!--    <string name="qst_exp">Vignettes de paramètres rapides expirées</string>-->
+<!--    <string name="ad_starting_in">"Vidéo commençant dans "</string>-->
+<!--    <string name="no_thanks">Non merci!</string>-->
+    <string name="chng_res_failed">Échec de la modification de la résolution.</string>
+    <string name="one_res_def">Une seule résolution définie dans le système.</string>
+    <string name="rrp_not_loaded">Les taux de rafraîchissement disponibles ne sont pas encore chargés. Réessayer.</string>
+    <string name="sot_no_perm">La permission d’afficher en haut n’est pas accordée!</string>
+<!--    <string name="error_opening_settings">Erreur lors de l’ouverture des paramètres.</string>-->
+    <string name="cie">Erreur! Veuillez vérifier la connexion Internet et réessayer.</string>
+    <string name="aca">Code d’activation invalide.</string>
+    <string name="afa">Premium activé avec succès!</string>
+    <string name="afu">Essai Premium déjà utilisé et expiré.</string>
+    <plurals name="aha">
+        <item quantity="one">Essai Premium activé: %d jour restant</item>
+        <item quantity="other">Essai Premium activé: %d jours restants</item>
+    </plurals>
+    <!--<string name="eta">Erreur lors de l\'activation de l\'essai sans publicité!</string>-->
+    <string name="nlh">Aucune licence premium trouvée pour cet appareil: %s</string>
+    <string name="edit">Éditer</string>
+    <string name="quick_doz_mod">Rapide doze mod</string>
+    <string name="quick_mod_inf">Cette fonction mettra rapidement l\'appareil en mode veille lors de la mise hors tension de l\'écran pour améliorer l\'utilisation de la batterie en veille.</string>
+    <string name="adp_min_hz">Hz min. pour Adaptatif</string>
+    <string name="enable_as_inf">Dans la fenêtre qui apparaît, cliquez sur «Services installés» puis activez le service «Galaxy Max Hz»</string>
+    <string name="adp_delay">Retard adaptatif de min Hz (secondes)</string>
+    <string name="cur_rr_h">Taux de rafraîchissement actuel: %s Hz</string>
+    <string name="show_ns_card">Afficher l\'outil netspeed</string>
+    <string name="lbl_rrm">Mods de taux de rafraîchissement</string>
+    <string name="prr_psm">Maintenir motion smoothness en mode économie d\'énergie</string>
+    <string name="actvt_trial">Activer l\'essai gratuit</string>
+    <string name="auto_psm">Mode d\'économie d\'énergie lorsque l\'écran est éteint</string>
+    <string name="reso_opts">Options activées</string>
+
+    <string name="requires_ws_perm_h">
+        %1$s a besoin d\'une autorisation spéciale pour exécuter cette fonction.
+        Cliquez sur le lien de configuration ADB ci-dessous pour savoir comment procéder.
+        \n\nTLDR: Run \'adb shell pm grant %2$s android.permission.WRITE_SECURE_SETTINGS\'\n\n
+       Cette procédure ne doit être effectuée qu\'une seule fois.
+    </string>
+    <string name="std">Standard</string>
+    <string name="lbl_profiles_h">%sProfils de résolution d\'écran et de taux de rafraîchissement</string>
+    <string name="high_mode">Mode Haut</string>
+    <string name="std_mode">Mode Standard</string>
+    <string name="adp_mode">Mode Adaptatif</string>
+    <string name="perm_reqd">Autorisation requise</string>
+    <string name="adb_setup">Configuration ADB</string>
+    <string name="dismiss">Sortir</string>
+    <string name="help">Aider</string>
+    <string name="reload_profiles">Recharger les profils</string>
+    <string name="options">Options</string>
+    <string name="psm_options"><u>Options du mode d\'économie d\'énergie</u></string>
+    <string name="disable_sync_on_so">Désactiver la sync automatique lorsque l\'écran est éteint</string>
+    <string name="autosync_settings"><u>Paramètres de sync automatique</u></string>
+    <string name="apps_bat_opt_settings"><u>Paramètres d\'optimisation de la batterie</u></string>
+    <string name="quick_doz_mod_inf2">
+        Le mode Doze prolonge la durée de vie de la batterie en différant l\'activité du processeur et du réseau en arrière-plan de l\'application.
+        Lorsqu\'il est endormi, l\'appareil entre périodiquement dans une fenêtre de maintenance (MW),
+        au cours de laquelle les applications peuvent terminer le travail en attente (synchronisations, tâches, etc.).
+        L\'appareil continuera ce cycle, doublant la longueur de l\'intervalle MW à chaque fois.
+        Plus l\'intervalle MW est long, meilleure est l\'économie de la batterie.
+        Le mode Doze peut entraîner des retards de notification sur certaines applications.
+        Cela n\'affectera pas les SMS, le FCM haute priorité et les applications dont les optimisations de batterie sont désactivées.
+        Le mode Doze se désactivera une fois l\'appareil déverrouillé.
+    </string>
+    <string name="quick_doz_mod_mwi">Intervalle de la fenêtre de maintenance initiale en minutes (0 = aucune fenêtre de maintenance)</string>
+    <string name="brightness_threshold">Luminosité minimale pour adaptatif</string>
+    <string name="sensor_off_info">Les capteurs de l\'appareil sont automatiquement désactivés lorsque l\'écran est éteint jusqu\'à ce que l\'appareil soit déverrouillé. Cela aide à minimiser les wakelocks induits par le mouvement qui épuisent la batterie.</string>
+    <string name="sensors_off_note">Remarque importante : lorsque la vignette SensorsOff est activée, la ou les caméras et le microphone de l\'appareil, entre autres capteurs, deviennent inaccessibles. Cela affecte le déverrouillage du visage et, sur certains appareils, l\'audibilité pendant les appels. Vérifiez si vous êtes audible pendant l\'appel ou non. Si ce n\'est pas audible et que vous recevez un appel alors que l\'appareil est verrouillé, vous pouvez appuyer longuement sur la vignette SensorsOff pour déverrouiller l\'appareil et désactiver la vignette SensorsOff - après avoir appuyé sur le bouton de réception d\'appel</string>
+</resources>

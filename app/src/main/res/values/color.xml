@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary_color">@color/design_default_color_primary</color>
+    <color name="card_view_background">#FFFFFF</color>
+    <color name="ic_launcher_background">@color/primary_color</color>
+</resources>

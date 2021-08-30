@@ -1,0 +1,1105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+    <data>
+
+        <variable
+                name="showNsTool"
+                type="Boolean" />
+        <variable
+                name="isMultiRes"
+                type="Boolean"/>
+        <variable
+                name="isAdFree"
+                type="Boolean" />
+        <variable
+                name="hideHzOverlaySettings"
+                type="Boolean" />
+        <variable
+                name="adaptiveSupported"
+                type="Boolean" />
+        <variable
+                name="hasMotionSmoothness"
+                type="Boolean" />
+        <variable
+                name="refreshRateMode"
+                type="String" />
+        <variable
+                name="hasWssPerm"
+                type="Boolean" />
+        <!--Keep this-->
+        <variable
+                name="dozeIsOn"
+                type="Boolean" />
+        <variable
+                name="powerSavingIsOn"
+                type="Boolean" />
+        <variable
+                name="minHzAdaptive"
+                type="Integer" />
+
+        <variable
+            name="hasMinHzOptions"
+            type="Boolean" />
+
+        <variable
+                name="sensorsOff"
+                type="Boolean" />
+        <variable
+            name="sensorsOffSupported"
+            type="Boolean" />
+        <variable
+                name="clickListener"
+                type="com.tribalfs.gmh.callbacks.MyClickHandler"/>
+        <import type="android.view.View"/>
+    </data>
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            tools:context=".MainActivity">
+
+        <com.google.android.material.appbar.AppBarLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:animateLayoutChanges="true"
+                app:liftOnScroll="true">
+
+            <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:background="?attr/colorPrimary"
+                    android:layout_height="?actionBarSize"
+                    android:elevation="8dp"
+                    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+            </androidx.appcompat.widget.Toolbar>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.core.widget.NestedScrollView
+                android:id="@+id/scroll_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#0F000000"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    >
+                <LinearLayout
+                        style="@style/cardViewStyle"
+                        android:orientation="vertical">
+
+                    <TextView
+                            style="@style/topTitle"
+                            android:text=""
+                            android:id="@+id/tv_res_and_rates_lbl"
+                            android:drawableStart="@drawable/ic_res_switch_24"
+                            tools:ignore="UseCompatTextViewDrawableXml" />
+
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/tv_res_and_rates"
+                            android:textSize="14sp"
+                            android:text=""
+                            android:layout_gravity="center_horizontal"
+                            android:layout_margin="8dp"
+                            android:textAlignment="center" />
+
+                    <View
+                            android:layout_width="265dp"
+                            android:layout_height="1dp"
+                            android:background="?android:attr/listDivider"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginBottom="8dp"
+                            android:visibility="@{isMultiRes ? View.VISIBLE : View.GONE, default=gone}"
+                            android:layout_gravity="center_horizontal" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:text="@string/use_qstile_reso_switch"
+                        android:textColor="?android:attr/textColorSecondary"
+                        android:layout_margin="8dp"
+                        android:layout_gravity="center_horizontal"
+                        android:textAllCaps="false"
+                        android:visibility="@{isMultiRes ? View.VISIBLE : View.GONE, default=gone}"
+                        android:id="@+id/tv_use_qs_tile_inf"
+                        android:drawableEnd="@{hasWssPerm ? null : @android:drawable/ic_menu_info_details}"
+                        tools:ignore="UseCompatTextViewDrawableXml"
+                        android:textAlignment="center"
+                        android:onClick="@{hasWssPerm ? null : clickListener::onClickView}"
+                        android:textStyle="italic" />
+
+                    <TextView
+                            android:text="@string/reso_opts"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            style="?android:attr/textColorPrimary"
+                            android:textSize="12sp"
+                            android:layout_gravity="center_horizontal"
+                            android:visibility="@{(isMultiRes &amp;&amp; isAdFree) ? View.VISIBLE : View.GONE, default=gone}" />
+
+
+
+                    <HorizontalScrollView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:visibility="@{(isMultiRes &amp;&amp; isAdFree) ? View.VISIBLE : View.GONE, default=gone}">
+
+                        <com.google.android.material.chip.ChipGroup
+                                android:id="@+id/cgResSwFilter"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                app:singleLine="true"
+                                app:singleSelection="false"
+                                app:selectionRequired="true"
+                                android:clipToPadding="false"
+                                tools:ignore="ScrollViewSize" />
+                    </HorizontalScrollView>
+
+
+                </LinearLayout>
+
+               <!-- <com.google.android.gms.ads.AdView
+                        style="@style/cardViewStyle"
+                        android:id="@+id/adView"
+                        app:adSize="SMART_BANNER"
+                        android:visibility="@{isAdFree ? View.GONE : View.VISIBLE, default=visible}"
+                        app:adUnitId="ca-app-pub-3239920037413959/2300282594"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="2dp" />-->
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                        style="@style/cardViewStyle"
+                        android:visibility="@{hasMotionSmoothness ? View.VISIBLE: View.GONE, default=visible}">
+
+                    <TextView
+                            style="@style/topTitle"
+                            android:text="@string/lbl_rrm"
+                            android:drawableStart="@drawable/ic_max_hz"
+                            tools:ignore="UseCompatTextViewDrawableXml"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            android:id="@+id/tvRefreshRateMods"
+                            android:layout_width="0dp" />
+
+                    <Switch
+                            android:layout_width="@dimen/seekbar_width"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/sw_peak_hz"
+                            android:text="@string/lbl_enable_msm"
+                            android:textSize="12sp"
+                            android:layout_marginTop="24dp"
+                            app:layout_constraintTop_toBottomOf="@+id/tvRefreshRateMods"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            tools:ignore="UseSwitchCompatOrMaterialXml"
+                            android:layout_gravity="center_horizontal"
+                            android:textColor="?android:attr/textColorSecondary"
+                            android:checked="@{refreshRateMode.equals(&quot;2&quot;) || refreshRateMode.equals(&quot;1&quot;) ? true : false}"
+                            android:onClick="@{hasMotionSmoothness ? clickListener::onClickView : null}"
+                            android:enabled="@{(hasMotionSmoothness &amp;&amp; hasWssPerm &amp;&amp; (!isAdFree || !powerSavingIsOn)) ? true : false}" />
+
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="0dp"
+                            android:textSize="14sp"
+                            android:id="@+id/tv_enable_ms"
+                            app:layout_constraintTop_toTopOf="@id/sw_peak_hz"
+                            android:visibility="@{!hasWssPerm  ? View.VISIBLE : View.GONE, default=visible}"
+                            android:onClick="@{hasWssPerm ? null : clickListener::onClickView}"
+                            android:drawableEnd="@android:drawable/ic_menu_info_details"
+                            tools:ignore="UseCompatTextViewDrawableXml"
+                            app:layout_constraintBottom_toBottomOf="@+id/sw_peak_hz"
+                            app:layout_constraintStart_toEndOf="@+id/sw_peak_hz" />
+
+                    <androidx.appcompat.widget.AppCompatSeekBar
+                        android:id="@+id/sb_peak_hz"
+                        style="@style/MySeekBarTheme"
+                        android:layout_width="@dimen/seekbar_width"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="4dp"
+                        android:enabled="@{refreshRateMode.equals(&quot;1&quot;) || refreshRateMode.equals(&quot;2&quot;)  ? true : false}"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/sw_peak_hz" />
+
+                    <Switch
+                            android:text="@string/prr_psm"
+                            android:layout_width="@dimen/seekbar_width"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/sw_keep_mode"
+                            android:textSize="12sp"
+                            app:layout_constraintTop_toBottomOf="@+id/sb_peak_hz"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            android:visibility="@{isAdFree ? View.VISIBLE : View.GONE, default=visible}"
+                            tools:ignore="UseSwitchCompatOrMaterialXml"
+                            android:layout_gravity="center_horizontal"
+                            android:textColor="?android:attr/textColorSecondary"
+                            android:onClick="@{hasMotionSmoothness ? clickListener::onClickView : null}"
+                            android:enabled="@{hasWssPerm ? true : false}"
+                            android:layout_marginTop="16dp" />
+                            <!--Note: isChecked handled in MainActivity-->
+
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="0dp"
+                            android:textSize="14sp"
+                            android:id="@+id/tv_keep_mode_adb_inf"
+                            app:layout_constraintTop_toTopOf="@id/sw_keep_mode"
+                            app:layout_constraintStart_toEndOf="@+id/sw_keep_mode"
+                            android:visibility="@{(isAdFree &amp;&amp; !hasWssPerm)  ? View.VISIBLE : View.GONE, default=visible}"
+                            android:onClick="@{hasWssPerm ? null : clickListener::onClickView}"
+                            android:drawableEnd="@android:drawable/ic_menu_info_details"
+                            tools:ignore="UseCompatTextViewDrawableXml"
+                            app:layout_constraintBottom_toBottomOf="@+id/sw_keep_mode" />
+
+                    <androidx.appcompat.widget.AppCompatSeekBar
+                        android:id="@+id/sb_peak_hz_psm"
+                        style="@style/MySeekBarTheme"
+                        android:layout_width="@dimen/seekbar_width"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="4dp"
+                        android:enabled="@{(refreshRateMode.equals(&quot;1&quot;) || refreshRateMode.equals(&quot;2&quot;)) ? true : false}"
+                        android:visibility="@{isAdFree &amp;&amp; hasMotionSmoothness ? View.VISIBLE : View.GONE, default=visible}"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/sw_keep_mode" />
+
+                    <View
+                            android:id="@+id/divider1"
+                            android:layout_width="265dp"
+                            android:layout_height="1dp"
+                            app:layout_constraintTop_toBottomOf="@+id/sb_peak_hz_psm"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            android:background="?android:attr/listDivider"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginBottom="8dp"
+                            app:layout_constraintBottom_toTopOf="@+id/cg_refresh_rate_mode" />
+
+                    <com.google.android.material.chip.ChipGroup
+                            android:id="@+id/cg_refresh_rate_mode"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:singleLine="true"
+                            app:singleSelection="true"
+                            app:selectionRequired="@{(refreshRateMode.equals(&quot;1&quot;) || refreshRateMode.equals(&quot;2&quot;)) ? true : false}"
+                            android:visibility="@{(adaptiveSupported || isAdFree) ? View.VISIBLE : View.GONE, default=visible}"
+                            app:layout_constraintTop_toBottomOf="@id/divider1"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            android:layout_marginTop="8dp">
+
+                        <com.google.android.material.chip.Chip
+                                android:text="@string/adaptive"
+                                style="@style/chipStyle"
+                                app:chipIconSize="18dp"
+                                android:id="@+id/ch_adaptive"
+                                android:checked="@{refreshRateMode.equals(&quot;1&quot;)}"
+                                android:onClick="@{hasMotionSmoothness ? clickListener::onClickView : null}"
+                                android:enabled="@{hasWssPerm &amp;&amp; (refreshRateMode.equals(&quot;1&quot;) || refreshRateMode.equals(&quot;2&quot;))}" />
+
+                        <com.google.android.material.chip.Chip
+                                android:text="@string/high"
+                                style="@style/chipStyle"
+                                app:chipIconSize="18dp"
+                                android:id="@+id/ch_high"
+                                android:checked="@{refreshRateMode.equals(&quot;2&quot;)}"
+                                android:onClick="@{hasMotionSmoothness ? clickListener::onClickView : null}"
+                                android:enabled="@{hasWssPerm &amp;&amp; (refreshRateMode.equals(&quot;1&quot;) || refreshRateMode.equals(&quot;2&quot;))}" />
+                    </com.google.android.material.chip.ChipGroup>
+
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/tv_rrm_adb_inf"
+                            android:drawableEnd="@android:drawable/ic_menu_info_details"
+                            android:visibility="@{((adaptiveSupported || isAdFree) &amp;&amp; !hasWssPerm) ? View.VISIBLE : View.GONE, default=visible}"
+                            android:onClick="@{hasWssPerm ? null : clickListener::onClickView}"
+                            app:layout_constraintStart_toEndOf="@+id/cg_refresh_rate_mode"
+                            app:layout_constraintTop_toTopOf="@+id/cg_refresh_rate_mode"
+                            app:layout_constraintBottom_toBottomOf="@+id/cg_refresh_rate_mode"
+                            tools:ignore="UseCompatTextViewDrawableXml" />
+
+                    <TextView
+                            android:text="@string/adp_min_hz"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/tv_lower_limit_adapt"
+                            style="?android:attr/textColorPrimary"
+                            android:textSize="11sp"
+                            app:layout_constraintTop_toBottomOf="@+id/cg_refresh_rate_mode"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            android:layout_marginTop="12dp"
+                            android:visibility="@{hasMinHzOptions == true &amp;&amp; refreshRateMode.equals(&quot;1&quot;) &amp;&amp; isAdFree ? View.VISIBLE : View.GONE, default=gone}"
+                            tools:ignore="SmallSp" />
+
+                    <androidx.appcompat.widget.AppCompatSeekBar
+                            style="@style/MySeekBarTheme"
+                            android:id="@+id/sb_min_hz_adapt"
+                            android:layout_width="@dimen/seekbar_width"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintTop_toBottomOf="@id/tv_lower_limit_adapt"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="4dp"
+                            android:enabled="@{hasWssPerm}"
+                            android:visibility="@{hasMinHzOptions == true &amp;&amp; refreshRateMode.equals(&quot;1&quot;) &amp;&amp; isAdFree ? View.VISIBLE : View.GONE, default=gone}" />
+
+                    <TextView
+                            android:text="@string/brightness_threshold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/tv_brightness"
+                            style="?android:attr/textColorPrimary"
+                            android:textSize="11sp"
+                            app:layout_constraintTop_toBottomOf="@+id/sb_min_hz_adapt"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            android:layout_marginTop="12dp"
+                            android:visibility="@{refreshRateMode.equals(&quot;1&quot;) &amp;&amp; hasWssPerm &amp;&amp; isAdFree &amp;&amp; (!adaptiveSupported || minHzAdaptive &lt; 60) ? View.VISIBLE : View.GONE, default=gone}"
+                            tools:ignore="SmallSp" />
+
+                    <androidx.appcompat.widget.AppCompatSeekBar
+                            style="@style/MySeekBarTheme"
+                            android:id="@+id/sb_brightness"
+                            android:layout_width="@dimen/seekbar_width"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintTop_toBottomOf="@id/tv_brightness"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="4dp"
+                            android:enabled="@{hasWssPerm}"
+                            android:visibility="@{refreshRateMode.equals(&quot;1&quot;) &amp;&amp; isAdFree &amp;&amp; (!adaptiveSupported || minHzAdaptive &lt; 60)  ? View.VISIBLE : View.GONE, default=gone}" />
+
+                    <TextView
+                            android:text="@string/adp_delay"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/tv_adaptive_delay"
+                            style="?android:attr/textColorPrimary"
+                            android:textSize="11sp"
+                            app:layout_constraintTop_toBottomOf="@+id/sb_brightness"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            android:layout_marginTop="12dp"
+                            android:visibility="@{(refreshRateMode.equals(&quot;1&quot;) &amp;&amp; hasWssPerm &amp;&amp; isAdFree &amp;&amp; !adaptiveSupported) ? View.VISIBLE : View.GONE, default=gone}"
+                            tools:ignore="SmallSp" />
+
+                    <androidx.appcompat.widget.AppCompatSeekBar
+                            style="@style/MySeekBarTheme"
+                            android:id="@+id/sb_adaptive_delay"
+                            android:layout_width="@dimen/seekbar_width"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintTop_toBottomOf="@id/tv_adaptive_delay"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="4dp"
+                            android:visibility="@{(refreshRateMode.equals(&quot;1&quot;) &amp;&amp; hasWssPerm &amp;&amp; isAdFree &amp;&amp; !adaptiveSupported) ? View.VISIBLE : View.GONE, default=gone}" />
+
+                    <View
+                            android:id="@+id/divider2"
+                            android:layout_width="265dp"
+                            android:layout_height="1dp"
+                            app:layout_constraintTop_toBottomOf="@id/sb_adaptive_delay"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            android:background="?android:attr/listDivider"
+                            android:layout_marginVertical="8dp"
+                            android:visibility="@{isAdFree ? View.VISIBLE : View.GONE, default=gone}" />
+
+
+                    <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+                            android:text="@string/info_qs_max_hz"
+                            android:layout_margin="8dp"
+                            android:textAlignment="center"
+                            android:textStyle="italic"
+                            app:layout_constraintTop_toBottomOf="@id/divider2"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            android:id="@+id/toggleMaxHzTileInf"
+                            android:textColor="?android:attr/textColorSecondary"
+                            android:layout_marginTop="24dp" />
+
+
+                    <TextView
+                            android:text="@string/min_hz_for_toggle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/tvLowerLimitLbl"
+                            style="?android:attr/textColorPrimary"
+                            android:textSize="11sp"
+                            app:layout_constraintTop_toBottomOf="@+id/toggleMaxHzTileInf"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            android:layout_marginTop="8dp"
+                            tools:ignore="SmallSp" />
+
+
+                    <androidx.appcompat.widget.AppCompatSeekBar
+                            style="@style/MySeekBarTheme"
+                            android:id="@+id/sb_min_hz"
+                            android:layout_width="@dimen/seekbar_width"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintTop_toBottomOf="@id/tvLowerLimitLbl"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            android:layout_gravity="center_horizontal"
+                            android:enabled="@{refreshRateMode.equals(&quot;1&quot;) || refreshRateMode.equals(&quot;2&quot;) ? true : false}"
+                            android:layout_marginTop="4dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            android:layout_marginBottom="8dp" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                        style="@style/cardViewStyle"
+                        android:id="@+id/cl_show_hz"
+                        android:visibility="@{hasMotionSmoothness ? View.VISIBLE: View.GONE, default=visible}">
+
+                    <TextView
+                            style="@style/topTitle"
+                            app:drawableStartCompat="@drawable/ic_hz_24"
+                            android:layout_height="wrap_content"
+                            android:layout_width="0dp"
+                            android:id="@+id/tv_show_hz_lbl"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:layout_marginStart="12dp"
+                            android:layout_marginEnd="12dp"
+                            android:text="@string/show_refresh_rate" />
+
+
+                    <Switch
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/sw_hz_on"
+                            android:textColor="?android:attr/textColorPrimary"
+                            android:layout_marginTop="8dp"
+                            app:layout_constraintTop_toBottomOf="@+id/tv_show_hz_lbl"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            android:onClick="@{hasMotionSmoothness ? clickListener::onClickView : null}"
+                            tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+
+                    <com.google.android.material.chip.ChipGroup
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/cg_view_options"
+                            app:singleLine="true"
+                            app:selectionRequired="true"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/sw_hz_on"
+                            android:layout_marginTop="8dp">
+
+                        <com.google.android.material.chip.Chip
+                                style="@style/chipStyle"
+                                app:chipIconSize="18dp"
+                                android:id="@+id/ch_overlay_hz"
+                                android:text="@string/overlay"
+                                android:onClick="@{hasMotionSmoothness ? clickListener::onClickView : null}"
+                                app:chipMinTouchTargetSize="40dp" />
+
+                        <com.google.android.material.chip.Chip
+                                style="@style/chipStyle"
+                                app:chipIconSize="18dp"
+                                android:id="@+id/ch_notif_hz"
+                                android:text="@string/statusbar"
+                                app:checkedIconVisible="true"
+                                android:onClick="@{hasMotionSmoothness ? clickListener::onClickView : null}"
+                                app:chipMinTouchTargetSize="40dp" />
+                    </com.google.android.material.chip.ChipGroup>
+
+                    <TextView
+                            android:text="@string/overlay_pos"
+                            android:layout_width="wrap_content"
+                            android:layout_height="0dp"
+                            android:id="@+id/tv_location_hz"
+                            style="?android:attr/textColorPrimary"
+                            android:textSize="11sp"
+                            android:layout_margin="8dp"
+                            app:layout_constraintTop_toBottomOf="@+id/cg_view_options"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            android:layout_marginTop="12dp"
+                            android:visibility="@{hideHzOverlaySettings ? View.GONE : View.VISIBLE}"
+                            tools:ignore="SmallSp" />
+
+                    <HorizontalScrollView
+                            android:id="@+id/hv_op_hz"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            android:layout_marginHorizontal="@dimen/horizontal_spacing"
+                            app:layout_constraintTop_toBottomOf="@+id/tv_location_hz"
+                            android:visibility="@{hideHzOverlaySettings ? View.GONE : View.VISIBLE}">
+
+                        <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/tv_location_hz"
+                                android:orientation="horizontal"
+                                android:layout_gravity="center_horizontal">
+
+                            <com.google.android.material.chip.ChipGroup
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/cg_top_bottom"
+                                    app:singleLine="true"
+                                    app:singleSelection="true"
+                                    app:checkedChip="@id/ch_top_hz"
+                                    app:selectionRequired="true">
+
+                                <com.google.android.material.chip.Chip
+                                        style="@style/chipStyle"
+                                        app:chipIconSize="16dp"
+                                        android:id="@+id/ch_top_hz"
+                                        android:text="@string/top"
+                                        android:onClick="@{hasMotionSmoothness ? clickListener::onClickView : null}"
+                                        app:chipMinTouchTargetSize="40dp" />
+
+                                <com.google.android.material.chip.Chip
+                                        style="@style/chipStyle"
+                                        app:chipIconSize="16dp"
+                                        android:id="@+id/ch_bottom_hz"
+                                        android:text="@string/bottom"
+                                        app:checkedIconVisible="true"
+                                        android:onClick="@{hasMotionSmoothness ? clickListener::onClickView : null}"
+                                        app:chipMinTouchTargetSize="40dp" />
+                            </com.google.android.material.chip.ChipGroup>
+
+                            <View
+                                    android:id="@+id/divider"
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:background="?android:attr/listDivider"
+                                    android:layout_marginHorizontal="8dp"
+                                    android:layout_marginVertical="4dp" />
+
+                            <com.google.android.material.chip.ChipGroup
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/cg_left_cent_right_hz"
+                                    app:singleSelection="true"
+                                    app:singleLine="true"
+                                    app:checkedChip="@id/ch_right_hz"
+                                    app:selectionRequired="true">
+
+                                <com.google.android.material.chip.Chip
+                                        style="@style/chipStyle"
+                                        app:chipIconSize="16dp"
+                                        android:id="@+id/ch_left_hz"
+                                        android:text="@string/left"
+                                        android:onClick="@{hasMotionSmoothness ? clickListener::onClickView : null}"
+                                        app:chipMinTouchTargetSize="40dp" />
+
+                                <com.google.android.material.chip.Chip
+                                        style="@style/chipStyle"
+                                        app:chipIconSize="16dp"
+                                        android:id="@+id/ch_cent_hz"
+                                        android:text="@string/center"
+                                        android:onClick="@{hasMotionSmoothness ? clickListener::onClickView : null}"
+                                        app:chipMinTouchTargetSize="40dp" />
+
+                                <com.google.android.material.chip.Chip
+                                        style="@style/chipStyle"
+                                        app:chipIconSize="16dp"
+                                        android:id="@+id/ch_right_hz"
+                                        android:text="@string/right"
+                                        android:onClick="@{hasMotionSmoothness ? clickListener::onClickView : null}"
+                                        app:chipMinTouchTargetSize="40dp" />
+                            </com.google.android.material.chip.ChipGroup>
+                        </LinearLayout>
+                    </HorizontalScrollView>
+                    <TextView
+                            android:text="@string/font_size"
+                            android:layout_width="wrap_content"
+                            android:layout_height="0dp"
+                            android:id="@+id/tv_overlay_size_hz"
+                            style="?android:attr/textColorPrimary"
+                            android:textSize="11sp"
+                            android:layout_margin="8dp"
+                            app:layout_constraintTop_toBottomOf="@+id/hv_op_hz"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            android:layout_marginTop="12dp"
+                            android:visibility="@{hideHzOverlaySettings ? View.GONE : View.VISIBLE}"
+                            tools:ignore="SmallSp" />
+
+                    <androidx.appcompat.widget.AppCompatSeekBar
+                            style="@style/MySeekBarTheme"
+                            android:layout_width="@dimen/seekbar_width"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/sb_font_size_hz"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tv_overlay_size_hz"
+                            android:layout_gravity="center_horizontal"
+                            android:visibility="@{hideHzOverlaySettings ? View.GONE : View.VISIBLE}"/>
+
+                    <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+                            android:text="@string/info_qs_rtrr"
+                            android:textAlignment="center"
+                            app:layout_constraintTop_toBottomOf="@+id/sb_font_size_hz"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginBottom="8dp"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:textColor="?android:attr/textColorSecondary"
+                            android:textStyle="italic" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout style="@style/cardViewStyle">
+
+                    <TextView
+                        android:id="@+id/lbl_so_mods"
+                        style="@style/topTitle"
+                        android:drawableStart="@drawable/ic_baseline_visibility_off_24"
+                        android:text="@string/s_off_mod"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="UseCompatTextViewDrawableXml" />
+
+                    <Switch
+                        android:id="@+id/sw_so_force_lowest_hz"
+                        android:layout_width="290dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginHorizontal="0dp"
+                        android:layout_marginTop="8dp"
+                        android:onClick="@{hasMotionSmoothness ? clickListener::onClickView : null}"
+                        android:text="@string/force_hz_mod"
+                        android:textColor="?android:attr/textColorPrimary"
+                        android:visibility="@{hasMotionSmoothness ? View.VISIBLE : View.GONE}"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/lbl_so_mods"
+                        tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+                    <TextView
+                        android:id="@+id/tv_so_refresh"
+                        android:layout_width="290dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="0dp"
+                        android:layout_marginBottom="8dp"
+                        android:text="@string/s_off_hz_inf"
+                        android:textSize="13sp"
+                        android:visibility="@{hasMotionSmoothness ? View.VISIBLE : View.GONE}"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/sw_so_force_lowest_hz"
+                        app:layout_constraintBottom_toTopOf="@+id/sw_so_psm"/>
+
+                    <Switch
+                        android:id="@+id/sw_so_psm"
+                        android:layout_width="290dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginVertical="8dp"
+                        android:layout_marginTop="8dp"
+                        android:enabled="@{hasWssPerm ? true : false}"
+                        android:onClick="@{hasWssPerm ? clickListener::onClickView : null}"
+                        android:text="@string/auto_psm"
+                        android:textColor="?android:attr/textColorPrimary"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_so_refresh"
+                        tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+                    <TextView
+                        android:id="@+id/tv_so_psm_adb_inf"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="0dp"
+                        android:drawableEnd="@{hasWssPerm ? null : @android:drawable/ic_menu_info_details}"
+                        android:onClick="@{hasWssPerm ? null : clickListener::onClickView}"
+                        android:padding="0dp"
+                        android:translationX="-30dp"
+                        android:visibility="@{!hasWssPerm ? View.VISIBLE : View.GONE}"
+                        app:layout_constraintBottom_toBottomOf="@+id/sw_so_psm"
+                        app:layout_constraintStart_toEndOf="@+id/sw_so_psm"
+                        app:layout_constraintTop_toTopOf="@+id/sw_so_psm"
+                        tools:ignore="UseCompatTextViewDrawableXml" />
+
+                    <TextView
+                        android:id="@+id/tv_so_psm_options"
+                        android:layout_width="290dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="0dp"
+                        android:layout_marginBottom="8dp"
+                        android:onClick="@{hasWssPerm ? clickListener::onClickView : clickListener::onClickView}"
+                        android:text="@string/psm_options"
+                        android:textColor="@color/primary_color"
+                        android:textSize="13sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/sw_so_psm"
+                        tools:ignore="TooManyViews"
+                        app:layout_constraintBottom_toTopOf="@+id/sw_auto_off_sync"/>
+
+                    <Switch
+                        android:id="@+id/sw_auto_off_sync"
+                        android:layout_width="290dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="8dp"
+                        android:onClick="@{isAdFree ? clickListener::onClickView : null}"
+                        android:text="@string/disable_sync_on_so"
+                        android:textColor="?android:attr/textColorPrimary"
+                        android:visibility="@{isAdFree ? View.VISIBLE : View.GONE}"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_so_psm_options"
+                        tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+                    <TextView
+                        android:id="@+id/tv_auto_sync_settings"
+                        android:layout_width="290dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="0dp"
+                        android:layout_marginBottom="8dp"
+                        android:onClick="@{isAdFree ? clickListener::onClickView : null}"
+                        android:text="@string/autosync_settings"
+                        android:textColor="@color/primary_color"
+                        android:textSize="13sp"
+                        android:visibility="@{isAdFree ? View.VISIBLE : View.GONE}"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/sw_auto_off_sync"
+                        app:layout_constraintBottom_toTopOf="@+id/sw_screen_off_doze"/>
+
+                    <Switch
+                        android:id="@+id/sw_screen_off_doze"
+                        android:layout_width="290dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="8dp"
+                        android:checked="@{dozeIsOn}"
+                        android:enabled="@{hasWssPerm}"
+                        android:onClick="@{hasWssPerm ? clickListener::onClickView : null}"
+                        android:text="@string/quick_doz_mod"
+                        android:textColor="?android:attr/textColorPrimary"
+                        android:visibility="@{isAdFree ? View.VISIBLE : View.GONE}"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_auto_sync_settings"
+                        tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+                    <TextView
+                        android:id="@+id/screen_off_doze_info"
+                        android:layout_width="290dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginHorizontal="48dp"
+                        android:drawableEnd="@{hasWssPerm ? @android:drawable/ic_dialog_info : @android:drawable/ic_menu_info_details}"
+                        android:onClick="@{hasWssPerm ? clickListener::onClickView : clickListener::onClickView}"
+                        android:text="@string/quick_mod_inf"
+                        android:textSize="13sp"
+                        android:visibility="@{isAdFree ? View.VISIBLE : View.GONE}"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/sw_screen_off_doze"
+                        tools:ignore="UseCompatTextViewDrawableXml" />
+
+                    <TextView
+                        android:id="@+id/tv_batt_optim_settings"
+                        android:layout_width="290dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginBottom="8dp"
+                        android:onClick="@{isAdFree ? clickListener::onClickView : null}"
+                        android:text="@string/apps_bat_opt_settings"
+                        android:textColor="@color/primary_color"
+                        android:textSize="13sp"
+                        android:visibility="@{isAdFree ? View.VISIBLE : View.GONE}"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/screen_off_doze_info" />
+
+                    <TextView
+                        android:id="@+id/tv_dze_mw_interval"
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="48dp"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/quick_doz_mod_mwi"
+                        android:textSize="11sp"
+                        android:visibility="@{isAdFree ? View.VISIBLE : View.GONE}"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_batt_optim_settings"
+                        tools:ignore="SmallSp,UseCompatTextViewDrawableXml" />
+
+                    <androidx.appcompat.widget.AppCompatSeekBar
+                        android:id="@+id/sb_mw_interval"
+                        style="@style/MySeekBarTheme"
+                        android:layout_width="@dimen/seekbar_width"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginBottom="12dp"
+                        android:enabled="@{hasWssPerm}"
+                        android:visibility="@{isAdFree ? View.VISIBLE : View.GONE, default=gone}"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_dze_mw_interval" />
+
+                    <Switch
+                        android:id="@+id/sw_auto_sensors_off"
+                        android:layout_width="290dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="8dp"
+                        android:enabled="@{hasWssPerm ? true : false}"
+                        android:onClick="@{isAdFree ? clickListener::onClickView : null}"
+                        android:text="@string/auto_sensors_off_exp"
+                        android:textColor="?android:attr/textColorPrimary"
+                        android:visibility="@{sensorsOffSupported == true &amp;&amp; isAdFree ? View.VISIBLE : View.GONE}"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/sb_mw_interval"
+                        tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+                    <TextView
+                        android:id="@+id/tv_auto_sensors_off_info"
+                        android:layout_width="290dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginHorizontal="48dp"
+                        android:drawableEnd="@{hasWssPerm ? @android:drawable/ic_dialog_info : @android:drawable/ic_menu_info_details}"
+                        android:onClick="@{hasWssPerm ? clickListener::onClickView : clickListener::onClickView}"
+                        android:text="@string/sensor_off_info"
+                        android:textSize="13sp"
+                        android:visibility="@{sensorsOffSupported == true &amp;&amp; isAdFree ? View.VISIBLE : View.GONE}"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/sw_auto_sensors_off"
+                        tools:ignore="UseCompatTextViewDrawableXml" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                        style="@style/cardViewStyle"
+                        android:visibility="@{isAdFree &amp;&amp; showNsTool ? View.VISIBLE : View.GONE, default=gone}">
+
+                    <TextView
+                            style="@style/topTitle"
+                            android:text="@string/show_ns"
+                            android:drawableStart="@drawable/ic_baseline_speed_24"
+                            tools:ignore="UseCompatTextViewDrawableXml"
+                            android:id="@+id/tv_show_netspeed_lbl"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent" />
+
+                    <Switch
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:id="@+id/sw_enable_netspeed"
+                            android:textColor="?android:attr/textColorPrimary"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/tv_show_netspeed_lbl"
+                            android:onClick="@{isAdFree ? clickListener::onClickView : null}"
+                            tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+                    <TextView
+                            android:text="@string/options"
+                            android:layout_width="wrap_content"
+                            android:layout_height="0dp"
+                            android:id="@+id/tv_speed_to_show"
+                            style="?android:attr/textColorPrimary"
+                            android:textSize="11sp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/sw_enable_netspeed"
+                            android:layout_marginTop="12dp"
+                            tools:ignore="SmallSp" />
+
+                    <com.google.android.material.chip.ChipGroup
+                            android:id="@+id/cg_data_stream"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:singleLine="true"
+                            app:singleSelection="true"
+                            app:selectionRequired="true"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/tv_speed_to_show">
+
+                        <com.google.android.material.chip.Chip
+                                android:text="@string/download"
+                                style="@style/chipStyle"
+                                android:textSize="11sp"
+                                app:chipIconSize="16dp"
+                                android:id="@+id/ch_down_stream"
+                                android:layout_height="wrap_content"
+                                android:layout_width="wrap_content"
+                                android:onClick="@{isAdFree ? clickListener::onClickView : null}"
+                                tools:ignore="SmallSp" />
+
+                        <com.google.android.material.chip.Chip
+                                android:text="@string/upload"
+                                style="@style/chipStyle"
+                                android:textSize="11sp"
+                                app:chipIconSize="16dp"
+                                android:id="@+id/ch_up_stream"
+                                android:layout_height="wrap_content"
+                                android:layout_width="wrap_content"
+                                android:onClick="@{isAdFree ? clickListener::onClickView : null}"
+                                tools:ignore="SmallSp" />
+
+                        <com.google.android.material.chip.Chip
+                                android:text="@string/combined"
+                                style="@style/chipStyle"
+                                android:textSize="11sp"
+                                app:chipIconSize="16dp"
+                                android:id="@+id/ch_combined_stream"
+                                android:layout_height="wrap_content"
+                                android:layout_width="wrap_content"
+                                android:onClick="@{isAdFree ? clickListener::onClickView : null}"
+                                tools:ignore="SmallSp" />
+                    </com.google.android.material.chip.ChipGroup>
+
+
+                    <com.google.android.material.chip.ChipGroup
+                            android:id="@+id/cg_bytes_bits"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:singleLine="true"
+                            app:singleSelection="true"
+                            app:selectionRequired="true"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/cg_data_stream">
+
+                        <com.google.android.material.chip.Chip
+                                android:text="@string/byt"
+                                style="@style/chipStyle"
+                                android:textSize="11sp"
+                                app:chipIconSize="16dp"
+                                android:id="@+id/ch_bytes"
+                                android:layout_height="wrap_content"
+                                android:layout_width="wrap_content"
+                                android:onClick="@{isAdFree ? clickListener::onClickView : null}"
+                                tools:ignore="SmallSp" />
+
+                        <com.google.android.material.chip.Chip
+                                android:text="@string/bit"
+                                style="@style/chipStyle"
+                                android:textSize="11sp"
+                                app:chipIconSize="16dp"
+                                android:id="@+id/ch_bits"
+                                android:layout_height="wrap_content"
+                                android:layout_width="wrap_content"
+                                android:onClick="@{isAdFree ? clickListener::onClickView : null}"
+                                tools:ignore="SmallSp" />
+
+                    </com.google.android.material.chip.ChipGroup>
+
+                    <TextView
+                            android:text="@string/data_usage"
+                            android:layout_width="wrap_content"
+                            android:layout_height="0dp"
+                            android:id="@+id/tv_data_usage"
+                            android:onClick="@{isAdFree ? clickListener::onClickView : null}"
+                            android:textSize="14sp"
+                            android:textStyle="italic"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/cg_bytes_bits"
+                            android:layout_marginTop="12dp"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:textColor="@color/primary_color" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_gravity="center_horizontal"
+                        android:id="@+id/linear_buy_activate"
+                        android:visibility="@{isAdFree ? View.GONE : View.VISIBLE}"
+                        android:layout_marginBottom="2dp">
+
+                    <androidx.appcompat.widget.AppCompatButton
+                            android:text="@string/buy_adfree"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/btn_buy_adfree"
+                            android:textSize="11sp"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginEnd="4dp"
+                            android:onClick="@{!isAdFree ? clickListener::onClickView : null}"
+                            tools:ignore="SmallSp"
+                            android:maxLines="1" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                            android:text="@string/act"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/btn_sync_license"
+                            android:textSize="11sp"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:onClick="@{!isAdFree ? clickListener::onClickView : null}"
+                            tools:ignore="SmallSp"
+                            android:maxLines="1" />
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+        <FrameLayout
+                android:id="@+id/p_bar"
+                android:animateLayoutChanges="true"
+                android:visibility="visible"
+                android:background="#0F000000"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            <ProgressBar
+                    style="@android:style/Widget.Material.ProgressBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:indeterminate="true" />
+        </FrameLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

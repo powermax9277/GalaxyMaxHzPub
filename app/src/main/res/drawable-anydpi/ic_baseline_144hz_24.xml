@@ -1,0 +1,22 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24.0"
+    android:viewportHeight="24.0"
+    android:tint="?attr/colorControlNormal"
+    tools:keep="@drawable/ic_baseline_144hz_24">
+  <group android:scaleX="0.11"
+      android:scaleY="0.11"
+      android:translateX="3.5"
+      android:translateY="1.8">
+    <group android:translateY="141.67969">
+      <path android:pathData="M20,-0L10,-0L10,-77L6,-77L6,-77.25L12.125,-110L20,-110L20,-0Z"
+          android:fillColor="@android:color/white"/>
+      <path android:pathData="M80,-29L72,-29L72,0L63,0L63,-29L32,-29L32,-33.96875L58.640625,-110L67.640625,-110Q67.640625,-109.578125,67.640625,-109.578125L42.328125,-37L63,-37L63,-77L72,-77L72,-37L80,-37L80,-29Z"
+          android:fillColor="@android:color/white"/>
+      <path android:pathData="M135,-29L127,-29L127,0L118,0L118,-29L87,-29L87,-33.96875L113.640625,-110L122.640625,-110Q122.640625,-109.578125,122.640625,-109.578125L97.328125,-37L118,-37L118,-77L127,-77L127,-37L135,-37L135,-29Z"
+          android:fillColor="@android:color/white"/>
+    </group>
+  </group>
+</vector>

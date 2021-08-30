@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="lbl_enable_msm">मोशन स्मूथनेस इनेबल करें</string>
+    <string name="show_hz">ताज़ा दर मॉनिटर</string>
+    <string name="buy_adfree">प्रीमियम खरीदें</string>
+<!--
+    <string name="info_expired">यह वीडियो देखें और एक अन्य %d दिनों के लिए सक्रिय त्वरित सेटिंग टाइल मिलता है।</string>
+-->
+    <string name="resolution">संकल्प और मोशन चिकनाई टॉगल</string>
+    <string name="act">प्रीमियम सक्षम गर्नुहोस्|परीक्षण</string>
+    <string name="max_hz">मैक्स हर्ट्ज</string>
+    <string name="max_hz_holder">मैक्स %s हर्ट्ज</string>
+    <string name="feat_n_a" tools:keep="@string/feat_n_a">बदलें संकल्प नहीं समर्थित</string>
+    <string name="unknown_mode">अज्ञात मोड ताज़ा दर</string>
+<!--    <string name="qs_active">त्वरित सेटिंग्स टाइलें सफलतापूर्वक सक्रिय</string>-->
+    <string name="min_hz_for_toggle">टॉगल की निम्न सीमा (हर्ट्ज)</string>
+    <string name="adaptive">अनुकूली</string>
+    <string name="high">उच्च</string>
+    <string name="show_refresh_rate">दिखाएँ वास्तविक समय ताज़ा दर</string>
+    <string name="left">बाईं तरफ</string>
+    <string name="right">दाईं ओर</string>
+    <string name="top">ऊपरी ओर</string>
+    <string name="bottom">नीचे की ओर</string>
+    <string name="use_qstile_reso_switch">त्वरित रूप से स्विच प्रस्तावों और गति चिकनाई मोड करने के लिए शामिल त्वरित सेटिंग्स टाइल का प्रयोग करें।</string>
+    <string name="center">केंद्र</string>
+    <string name="info_qs_max_hz">अधिकतम हर्ट्ज टॉगल करने के लिए एक त्वरित सेटिंग टाइल शामिल</string>
+    <string name="info_qs_rtrr">एक त्वरित सेटिंग टाइल को दिखाने के लिए वास्तविक समय ताज़ा दर भी शामिल है</string>
+    <string name="s_off_mod">बंद स्क्रीन ताज़ा दर</string>
+    <string name="force_hz_mod">फोर्स को सबसे कम Hz</string>
+    <string name="s_off_hz_inf">
+        यह अतिरिक्त बैटरी उपयोग को बेहतर बनाने के लिए स्क्रीन-ऑफ या AOD ताज़ा दर को सबसे कम सेट करेगा।
+        \nस्क्रीन-ऑफ रिफ्रेश रेट %s
+    </string>
+    <string name="chng_res_stng">
+        %s संकल्प उच्च / अनुकूली ताज़ा दर की स्थापना का समर्थन नहीं करता। पहले सेटिंग में संकल्प प्रस्ताव चिकनाई मोड बदलें।
+        \n\n एप्लिकेशन आसानी से त्वरित सेटिंग्स टाइल ग्यारह एडीबी सेटअप किया जाता है का उपयोग कर स्विच कर सकते हैं संकल्प और गति चिकनाई मोड।</string>
+    <string name="chng_res_qs">
+        %s संकल्प उच्च / अनुकूली ताज़ा दर की स्थापना का समर्थन नहीं करता। आप त्वरित सेटिंग टाइल इस एप्लिकेशन को शामिल संकल्प जल्दी का उपयोग कर बदल सकते हैं।
+    </string>
+    <string name="psm_on_inf">
+        पावर सेविंग मोड वर्तमान में पारी है। सितंबर में सेटिंग में इसे बंद कर दें पहली और अनुकूली / उच्च।
+        \n\n इस ऐप्लिकेशन को गति चिकनाई मोड भी पर ग्यारह एडीबी सेटअप किया जाता है अनुकूली मोड / हाई पावर सेविंग मोड पर आसानी से मोशन चिकनाई बदल सकते हैं।
+    </string>
+    <string name="rrm_std_inf">
+        मोशन चिकनाई मोड वर्तमान में स्टैंडर्ड को तैयार है। सेटिंग्स पहले।
+        \n\n अनुकूली मोड / उच्च ग्यारह एडीबी सेटअप करने के लिए आसानी से मोशन चिकनाई बदल सकते हैं एप्लिकेशन किया
+        जाता है में यह बदलें। यह भी बिजली की बचत मोड पर काम करता है।
+    </string>
+    <string name="input_ac_inf">यदि आप इस उपकरण को रीसेट करने के परिणामस्वरूप प्रीमियम खो देते हैं, तो आप अपने ईमेल पर भेजे गए सक्रियण कोड को दर्ज करके इसे पुनः सक्रिय कर सकते हैं।
+    </string>
+<!--    <string name="failed_show_ad">वीडियो विज्ञापन दिखाने में विफल। कृपया पुन: प्रयास करें।</string>-->
+<!--    <string name="failed_load_ad">लोड वीडियो विज्ञापन करने में विफल। इंटरनेट की जाँच करें और पुन: प्रयास करें।</string>-->
+    <string name="show_ns">दिखाएँ इंटरनेट स्पीड संकेतक</string>
+    <string name="combined">संयुक्त</string>
+    <string name="upload">डालना</string>
+    <string name="download">डाउनलोड</string>
+    <string name="font_size">ओवरले फ़ॉन्ट का आकार</string>
+    <string name="overlay_pos">ओवरले स्थान</string>
+    <string name="overlay">उपरिशायी</string>
+    <string name="statusbar">स्टेटस बार</string>
+    <string name="perm_appx">
+        \n\nएडीबी सेटअप किया जाता है, तो आप इस एप्लिकेशन के साथ निम्नलिखित कर सकते हैं:
+        \n- त्वरित रूप से स्विच स्क्रीन संकल्प
+        \n- अनुकूली या उच्च गति चिकनाई यहां तक िक बिजली की बचत मोड लागू करें
+        \n- स्क्रीन बंद होने पर पावर सेव मोड को स्वचालित रूप से लागू करें
+        \n- क्विक डीप-डोज़ मॉड का उपयोग करें (प्रीमियम के लिए)
+        \n- गैर-देशी रूप से समर्थित उपकरणों पर भी अनुकूली ताज़ा दर मोड लागू करें (प्रीमियम के लिए)
+        \n- ऑटो सेंसर बंद (प्रीमियम के लिए)
+    </string>
+    <string name="ac_none">आपके पास कोई सक्रियण कोड में प्रवेश किया।</string>
+    <string name="in_bd">एक्टिवेशन कोड दर्ज करे</string>
+    <string name="apply">लागू</string>
+    <string name="psm_on">पावर सेविंग मोड चालू है</string>
+    <string name="chng_res">संकल्प बदलें</string>
+    <string name="open_settings">सेटिंग्स खोलें</string>
+<!--    <string name="qst_exp">त्वरित सेटिंग्स टाइलें समय सीमा समाप्त</string>-->
+<!--    <string name="ad_starting_in">"वीडियो में शुरू होने वाले"</string>-->
+<!--    <string name="no_thanks">जी नहीं, धन्यवाद!</string>-->
+    <string name="chng_res_failed">परिवर्तन संकल्प करने में विफल।</string>
+    <string name="one_res_def">केवल एक ही समाधान व्यवस्था में परिभाषित किया।</string>
+    <string name="rrp_not_loaded">उपलब्ध रिफ्रेश रेट अभी तक लोड नहीं। पुनः प्रयास करें।</string>
+    <string name="sot_no_perm">शीर्ष अनुमति पर दिखाएँ दी नहीं है!</string>
+  <!--  <string name="error_opening_settings">खोलने में त्रुटि सेटिंग्स।</string>-->
+    <string name="cie">त्रुटि! इंटरनेट कनेक्शन की जाँच करें और पुन: प्रयास करें।</string>
+    <string name="aca">अमान्य सक्रियण कोड।</string>
+    <string name="afa">प्रीमियम सफलतापूर्वक सक्रिय कर दिया गया है!</string>
+    <string name="afu">परीक्षण संस्करण पहले ही उपयोग किया जा चुका है और समाप्त हो गया है।</string>
+    <plurals name="aha">
+        <item quantity="one">प्रीमियम परीक्षण सक्रिय: %d दिन शेष</item>
+        <item quantity="other">प्रीमियम परीक्षण सक्रिय: %d दिन शेष</item>
+    </plurals>
+   <!-- <string name="eta">त्रुटि विज्ञापन मुक्त सक्रिय परीक्षण!</string>-->
+    <string name="nlh">इस डिवाइस के लिए कोई प्रीमियम लाइसेंस नहीं मिला: %s</string>
+    <string name="edit">संपादित करें</string>
+    <string name="quick_doz_mod">क्विक Doze Mod</string>
+    <string name="quick_mod_inf">स्टैंडबाय में बैटरी के उपयोग को बेहतर बनाने के लिए स्क्रीन को बंद करने पर यह फ़ंक्शन डिवाइस को जल्दी से doze mode में डाल देगा।</string>
+    <string name="adp_min_hz">अनुकूली के लिए न्यूनतम Hz</string>
+    <string name="enable_as_inf">दिखाई देने वाली विंडो में, \"इंस्टॉल की गई सेवाएं\" पर क्लिक करें और फिर \"Galaxy Max Hz\" सेवा को सक्षम करें</string>
+    <string name="adp_delay">अनुकूली न्यूनतम हर्ट्ज देरी (सेकंड)</string>
+    <string name="cur_rr_h">वर्तमान ताज़ा दर: %s Hz</string>
+    <string name="show_ns_card">नेटवर्क स्पीड टूल दिखाएं</string>
+    <string name="lbl_rrm">ताज़ा दर Mods</string>
+    <string name="prr_psm">पावर सेविंग मोड में मोशन स्मूदनेस बनाए रखें</string>
+    <string name="actvt_trial">नि: शुल्क परीक्षण को सक्रिय करें?</string>
+    <string name="auto_psm">स्क्रीन बंद होने पर पावर सेव मोड</string>
+    <string name="reso_opts">संकल्प स्विचन विकल्प</string>
+
+    <string name="requires_ws_perm_h">
+        %1$s इस सुविधा को निष्पादित करने के लिए एक विशेष अनुमति की आवश्यकता है।
+        कैसे जानने के लिए नीचे एडीबी सेटअप लिंक पर क्लिक करें।
+        \n\nTLDR: Run \'adb shell pm grant %2$s android.permission.WRITE_SECURE_SETTINGS\'
+        \n\nयह एक बार की प्रक्रिया है।
+    </string>
+    <string name="std">मानक</string>
+    <string name="lbl_profiles_h">%sस्क्रीन रिज़ॉल्यूशन और ताज़ा दर प्रोफ़ाइल</string>
+    <string name="high_mode">उच्च मोड</string>
+    <string name="std_mode">मानक मोड</string>
+    <string name="adp_mode">अनुकूली मोड</string>
+    <string name="perm_reqd">अनुमति आवश्यक है</string>
+    <string name="adb_setup">सेटअप एडीबी</string>
+    <string name="dismiss">खारिज</string>
+    <string name="help">मदद</string>
+    <string name="reload_profiles">रीलोडेड प्रोफाइल</string>
+    <string name="options">विकल्प</string>
+    <string name="psm_options"><u>ऊर्जा बचत मोड विकल्प</u></string>
+    <string name="disable_sync_on_so">स्क्रीन बंद होने पर ऑटो-सिंक बंद करें</string>
+    <string name="autosync_settings"><u>स्वत: समन्वयन सेटिंग</u></string>
+    <string name="apps_bat_opt_settings"><u>बैटरी अनुकूलन सेटिंग्स</u></string>
+    <string name="quick_doz_mod_inf2">
+        डोज़ मोड ऐप बैकग्राउंड सीपीयू और नेटवर्क गतिविधि को स्थगित करके बैटरी लाइफ बढ़ाता है।
+        डोज़ में रहते हुए, डिवाइस समय-समय पर एक रखरखाव विंडो (MW) में प्रवेश करता है, जिसके दौरान ऐप्स लंबित कार्य (सिंक, जॉब आदि) को पूरा कर सकते हैं।
+        डिवाइस हर बार मेगावाट अंतराल की लंबाई को दोगुना करते हुए इस चक्र को जारी रखेगा। MW का अंतराल जितना लंबा होगा, बैटरी की बचत उतनी ही बेहतर होगी।
+        डोज़ मोड के कारण कुछ ऐप्स पर नोटिफिकेशन में देरी हो सकती है। यह SMS, उच्च प्राथमिकता वाले FCM और बैटरी अनुकूलन अक्षम किए गए ऐप्स को प्रभावित नहीं करेगा।
+        डिवाइस के अनलॉक होने के बाद डोज मोड निष्क्रिय हो जाएगा।
+    </string>
+    <string name="quick_doz_mod_mwi">मिनटों में प्रारंभिक रखरखाव विंडो अंतराल (0 = कोई रखरखाव विंडो नहीं)</string>
+    <string name="brightness_threshold">अनुकूली के लिए न्यूनतम चमक</string>
+    <string name="sensor_off_info">डिवाइस के अनलॉक होने तक स्क्रीन बंद होने पर डिवाइस सेंसर स्वचालित रूप से बंद हो जाते हैं। यह गति-प्रेरित वेक लॉक को कम करने में मदद करता है जो बैटरी को खत्म करते हैं।</string>
+    <string name="sensors_off_note">महत्वपूर्ण नोट: जबकि "SensorsOff" टाइल चालू है, डिवाइस के कैमरे और माइक्रोफ़ोन, अन्य सेंसरों के बीच, पहुंच योग्य नहीं हो जाते हैं। जांचें कि कॉल के दौरान आपकी आवाज सुनी जा सकती है या नहीं। यदि इसे नहीं सुना जा सकता है और डिवाइस लॉक होने पर आपको कॉल प्राप्त होती है, तो आप डिवाइस को अनलॉक करने के लिए "SensorsOff" टाइल को देर तक दबा सकते हैं और "SensorsOff" टाइल को बंद कर सकते हैं - रिसीव कॉल बटन दबाने के बाद।
+    </string>
+</resources>

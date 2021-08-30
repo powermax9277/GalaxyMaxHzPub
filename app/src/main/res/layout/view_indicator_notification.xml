@@ -1,0 +1,43 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:paddingStart="20dp"
+    android:paddingEnd="16dp"
+    tools:ignore="UseCompoundDrawables">
+
+    <TextView
+            android:id="@+id/notificationTextDl"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.Compat.Notification.Info"
+            android:drawableStart="@drawable/ic_baseline_speed_12"
+            android:layout_weight="1.2"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="6dp"
+            android:drawablePadding="8dp"
+            tools:ignore="UseCompatTextViewDrawableXml"
+            android:maxLines="1" />
+    <TextView
+        android:id="@+id/notificationTextUl"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.Compat.Notification.Info"
+        android:layout_weight="0.9"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="6dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:maxLines="1" />
+    <TextView
+        android:id="@+id/notificationTextTot"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.Compat.Notification.Info"
+        android:layout_weight="1.1"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="6dp"
+        android:maxLines="1" />
+</LinearLayout>

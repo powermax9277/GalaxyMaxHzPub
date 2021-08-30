@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="lbl_enable_msm">Hareket Düzgünlüğünü Etkinleştir</string>
+    <string name="show_hz">Yenileme Hızı Monitör</string>
+    <string name="buy_adfree">Premium Satın Al</string>
+<!--    <string name="info_expired">Bu videoyu izleyin ve başka %d gün boyunca aktive hızlı ayar fayans olsun.</string>-->
+    <string name="resolution">Çözünürlük ve Hareket Düzgünlüğü Değiştirici</string>
+    <string name="act">Premium\'u Etkinleştir</string>
+    <string name="max_hz">Azami Hz</string>
+    <string name="max_hz_holder">Azami %s Hz</string>
+    <string name="feat_n_a" tools:keep="@string/feat_n_a">Değişim Çözünürlük Desteklemiyor</string>
+    <string name="unknown_mode">Tanımlanamayan Mod Yenileme Sıklığı</string>
+<!--    <string name="qs_active">Hızlı Ayarlar Fayans başarıyla aktive</string>-->
+    <string name="min_hz_for_toggle">geçiş alt sınırı (Hz)</string>
+    <string name="adaptive">Adaptive</string>
+    <string name="high">Yüksek</string>
+    <string name="show_refresh_rate">Gerçek Zamanlı Yenileme Hızını göster</string>
+    <string name="left">Sol</string>
+    <string name="right">Sağ</string>
+    <string name="top">Üst</string>
+    <string name="bottom">Alt</string>
+    <string name="use_qstile_reso_switch">Hızla anahtarı çözünürlükleri ve hareket düzgünlük modları dahil Hızlı ayarlar döşemeyi kullanın.</string>
+    <string name="center">merkez</string>
+    <string name="info_qs_max_hz">Hızlı bir ayar kiremit maksimum hz geçiş yapmak için dahil</string>
+    <string name="info_qs_rtrr">Gerçek zamanlı yenileme hızını göstermek için hızlı ayar karo içerir</string>
+    <string name="s_off_mod">Ekran Kapalı Mods</string>
+    <string name="force_hz_mod">En Düşük Hz ye Zorla</string>
+    <string name="s_off_hz_inf">
+        Bu, bekleme pil kullanımını iyileştirmek için ekran kapalı / AOD yenileme oranını en düşük değere ayarlayacaktır.
+        \nScreen-off yenileme hızı : %s
+    </string>
+    <string name="chng_res_stng">%s çözünürlük ayarı yüksek / uyarlanabilir yenileme oranını desteklemiyor. Öncelikle ayarlarda çözünürlüğü ve hareket düzgünlüğü modunu değiştirin.
+        \n\nBu uygulama, ADB kurulumu gerçekleştirildikten sonra hızlı ayarlar kutucuğunu kullanarak çözünürlüğü ve hareket düzgünlüğü modunu kolayca değiştirebilir.
+    </string>
+    <string name="chng_res_qs">%s çözünürlük ayarı yüksek / uyarlanabilir yenileme oranını desteklemiyor.
+        Bu uygulamada bulunan hızlı ayar düğmesini kullanarak çözünürlüğü hızlı bir şekilde değiştirebilirsiniz.
+    </string>
+    <string name="psm_on_inf">
+        Güç Tasarrufu Modu şu anda açık. Önce ayarlardan kapatın ve hareket yumuşaklığı modunu Uyarlanabilir / Yüksek olarak ayarlayın.
+        \n\nBu uygulama, ADB kurulumu gerçekleştirildikten sonra Güç Tasarrufu Modunda bile Hareket Düzgünlüğü Modunu Uyarlanabilir / Yüksek olarak ayarlayabilir.
+    </string>
+    <string name="rrm_std_inf">
+        Motion smoothness modu şu anda Standart olarak ayarlanmıştır. Önce ayarlardan değiştirin.
+        \n\nBu uygulama, ADB kurulumu gerçekleştirildikten sonra Hareket Düzgünlüğü Modunu kolayca Uyarlanabilir / Yüksek olarak değiştirebilir. Bu, Güç Tasarrufu Modunda bile çalışır.
+    </string>
+    <string name="input_ac_inf">
+        Bu cihaz sıfırlaması nedeniyle reklamsız olarak kaybettiyseniz, reklamsız olarak yeniden etkinleştirmek için e-postanıza gönderilen aktivasyon kodunu girin.
+    </string>
+<!--    <string name="failed_show_ad">Video reklamı gösterebilmek için başarısız oldu. Lütfen tekrar deneyin.</string>-->
+<!--    <string name="failed_load_ad">Yük video reklamın alınamadı. internet kontrol edin ve tekrar deneyin.</string>-->
+    <string name="show_ns">İnternet Hız Göstergesi göster</string>
+    <string name="combined">Kombine</string>
+    <string name="upload">Yükleme</string>
+    <string name="download">İndir</string>
+    <string name="font_size">Bindirme Yazı Tipi Boyutu</string>
+    <string name="overlay_pos">bindirme Yeri</string>
+    <string name="overlay">Kaplama</string>
+    <string name="statusbar">Durum çubuğu</string>
+    <string name="perm_appx">
+        \n\nADB kurulumu yapıldığında, bu uygulama ile aşağıdakileri yapabilirsiniz:
+        \n- Ekran çözünürlüklerini hızla değiştirin
+        \n- (Otomatik)Güç Tasarrufu Modunda bile Uyarlamalı veya Yüksek hareket pürüzsüzlüğü uygulayın
+        \n- Ekran kapalıyken otomatik olarak güç tasarrufu modunu uygulayın
+        \n- Hızlı doze modunu kullanın (premium)
+        \n- Yerel olarak desteklenmeyen cihazda bile Uyarlanabilir yenileme hızı modunu uygulayın (premium)
+        \n- Otomatik Sensörler Kapalı(premium)
+    </string>
+    <string name="ac_none">Hiçbir aktivasyon kodunu girdi.</string>
+    <string name="in_bd">Aktivasyon kodunu girin</string>
+    <string name="apply">Uygulamak</string>
+    <string name="psm_on">Güç Tasarruf Modu Açık</string>
+    <string name="chng_res">Ekran Çözünürlüğünü Değiştirin</string>
+    <string name="open_settings">Ayarları aç</string>
+<!--    <string name="qst_exp">Hızlı Ayarlar Fayans Doldu</string>-->
+<!--    <string name="ad_starting_in">"Video ayından itibaren "</string>-->
+<!--    <string name="no_thanks">Hayır, teşekkürler!</string>-->
+    <string name="chng_res_failed">değişim çözünürlüğe alınamadı.</string>
+    <string name="one_res_def">sistemde tanımlı Sadece bir çözünürlük.</string>
+    <string name="rrp_not_loaded">Mevcut yenileme hızları henüz yüklenmedi. Tekrar deneyin.</string>
+    <string name="sot_no_perm">Üst iznine göster Verilen değil!</string>
+<!--    <string name="error_opening_settings">Hata açma ayarlarını.</string>-->
+    <string name="cie">Hata! İnternet bağlantınızı kontrol edip tekrar deneyin.</string>
+    <string name="aca">Geçersiz aktivasyon kodu.</string>
+    <string name="afa">Premium başarıyla etkinleştirildi!</string>
+    <string name="afu">Deneme sürümü zaten kullanılmış ve süresi dolmuş.</string>
+    <plurals name="aha">
+        <item quantity="one">Premium deneme etkinleştirildi: %d gün kaldı</item>
+        <item quantity="other">Premium deneme etkinleştirildi: %d gün kaldı</item>
+    </plurals>
+    <!--<string name="eta">Hata Reklamsız aktive edici deneme!</string>-->
+    <string name="nlh">Bu cihaz için premium lisans bulunamadı: %s</string>
+    <string name="edit">Düzenle</string>
+    <string name="quick_doz_mod">Hızlı Doze Mod</string>
+    <string name="quick_mod_inf">Bu, bekleme pil tüketimini iyileştirmek için cihazınızı ekran kapalıyken hızlı bir şekilde doz moduna girecek şekilde ayarlayacaktır.</string>
+    <string name="adp_min_hz">Adaptive için Min. Hz</string>
+    <string name="enable_as_inf">Görünen pencerede, \"Yüklü Hizmetler\" e tıklayın ve ardından \"Galaxy Max Hz\" hizmetini etkinleştirin</string>
+    <string name="adp_delay">Saniye cinsinden uyarlanabilir minimum hertz gecikmesi</string>
+    <string name="cur_rr_h">Mevcut Yenileme Hızı: %s Hz</string>
+    <string name="show_ns_card">Netspeed aracını göster</string>
+    <string name="lbl_rrm">Yenileme Hızı Mods</string>
+    <string name="prr_psm">Güç Tasarrufu Modunda Hareket Düzgünlüğünü Koruyun</string>
+    <string name="actvt_trial">Ücretsiz deneme etkinleştirilsin mi?</string>
+    <string name="auto_psm">Ekran Kapalıyken güç Tasarrufu Modu</string>
+    <string name="reso_opts">Çözünürlük Seçeneklerini Değiştir</string>
+
+    <string name="requires_ws_perm_h">
+        %1$s bu özelliği çalıştırmak için özel bir izne ihtiyacı var.
+        Nasıl yapılacağını öğrenmek için aşağıdaki ADB kurulum bağlantısını tıklayın.
+        \n\nTLDR: Run \'adb shell pm grant %2$s android.permission.WRITE_SECURE_SETTINGS\'
+        \n\nBu tek seferlik bir prosedürdür.
+    </string>
+    <string name="std">Standart</string>
+    <string name="lbl_profiles_h">%sEkran Cözünürlüğü ve Yenileme Hızı Profilleri</string>
+    <string name="high_mode">Yüksek Mod</string>
+    <string name="std_mode">Standart Mod</string>
+    <string name="adp_mode">Uyarlamalı Mod</string>
+    <string name="perm_reqd">İzin Gerekli</string>
+    <string name="adb_setup">ADB Kurulumu</string>
+    <string name="dismiss">Reddet</string>
+    <string name="help">Yardım</string>
+    <string name="reload_profiles">Profilleri Yeniden Yükle</string>
+    <string name="options">"Seçenekler "</string>
+    <string name="psm_options"><u>Enerji tasarrufu modu seçenekleri</u></string>
+    <string name="disable_sync_on_so">Ekran kapalıyken otomatik senk kapatın</string>
+    <string name="autosync_settings"><u>Otomatik senk ayarları</u></string>
+    <string name="apps_bat_opt_settings"><u>Pil optimizasyon ayarları</u></string>
+    <string name="quick_doz_mod_inf2">
+        Doze modu, uygulama arka plan CPU\'sunu ve ağ etkinliğini erteleyerek pil ömrünü uzatır.
+        Uyku modundayken, cihaz periyodik olarak uygulamaların bekleyen işleri (eşitlemeler, işler vb.) tamamlayabileceği bir bakım penceresine (MW) girer.
+        Cihaz, her seferinde MW aralığının uzunluğunu iki katına çıkararak bu döngüye devam edecektir.
+        MW aralığı ne kadar uzun olursa, pil tasarrufu o kadar iyi olur.
+        Doze modu, bazı uygulamalarda bildirim gecikmelerine neden olabilir.
+        SMS, Yüksek Öncelikli FCM ve pil optimizasyonlarının devre dışı bırakıldığı uygulamaları etkilemez.
+        Doze modu, cihazın kilidi açıldığında devre dışı bırakılır.
+    </string>
+    <string name="quick_doz_mod_mwi">Dakika cinsinden ilk bakım aralığı (0 = bakım yok)</string>
+    <string name="brightness_threshold">Uyarlanabilir mod için minimum parlaklık</string>
+    <string name="sensor_off_info">Cihaz kilidi açılana kadar ekran kapatıldığında cihaz sensörleri otomatik olarak kapanır. Bu, pili tüketen harekete bağlı uyanık kalma kilitlerini en aza indirmeye yardımcı olur.</string>
+    <string name="sensors_off_note">Önemli not: SensorsOff kutucuğu AÇIK durumdayken, diğer sensörlerin yanı sıra cihazın kamera(lar)ı ve mikrofon(lar)ına erişilemez hale gelir. Görüşme sırasında sesinizin duyulup duyulmadığını kontrol edin. Ses duyulmuyorsa ve cihaz kilitliyken arama alırsanız, cihazın kilidini açmak için SensorsOff kutucuğuna uzun basabilir ve çağrı al düğmesine bastıktan sonra SensorsOff kutucuğunu kapatabilirsiniz.</string>
+
+</resources>
