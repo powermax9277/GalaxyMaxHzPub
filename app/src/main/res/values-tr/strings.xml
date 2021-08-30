@@ -138,4 +138,8 @@
     <string name="sensor_off_info">Cihaz kilidi açılana kadar ekran kapatıldığında cihaz sensörleri otomatik olarak kapanır. Bu, pili tüketen harekete bağlı uyanık kalma kilitlerini en aza indirmeye yardımcı olur.</string>
     <string name="sensors_off_note">Önemli not: SensorsOff kutucuğu AÇIK durumdayken, diğer sensörlerin yanı sıra cihazın kamera(lar)ı ve mikrofon(lar)ına erişilemez hale gelir. Görüşme sırasında sesinizin duyulup duyulmadığını kontrol edin. Ses duyulmuyorsa ve cihaz kilitliyken arama alırsanız, cihazın kilidini açmak için SensorsOff kutucuğuna uzun basabilir ve çağrı al düğmesine bastıktan sonra SensorsOff kutucuğunu kapatabilirsiniz.</string>
 
+    <string name="sensor_off_setup_info">Do this first: Enable \'Sensors Off\' tile in Settings > Developer options > Quick settings developer tiles. ></string>
+    <string name="dev_opt_setup_info">To enable Developer options, go to Settings > About phone > Software info and tap \'Build number\' 7x.</string>
+    <string name="enable_write_settings">Enable Galaxy Max Hz change/write system settings permission.</string>
+    <string name="as_desc">This service is required for galaxy max hz mods to work.</string>
 </resources>

@@ -11,4 +11,7 @@
 /build
 /captures
 /.firebase
+/app/release
+/app/build
+/appupdater/build
 .externalNativeBuild

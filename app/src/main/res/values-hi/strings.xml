@@ -138,4 +138,9 @@
     <string name="sensor_off_info">डिवाइस के अनलॉक होने तक स्क्रीन बंद होने पर डिवाइस सेंसर स्वचालित रूप से बंद हो जाते हैं। यह गति-प्रेरित वेक लॉक को कम करने में मदद करता है जो बैटरी को खत्म करते हैं।</string>
     <string name="sensors_off_note">महत्वपूर्ण नोट: जबकि "SensorsOff" टाइल चालू है, डिवाइस के कैमरे और माइक्रोफ़ोन, अन्य सेंसरों के बीच, पहुंच योग्य नहीं हो जाते हैं। जांचें कि कॉल के दौरान आपकी आवाज सुनी जा सकती है या नहीं। यदि इसे नहीं सुना जा सकता है और डिवाइस लॉक होने पर आपको कॉल प्राप्त होती है, तो आप डिवाइस को अनलॉक करने के लिए "SensorsOff" टाइल को देर तक दबा सकते हैं और "SensorsOff" टाइल को बंद कर सकते हैं - रिसीव कॉल बटन दबाने के बाद।
     </string>
+    <string name="sensor_off_setup_info">Do this first: Enable \'Sensors Off\' tile in Settings > Developer options > Quick settings developer tiles. ></string>
+    <string name="dev_opt_setup_info">To enable Developer options, go to Settings > About phone > Software info and tap \'Build number\' 7x.</string>
+    <string name="enable_write_settings">Enable Galaxy Max Hz change/write system settings permission.</string>
+    <string name="as_desc">This service is required for galaxy max hz mods to work.</string>
+
 </resources>

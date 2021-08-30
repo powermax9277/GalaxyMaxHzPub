@@ -147,4 +147,9 @@
     <string name="sensor_off_info">Els sensors del dispositiu s\'apaguen automàticament quan s\'apaga la pantalla fins que es desbloqueja el dispositiu. Això ajuda a minimitzar els panys de despertar induïts pel moviment que esgoten la bateria.
     </string>
     <string name="sensors_off_note">Nota important: quan activeu el mosaic SensorsOff, no podreu accedir a la càmera, al micròfon i a altres sensors del dispositiu. Això afectarà el desbloqueig facial i l\'audibilitat durant les trucades en alguns dispositius. Comproveu si la vostra veu es pot sentir o no durant la trucada. Si no es pot escoltar i rebre trucades quan el dispositiu està bloquejat, podeu mantenir premuda la pestanya SensorsOff per desbloquejar el dispositiu i desactivar la pestanya SensorsOff després de prémer el botó de resposta de trucada.</string>
+
+    <string name="sensor_off_setup_info">Do this first: Enable \'Sensors Off\' tile in Settings > Developer options > Quick settings developer tiles. ></string>
+    <string name="dev_opt_setup_info">To enable Developer options, go to Settings > About phone > Software info and tap \'Build number\' 7x.</string>
+    <string name="enable_write_settings">Enable Galaxy Max Hz change/write system settings permission.</string>
+    <string name="as_desc">This service is required for galaxy max hz mods to work.</string>
 </resources>

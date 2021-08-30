@@ -146,5 +146,10 @@
     <string name="quick_doz_mod_mwi">Intervalle de la fenêtre de maintenance initiale en minutes (0 = aucune fenêtre de maintenance)</string>
     <string name="brightness_threshold">Luminosité minimale pour adaptatif</string>
     <string name="sensor_off_info">Les capteurs de l\'appareil sont automatiquement désactivés lorsque l\'écran est éteint jusqu\'à ce que l\'appareil soit déverrouillé. Cela aide à minimiser les wakelocks induits par le mouvement qui épuisent la batterie.</string>
-    <string name="sensors_off_note">Remarque importante : lorsque la vignette SensorsOff est activée, la ou les caméras et le microphone de l\'appareil, entre autres capteurs, deviennent inaccessibles. Cela affecte le déverrouillage du visage et, sur certains appareils, l\'audibilité pendant les appels. Vérifiez si vous êtes audible pendant l\'appel ou non. Si ce n\'est pas audible et que vous recevez un appel alors que l\'appareil est verrouillé, vous pouvez appuyer longuement sur la vignette SensorsOff pour déverrouiller l\'appareil et désactiver la vignette SensorsOff - après avoir appuyé sur le bouton de réception d\'appel</string>
+    <string name="sensors_off_note">Remarque importante: lorsque la vignette SensorsOff est activée, la ou les caméras et le microphone de l\'appareil, entre autres capteurs, deviennent inaccessibles. Cela affecte le déverrouillage du visage et, sur certains appareils, l\'audibilité pendant les appels. Vérifiez si vous êtes audible pendant l\'appel ou non. Si ce n\'est pas audible et que vous recevez un appel alors que l\'appareil est verrouillé, vous pouvez appuyer longuement sur la vignette SensorsOff pour déverrouiller l\'appareil et désactiver la vignette SensorsOff - après avoir appuyé sur le bouton de réception d\'appel</string>
+
+    <string name="sensor_off_setup_info">Do this first: Enable \'Sensors Off\' tile in Settings > Developer options > Quick settings developer tiles. ></string>
+    <string name="dev_opt_setup_info">To enable Developer options, go to Settings > About phone > Software info and tap \'Build number\' 7x.</string>
+    <string name="enable_write_settings">Enable Galaxy Max Hz change/write system settings permission.</string>
+    <string name="as_desc">This service is required for galaxy max hz mods to work.</string>
 </resources>

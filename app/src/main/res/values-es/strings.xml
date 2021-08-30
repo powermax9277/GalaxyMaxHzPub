@@ -139,5 +139,8 @@
     <string name="brightness_threshold">Brillo mínimo para adaptativo</string>
     <string name="sensor_off_info">Los sensores del dispositivo se apagan automáticamente cuando se apaga la pantalla hasta que se desbloquea el dispositivo. Esto ayuda a minimizar los bloqueos de activación inducidos por el movimiento que agotan la batería.</string>
     <string name="sensors_off_note">Nota importante: mientras el mosaico SensorsOff está ENCENDIDO, la (s) cámara (s) y el micrófono (s) del dispositivo, entre otros sensores, se vuelven inaccesibles. Compruebe si su voz se puede escuchar o no durante la llamada. Si no se puede escuchar y recibe una llamada mientras el dispositivo está bloqueado, puede presionar prolongadamente el mosaico SensorsOff para desbloquear el dispositivo y apagar el mosaico SensorsOff, después de presionar el botón Recibir llamada.</string>
-
+    <string name="sensor_off_setup_info">Do this first: Enable \'Sensors Off\' tile in Settings > Developer options > Quick settings developer tiles. ></string>
+    <string name="dev_opt_setup_info">To enable Developer options, go to Settings > About phone > Software info and tap \'Build number\' 7x.</string>
+    <string name="enable_write_settings">Enable Galaxy Max Hz change/write system settings permission.</string>
+    <string name="as_desc">This service is required for galaxy max hz mods to work.</string>
 </resources>

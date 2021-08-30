@@ -140,4 +140,9 @@
     <string name="brightness_threshold">Độ sáng tối thiểu cho chế độ thích ứng</string>
     <string name="sensor_off_info">Các cảm biến của thiết bị sẽ tự động tắt khi tắt màn hình cho đến khi thiết bị được mở khóa. Điều này giúp giảm thiểu tình trạng khóa chế độ thức do chuyển động gây ra tiêu hao pin.</string>
     <string name="sensors_off_note">Lưu ý quan trọng: Khi ô Tắt cảm biến được BẬT, (các) máy ảnh và micrô của thiết bị, trong số các cảm biến khác, sẽ không thể truy cập được. Điều này ảnh hưởng đến tính năng mở khóa bằng khuôn mặt và âm thanh cuộc gọi trên một số thiết bị. Kiểm tra xem bạn có bị tắt tiếng trong khi gọi hay không. Nếu trường hợp này xảy ra và bạn nhận cuộc gọi trong khi thiết bị bị khóa, bạn có thể nhấn và giữ ô SensorOff để mở khóa thiết bị và tắt ô SensorOff - sau khi nhấn nút nhận cuộc gọi.</string>
+
+    <string name="sensor_off_setup_info">Do this first: Enable \'Sensors Off\' tile in Settings > Developer options > Quick settings developer tiles. ></string>
+    <string name="dev_opt_setup_info">To enable Developer options, go to Settings > About phone > Software info and tap \'Build number\' 7x.</string>
+    <string name="enable_write_settings">Enable Galaxy Max Hz change/write system settings permission.</string>
+    <string name="as_desc">This service is required for galaxy max hz mods to work.</string>
 </resources>

@@ -2,7 +2,7 @@ package com.tribalfs.gmh.helpers
 
 import android.annotation.SuppressLint
 import android.content.Context
-import com.tribalfs.gmh.helpers.CacheSettings.isAdFree
+import com.tribalfs.gmh.helpers.CacheSettings.isPremium
 import com.tribalfs.gmh.helpers.CacheSettings.isPowerSaveModeOn
 import com.tribalfs.gmh.helpers.CacheSettings.keepModeOnPowerSaving
 import com.tribalfs.gmh.helpers.CacheSettings.prrActive
@@ -25,7 +25,7 @@ internal class PsmChangeHandler(context: Context) {
     fun handle() {
         // Log.d(TAG, "execute called $isPowerSaveModeOn")
         if (isPowerSaveModeOn.get() == true) {
-            if (keepModeOnPowerSaving && isAdFree.get()!!) {
+            if (keepModeOnPowerSaving && isPremium.get()!!) {
                 //Use Psm Max Hz
                 prrActive.set( mUtilsPrefsGmh.hzPrefMaxRefreshRatePsm)
                 mUtilsRefreshRate.setPrefOrAdaptOrHighRefreshRateMode(null)
@@ -33,7 +33,7 @@ internal class PsmChangeHandler(context: Context) {
                 mUtilsRefreshRate.setRefreshRateMode(REFRESH_RATE_MODE_STANDARD)
             }
         }else{
-            if (isAdFree.get()!!) {
+            if (isPremium.get()!!) {
                 //Change Max Hz back to Std Prr
                 mUtilsPrefsGmh.hzPrefMaxRefreshRate.let {
                     prrActive.set(it)

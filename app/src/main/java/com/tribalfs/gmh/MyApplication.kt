@@ -34,7 +34,7 @@ import com.tribalfs.gmh.helpers.CacheSettings.currentRefreshRateMode
 import com.tribalfs.gmh.helpers.CacheSettings.hasWriteSecureSetPerm
 import com.tribalfs.gmh.helpers.CacheSettings.highestHzForAllMode
 import com.tribalfs.gmh.helpers.CacheSettings.ignoreRrmChange
-import com.tribalfs.gmh.helpers.CacheSettings.isAdFree
+import com.tribalfs.gmh.helpers.CacheSettings.isPremium
 import com.tribalfs.gmh.helpers.CacheSettings.isFakeAdaptive
 import com.tribalfs.gmh.helpers.CacheSettings.isFakeAdaptiveValid
 import com.tribalfs.gmh.helpers.CacheSettings.isHzNotifOn
@@ -339,7 +339,7 @@ class MyApplication : Application() {
             adaptiveDelayMillis = it
             adaptiveAccessTimeout = it * TIMEOUT_FACTOR.toLong()
         }
-        isAdFree.set( (mUtilsPrefsAct.gmhPrefLicType == LIC_TYPE_ADFREE || mUtilsPrefsAct.gmhPrefLicType == LIC_TYPE_TRIAL_ACTIVE)
+        isPremium.set( (mUtilsPrefsAct.gmhPrefLicType == LIC_TYPE_ADFREE || mUtilsPrefsAct.gmhPrefLicType == LIC_TYPE_TRIAL_ACTIVE)
                 && (mUtilsPrefsAct.gmhPrefSignature == internalCert))
 
 
@@ -361,7 +361,7 @@ class MyApplication : Application() {
     private fun updateRefreshRateParams(){
         canApplyFakeAdaptive = canApplyFakeAdaptive()//don't interchange
         isFakeAdaptive.set(isFakeAdaptive())//don't interchange
-        prrActive.set (if (isPowerSaveModeOn.get() == true && isAdFree.get()!!) {
+        prrActive.set (if (isPowerSaveModeOn.get() == true && isPremium.get()!!) {
             mUtilsPrefsGmh.hzPrefMaxRefreshRatePsm
         } else {
             mUtilsPrefsGmh.hzPrefMaxRefreshRate

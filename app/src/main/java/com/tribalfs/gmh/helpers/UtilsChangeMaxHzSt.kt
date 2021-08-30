@@ -10,7 +10,7 @@ import com.tribalfs.gmh.profiles.ProfilesObj.loadComplete
 import com.tribalfs.gmh.helpers.CacheSettings.currentRefreshRateMode
 import com.tribalfs.gmh.helpers.CacheSettings.lowestHzCurMode
 import com.tribalfs.gmh.helpers.CacheSettings.hasWriteSecureSetPerm
-import com.tribalfs.gmh.helpers.CacheSettings.isAdFree
+import com.tribalfs.gmh.helpers.CacheSettings.isPremium
 import com.tribalfs.gmh.helpers.CacheSettings.isPowerSaveModeOn
 import com.tribalfs.gmh.helpers.CacheSettings.isScreenOn
 import com.tribalfs.gmh.helpers.CacheSettings.prrActive
@@ -141,7 +141,7 @@ class UtilsChangeMaxHzSt private constructor(private val appCtx: Context) {
             }
 
             prrActive.set(maxHzToApplyFinal.coerceAtLeast(lowestHzCurMode))
-            if (isAdFree.get()!! && isPowerSaveModeOn.get() == true){// && keepModeOnPowerSaving) {
+            if (isPremium.get()!! && isPowerSaveModeOn.get() == true){// && keepModeOnPowerSaving) {
                 mUtilsPrefsGmh.hzPrefMaxRefreshRatePsm = maxHzToApplyFinal
             }else{
                 mUtilsPrefsGmh.hzPrefMaxRefreshRate = maxHzToApplyFinal

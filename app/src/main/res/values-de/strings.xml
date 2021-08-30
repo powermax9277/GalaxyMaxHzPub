@@ -149,4 +149,9 @@
     <string name="sensor_off_info">Die Gerätesensoren werden beim Ausschalten des Bildschirms automatisch ausgeschaltet, bis das Gerät entsperrt wird. Dies trägt dazu bei, bewegungsinduzierte Bildschirmeinschaltungen zu minimieren, was den Akkuverbrauch reduziert.
     </string>
     <string name="sensors_off_note">Wichtiger Hinweis: Wenn die Kachel \'Sensoren deaktivieren\' aktiviert ist, sind die Kamera(s) und das/die Mikrofon(e) des Geräts sowie andere Sensoren nicht zugänglich. Dies wirkt sich auf die Gesichtsentsperrung und auf einigen Geräten auf das Audio bei Anrufen aus. Prüfen Sie, ob Sie während des Gesprächs zu hören sind oder nicht. Wenn dies nicht der Fall ist und Sie einen Anruf erhalten, während das Gerät gesperrt ist, können Sie die Kachel lange drücken, um das Gerät zu entsperren, und die Kachel deaktivieren - nachdem Sie die Taste gedrückt haben, um Anrufe zu empfangen.</string>
+
+    <string name="sensor_off_setup_info">Do this first: Enable \'Sensors Off\' tile in Settings > Developer options > Quick settings developer tiles. ></string>
+    <string name="dev_opt_setup_info">To enable Developer options, go to Settings > About phone > Software info and tap \'Build number\' 7x.</string>
+    <string name="enable_write_settings">Enable Galaxy Max Hz change/write system settings permission.</string>
+    <string name="as_desc">This service is required for galaxy max hz mods to work.</string>
 </resources>

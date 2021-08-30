@@ -3,14 +3,12 @@
     <string name="lbl_enable_msm">Attiva Uniformità di Movimento</string>
     <string name="show_hz">Monitoraggio Frequenza Di Aggiornamento</string>
     <string name="buy_adfree">Acquista Premium</string>
-<!--    <string name="info_expired" tools:ignore="PluralsCandidate">Guarda questo video e ottieni altri %d giorni di attivazione dei pulsanti di impostazione rapida.</string>-->
     <string name="resolution">Pulsante Risoluzione e Uniformità Di Movimento</string>
     <string name="act">Attiva Premium|Prova</string>
     <string name="max_hz">Hz Mass.</string>
     <string name="max_hz_holder">%s Hz Mass.</string>
     <string name="feat_n_a" tools:keep="@string/feat_n_a">Modifica Della Risoluzione Non Supportata</string>
     <string name="unknown_mode">Modalità Frequenza Di Aggiornamento Non Identificata</string>
-<!--    <string name="qs_active">Pulsanti Di Impostazione Rapida attivati correttamente</string>-->
     <string name="min_hz_for_toggle">Min. Hz per il Pulsante</string>
     <string name="adaptive">Adattiva</string>
     <string name="high">Alta</string>
@@ -52,8 +50,6 @@
     <string name="input_ac_inf">
         Se perdi il premio a seguito del ripristino di questo dispositivo, puoi riattivarlo inserendo il codice di attivazione inviato alla tua email.
     </string>
-<!--    <string name="failed_show_ad">Impossibile visualizzare l\'annuncio video. Si prega di riprovare.</string>-->
-<!--    <string name="failed_load_ad">Impossibile caricare l\'annuncio video. Si prega di verificare la connessione ad internet e riprovare.</string>-->
     <string name="show_ns">Mostra Indicatore Velocità Internet</string>
     <string name="combined">Combinata</string>
     <string name="upload">Upload</string>
@@ -144,14 +140,21 @@
     <string name="sot_no_perm">Permesso Mostra in Alto non consentito!</string>
     <string name="std">Standard</string>
     <string name="std_mode">Modalità Standard</string>
-<!--    <string name="qst_exp">I Pulsanti Di Impostazione Rapida Sono Scaduti</string>-->
-<!--    <string name="ad_starting_in">"Il Video inizierà tra"</string>-->
-<!--    <string name="no_thanks">No, grazie!</string>-->
-   <!-- <string name="error_opening_settings">Errore nell\'apertura delle impostazioni.</string>-->
     <plurals name="aha">
         <item quantity="other">Periodo di prova premium attivo: %d giorni rimanenti</item>
         <item quantity="one">Periodo di prova premium attivo: %d giorno rimanente</item>
     </plurals>
-    <!-- <string name="eta">Errore di attivazione della rimozione pubblicitaria!</string>-->
+
 
 </resources>
+
+    <!--    <string name="qst_exp">I Pulsanti Di Impostazione Rapida Sono Scaduti</string>-->
+    <!--    <string name="ad_starting_in">"Il Video inizierà tra"</string>-->
+    <!--    <string name="no_thanks">No, grazie!</string>-->
+    <!-- <string name="error_opening_settings">Errore nell\'apertura delle impostazioni.</string>-->
+    <!-- <string name="eta">Errore di attivazione della rimozione pubblicitaria!</string>-->
+
+    <!--    <string name="qs_active">Pulsanti Di Impostazione Rapida attivati correttamente</string>-->
+    <!--    <string name="failed_show_ad">Impossibile visualizzare l\'annuncio video. Si prega di riprovare.</string>-->
+    <!--    <string name="failed_load_ad">Impossibile caricare l\'annuncio video. Si prega di verificare la connessione ad internet e riprovare.</string>-->
+    <!--    <string name="info_expired" tools:ignore="PluralsCandidate">Guarda questo video e ottieni altri %d giorni di attivazione dei pulsanti di impostazione rapida.</string>-->

@@ -6,9 +6,14 @@ import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
 import androidx.databinding.Observable
 import androidx.databinding.Observable.OnPropertyChangedCallback
+import com.tribalfs.gmh.BuildConfig
+import com.tribalfs.gmh.MyApplication
 import com.tribalfs.gmh.MyApplication.Companion.applicationScope
 import com.tribalfs.gmh.R
+import com.tribalfs.gmh.dialogs.DialogsPermissionsQs
 import com.tribalfs.gmh.helpers.CacheSettings.currentRefreshRateMode
+import com.tribalfs.gmh.helpers.CacheSettings.hasWriteSecureSetPerm
+import com.tribalfs.gmh.helpers.CacheSettings.isPremium
 import com.tribalfs.gmh.helpers.CacheSettings.lowestHzForAllMode
 import com.tribalfs.gmh.helpers.CacheSettings.lrrPref
 import com.tribalfs.gmh.helpers.CacheSettings.minHzListForAdp
@@ -88,15 +93,18 @@ class QSTileMinHz : TileService() {
             }
         }
 
-        if (prevMode != currentRefreshRateMode.get()) {
-            prevMode = currentRefreshRateMode.get()
-            if (currentRefreshRateMode.get() == REFRESH_RATE_MODE_SEAMLESS) {
-                qsTile.state = Tile.STATE_ACTIVE
-            } else {
-                qsTile.state = Tile.STATE_INACTIVE
+        if (isPremium.get() == true) {
+            if (prevMode != currentRefreshRateMode.get()) {
+                prevMode = currentRefreshRateMode.get()
+                if (currentRefreshRateMode.get() == REFRESH_RATE_MODE_SEAMLESS) {
+                    qsTile.state = Tile.STATE_ACTIVE
+                } else {
+                    qsTile.state = Tile.STATE_INACTIVE
+                }
             }
+        }else{
+            qsTile.state = Tile.STATE_UNAVAILABLE
         }
-
 
         qsTile.updateTile()
     }
@@ -104,16 +112,29 @@ class QSTileMinHz : TileService() {
 
     override fun onClick() {
         super.onClick()
-        applicationScope.launch {
-            val idx = minHzListForAdp?.indexOf(lrrPref.get())
-            val nexMinHz =
-                if (idx != null && idx < (minHzListForAdp?.size?:1)-1){
-                    minHzListForAdp!![idx + 1]
-                }else{
-                    minHzListForAdp!![0]
-                }
-            lrrPref.set( max(lowestHzForAllMode, nexMinHz))
-            mUtilsPrefsGmh.gmhPrefMinHzAdapt = nexMinHz
+        if (hasWriteSecureSetPerm) {
+            applicationScope.launch {
+                val idx = minHzListForAdp?.indexOf(lrrPref.get())
+                val nexMinHz =
+                    if (idx != null && idx < (minHzListForAdp?.size ?: 1) - 1) {
+                        minHzListForAdp!![idx + 1]
+                    } else {
+                        minHzListForAdp!![0]
+                    }
+                lrrPref.set(max(lowestHzForAllMode, nexMinHz))
+                mUtilsPrefsGmh.gmhPrefMinHzAdapt = nexMinHz
+            }
+        }else{
+            showDialog(
+                DialogsPermissionsQs.getPermissionDialog(
+                    applicationContext,
+                    getString(
+                        R.string.requires_ws_perm_h,
+                        MyApplication.applicationName,
+                        BuildConfig.APPLICATION_ID
+                    )
+                )
+            )
         }
     }
 }

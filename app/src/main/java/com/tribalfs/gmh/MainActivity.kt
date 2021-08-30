@@ -66,7 +66,7 @@ import com.tribalfs.gmh.helpers.CacheSettings.displayId
 import com.tribalfs.gmh.helpers.CacheSettings.hasWriteSecureSetPerm
 import com.tribalfs.gmh.helpers.CacheSettings.hasWriteSystemSetPerm
 import com.tribalfs.gmh.helpers.CacheSettings.highestHzForAllMode
-import com.tribalfs.gmh.helpers.CacheSettings.isAdFree
+import com.tribalfs.gmh.helpers.CacheSettings.isPremium
 import com.tribalfs.gmh.helpers.CacheSettings.isFakeAdaptive
 import com.tribalfs.gmh.helpers.CacheSettings.isMultiResolution
 import com.tribalfs.gmh.helpers.CacheSettings.isNsNotifOn
@@ -329,7 +329,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
             when (sender) {
                 currentRefreshRateMode -> { //triggered by MyContentObserver -> updateCacheSettings()
                     currentRefreshRateMode.get().let {
-                        if (!isOfficialAdaptive && !isAdFree.get()!! && it == REFRESH_RATE_MODE_SEAMLESS ) {
+                        if (!isOfficialAdaptive && !isPremium.get()!! && it == REFRESH_RATE_MODE_SEAMLESS ) {
                             mUtilsRefreshRate.setRefreshRateMode(
                                 if (highestHzForAllMode > STANDARD_REFRESH_RATE_HZ)
                                     REFRESH_RATE_MODE_ALWAYS else
@@ -727,7 +727,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
         setupMenuVisibility()
 
         viewModel.isValidAdFree.observe(this, { adFree ->
-            isAdFree.set( adFree)
+            isPremium.set( adFree)
             //syncInsDate(SYNCMODE_GET, null, adFree)
             updateNetSpeed(adFree)
             //setupMenuVisibility()
@@ -1312,7 +1312,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
             //Standard mode
             ) {
                 if (isPowerSaveModeOn.get() == true
-                    && hasWriteSecureSetPerm && keepModeOnPowerSaving && isAdFree.get()!!
+                    && hasWriteSecureSetPerm && keepModeOnPowerSaving && isPremium.get()!!
                 ) {
                     mUtilsRefreshRate.setPrefOrAdaptOrHighRefreshRateMode(null)
                 }
@@ -1320,7 +1320,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
                 //High/Adaptive mode
                 if (isPowerSaveModeOn.get() == true
                     && (currentRefreshRateMode.get() == REFRESH_RATE_MODE_SEAMLESS || currentRefreshRateMode.get() == REFRESH_RATE_MODE_ALWAYS)
-                    && isAdFree.get()!!
+                    && isPremium.get()!!
                 ) {
                     keepModeOnPowerSaving = true
                     mUtilsPrefsGmh.gmhPrefKmsOnPsm = true
@@ -1346,7 +1346,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
             override fun onStopTrackingTouch(seekBar: SeekBar) {
                 seekBar.progress.let {prog ->
                     mUtilsPrefsGmh.hzPrefMaxRefreshRate = prog
-                    if (isPowerSaveModeOn.get() != true || !isAdFree.get()!!) {
+                    if (isPowerSaveModeOn.get() != true || !isPremium.get()!!) {
                         mUtilsPrefsGmh.hzPrefMaxRefreshRate.let{
                             prrActive.set( it)
                             mUtilsRefreshRate.setRefreshRate(it)

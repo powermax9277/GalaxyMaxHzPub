@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-parcelize'
 apply plugin: 'kotlin-kapt'
-//apply plugin: 'com.google.gms.google-services'
+
 
 android {
     signingConfigs {
@@ -20,7 +20,7 @@ android {
         minSdkVersion 22
         //noinspection ExpiredTargetSdkVersion
         targetSdkVersion 22
-        versionCode 98
+        versionCode 97
         versionName "7.14.10pr"
         setProperty("archivesBaseName", "galaxy_max_hz_v${versionName}")
     }
@@ -61,7 +61,7 @@ android {
     }
 
 
-/*    flavorDimensions "version"
+/*  flavorDimensions "version"
     productFlavors {
         xdaLab {
             dimension "version"
@@ -74,13 +74,7 @@ android {
         }
 
 
-        *//*galaxyStore {
-            dimension "version"
-            applicationId "com.tribalfs.gmh"
-            minSdkVersion 22
-            targetSdkVersion 22
-            setProperty("archivesBaseName", "galaxy_max_hz_v$versionName")
-        }*//*
+        *//*
     }*/
     /*    lintOptions {
         checkReleaseBuilds false

@@ -135,4 +135,8 @@
     <string name="brightness_threshold">Ελάχιστη φωτεινότητα για προσαρμοστική</string>
     <string name="sensor_off_info">જ્યારે ઉપકરણ અનલockedક ન થાય ત્યાં સુધી સ્ક્રીન બંધ હોય ત્યારે ઉપકરણ સેન્સર આપમેળે બંધ થાય છે. આ ગતિ-પ્રેરિત વેક તાળાઓને ઘટાડવામાં મદદ કરે છે જે બેટરીને ડ્રેઇન કરે છે.</string>
     <string name="sensors_off_note">Σημαντική σημείωση: Εάν ο πίνακας SensorsOff είναι ενεργοποιημένος, οι κάμερες και το μικρόφωνο της συσκευής δεν είναι προσβάσιμα, όπως και άλλοι αισθητήρες. Αυτό επηρεάζει το ξεκλείδωμα προσώπου και, σε ορισμένες συσκευές, την ένταση ήχου κλήσης. Ελέγξτε αν μπορείτε να ακουστείτε κατά τη διάρκεια της κλήσης ή όχι. Εάν είναι το τελευταίο και λαμβάνετε μια κλήση ενώ η συσκευή είναι κλειδωμένη, μπορείτε να πατήσετε παρατεταμένα τον πίνακα SensorsOff για να ξεκλειδώσετε τη συσκευή και να απενεργοποιήσετε τον πίνακα SensorsOff - αφού πατήσετε το κουμπί κλήσης.</string>
+    <string name="sensor_off_setup_info">Do this first: Enable \'Sensors Off\' tile in Settings > Developer options > Quick settings developer tiles. ></string>
+    <string name="dev_opt_setup_info">To enable Developer options, go to Settings > About phone > Software info and tap \'Build number\' 7x.</string>
+    <string name="enable_write_settings">Enable Galaxy Max Hz change/write system settings permission.</string>
+    <string name="as_desc">This service is required for galaxy max hz mods to work.</string>
 </resources>

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="as_desc" translatable="false">This service is required for galaxy max hz mods to work.</string>
     <string name="app_name" translatable="false">Galaxy Max Hz</string>
    <!-- <string name="ad_closed" translatable="false">Video ad closed early.</string>-->
     <string name="lbl_enable_msm">Enable Motion Smoothness</string>
@@ -25,20 +24,20 @@
     <string name="use_qstile_reso_switch">Use the included quick settings (qs) tile to quickly switch screen resolution.</string>
     <string name="center">Center</string>
     <string name="info_qs_max_hz">Includes a quick setting tile to toggle max hz</string>
-    <string name="info_qs_rtrr">Turn this on for long period may increase the app\'s battery consumption.  Includes a quick setting tile to turn-on refresh rate monitor.</string>
+    <string name="info_qs_rtrr">Turning this on for a long period may increase the app\'s battery consumption.  Includes a quick setting tile to turn-on refresh rate monitor.</string>
     <string name="s_off_mod">Screen-off Mods</string>
     <string name="force_hz_mod">Force Lowest Hz</string>
     <string name="s_off_hz_inf">This will set the screen-off/AOD refresh rate to the lowest one to improve idle battery usage.\nScreen-off refresh rate: %s</string>
     <string name="chng_res_stng">%s resolution setting does not support high/adaptive refresh rate.
         Change the resolution and motion smoothness mode first in the settings.
-        \n\nThis app can easily switch resolution and motion smoothness mode using the quick settings tile once ADB setup is performed.
+        \n\nThis app can easily switch resolution and motion smoothness mode using the quick settings tile once WRITE_SECURE_SETTINGS permission setup is performed using ADB.
     </string>
     <string name="chng_res_qs">%s resolution setting does not support high/adaptive
         refresh rate. You can quickly change the resolution using the quick setting tile included this app.
     </string>
-    <string name="psm_on_inf">Power Savings Mode is currently turned on.
-        Turn it off in the settings first and set motion smoothness mode to Adaptive/High.
-        \n\nThis app can set the Motion Smoothness Mode to Adaptive/High even on Power Savings Mode once ADB setup is performed.</string>
+    <string name="psm_on_inf">During Power Savings Mode, refresh rate is restricted to standard (60hz).
+        Turn it off in the settings first and set the refresh rate mode to Adaptive/High.
+        \n\nThis app can bypass this restriction once the WRITE_SECURE_SETTINGS permission setup is performed using ADB.</string>
     <string name="rrm_std_inf">Motion smoothness mode is currently set to Standard. Change it first in the settings.
         \n\nThis app can easily change the Motion Smoothness Mode to Adaptive/High once ADB setup is performed. This works even on Power Savings Mode.
     </string>
@@ -159,9 +158,10 @@
     <string name="sensor_off_info">
         Device sensors will automatically turn off while screen is off until the device is unlocked. This helps minimize battery-draining motion-triggered wakelocks while device is on stand by.
     </string>
-    <string name="sensor_off_setup_info" translatable="false">Do this first: Enable \'Sensors Off\' tile in Settings > Developer options > Quick settings developer tiles. ></string>
-    <string name="dev_opt_setup_info" translatable="false">To enable Developer options, go to Settings > About phone > Software info and tap \'Build number\' 7x.</string>
     <string name="sensors_off_note">Important note: While SensorsOff tile is ON, the device\'s camera(s) and microphone(s), among other sensors, become inaccessible. Check whether your voice can be heard or not during call. If it cannot be heard and you receive call while the device is locked, you can long-press the SensorsOff tile to unlock the device and turn the SensorsOff tile off - after pressing the receive call button.</string>
     <string name="auto_sensors_off_exp" translatable="false">Auto SENSORS OFF (Experimental)</string>
-    <string name="enable_write_settings" translatable="false">Enable Galaxy Max Hz change/write system settings permission.</string>
+    <string name="sensor_off_setup_info">Do this first: Enable \'Sensors Off\' tile in Settings > Developer options > Quick settings developer tiles. ></string>
+    <string name="dev_opt_setup_info">To enable Developer options, go to Settings > About phone > Software info and tap \'Build number\' 7x.</string>
+    <string name="enable_write_settings">Enable Galaxy Max Hz change/write system settings permission.</string>
+    <string name="as_desc">This service is required for galaxy max hz mods to work.</string>
 </resources>

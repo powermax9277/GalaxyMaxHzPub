@@ -30,12 +30,11 @@ object CacheSettings {
 
    // internal var prrKey = PEAK_REFRESH_RATE
 
-
     /***Updated by DisplayInfo, MainActivity***/
     internal var displayId: Int = DEFAULT_DISPLAY
 
     /***Updated by MainActivity,MyApplication***/
-    internal var isAdFree = ObservableField(false)
+    internal var isPremium = ObservableField(false)
     internal val prrActive = ObservableField(60)
     internal val lrrPref = ObservableField(60)
     internal var isSpayInstalled: Boolean? = null
@@ -77,11 +76,9 @@ object CacheSettings {
         }
     }*/
 
-
-
-    internal val isFakeAdaptiveValid = object : ObservableField<Boolean>(isFakeAdaptive,isAdFree, prrActive,lrrPref) {
+    internal val isFakeAdaptiveValid = object : ObservableField<Boolean>(isFakeAdaptive,isPremium, prrActive,lrrPref) {
         override fun get(): Boolean {
-            return isFakeAdaptive.get()!! && isAdFree.get()!! && (prrActive.get()!! > lrrPref.get()!! || prrActive.get() == -1)
+            return isFakeAdaptive.get()!! && isPremium.get()!! && (prrActive.get()!! > lrrPref.get()!! || prrActive.get() == -1)
         }
     }
 

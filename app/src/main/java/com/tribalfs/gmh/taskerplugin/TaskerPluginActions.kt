@@ -22,8 +22,7 @@ import com.tribalfs.gmh.MyApplication.Companion.applicationName
 import com.tribalfs.gmh.helpers.*
 import com.tribalfs.gmh.helpers.CacheSettings.displayId
 import com.tribalfs.gmh.helpers.CacheSettings.highestHzForAllMode
-import com.tribalfs.gmh.helpers.CacheSettings.isAdFree
-import com.tribalfs.gmh.helpers.CacheSettings.isMultiResolution
+import com.tribalfs.gmh.helpers.CacheSettings.isPremium
 import com.tribalfs.gmh.helpers.CacheSettings.isOfficialAdaptive
 import com.tribalfs.gmh.helpers.CacheSettings.isPowerSaveModeOn
 import com.tribalfs.gmh.helpers.CacheSettings.isScreenOn
@@ -132,7 +131,7 @@ private val infosForTasker = InfosFromMainApp().apply {
 
 
 
-    if (isAdFree.get()!!) {
+    if (isPremium.get()!!) {
         if (minHzListForAdp?.size ?: 0 > 1) {
             add(
                 InfoFromMainApp(
@@ -199,7 +198,7 @@ class DynamicInputRunner : TaskerPluginRunnerActionNoOutputOrInput() {
                                 REFRESH_RATE_MODE_STANDARD -> mUtilsRefreshRate.setRefreshRateMode(msm)
                                 REFRESH_RATE_MODE_ALWAYS -> mUtilsRefreshRate.tryPrefRefreshRateMode(msm, null)
                                 REFRESH_RATE_MODE_SEAMLESS ->{
-                                    if (isAdFree.get()!! || isOfficialAdaptive) {
+                                    if (isPremium.get()!! || isOfficialAdaptive) {
                                         mUtilsRefreshRate.tryPrefRefreshRateMode(msm, null)
                                     }
                                 }
@@ -218,7 +217,7 @@ class DynamicInputRunner : TaskerPluginRunnerActionNoOutputOrInput() {
                                 } else {
                                     if (supportedHzIntCurMod?.indexOfFirst { hz -> hz == mHz } != -1) {
                                         prrActive.set(mHz.coerceAtLeast(lowestHzCurMode))
-                                        if (isAdFree.get()!! && isPowerSaveModeOn.get() == true){// && keepModeOnPowerSaving) {
+                                        if (isPremium.get()!! && isPowerSaveModeOn.get() == true){// && keepModeOnPowerSaving) {
                                             mUtilsPrefsGmh.hzPrefMaxRefreshRatePsm = mHz
                                         }else{
                                             mUtilsPrefsGmh.hzPrefMaxRefreshRate = mHz
@@ -237,7 +236,7 @@ class DynamicInputRunner : TaskerPluginRunnerActionNoOutputOrInput() {
                     keep_motion_smoothness_on_psm -> {
                         try {
                             ((info.value as String).toBoolean()).let {isKeep ->
-                                if (isAdFree.get()!!) {
+                                if (isPremium.get()!!) {
                                     keepModeOnPowerSaving = isKeep
                                     CoroutineScope(Dispatchers.Default).launch {
                                         PsmChangeHandler.instance(appCtx).handle()
@@ -258,7 +257,7 @@ class DynamicInputRunner : TaskerPluginRunnerActionNoOutputOrInput() {
 
                     quick_doze_mod -> {
                         CoroutineScope(Dispatchers.Main).launch {
-                            if (isAdFree.get()!!) {
+                            if (isPremium.get()!!) {
                                 try {
                                     (info.value as String).toInt().let { dozInt ->
                                         if (dozInt == -1){
@@ -286,7 +285,7 @@ class DynamicInputRunner : TaskerPluginRunnerActionNoOutputOrInput() {
                     auto_sensors_off ->{
                         CoroutineScope(Dispatchers.IO).launch{
                             try {
-                                if (isAdFree.get()!!) {
+                                if (isPremium.get()!!) {
                                     when ((info.value as String).toInt()) {
                                         1 -> {//turn On
                                             mUtilsPrefsGmh.gmhPrefSensorsOff = (CheckBlacklistApiSt.instance(appCtx).isAllowed()

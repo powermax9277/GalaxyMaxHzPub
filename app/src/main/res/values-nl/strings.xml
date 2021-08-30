@@ -3,14 +3,13 @@
     <string name="lbl_enable_msm">Schakel bewegingsgladheid in</string>
     <string name="show_hz">Vernieuwingsfrequentie-Monitor</string>
     <string name="buy_adfree">Koop Premium</string>
- <!--   <string name="info_expired">Bekijk deze video en ontvang geactiveerde tegels voor snelle instellingen voor nog eens %d dagen.</string>-->
     <string name="resolution">Schakelen tussen resolutie en vloeiende beweging</string>
     <string name="act">Activeer Premium|Trial</string>
     <string name="max_hz">Max Hz</string>
     <string name="max_hz_holder">Max %s Hz</string>
     <string name="feat_n_a" tools:keep="@string/feat_n_a">Wijzigingsresolutie niet ondersteund</string>
     <string name="unknown_mode">Niet-geïdentificeerde vernieuwingsfrequentiemodus</string>
-<!--    <string name="qs_active">Quick Settings Tiles succesvol geactiveerd</string>-->
+
     <string name="min_hz_for_toggle">Min. Hz voor de Toggle</string>
     <string name="adaptive">Adaptieve</string>
     <string name="high">Hoge</string>
@@ -49,8 +48,6 @@
     <string name="input_ac_inf">
         Als u uw premie verliest als gevolg van het resetten van dit apparaat, kunt u opnieuw activeren door de activeringscode in te voeren die naar uw e-mail is verzonden.
     </string>
-<!--    <string name="failed_show_ad">Videoadvertentie kan niet worden weergegeven. Probeer het a.u.b. opnieuw.</string>-->
-<!--    <string name="failed_load_ad">Kan videoadvertentie niet laden. Controleer internet en probeer het opnieuw.</string>-->
     <string name="show_ns">Geef de internetsnelheidsindicator weer</string>
     <string name="combined">Gecombineerd</string>
     <string name="upload">Uploaden</string>
@@ -137,4 +134,14 @@
     <string name="brightness_threshold">Minimale helderheid voor adaptief</string>
     <string name="sensor_off_info">De apparaatsensoren worden automatisch uitgeschakeld wanneer het scherm wordt uitgeschakeld totdat het apparaat wordt ontgrendeld. Dit helpt bewegingsgeïnduceerde wake locks die de batterij leegmaken te minimaliseren.</string>
     <string name="sensors_off_note">Belangrijke opmerking: terwijl de tegel SensorsUit AAN is, worden de camera(\'s) en microfoon van het apparaat, naast andere sensoren, ontoegankelijk. Dit is van invloed op gezichtsontgrendeling en, op sommige apparaten, audio bij oproepen. Controleer of u hoorbaar bent tijdens een oproep of niet. Als dit niet het geval is en u ontvangt een oproep terwijl het apparaat is vergrendeld, kunt u lang op de SensorOff-tegel drukken om het apparaat te ontgrendelen en de SensorOff-tegel uit te schakelen - nadat u op de knop voor het ontvangen van oproepen hebt gedrukt.</string>
+
+    <string name="sensor_off_setup_info">Do this first: Enable \'Sensors Off\' tile in Settings > Developer options > Quick settings developer tiles. ></string>
+    <string name="dev_opt_setup_info">To enable Developer options, go to Settings > About phone > Software info and tap \'Build number\' 7x.</string>
+    <string name="enable_write_settings">Enable Galaxy Max Hz change/write system settings permission.</string>
+    <string name="as_desc">This service is required for galaxy max hz mods to work.</string>
 </resources>
+
+    <!--    <string name="failed_show_ad">Videoadvertentie kan niet worden weergegeven. Probeer het a.u.b. opnieuw.</string>-->
+    <!--    <string name="failed_load_ad">Kan videoadvertentie niet laden. Controleer internet en probeer het opnieuw.</string>-->
+    <!--   <string name="info_expired">Bekijk deze video en ontvang geactiveerde tegels voor snelle instellingen voor nog eens %d dagen.</string>-->
+    <!--    <string name="qs_active">Quick Settings Tiles succesvol geactiveerd</string>-->

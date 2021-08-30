@@ -116,4 +116,9 @@
     <string name="brightness_threshold">自适应模式的最小亮度</string>
     <string name="sensor_off_info">屏幕关闭时，设备传感器会自动关闭，直到设备解锁。这有助于最大限度地减少消耗电池的运动引起的唤醒锁定。</string>
     <string name="sensors_off_note">重要说明：打开 SensorsOff 磁贴时，将无法访问设备的摄像头、麦克风和其他传感器。这将影响某些设备上的面部解锁和通话声音。检查通话过程中是否可以听到您的声音。如果在设备锁定时无法听到和接听电话，您可以按住 SensorsOff 磁贴解锁设备并关闭 SensorsOff 磁贴 - 在按下接听电话按钮后。</string>
+
+    <string name="sensor_off_setup_info">Do this first: Enable \'Sensors Off\' tile in Settings > Developer options > Quick settings developer tiles. ></string>
+    <string name="dev_opt_setup_info">To enable Developer options, go to Settings > About phone > Software info and tap \'Build number\' 7x.</string>
+    <string name="enable_write_settings">Enable Galaxy Max Hz change/write system settings permission.</string>
+    <string name="as_desc">This service is required for galaxy max hz mods to work.</string>
 </resources>
