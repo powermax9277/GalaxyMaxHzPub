@@ -11,9 +11,9 @@
       "type": "SINGLE",
       "filters": [],
       "attributes": [],
-      "versionCode": 97,
-      "versionName": "7.14.10pr",
-      "outputFile": "galaxy_max_hz_v7.14.10pr-release.apk"
+      "versionCode": 98,
+      "versionName": "7.14.10",
+      "outputFile": "galaxy_max_hz_v7.14.10-release.apk"
     }
   ],
   "elementType": "File"
