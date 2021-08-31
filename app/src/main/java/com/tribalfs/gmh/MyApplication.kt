@@ -119,7 +119,7 @@ class MyApplication : Application() {
                                     putExtra(SETUP_ADAPTIVE, true)
                                 }
                             )
-                            //TODO: check
+
                             mUtilsPrefsGmh.gmhPrefRefreshRateModePref = currentRefreshRateMode.get()
 
                         }

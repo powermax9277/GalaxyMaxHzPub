@@ -184,7 +184,7 @@ class NetSpeedService : Service(), CoroutineScope {
             notificationManagerCompat.createNotificationChannel(this)
         }
 
-        val pendingIntent: PendingIntent = PendingIntent.getActivity(applicationContext, 0, dataUsageSettingsIntent, FLAG_IMMUTABLE)//Todo Test
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(applicationContext, 0, dataUsageSettingsIntent, FLAG_IMMUTABLE)
 
         notificationBuilderInstance = (Notification.Builder(applicationContext,
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) CHANNEL_ID_NET_SPEED else ""))

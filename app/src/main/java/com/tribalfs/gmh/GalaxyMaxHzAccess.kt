@@ -327,13 +327,13 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         }
     }
 
-  /*  override fun onUnbind(intent: Intent?): Boolean {
+    override fun onUnbind(intent: Intent?): Boolean {
         //job.cancel()
         if (hasWriteSecureSetPerm && isSpayInstalled == false) {
             allowAccessibility(applicationContext, GalaxyMaxHzAccess::class.java, true)
         }
         return false//super.onUnbind(intent)
-    }*/
+    }
 
 
 
