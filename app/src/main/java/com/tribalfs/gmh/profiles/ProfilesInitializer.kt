@@ -77,7 +77,9 @@ internal class ProfilesInitializer private constructor(context: Context) {
         S21_U,
         N20U_JP,
         ZF3,
-        ZFp3
+        ZFp3,
+        TS7L,
+        TS7LW
     )
 
 

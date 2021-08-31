@@ -24,6 +24,7 @@ class NetSpeedServiceHelperStn private constructor(context: Context)  {
         }
 
 
+    @ExperimentalCoroutinesApi
     fun runNetSpeed(enable: Boolean?){
         enable?.let{
             mUtilsPrefGmh.gmhPrefNetSpeedIsOn = it
