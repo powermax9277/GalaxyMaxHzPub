@@ -13,8 +13,8 @@ import com.tribalfs.gmh.profiles.ProfilesObj.refreshRateModeMap
 import com.tribalfs.gmh.resochanger.ResolutionChangeUtilSt
 import kotlinx.coroutines.*
 
+@ExperimentalCoroutinesApi
 class BootCompleteReceiver : BroadcastReceiver() {
-    @ExperimentalCoroutinesApi
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onReceive(context: Context, intent: Intent) {
         when (intent.action) {

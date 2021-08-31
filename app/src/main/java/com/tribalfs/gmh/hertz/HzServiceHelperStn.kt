@@ -10,6 +10,7 @@ import com.tribalfs.gmh.helpers.CacheSettings.isScreenOn
 import com.tribalfs.gmh.helpers.SingletonHolder
 import com.tribalfs.gmh.hertz.HzService.Companion.STOP
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmh
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 class HzServiceHelperStn private constructor(context: Context) {
 
@@ -20,6 +21,7 @@ class HzServiceHelperStn private constructor(context: Context) {
        // private const val TAG = "HzServiceHelperStn"
     }
 
+    @ExperimentalCoroutinesApi
     @RequiresApi(Build.VERSION_CODES.M)
     fun updateHzSize(size: Int?) {
         size?.let{
@@ -28,6 +30,7 @@ class HzServiceHelperStn private constructor(context: Context) {
         }
     }
 
+    @ExperimentalCoroutinesApi
     @RequiresApi(Build.VERSION_CODES.M)
     fun updateHzGravity(gravity: Int){
         mHzSharePref.gmhPrefHzPosition = gravity
@@ -37,6 +40,7 @@ class HzServiceHelperStn private constructor(context: Context) {
     }
 
 
+    @ExperimentalCoroutinesApi
     fun switchOverlay(showOverlayHz: Boolean) {
       //  Log.d(TAG, "switchOverlay() called $showOverlayHz")
         mHzSharePref.gmhPrefHzOverlayIsOn = showOverlayHz
@@ -47,6 +51,7 @@ class HzServiceHelperStn private constructor(context: Context) {
     }
 
 
+    @ExperimentalCoroutinesApi
     @RequiresApi(Build.VERSION_CODES.M)
     fun startHertz(isSwOn: Boolean?, showOverlayHz: Boolean?, showNotifHz: Boolean?) {
         //Log.d(TAG, "HzServiceHelper/startHertz: showHzFpsOverlay() called")
@@ -65,6 +70,7 @@ class HzServiceHelperStn private constructor(context: Context) {
         }
     }
 
+    @ExperimentalCoroutinesApi
     @RequiresApi(Build.VERSION_CODES.M)
     fun stopHertz(){
         //Log.d(TAG, "HzServiceHelper/stopHertz")
@@ -73,6 +79,7 @@ class HzServiceHelperStn private constructor(context: Context) {
         }catch(_:Exception){}
     }
 
+    @ExperimentalCoroutinesApi
     @RequiresApi(Build.VERSION_CODES.M)
     fun isHzStop(): Boolean {
         return hzStatus.get() == STOP

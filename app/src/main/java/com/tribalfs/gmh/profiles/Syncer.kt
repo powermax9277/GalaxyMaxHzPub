@@ -6,6 +6,7 @@ import android.os.Build.VERSION_CODES
 import android.provider.Settings
 import android.util.Log
 import androidx.annotation.RequiresApi
+import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.tribalfs.gmh.BuildConfig
@@ -125,6 +126,7 @@ internal class Syncer(context: Context) {
         }
     }
 
+    @ExperimentalCoroutinesApi
     suspend fun openBuyAdFreeLink(): JSONObject? = withContext(Dispatchers.IO) {
         val jsonBody = JSONObject().apply {
             put(KEY_JSON_DEVICE_ID, deviceId)
@@ -191,6 +193,7 @@ internal class Syncer(context: Context) {
         try {
             val queue = Volley.newRequestQueue(appCtx)
             val jsonObjReq = JsonObjectRequest(
+                Request.Method.POST,
                 "$url?Rq=$requestType", sendObj,
                 { response ->
                     it.resume(response)

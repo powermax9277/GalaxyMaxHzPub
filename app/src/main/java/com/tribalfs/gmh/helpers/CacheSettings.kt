@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.view.Display.DEFAULT_DISPLAY
 import androidx.databinding.ObservableField
 import com.tribalfs.gmh.hertz.HzService.Companion.STOP
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import java.lang.Long.max
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -61,6 +62,7 @@ object CacheSettings {
 
     /***Updated by MyApplication,HzService***/
     internal val isHzNotifOn = ObservableField(false)  //ok
+    @ExperimentalCoroutinesApi
     @SuppressLint("NewApi")
     internal var hzStatus = ObservableField(STOP)
 

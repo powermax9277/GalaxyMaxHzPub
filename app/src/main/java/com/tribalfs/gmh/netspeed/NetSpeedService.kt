@@ -30,6 +30,7 @@ import java.util.*
 import kotlin.coroutines.CoroutineContext
 
 
+@ExperimentalCoroutinesApi
 class NetSpeedService : Service(), CoroutineScope {
 
     companion object {
@@ -156,6 +157,7 @@ class NetSpeedService : Service(), CoroutineScope {
         mIconCanvas = Canvas(mIconBitmap)
     }
 
+    @ExperimentalCoroutinesApi
     private fun setupScreenStatusReceiver(){
         if (!AccessibilityPermission.isAccessibilityEnabled(applicationContext,GalaxyMaxHzAccess::class.java)) {
             IntentFilter().let {

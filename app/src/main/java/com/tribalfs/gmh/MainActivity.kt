@@ -1269,11 +1269,9 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
             Snackbar.LENGTH_INDEFINITE,
             android.R.string.ok
         ) {
-            launch(Dispatchers.Main) {
                 val intent = Intent(ACTION_ACCESSIBILITY_SETTINGS)
-                /*intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK*/
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
                 startActivity(intent)
-            }
         }
     }
 

@@ -165,8 +165,8 @@ class UtilsDeviceInfo(val context: Context) {
     internal fun getResoAndRefRateModeArr(currentRefreshRateMode: String?): Array<String> {
         val reso = getDisplayResolution()
         val resoCat = getName(
-            reso.resHeight ?: error(0),
-            reso.resWidth ?: error(0)
+            reso.resHeight,
+            reso.resWidth
         )
 
         val mode = when (currentRefreshRateMode?:getSamRefreshRateMode()) {
