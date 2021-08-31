@@ -26,4 +26,19 @@ internal object ModelNumbers {
     const val ZFp3 = "SM-F711"
 
     val fordableWithHrrExternal = listOf(ZF3)
+
+    val adaptiveModelsLocal: List<String> = listOf(
+        N20U,
+        ZF2,
+        ZF2_JP,
+        N20U5G,
+        S21,
+        S21_P,
+        S21_U,
+        N20U_JP,
+        ZF3,
+        ZFp3,
+        TS7L,
+        TS7LW
+    )
 }

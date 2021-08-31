@@ -44,6 +44,7 @@ import com.tribalfs.gmh.profiles.ModelNumbers.ZF2
 import com.tribalfs.gmh.profiles.ModelNumbers.ZF2_JP
 import com.tribalfs.gmh.profiles.ModelNumbers.ZF3
 import com.tribalfs.gmh.profiles.ModelNumbers.ZFp3
+import com.tribalfs.gmh.profiles.ModelNumbers.adaptiveModelsLocal
 import com.tribalfs.gmh.profiles.ProfilesObj.adaptiveModelsObj
 import com.tribalfs.gmh.profiles.ProfilesObj.loadComplete
 import com.tribalfs.gmh.profiles.ProfilesObj.refreshRateModeMap
@@ -67,20 +68,7 @@ internal class ProfilesInitializer private constructor(context: Context) {
         )
     }
 
-    private val adaptiveModelsLocal: List<String> = listOf(
-        N20U,
-        ZF2,
-        ZF2_JP,
-        N20U5G,
-        S21,
-        S21_P,
-        S21_U,
-        N20U_JP,
-        ZF3,
-        ZFp3,
-        TS7L,
-        TS7LW
-    )
+
 
 
     private val appCtx = context.applicationContext
