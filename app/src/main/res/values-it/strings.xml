@@ -143,7 +143,7 @@
     <string name="sot_no_perm">Permesso Mostra in Alto non consentito!</string>
     <string name="std">Standard</string>
     <string name="std_mode">Modalità Standard</string>
-    <string name="enable">Enable</string>
+    <string name="enable">Abilitar</string>
     <plurals name="aha">
         <item quantity="other">Periodo di prova premium attivo: %d giorni rimanenti</item>
         <item quantity="one">Periodo di prova premium attivo: %d giorno rimanente</item>

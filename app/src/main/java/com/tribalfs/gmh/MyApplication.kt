@@ -40,10 +40,12 @@ import com.tribalfs.gmh.helpers.CacheSettings.isFakeAdaptiveValid
 import com.tribalfs.gmh.helpers.CacheSettings.isHzNotifOn
 import com.tribalfs.gmh.helpers.CacheSettings.isNsNotifOn
 import com.tribalfs.gmh.helpers.CacheSettings.isOfficialAdaptive
+import com.tribalfs.gmh.helpers.CacheSettings.isOnePlus
 import com.tribalfs.gmh.helpers.CacheSettings.isPowerSaveModeOn
 import com.tribalfs.gmh.helpers.CacheSettings.isSamsung
 import com.tribalfs.gmh.helpers.CacheSettings.isScreenOn
 import com.tribalfs.gmh.helpers.CacheSettings.isSpayInstalled
+import com.tribalfs.gmh.helpers.CacheSettings.isXiaomi
 import com.tribalfs.gmh.helpers.CacheSettings.keepModeOnPowerSaving
 import com.tribalfs.gmh.helpers.CacheSettings.lrrPref
 import com.tribalfs.gmh.helpers.CacheSettings.prrActive
@@ -385,18 +387,18 @@ class MyApplication : Application() {
         when (mUtilsDeviceInfo.manufacturer) {
             "SAMSUNG" ->{
                 isSamsung = true
-                CacheSettings.isXiaomi = false
-                CacheSettings.isOnePlus = false
+                isXiaomi = false
+                isOnePlus = false
             }
             "XIAOMI","POCO" ->{
                 isSamsung = false
-                CacheSettings.isXiaomi = true
-                CacheSettings.isOnePlus = false
+                isXiaomi = true
+                isOnePlus = false
             }
             "ONEPLUS" ->{
                 isSamsung = false
-                CacheSettings.isXiaomi = false
-                CacheSettings.isOnePlus = true
+                isXiaomi = false
+                isOnePlus = true
             }
         }
     }
