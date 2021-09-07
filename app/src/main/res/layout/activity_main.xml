@@ -95,7 +95,7 @@
                     <TextView
                         android:id="@+id/tv_res_and_rates_lbl"
                         style="@style/topTitle"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="16dp"
                         android:drawableStart="@drawable/ic_res_switch_24"
                         android:text=""
                         tools:ignore="UseCompatTextViewDrawableXml" />
@@ -184,7 +184,7 @@
                         android:id="@+id/tvRefreshRateMods"
                         style="@style/topTitle"
                         android:layout_width="0dp"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="16dp"
                         android:drawableStart="@drawable/ic_max_hz"
                         android:text="@string/lbl_rrm"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -415,9 +415,9 @@
                     <View
                         android:id="@+id/divider2"
                         android:layout_width="0dp"
-                        android:layout_height="0dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginVertical="8dp"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginTop="24dp"
                         android:background="?android:attr/listDivider"
                         android:visibility="@{isAdFree ? View.VISIBLE : View.GONE, default=visible}"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -428,7 +428,7 @@
                     <TextView
                         android:id="@+id/toggleMaxHzTileInf"
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"
+                        android:layout_height="wrap_content"
                         android:layout_margin="8dp"
                         android:layout_marginTop="24dp"
                         android:text="@string/info_qs_max_hz"
@@ -477,7 +477,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="16dp"
                         android:layout_marginEnd="12dp"
                         android:text="@string/show_refresh_rate"
                         app:drawableStartCompat="@drawable/ic_hz_24"
@@ -494,7 +494,7 @@
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="8dp"
                         android:onClick="@{hasMotionSmoothness ? clickListener::onClickView : null}"
-                        android:text="Enable"
+                        android:text="@string/enable"
                         android:textColor="?android:attr/textColorPrimary"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -635,31 +635,31 @@
                             </com.google.android.material.chip.ChipGroup>
                         </LinearLayout>
                     </HorizontalScrollView>
+
                     <TextView
-                            android:text="@string/font_size"
-                            android:layout_width="wrap_content"
-                            android:layout_height="0dp"
-                            android:id="@+id/tv_overlay_size_hz"
-                            style="?android:attr/textColorPrimary"
-                            android:textSize="11sp"
-                            android:layout_margin="8dp"
-                            app:layout_constraintTop_toBottomOf="@+id/hv_op_hz"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            android:layout_marginTop="12dp"
-                            android:visibility="@{hideHzOverlaySettings ? View.GONE : View.VISIBLE}"
-                            tools:ignore="SmallSp" />
+                        android:id="@+id/tv_overlay_size_hz"
+                        style="?android:attr/textColorPrimary"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_margin="8dp"
+                        android:layout_marginTop="12dp"
+                        android:text="@string/font_size"
+                        android:textSize="11sp"
+                        android:visibility="@{hideHzOverlaySettings ? View.GONE : View.VISIBLE}"
+                        app:layout_constraintStart_toStartOf="@+id/sw_hz_on"
+                        app:layout_constraintTop_toBottomOf="@+id/hv_op_hz"
+                        tools:ignore="SmallSp" />
 
                     <androidx.appcompat.widget.AppCompatSeekBar
-                            style="@style/MySeekBarTheme"
-                            android:layout_width="@dimen/seekbar_width"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/sb_font_size_hz"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/tv_overlay_size_hz"
-                            android:layout_gravity="center_horizontal"
-                            android:visibility="@{hideHzOverlaySettings ? View.GONE : View.VISIBLE}"/>
+                        android:id="@+id/sb_font_size_hz"
+                        style="@style/MySeekBarTheme"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:visibility="@{hideHzOverlaySettings ? View.GONE : View.VISIBLE}"
+                        app:layout_constraintEnd_toEndOf="@+id/sw_hz_on"
+                        app:layout_constraintStart_toStartOf="@+id/sw_hz_on"
+                        app:layout_constraintTop_toBottomOf="@id/tv_overlay_size_hz" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -849,15 +849,15 @@
 
                     <TextView
                         android:id="@+id/tv_dze_mw_interval"
-                        android:layout_width="200dp"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="48dp"
                         android:layout_marginTop="8dp"
                         android:text="@string/quick_doz_mod_mwi"
                         android:textSize="11sp"
                         android:visibility="@{isAdFree ? View.VISIBLE : View.GONE}"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/sb_mw_interval"
+                        app:layout_constraintStart_toStartOf="@+id/sb_mw_interval"
                         app:layout_constraintTop_toBottomOf="@+id/tv_batt_optim_settings"
                         tools:ignore="SmallSp,UseCompatTextViewDrawableXml" />
 
@@ -870,7 +870,7 @@
                         android:layout_marginTop="4dp"
                         android:layout_marginBottom="12dp"
                         android:enabled="@{hasWssPerm}"
-                        android:visibility="@{isAdFree ? View.VISIBLE : View.GONE, default=gone}"
+                        android:visibility="@{isAdFree ? View.VISIBLE : View.GONE, default=visible}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/tv_dze_mw_interval" />
@@ -910,7 +910,7 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                         style="@style/cardViewStyle"
-                        android:visibility="@{isAdFree &amp;&amp; showNsTool ? View.VISIBLE : View.GONE, default=gone}">
+                        android:visibility="@{isAdFree &amp;&amp; showNsTool ? View.VISIBLE : View.GONE, default=visible}">
 
                     <TextView
                             style="@style/topTitle"
@@ -923,13 +923,14 @@
                             app:layout_constraintEnd_toEndOf="parent" />
 
                     <Switch
-                            android:layout_width="wrap_content"
+                            android:layout_width="@dimen/seekbar_width"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
+                            android:layout_marginTop="16dp"
                             android:id="@+id/sw_enable_netspeed"
                             android:textColor="?android:attr/textColorPrimary"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
+                            android:text="@string/enable"
                             app:layout_constraintTop_toBottomOf="@+id/tv_show_netspeed_lbl"
                             android:onClick="@{isAdFree ? clickListener::onClickView : null}"
                             tools:ignore="UseSwitchCompatOrMaterialXml" />
@@ -1084,20 +1085,23 @@
                 </LinearLayout>
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
+
         <FrameLayout
-                android:id="@+id/p_bar"
-                android:animateLayoutChanges="true"
-                android:visibility="visible"
-                android:background="#0F000000"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+            android:id="@+id/p_bar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:animateLayoutChanges="true"
+            android:background="#0F000000"
+            android:visibility="visible"
+            app:layout_anchor="@+id/scroll_view"
+            app:layout_anchorGravity="center">
 
             <ProgressBar
-                    style="@android:style/Widget.Material.ProgressBar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:indeterminate="true" />
+                style="@android:style/Widget.Material.ProgressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:indeterminate="true" />
         </FrameLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

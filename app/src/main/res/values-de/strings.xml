@@ -154,4 +154,5 @@
     <string name="dev_opt_setup_info">To enable Developer options, go to Settings > About phone > Software info and tap \'Build number\' 7x.</string>
     <string name="enable_write_settings">Enable Galaxy Max Hz change/write system settings permission.</string>
     <string name="as_desc">This service is required for galaxy max hz mods to work.</string>
+    <string name="enable">Enable</string>
 </resources>
