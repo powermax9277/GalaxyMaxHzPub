@@ -125,9 +125,12 @@
     <string name="psm_on">Modalità Risparmio Energetico Attiva</string>
      <string name="psm_options"><u>Opzioni Modalità Risparmio Energetico</u></string>
     <string name="reload_profiles">Ricarica Profili</string>
-    <string name="requires_ws_perm_h">%1$s necessita di un permesso speciale per eseguire questa funzionalità. Clicca sul collegamento Configurazione ADB in basso per scoprire come.
+    <string name="requires_ws_perm_h">
+        %1$s necessita di un permesso speciale per eseguire questa funzionalità.
+        Clicca sul collegamento Configurazione ADB in basso per scoprire come.
         \n\nTLDR: Esegui il comando \'adb shell pm grant %2$s android.permission.WRITE_SECURE_SETTINGS\'
-        \n\nQuesta è una procedura una tantum.</string>
+        \n\nQuesta è una procedura una tantum.
+    </string>
     <string name="rrp_not_loaded">Profilo Frequenza di Aggiornamento non ancora caricato. Riprova.</string>
     <string name="reso_opts">Opzioni Abilitate</string>
     <string name="sensor_off_info">I sensori del dispositivo si spegneranno automaticamente mentre lo schermo rimarrà spento finché il dispositivo non verrà sbloccato. Ciò aiuterà a ridurre al minimo quei wakelock attivati dal movimento che consumano batteria.</string>

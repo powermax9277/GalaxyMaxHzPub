@@ -35,53 +35,55 @@ object InternalProfiles {
         return refreshRateModeMap.containsKey(mKey)
     }
 
-   @ExperimentalCoroutinesApi
-   @SuppressLint("NewApi")
+    @ExperimentalCoroutinesApi
+    @SuppressLint("NewApi")
     @Synchronized
-   suspend fun load(currentModeOnly: Boolean, context: Context): JSONObject = withContext(Dispatchers.IO) {
+    suspend fun load(currentModeOnly: Boolean, context: Context): JSONObject = withContext(Dispatchers.IO) {
 
-            val mUtilsDeviceInfo = UtilsDeviceInfo(context)
+        val mUtilsDeviceInfo = UtilsDeviceInfo(context)
+        val mContentResolver = context.applicationContext.contentResolver
 
-            if (!currentModeOnly && hasWriteSecureSetPerm
-                //Ensure that device is not resolution with no high refresh rate support
-                && (!isSamsung || mUtilsDeviceInfo.getSamRefreshRateMode() != REFRESH_RATE_MODE_STANDARD)
-            ) {
-                val originalRefreshRateMode = mUtilsDeviceInfo.getSamRefreshRateMode()
-                var endingRefreshRateMode = originalRefreshRateMode
+        if (!currentModeOnly
+            && hasWriteSecureSetPerm
+            //Ensure that device is not resolution with no high refresh rate support
+            && (!isSamsung || mUtilsDeviceInfo.getSamRefreshRateMode() != REFRESH_RATE_MODE_STANDARD)
+        ) {
+            val originalRefreshRateMode = mUtilsDeviceInfo.getSamRefreshRateMode()
+            var endingRefreshRateMode = originalRefreshRateMode
 
-                loadComplete = withContext(Dispatchers.IO) {
-                    var modeAddedCnt = 0
-                    try {
-                        refreshRateModes.forEach {
-                            val key = "$displayId-$it"
-                            if (!isModeProfilesAdded(key, context)) {
-                                Settings.Secure.putString(context.applicationContext.contentResolver, REFRESH_RATE_MODE, it )
-                                delay(500)
-                                endingRefreshRateMode = it
-                                if (addModeProfiles(key, context)) {
-                                    modeAddedCnt += 0
-                                }
-                                delay(100)
+            loadComplete = withContext(Dispatchers.IO) {
+                var modeAddedCnt = 0
+                try {
+                    refreshRateModes.forEach {
+                        val key = "$displayId-$it"
+                        if (!isModeProfilesAdded(key, context)) {
+                            Settings.Secure.putString(mContentResolver, REFRESH_RATE_MODE, it )
+                            delay(500)
+                            endingRefreshRateMode = it
+                            if (addModeProfiles(key, context)) {
+                                modeAddedCnt += 0
                             }
+                            delay(100)
                         }
-                    }catch (_:Exception){ }
-                    modeAddedCnt == refreshRateModes.size
-                }
-
-                //restore user refresh rate mode
-                if (originalRefreshRateMode != endingRefreshRateMode) {
-                    Settings.Secure.putString(context.applicationContext.contentResolver, REFRESH_RATE_MODE, originalRefreshRateMode )
-                }
-
-            } else {
-                //add current DisplayMode only in case syncs results below is empty or failed
-                if (!isModeProfilesAdded(null,context)) {
-                    val key = getKey(context)
-                    addModeProfiles(key, context)
-                }
+                    }
+                }catch (_:Exception){ }
+                modeAddedCnt == refreshRateModes.size
             }
 
-            return@withContext getLoadedDisplayModesInJson()
+            //restore user refresh rate mode
+            if (originalRefreshRateMode != endingRefreshRateMode) {
+                Settings.Secure.putString(mContentResolver, REFRESH_RATE_MODE, originalRefreshRateMode )
+            }
+
+        } else {
+            //add current DisplayMode only in case syncs results below is empty or failed
+            if (!isModeProfilesAdded(null,context)) {
+                val key = getKey(context)
+                addModeProfiles(key, context)
+            }
+        }
+
+        return@withContext getLoadedDisplayModesInJson()
 
     }
 

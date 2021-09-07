@@ -91,13 +91,13 @@ class GmhBroadcastReceivers(context: Context, private val accessibilityCallback:
                 scope.launch {
                     if (mUtilsPrefsGmh.gmhPrefPsmIsOffCache) {
                         //Not ignored
-                            try {
+                            if (hasWriteSecureSetPerm) {
                                 Settings.Global.putString(
                                     context.applicationContext.contentResolver,
                                     LOW_POWER,
                                     LOW_POWER_OFF
                                 )
-                            }catch(_: Exception){}
+                            }
                     }
                 }
             } else {

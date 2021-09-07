@@ -27,8 +27,8 @@ class BootCompleteReceiver : BroadcastReceiver() {
         }
     }
 
-    @ExperimentalCoroutinesApi
-    @SuppressLint("NewApi")
+
+    @RequiresApi(Build.VERSION_CODES.M)
     private fun bootCompleteChecker(appCtx: Context) {
         CoroutineScope(Dispatchers.IO).launch {
             while(refreshRateModeMap.isEmpty()) {

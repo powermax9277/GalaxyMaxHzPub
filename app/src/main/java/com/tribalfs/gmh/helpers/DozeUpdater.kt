@@ -3,6 +3,7 @@ package com.tribalfs.gmh.helpers
 import android.annotation.SuppressLint
 import android.content.Context
 import android.provider.Settings
+import com.tribalfs.gmh.helpers.CacheSettings.hasWriteSecureSetPerm
 import com.tribalfs.gmh.helpers.UtilsDeviceInfo.Companion.DEVICE_IDLE_CONSTANTS
 import java.lang.Integer.max
 import java.lang.Integer.min
@@ -31,19 +32,19 @@ object DozeUpdater {
                 "inactive_to=${dozeMw*60*1000}," +
                 "idle_to=${dozeMw*60*1000}," +
                 "max_idle_to=${max(dozeMw*5,4*60)*60*1000}"
-       return "$DOZE_VAL_MAIN,$dozValApx"
+        return "$DOZE_VAL_MAIN,$dozValApx"
     }
 
     @Synchronized
     fun Context.updateDozValues(enable:Boolean, dozeMw: Int?) {
         (if (!enable || dozeMw == null) "null" else getDozeVal(if (dozeMw == 0) 5*24*60 else dozeMw)).let{
-            try {
+            if (hasWriteSecureSetPerm){
                 Settings.Global.putString(
                     applicationContext.contentResolver,
                     DEVICE_IDLE_CONSTANTS,
                     it
                 )
-            }catch(_: Exception){}
+            }
         }
 
     }

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.PowerManager.*
 import android.provider.Settings
+import com.tribalfs.gmh.helpers.CacheSettings.hasWriteSecureSetPerm
 import com.tribalfs.gmh.helpers.UtilsDeviceInfo.Companion.BATTERY_SAVER_CONSTANTS
 
 object DozePSCChecker {
@@ -33,7 +34,7 @@ object DozePSCChecker {
             }
 
             if (!msc.contains("gps_mode=$LOCATION_MODE_ALL_DISABLED_WHEN_SCREEN_OFF")) {
-               if (msc.contains("gps_mode=")) {
+                if (msc.contains("gps_mode=")) {
                     listOf(LOCATION_MODE_NO_CHANGE,
                         LOCATION_MODE_GPS_DISABLED_WHEN_SCREEN_OFF,
                         LOCATION_MODE_FOREGROUND_ONLY,
@@ -41,15 +42,13 @@ object DozePSCChecker {
                         msc = msc!!.replace("gps_mode=$it", "gps_mode=$LOCATION_MODE_ALL_DISABLED_WHEN_SCREEN_OFF")
                     }
                 } else {
-                   msc =  "$msc,gps_mode=$LOCATION_MODE_ALL_DISABLED_WHEN_SCREEN_OFF"
+                    msc =  "$msc,gps_mode=$LOCATION_MODE_ALL_DISABLED_WHEN_SCREEN_OFF"
                 }
                 update = true
             }
 
-            if (update) {
-                try {
-                    Settings.Global.putString(context.contentResolver, BATTERY_SAVER_CONSTANTS, msc!!)
-                }catch(_:Exception){}
+            if (update && hasWriteSecureSetPerm) {
+                Settings.Global.putString(context.contentResolver, BATTERY_SAVER_CONSTANTS, msc!!)
             }
 
         }else{
@@ -69,10 +68,9 @@ object DozePSCChecker {
                     }
                     tempMsc?:"null"
                 }
-                try {
+                if (hasWriteSecureSetPerm) {
                     Settings.Global.putString(context.contentResolver, BATTERY_SAVER_CONSTANTS, msc!!)
-                }catch(_:Exception){}
-
+                }
             }
         }
     }

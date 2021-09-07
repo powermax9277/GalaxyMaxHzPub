@@ -7,15 +7,17 @@ import com.tribalfs.gmh.dialogs.DialogsPermissionsQs
 import com.tribalfs.gmh.helpers.UtilsPermSt
 import com.tribalfs.gmh.hertz.HzServiceHelperStn
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmh
-
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @SuppressLint("NewApi")
+@ExperimentalCoroutinesApi
 class QSTileHzMon : TileService() {
-    companion object{
+    /*companion object{
         private const val TAG = "QSTileHzMon"
-    }
+    }*/
 
     //private val mUtilsPrefsGmh: UtilsPrefsGmh by lazy{ UtilsPrefsGmh(applicationContext) }
+
 
     override fun onStartListening() {
         super.onStartListening()

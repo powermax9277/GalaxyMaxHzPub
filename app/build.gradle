@@ -7,7 +7,7 @@ apply plugin: 'kotlin-kapt'
 android {
     signingConfigs {
         release {
-            storeFile file('B:\\AppProjects\\tribalfs.jks')
+            storeFile file('C:\\Users\\Louie Pamisa.LOUPAMS\\AppProjects\\tribalfs.jks')
             keyAlias 'tribalfs'
             keyPassword 'Ge0ltp1986'
             storePassword 'Ge0ltp1986'

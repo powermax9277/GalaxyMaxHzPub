@@ -3,6 +3,7 @@ package com.tribalfs.gmh.helpers
 import android.content.Context
 import android.os.Build
 import android.provider.Settings
+import com.tribalfs.gmh.helpers.CacheSettings.hasWriteSecureSetPerm
 
 internal class CheckBlacklistApiSt private constructor(context: Context) {
 
@@ -20,17 +21,21 @@ internal class CheckBlacklistApiSt private constructor(context: Context) {
             Settings.Global.getString(mResolver, HAP) == "1"
         }else {
             Settings.Global.getString(mResolver, HAP_PRE_P) == "1" &&
-            Settings.Global.getString(mResolver, HAP_P) == "1"
+                    Settings.Global.getString(mResolver, HAP_P) == "1"
 
         }
     }
 
     fun setAllowed(): Boolean{
-        return if (Build.VERSION.SDK_INT >= 29) {
-            Settings.Global.putString(mResolver, HAP, "1")
-        }else {
-            Settings.Global.putString(mResolver, HAP_PRE_P, "1") &&
-                    Settings.Global.putString(mResolver, HAP_P, "1")
+        return if (hasWriteSecureSetPerm) {
+            if (Build.VERSION.SDK_INT >= 29) {
+                Settings.Global.putString(mResolver, HAP, "1")
+            } else {
+                Settings.Global.putString(mResolver, HAP_PRE_P, "1") &&
+                        Settings.Global.putString(mResolver, HAP_P, "1")
+            }
+        }else{
+            false
         }
     }
 
