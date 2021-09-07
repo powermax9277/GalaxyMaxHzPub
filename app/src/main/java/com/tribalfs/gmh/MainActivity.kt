@@ -142,7 +142,7 @@ import kotlin.coroutines.CoroutineContext
 import kotlin.math.max
 import kotlin.math.min
 
-//TODO:{option to prevent system from switching to High, UI improvements, fixed crashes}
+//TODO:{option to prevent system from switching to High, UI improvements, fixed crashes, warning when first enabling doz mod}
 
 @ExperimentalCoroutinesApi
 class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClickHandler, CoroutineScope {

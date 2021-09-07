@@ -18,6 +18,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.lang.reflect.Field
 import java.util.*
+import kotlin.math.min
 import kotlin.math.round
 
 
@@ -48,8 +49,11 @@ class UtilsDeviceInfo(val context: Context) {
     internal val deviceModelVariant: String = /*if (BuildConfig.DEBUG) "SM-TEST" else */Build.MODEL
     internal val androidVersion: String = Build.VERSION.RELEASE
     internal val manufacturer: String = Build.MANUFACTURER.uppercase(Locale.ROOT)
-    internal val deviceModel: String = if (manufacturer == "SAMSUNG") deviceModelVariant.substring(0, 7) else deviceModelVariant
-
+    internal val deviceModel: String = if (manufacturer == "SAMSUNG") {
+        deviceModelVariant.substring(0, min(deviceModelVariant.length, 7))
+    } else {
+        deviceModelVariant
+    }
     private val currentDisplay: Display = (appCtx.getSystemService(Context.DISPLAY_SERVICE) as DisplayManager).getDisplay(displayId)
 
     fun getRefreshRateInt(): Int {
