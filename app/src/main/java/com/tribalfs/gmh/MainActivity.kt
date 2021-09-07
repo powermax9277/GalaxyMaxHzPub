@@ -142,6 +142,7 @@ import kotlin.coroutines.CoroutineContext
 import kotlin.math.max
 import kotlin.math.min
 
+//TODO:{option to prevent system from switching to High, UI improvements, fixed crashes}
 
 @ExperimentalCoroutinesApi
 class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClickHandler, CoroutineScope {

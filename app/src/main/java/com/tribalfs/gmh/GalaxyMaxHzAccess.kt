@@ -169,8 +169,13 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         return try {
             sensorPrivacyManager.getDeclaredMethod("isSensorPrivacyEnabled").invoke(sensorPrivacyService) as Boolean
         }catch(_: Exception){
-            CheckBlacklistApiSt.instance(applicationContext).setAllowed()
-            Toast.makeText(applicationContext, "Error reading device sensors state. Reboot this device and try again.",Toast.LENGTH_LONG).show()
+            if (CheckBlacklistApiSt.instance(applicationContext).setAllowed()) {
+                Toast.makeText(
+                    applicationContext,
+                    "Error reading device sensors state. Reboot this device and try again.",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
             false
         }
     }

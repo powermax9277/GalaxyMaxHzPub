@@ -284,7 +284,8 @@ class MyApplication : Application() {
                 Intent(applicationContext, GalaxyMaxHzAccess::class.java).apply {
                     putExtra(SETUP_ADAPTIVE, true)
                     putExtra(SETUP_NETWORK_CALLBACK, true)
-                    putExtra(SWITCH_AUTO_SENSORS, mUtilsPrefsGmh.gmhPrefSensorsOff)
+
+                // putExtra(SWITCH_AUTO_SENSORS, mUtilsPrefsGmh.gmhPrefSensorsOff)
                 }
             )
         }
