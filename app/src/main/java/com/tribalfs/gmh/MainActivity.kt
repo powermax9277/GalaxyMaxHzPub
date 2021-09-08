@@ -142,7 +142,13 @@ import kotlin.coroutines.CoroutineContext
 import kotlin.math.max
 import kotlin.math.min
 
-//TODO:{option to prevent system from switching to High, UI improvements, fixed crashes, warning when first enabling doz mod, translation for enable}
+//TODO:{option to prevent system from switching to High,
+// per model help/forum, show about premium in menu,
+// UI improvements,
+// fixed crashes,
+// warning when first enabling doz mod,
+// translation for enable
+// updated german string}
 
 @ExperimentalCoroutinesApi
 class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClickHandler, CoroutineScope {
@@ -691,6 +697,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
 
         val splashScreen = installSplashScreen()
         splashScreen.setKeepVisibleCondition { !isProfilesLoaded }
+
         inflateViews()
         updateDisplayId()
         // checkTileIsExpired()
@@ -875,9 +882,10 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
     private fun setupDozeSeekBar() {
         val mListener = object : OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                val newProgress = mwInterval.closestValue(progress)!!
-                seekBar.progress = newProgress
-                seekBar.thumb = getThumb(newProgress)
+                mwInterval.closestValue(progress)?.let{
+                    seekBar.progress = it
+                    seekBar.thumb = getThumb(it)
+                }
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
@@ -956,11 +964,10 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
     private fun setupMinHzSeekBar() {
         mBinding.sbMinHz.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                val newProgress = supportedHzIntCurMod?.closestValue(
-                    progress
-                )!!
-                seekBar.progress = newProgress
-                seekBar.thumb = getThumb(newProgress)
+                supportedHzIntCurMod?.closestValue(progress)?.let{
+                    seekBar.progress = it
+                    seekBar.thumb = getThumb(it)
+                }
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar) {}

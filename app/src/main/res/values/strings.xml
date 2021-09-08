@@ -13,7 +13,7 @@
     <string name="feat_n_a" tools:keep="@string/feat_n_a">Feature Not Supported</string>
     <string name="unknown_mode">Unidentified Refresh Rate Mode</string>
  <!--   <string name="qs_active">Quick Settings Tiles successfully activated</string>-->
-    <string name="min_hz_for_toggle">Minimum Hz for Toggle</string>
+    <string name="min_hz_for_toggle">Lowest Hz for Toggle</string>
     <string name="adaptive">Adaptive</string>
     <string name="high">High</string>
     <string name="show_refresh_rate">Refresh Rate Monitor</string>

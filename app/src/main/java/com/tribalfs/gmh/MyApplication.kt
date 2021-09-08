@@ -4,6 +4,7 @@ package com.tribalfs.gmh
 import android.annotation.SuppressLint
 import android.app.Application
 import android.content.ContentResolver
+import android.content.Context
 import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.database.ContentObserver
@@ -21,7 +22,6 @@ import androidx.databinding.Observable.OnPropertyChangedCallback
 import com.tribalfs.gmh.AccessibilityPermission.allowAccessibility
 import com.tribalfs.gmh.GalaxyMaxHzAccess.Companion.SETUP_ADAPTIVE
 import com.tribalfs.gmh.GalaxyMaxHzAccess.Companion.SETUP_NETWORK_CALLBACK
-import com.tribalfs.gmh.GalaxyMaxHzAccess.Companion.SWITCH_AUTO_SENSORS
 import com.tribalfs.gmh.SensorsOffSt.Companion.SYSUI_QS_TILES
 import com.tribalfs.gmh.helpers.*
 import com.tribalfs.gmh.helpers.CacheSettings.TIMEOUT_FACTOR
@@ -34,7 +34,6 @@ import com.tribalfs.gmh.helpers.CacheSettings.currentRefreshRateMode
 import com.tribalfs.gmh.helpers.CacheSettings.hasWriteSecureSetPerm
 import com.tribalfs.gmh.helpers.CacheSettings.highestHzForAllMode
 import com.tribalfs.gmh.helpers.CacheSettings.ignoreRrmChange
-import com.tribalfs.gmh.helpers.CacheSettings.isPremium
 import com.tribalfs.gmh.helpers.CacheSettings.isFakeAdaptive
 import com.tribalfs.gmh.helpers.CacheSettings.isFakeAdaptiveValid
 import com.tribalfs.gmh.helpers.CacheSettings.isHzNotifOn
@@ -42,6 +41,7 @@ import com.tribalfs.gmh.helpers.CacheSettings.isNsNotifOn
 import com.tribalfs.gmh.helpers.CacheSettings.isOfficialAdaptive
 import com.tribalfs.gmh.helpers.CacheSettings.isOnePlus
 import com.tribalfs.gmh.helpers.CacheSettings.isPowerSaveModeOn
+import com.tribalfs.gmh.helpers.CacheSettings.isPremium
 import com.tribalfs.gmh.helpers.CacheSettings.isSamsung
 import com.tribalfs.gmh.helpers.CacheSettings.isScreenOn
 import com.tribalfs.gmh.helpers.CacheSettings.isSpayInstalled
@@ -70,13 +70,18 @@ import com.tribalfs.gmh.sharedprefs.UtilsPrefsAct.Companion.LIC_TYPE_TRIAL_ACTIV
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmh
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmh.Companion.NOT_USING
 import kotlinx.coroutines.*
+import org.acra.ACRA
+import org.acra.annotation.AcraCore
+import org.acra.annotation.AcraHttpSender
+import org.acra.data.StringFormat
+import org.acra.sender.HttpSender
 
-/*@AcraCore(reportFormat= StringFormat.JSON)
+//TODO{reason: Comment out ACRA below}
+@AcraCore(reportFormat= StringFormat.JSON)
 @AcraHttpSender(uri = "https://script.google.com/macros/s/AKfycbybr-F6rCLr8fTk0jYvz_ohCOcNLwsSPCNxhYUlX-KtvLE9JT0/exec",
     httpMethod = HttpSender.Method.POST,
     basicAuthLogin = "",
     basicAuthPassword = "")
-*/
 @ExperimentalCoroutinesApi
 class MyApplication : Application() {
 
@@ -134,6 +139,7 @@ class MyApplication : Application() {
                     turnOff5GOnPsm = isTurnOff5GOnPsm()
                 }
 
+
                 deviceIdleConstantsUri -> {
                     applicationScope.launch {
                         if (mUtilsPrefsGmh.gmhPrefQuickDozeIsOn && DozeUpdater.getDozeVal(mUtilsPrefsGmh.gmhPrefGDozeModOpt)
@@ -147,14 +153,7 @@ class MyApplication : Application() {
                     }
                 }
 
-                /*Settings.System.getUriFor(SCREEN_BRIGHTNESS), */
-                brightnessFloatUri -> {
-                    applicationScope.launch {
-                        if (isFakeAdaptiveValid.get() == true && isScreenOn) {
-                            currentBrightness.set(mUtilsDeviceInfo.getScreenBrightnessPercent())
-                        }
-                    }
-                }
+
 
                 batterySaverConstantsUri -> {
                     if (mUtilsPrefsGmh.gmhPrefQuickDozeIsOn) {
@@ -245,6 +244,13 @@ class MyApplication : Application() {
          }*/
     }
 
+
+    //TODO{reason: Comment out method below}
+    override fun attachBaseContext(base: Context?) {
+          super.attachBaseContext(base)
+          // Initialise ACRA
+          ACRA.init(this);
+      }
 
 
     @RequiresApi(Build.VERSION_CODES.M)
@@ -338,9 +344,7 @@ class MyApplication : Application() {
 
         isProfilesLoaded = withContext(Dispatchers.IO) { ProfilesInitializer.instance(applicationContext).initProfiles() }
 
-        applicationContext.startService(Intent(applicationContext, GalaxyMaxHzAccess::class.java).apply{
-            putExtra(SETUP_ADAPTIVE, true)
-        })
+        applicationContext.startService(Intent(applicationContext, GalaxyMaxHzAccess::class.java).apply{ putExtra(SETUP_ADAPTIVE, true)})
 
         updateRefreshRateParams()
 
@@ -362,9 +366,11 @@ class MyApplication : Application() {
         lrrPref.set(mUtilsPrefsGmh.gmhPrefMinHzAdapt)
     }
 
+
     private fun canApplyFakeAdaptive(): Boolean {
         return isOfficialAdaptive && (currentRefreshRateMode.get() == REFRESH_RATE_MODE_SEAMLESS) && hasWriteSecureSetPerm
     }
+
 
     private fun isFakeAdaptive(): Boolean {
         return if (!isOfficialAdaptive){//Adaptive NOT Supported

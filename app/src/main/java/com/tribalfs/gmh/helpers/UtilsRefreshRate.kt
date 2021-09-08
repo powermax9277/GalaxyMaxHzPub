@@ -91,7 +91,6 @@ internal class UtilsRefreshRate(context: Context) {
                     && (
                     if (fordableWithHrrExternal.indexOf(mUtilsDeviceInfo.deviceModel) != -1) {
                         Settings.Secure.putString(mContentResolver, REFRESH_RATE_MODE_COVER, mode)
-
                     } else {
                         true
                     })
