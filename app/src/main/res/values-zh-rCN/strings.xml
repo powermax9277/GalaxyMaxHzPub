@@ -115,11 +115,19 @@
     <string name="quick_doz_mod_mwi">以分钟为单位的初始维护窗口间隔（0 = 无维护窗口）</string>
     <string name="brightness_threshold">自适应模式的最小亮度</string>
     <string name="sensor_off_info">屏幕关闭时，设备传感器会自动关闭，直到设备解锁。这有助于最大限度地减少消耗电池的运动引起的唤醒锁定。</string>
-    <string name="sensors_off_note">重要说明：打开 SensorsOff 磁贴时，将无法访问设备的摄像头、麦克风和其他传感器。这将影响某些设备上的面部解锁和通话声音。检查通话过程中是否可以听到您的声音。如果在设备锁定时无法听到和接听电话，您可以按住 SensorsOff 磁贴解锁设备并关闭 SensorsOff 磁贴 - 在按下接听电话按钮后。</string>
-
-    <string name="sensor_off_setup_info">Do this first: Enable \'Sensors Off\' tile in Settings > Developer options > Quick settings developer tiles. ></string>
-    <string name="dev_opt_setup_info">To enable Developer options, go to Settings > About phone > Software info and tap \'Build number\' 7x.</string>
-    <string name="enable_write_settings">Enable Galaxy Max Hz change/write system settings permission.</string>
-    <string name="as_desc">This service is required for galaxy max hz mods to work.</string>
+    <string name="sensors_off_note">重要说明：当 SensorsOff 磁贴打开时，设备的摄像头和麦克风以及其他传感器无法访问。
+        受影响的功能包括面部解锁、语音通话和铰链角度检测等。
+        仅当您清楚地了解启用传感器的影响时才使用此选项。
+    </string>
+    <string name="sensor_off_setup_info">首先执行此操作：在设置 > 开发人员选项 > 快速设置开发人员磁贴中启用 \'传感器关闭\' 磁贴。</string>
+    <string name="dev_opt_setup_info">要启用开发人员选项，请转至设置 > 关于手机 > 软件信息，然后点击 \'版本号\' 7x。</string>
+    <string name="enable_write_settings">启用 Galaxy Max Hz 更改/写入系统设置权限。</string>
+    <string name="as_desc">Galaxy max hz mods 需要此服务才能工作</string>
     <string name="enable">使能够</string>
+    <string name="allow">允许</string>
+    <string name="allow_aot">允许出现在顶部</string>
+    <string name="allow_bg_act">为了这个应用程序的稳定运行，启用\'允许后台活动\'或禁用\'优化电池使用\'。</string>
+    <string name="premium_features">高级功能</string>
+    <string name="prevent_high">避免切换到高模式</string>
+    <string name="auto_sensors_off_exp">自动传感器关闭</string>
 </resources>

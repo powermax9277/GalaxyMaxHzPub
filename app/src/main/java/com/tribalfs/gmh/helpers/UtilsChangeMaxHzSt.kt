@@ -113,12 +113,18 @@ class UtilsChangeMaxHzSt private constructor(private val appCtx: Context) {
             // To make sure current config already added
             if (!loadComplete) {
                 InternalProfiles.load(true, appCtx)
+                delay(250)
             }
 
-            if (ProfilesInitializer.instance(appCtx).getResoHighestHzForCurrentMode(null, null).toInt()
-                <= STANDARD_REFRESH_RATE_HZ
-            ) {
-                return@withContext CHANGE_RES
+            try {
+                if (ProfilesInitializer.instance(appCtx).getResoHighestHzForCurrentMode(null, null)
+                        .toInt()
+                    <= STANDARD_REFRESH_RATE_HZ
+                ) {
+                    return@withContext CHANGE_RES
+                }
+            }catch(_: Exception){
+                return@withContext NO_CONFIG_LOADED
             }
         }
         // }

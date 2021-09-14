@@ -5,7 +5,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import android.widget.Toast
-import com.tribalfs.gmh.R
 
 internal class NotificationBarSt private constructor (context: Context) {
 

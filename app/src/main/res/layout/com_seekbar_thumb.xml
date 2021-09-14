@@ -11,6 +11,6 @@
             android:layout_height="wrap_content"
             android:background="@drawable/ic_seekbar_thumb"
             android:gravity="center"
-            android:textSize="12sp"/>
+            android:textSize="11sp"/>
 
 </LinearLayout>

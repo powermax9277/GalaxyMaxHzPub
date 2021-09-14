@@ -137,19 +137,20 @@
     <string name="sensor_off_setup_info">
         Esegui prima questa operazione: attiva il pulsante \'Disattiva Sensori\' da Impostazioni > Opzioni sviluppatore > Impostazioni rapide pulsanti sviluppatore.</string>
     <string name="sensors_off_note">
-        Nota importante: quando il riquadro \'Disattiva Sensori\' è attivo, la/le videocamera/e e il microfono/i del dispositivo, tra gli altri sensori, risultano inaccessibili. Assicurati che la tua voce venga rilevata in fase di chiamata.
-        Se ciò non dovesse accadere e ricevessi una chiamata mentre il dispositivo è bloccato, ti basterò effettuare una pressione prolungata sul pulsante \'Disattiva Sensori\' per sbloccare il dispositivo ed i relativi sensori - dopo aver premuto il pulsante per rispondere alla chiamata.</string>
+        Nota importante: mentre il riquadro SensorsOff è attivo, la fotocamera e il microfono del dispositivo e altri sensori sono inaccessibili.
+        Le funzioni interessate includono lo sblocco facciale, l\'udibilità delle chiamate vocali (su alcuni) e il rilevamento dell\'angolo della cerniera, tra le altre.
+        Usalo solo se comprendi chiaramente l\'effetto dell\'attivazione dei sensori.</string>
     <string name="show_ns_card">Mostra Strumento Velocità Rete</string>
     <string name="sot_no_perm">Permesso Mostra in Alto non consentito!</string>
     <string name="std">Standard</string>
     <string name="std_mode">Modalità Standard</string>
     <string name="enable">Abilitar</string>
+    <string name="premium_features">प्रीमियम सुविधाएँ</string>
+    <string name="prevent_high">Prevent switching to High Mode</string>
     <plurals name="aha">
         <item quantity="other">Periodo di prova premium attivo: %d giorni rimanenti</item>
         <item quantity="one">Periodo di prova premium attivo: %d giorno rimanente</item>
     </plurals>
-
-
 </resources>
 
     <!--    <string name="qst_exp">I Pulsanti Di Impostazione Rapida Sono Scaduti</string>-->

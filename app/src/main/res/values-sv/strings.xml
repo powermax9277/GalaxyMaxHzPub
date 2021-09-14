@@ -135,10 +135,15 @@
     <string name="brightness_threshold">Minsta ljusstyrka för adaptiv</string>
     <string name="sensor_off_info">Enhetssensorerna stängs av automatiskt när skärmen stängs av tills enheten är upplåst. Detta hjälper till att minimera rörelseinducerade vaklås som tömmer batteriet.</string>
     <string name="sensors_off_note">Viktig anmärkning: Medan SensorsOff -brickan är PÅ blir enhetens kamera (er) och mikrofon (er), bland andra sensorer, otillgängliga. Kontrollera om din röst kan höras eller inte under samtalet. Om det inte kan höras och du tar emot samtal medan enheten är låst kan du trycka länge på SensorsOff -brickan för att låsa upp enheten och stänga av SensorsOff -brickan - efter att du har tryckt på knappen för mottagningssamtal.</string>
-
     <string name="sensor_off_setup_info">Do this first: Enable \'Sensors Off\' tile in Settings > Developer options > Quick settings developer tiles. ></string>
     <string name="dev_opt_setup_info">To enable Developer options, go to Settings > About phone > Software info and tap \'Build number\' 7x.</string>
     <string name="enable_write_settings">Enable Galaxy Max Hz change/write system settings permission.</string>
-    <string name="as_desc">This service is required for galaxy max hz mods to work.</string>
-    <string name="enable">" Växla"</string>
+    <string name="as_desc">Denna tjänst krävs för att galax max hz -mods ska fungera.</string>
+    <string name="enable">Växla</string>
+    <string name="allow">Povoliť</string>
+    <string name="allow_aot">Povoliť aplikácii zobrazovať sa navrchu</string>
+    <string name="allow_bg_act">Pre stabilný chod tejto aplikácie povoľte \'Povoliť aktivitu na pozadí\' alebo vypnite \'Optimalizovať využitie batérie\'.</string>
+    <string name="premium_features">Prémiové funkcie</string>
+    <string name="prevent_high">Förhindra byte till hög</string>
+    <string name="auto_sensors_off_exp">Automatiska SENSORER AV</string>
 </resources>

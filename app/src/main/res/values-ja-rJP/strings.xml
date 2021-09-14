@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="lbl_enable_msm">モーションの滑らかさを有効にする</string>
+    <string name="show_hz">リフレッシュレートモニター</string>
+    <string name="buy_adfree">プレミアムを購入|コーヒー</string>
+    <string name="resolution">解像度とモーションスムーズトグル</string>
+    <string name="act">プレミアムまたはトライアルを有効にする</string>
+    <string name="max_hz">最大Hz</string>
+    <string name="max_hz_holder">最大 %s Hz</string>
+    <string name="feat_n_a" tools:keep="@string/feat_n_a">サポートされていない機能</string>
+    <string name="unknown_mode">不明なリフレッシュレートモード</string>
+    <string name="min_hz_for_toggle">トグルの最低Hz</string>
+    <string name="adaptive">アダプティブ</string>
+    <string name="high">フォースハイ</string>
+    <string name="show_refresh_rate">リフレッシュレートモニター</string>
+    <string name="left">左</string>
+    <string name="right">右</string>
+    <string name="top">上</string>
+    <string name="bottom">下</string>
+    <string name="use_qstile_reso_switch">付属のクイック設定（qs）タイルを使用して、画面の解像度をすばやく切り替えます。</string>
+    <string name="center">Center</string>
+    <string name="info_qs_max_hz">付属のクイック設定タイルを使用して最大Hzを変更することもできます</string>
+    <string name="info_qs_rtrr">これを長期間オンにすると、アプリのバッテリー消費量が増える可能性があります。リフレッシュレートモニターをオンにするためのクイック設定タイルが含まれています。</string>
+    <string name="s_off_mod">スクリーンオフモッズ</string>
+    <string name="force_hz_mod">強制最低Hz</string>
+    <string name="s_off_hz_inf">これにより、スクリーンオフまたはAODが最低のリフレッシュを使用するように強制されます.\nスクリーンオフリフレッシュレート： %s</string>
+    <string name="chng_res_stng">%s 解像度設定は、高/適応リフレッシュレートをサポートしていません。
+        設定で最初に解像度とモーションスムーズモードを変更します。
+        \n\nこのアプリは、ADBを使用してWRITE_SECURE_SETTINGS権限の設定が実行されると、クイック設定タイルを使用して解像度と動きの滑らかさのモードを簡単に切り替えることができます。
+    </string>
+    <string name="chng_res_qs">%s 解像度設定は、高/適応リフレッシュレートをサポートしていません.
+        このアプリに含まれているクイック設定タイルを使用して、解像度をすばやく変更できます
+    </string>
+    <string name="psm_on_inf">省電力モード中、リフレッシュレートは標準（60hz）に制限されます.
+        最初に設定でオフにし、リフレッシュレートモードをアダプティブ/ハイに設定します。
+        \n\nこのアプリは、ADBを使用してWRITE_SECURE_SETTINGS権限の設定が実行されると、この制限を回避できます。</string>
+    <string name="rrm_std_inf">モーションスムーズモードは現在、標準に設定されています。最初に設定で変更してください.
+        \n\nこのアプリは、ADBのセットアップが実行されると、モーションスムーズモードをアダプティブ/ハイに簡単に変更できます。これは、省電力モードでも機能します。
+    </string>
+    <string name="input_ac_inf">このデバイスをリセットしたためにプレミアムを失った場合は、メールに送信されたアクティベーションコードを入力して、プレミアムを再度アクティブにします。</string>>
+    <string name="show_ns">ネットスピードインジケーターを表示</string>
+    <string name="combined">組み合わせ</string>
+    <string name="upload">アップロード</string>
+    <string name="download">ダウンロード</string>
+    <string name="font_size">オーバーレイフォントサイズ</string>
+    <string name="overlay_pos">オーバーレイ位置</string>
+    <string name="overlay">かぶせる</string>
+    <string name="statusbar">ステータスバー</string>
+    <string name="perm_appx">\n\nADBのセットアップが実行されると、このアプリで次のことができます。
+        \n- 画面の解像度をすばやく切り替える
+        \n- 省電力モードでアダプティブまたはハイモーションの滑らかさを（自動）適用/維持
+        \n- スクリーンオフ時に省電力モードを自動アクティブ化
+        \n- クイックドーズモッド（プレミアム）を使用する
+        \n- ネイティブにサポートされていないデバイス（プレミアム）でもアダプティブリフレッシュレートmodを適用する
+        \n- 自動センサーオフ（プレミアム）
+    </string>
+    <string name="ac_none">アクティベーションコードを入力していません。</string>
+    <string name="in_bd">アクティベーションコードを入力してください</string>
+    <string name="apply">適用する</string>
+    <string name="psm_on">省電力モードがオンになっている</string>
+    <string name="chng_res">解像度を変更する</string>
+    <string name="open_settings">設定を開く</string>
+    <string name="chng_res_failed">画面の解像度を変更できませんでした</string>
+    <string name="one_res_def">システムで定義されている解像度は1つだけです。</string>
+    <string name="rrp_not_loaded">リフレッシュレートプロファイルはまだロードされていません。再試行。</string>
+    <string name="sot_no_perm">上に表示する許可は付与されていません！</string>
+    <string name="cie">エラー！インターネット接続を確認して、もう一度お試しください。</string>
+    <string name="aca">無効なアクティベーションコード。</string>
+    <string name="afa">プレミアムが正常にアクティブ化されました！</string>
+    <string name="afu">プレミアムトライアルはすでに使用されており、有効期限が切れています。</string>
+    <plurals name="aha">
+        <item quantity="other">プレミアムトライアルが有効になりました：残り%d日</item>
+    </plurals>
+    <string name="nlh">この%sデバイスのプレミアムライセンスが見つかりません。</string>
+    <string name="edit">編集</string>
+    <string name="quick_doz_mod">クイックドーズMod</string>
+    <string name="quick_mod_inf">画面がオフのときは、動きに邪魔されることなくすばやく居眠りモードに入り、アイドル状態のバッテリーの使用量を改善します。</string>
+    <string name="quick_doz_mod_mwi">分単位の初期メンテナンスウィンドウ間隔（0 =メンテナンスウィンドウなし）</string>
+    <string name="quick_doz_mod_inf2">
+        Dozeモードは、アプリのバックグラウンドCPUとネットワークアクティビティを延期することでバッテリー寿命を延ばします。
+        居眠りしている間、デバイスは定期的にメンテナンスウィンドウ（MW）に入ります。アプリは、このMW中に保留中の作業（同期、ジョブなど）を完了することができます。
+        デバイスはこのサイクルを継続し、毎回MW間隔の長さを2倍にします。 MW間隔が長いほど、バッテリーの節約になります。
+        Dozeモードでは、一部のアプリで通知の遅延が発生する場合があります。 SMS、優先度の高いFCM、およびバッテリーの最適化が無効になっているアプリには影響しません。
+        デバイスのロックが解除されると、居眠りモードは非アクティブになります。
+    </string>
+    <string name="adp_min_hz">アダプティブModの最小Hz</string>
+    <string name="enable_as_inf">表示されるウィンドウで[インストールされているサービス]をクリックし、Galaxy MaxHzサービスを有効にします</string>
+    <string name="adp_delay">アダプティブModの最小Hz遅延（秒）</string>
+    <string name="cur_rr_h">現在のリフレッシュレート：%s Hz</string>
+    <string name="show_ns_card">ネットスピードツールを表示</string>
+    <string name="lbl_rrm">リフレッシュレート Mods</string>
+    <string name="prr_psm">省電力モードでモーションの滑らかさを保つ</string>
+    <string name="actvt_trial">無料トライアルを有効にする</string>
+    <string name="auto_psm">スクリーンオフ時の省電力モード</string>
+    <string name="reso_opts">アクティブなオプション</string>
+
+    <string name="requires_ws_perm_h">
+        この機能を実行するには、%1$sに特別な権限が必要です。
+        方法については、以下のADBセットアップリンクをクリックしてください。
+        \n\nTLDR: 走る \'adb shell pm grant %2$s android.permission.WRITE_SECURE_SETTINGS\'
+        \n\nこれは1回限りの手順です。
+    </string>
+    <string name="std">Standard</string>
+    <string name="lbl_profiles_h">%s画面の解像度とリフレッシュレートのプロファイル</string>
+    <string name="high_mode">ハイモード</string>
+    <string name="std_mode">標準モード</string>
+    <string name="adp_mode">アダプティブモード</string>
+    <string name="perm_reqd">許可が必要です</string>
+    <string name="adb_setup">ADBのセットアップ</string>
+    <string name="dismiss">退出させる</string>
+    <string name="allow" translatable="false">許可する</string>
+    <string name="allow_aot" translatable="false">上に表示できるようにする</string>
+    <string name="allow_bg_act" translatable="false">このアプリを安定して実行するには、「バックグラウンドアクティビティを許可する」を有効にするか、「バッテリー使用量を最適化する」を無効にします。</string>
+    <string name="help">ヘルプ</string>
+    <string name="reload_profiles">プロファイルをリロード</string>
+    <string name="options">オプション</string>
+    <string name="data_usage" translatable="false"><u>データ使用量</u></string>
+    <string name="psm_options"><u>省電力モードオプション</u></string>
+    <string name="disable_sync_on_so">同期を自動無効にする</string>
+    <string name="autosync_settings"><u>自動同期設定</u></string>
+    <string name="apps_bat_opt_settings"><u>アプリのバッテリー最適化設定</u></string>
+    <string name="brightness_threshold">アダプティブModの明るさのしきい値</string>
+    <string name="sensor_off_info">画面がオフの間、デバイスのロックが解除されるまで、デバイスセンサーは自動的にオフになります。これにより、デバイスがスタンバイ状態のときに、バッテリーを消耗するモーショントリガーのウェイクロックを最小限に抑えることができます。
+    </string>
+    <string name="sensors_off_note">重要な注意：SensorsOffタイルがオンになっている間は、デバイスのカメラ、マイク、またはその他のセンサーにアクセスできません。通話中に相手にあなたの声が聞こえるかどうかを確認します。聞こえない場合は、通話中にデバイスのロックを解除する必要があります（SensorsOffタイルを押したままにしてロックを解除します）。</string>
+    <string name="auto_sensors_off_exp">Auto SENSORS OFF (Experimental)</string>
+    <string name="sensor_off_setup_info">最初にこれを行います。[設定]> [開発者向けオプション]> [クイック設定] [開発者向けタイル]で[センサーオフ]タイルを有効にします。</string>
+    <string name="dev_opt_setup_info">開発者向けオプションを有効にするには、[設定]> [端末情報]> [ソフトウェア情報]に移動し、[ビルド番号]を7回タップします。</string>
+    <string name="enable_write_settings">Galaxy Max Hzのシステム設定の変更/書き込み権限を有効にします。</string>
+    <string name="as_desc">このサービスは、galaxy max hz modsが機能する</string>
+    <string name="enable">オンにする</string>
+    <string name="premium_features">プレミアム機能</string>
+    <string name="prevent_high">Prevent switching to High Mode</string>
+</resources>

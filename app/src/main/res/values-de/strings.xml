@@ -138,6 +138,16 @@
     <string name="disable_sync_on_so">Automatische Synchronisation deaktivieren, wenn der Bildschirm ausgeschaltet ist.</string>
     <string name="autosync_settings"><u>Einstellungen zur automatischen Synchronisation</u></string>
     <string name="apps_bat_opt_settings"><u>Einstellungen zur Akkuoptimierung</u></string>
+    <string name="sensor_off_info">Die Gerätesensoren werden beim Ausschalten des Bildschirms automatisch ausgeschaltet, bis das Gerät entsperrt wird. Dies trägt dazu bei, bewegungsinduzierte Bildschirmeinschaltungen zu minimieren, was den Akkuverbrauch reduziert.</string>
+    <string name="sensors_off_note">
+        Wichtiger Hinweis: Während die Kachel SensorsOff aktiviert ist, sind die Kamera und das Mikrofon des Geräts sowie andere Sensoren nicht zugänglich.
+        Zu den betroffenen Funktionen gehören unter anderem Gesichtsentsperrung, Hörbarkeit bei Sprachanrufen und Scharnierwinkelerkennung.
+        Verwenden Sie dies nur, wenn Sie die Auswirkungen der Aktivierung von Sensoren klar verstehen. </string>
+    <string name="sensor_off_setup_info">Tu dies zuerst: Aktiviere die \'Sensoren deaktivieren\' Kachel in den Einstellungen unter Entwickleroptionen > Schnelleinstellungen Entwicklerkacheln.></string>
+    <string name="dev_opt_setup_info">Um die Entwickleroptionen freizuschalten, gehe in die Einstellungen unter Telefoninfo > Softwareinformationen und tippe 7 mal auf \'Buildnummer\'.</string>
+    <string name="enable_write_settings">Aktiviere in den Einstellungen die Speicher Lese- &amp; Schreibberechtigung für die Galaxy Max Hz App.</string>
+    <string name="as_desc">Dieser Dienst ist benötig, damit die Galaxy Max Hz Mods funktionieren.</string>
+    <string name="auto_sensors_off_exp">Sensoren automatisch deaktivieren (Experimentell)</string>
     <string name="quick_doz_mod_inf2">
         Der Doze-Modus ist die Situation, in der sich jedes Gerät während einer langen Zeit im Standby-Modus befindet.
         Dieser Modus startet, nachdem der Benutzer die Seitentaste des Android-Geräts gedrückt hat oder das Gerät für längere Zeit (wie nachts) nicht benutzt.
@@ -145,14 +155,10 @@
         Je länger das Wartungsfenster-Intervall, desto geringer der Akkuverbrauch.
     </string>
     <string name="quick_doz_mod_mwi">Zeit bis zum ersten Wartungsfenster (in Minuten, 0 = kein Wartungsfenster)</string>
-
-    <string name="sensor_off_info">Die Gerätesensoren werden beim Ausschalten des Bildschirms automatisch ausgeschaltet, bis das Gerät entsperrt wird. Dies trägt dazu bei, bewegungsinduzierte Bildschirmeinschaltungen zu minimieren, was den Akkuverbrauch reduziert.
-    </string>
-    <string name="sensors_off_note">Wichtiger Hinweis: Wenn die Kachel \'Sensoren deaktivieren\' aktiviert ist, sind die Kamera(s) und das/die Mikrofon(e) des Geräts sowie andere Sensoren nicht zugänglich. Dies wirkt sich auf die Gesichtsentsperrung und auf einigen Geräten auf das Audio bei Anrufen aus. Prüfen Sie, ob Sie während des Gesprächs zu hören sind oder nicht. Wenn dies nicht der Fall ist und Sie einen Anruf erhalten, während das Gerät gesperrt ist, können Sie die Kachel lange drücken, um das Gerät zu entsperren, und die Kachel deaktivieren - nachdem Sie die Taste gedrückt haben, um Anrufe zu empfangen.</string>
-
-    <string name="sensor_off_setup_info">Do this first: Enable \'Sensors Off\' tile in Settings > Developer options > Quick settings developer tiles. ></string>
-    <string name="dev_opt_setup_info">To enable Developer options, go to Settings > About phone > Software info and tap \'Build number\' 7x.</string>
-    <string name="enable_write_settings">Enable Galaxy Max Hz change/write system settings permission.</string>
-    <string name="as_desc">This service is required for galaxy max hz mods to work.</string>
     <string name="enable">Anmache</string>
+    <string name="allow">Erlauben</string>
+    <string name="allow_aot">Erlaube oben erscheinen</string>
+    <string name="allow_bg_act">Damit diese Anwendung weiterhin ausgeführt wird, aktivieren sie \'hintergrundaktivität zulassen\' oder deaktivieren sie die option \'akkunutzung optimieren\'.</string>
+    <string name="premium_features">Premium-Funktionen</string>
+    <string name="prevent_high">Prevent switching to High Mode</string>
 </resources>

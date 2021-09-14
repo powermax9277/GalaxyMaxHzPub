@@ -23,11 +23,11 @@
     <string name="bottom">Bottom</string>
     <string name="use_qstile_reso_switch">Use the included quick settings (qs) tile to quickly switch screen resolution.</string>
     <string name="center">Center</string>
-    <string name="info_qs_max_hz">Includes a quick setting tile to toggle max hz</string>
+    <string name="info_qs_max_hz">Includes a quick setting tile to change max hz</string>
     <string name="info_qs_rtrr">Turning this on for a long period may increase the app\'s battery consumption.  Includes a quick setting tile to turn-on refresh rate monitor.</string>
     <string name="s_off_mod">Screen-off Mods</string>
     <string name="force_hz_mod">Force Lowest Hz</string>
-    <string name="s_off_hz_inf">This will set the screen-off/AOD refresh rate to the lowest one to improve idle battery usage.\nScreen-off refresh rate: %s</string>
+    <string name="s_off_hz_inf">This will set the screen-off/AOD refresh rate to the lowest hz.\nScreen-off refresh rate: %s</string>
     <string name="chng_res_stng">%s resolution setting does not support high/adaptive refresh rate.
         Change the resolution and motion smoothness mode first in the settings.
         \n\nThis app can easily switch resolution and motion smoothness mode using the quick settings tile once WRITE_SECURE_SETTINGS permission setup is performed using ADB.
@@ -56,8 +56,8 @@
     <string name="statusbar">Statusbar</string>
     <string name="perm_appx">\n\nWhen adb setup is performed, you can do the following with this app:
         \n- Quickly switch screen resolutions
-        \n- (Auto)apply/keep Adaptive or High motion smoothness on Power Saving Mode
-        \n- Auto apply power saving mode on screen-off
+        \n- (Auto)activate/keep Adaptive or High motion smoothness on Power Saving Mode
+        \n- Auto activate power saving mode on screen-off
         \n- Use the quick-doze mod (premium)
         \n- Apply Adaptive refresh rate mod even on non-natively supported device(premium)
         \n- Auto Sensors Off(premium)
@@ -142,10 +142,10 @@
     <string name="perm_reqd">Permission Required</string>
     <string name="adb_setup">ADB Setup</string>
     <string name="dismiss">Dismiss</string>
-    <string name="allow" translatable="false">Allow</string>
-    <string name="allow_aot" translatable="false">Allow Appear on Top</string>
+    <string name="allow">Allow</string>
+    <string name="allow_aot">Allow Appear on Top</string>
     <!--<string name="adp_mod_inf" translatable="false">Note: This is an experimental feature which is continually being improved.</string>-->
-    <string name="allow_bg_act" translatable="false">For this app to run with stability, enable \'Allow background activity\' or disable \'Optimize battery usage\'.</string>
+    <string name="allow_bg_act">For the stable running of this app, enable \'Allow background activity\' or disable \'Optimize battery usage\'.</string>
     <string name="help">Help</string>
     <string name="reload_profiles">Reload Profiles</string>
     <string name="options">Options</string>
@@ -155,14 +155,17 @@
     <string name="autosync_settings"><u>Autosync settings</u></string>
     <string name="apps_bat_opt_settings"><u>Apps Battery Optimization Settings</u></string>
     <string name="brightness_threshold">Brightness Threshold for Adaptive</string>
-    <string name="sensor_off_info">
-        Device sensors will automatically turn off while screen is off until the device is unlocked. This helps minimize battery-draining motion-triggered wakelocks while device is on stand by.
-    </string>
-    <string name="sensors_off_note">Important note: While SensorsOff tile is ON, the device\'s camera(s) and microphone(s), among other sensors, become inaccessible. Check whether your voice can be heard or not during call. If it cannot be heard and you receive call while the device is locked, you can long-press the SensorsOff tile to unlock the device and turn the SensorsOff tile off - after pressing the receive call button.</string>
-    <string name="auto_sensors_off_exp" translatable="false">Auto SENSORS OFF (Experimental)</string>
+    <string name="sensor_off_info">Device sensors will automatically turn off while screen is off until the device is unlocked.</string>
+    <string name="sensors_off_note">
+        Important Note: While the SensorsOff tile is on, the device\'s camera and microphone and other sensors are inaccessible.
+        Functionalities affected include face unlock, audibility on voice calls (on some) and hinge angle detection, among others.
+        Only use this if you clearly understand the effect of enabling sensors off.</string>
+    <string name="auto_sensors_off_exp">Auto SENSORS OFF</string>
     <string name="sensor_off_setup_info">Do this first: Enable \'Sensors Off\' tile in Settings > Developer options > Quick settings developer tiles. ></string>
     <string name="dev_opt_setup_info">To enable Developer options, go to Settings > About phone > Software info and tap \'Build number\' 7x.</string>
     <string name="enable_write_settings">Enable Galaxy Max Hz change/write system settings permission.</string>
     <string name="as_desc">This service is required for galaxy max hz mods to work.</string>
     <string name="enable">Enable</string>
+    <string name="premium_features">Premium Features</string>
+    <string name="prevent_high">Prevent switching to High Mode</string>
 </resources>

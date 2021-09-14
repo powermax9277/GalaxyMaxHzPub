@@ -23,6 +23,9 @@ import com.tribalfs.gmh.profiles.ModelNumbers.TS7W
 import com.tribalfs.gmh.profiles.ModelNumbers.ZF2
 import com.tribalfs.gmh.profiles.ModelNumbers.ZF2_JP
 import com.tribalfs.gmh.profiles.ModelNumbers.ZF3
+import com.tribalfs.gmh.profiles.ModelNumbers.ZF3_JP
+import com.tribalfs.gmh.profiles.ModelNumbers.ZFp3
+import com.tribalfs.gmh.profiles.ModelNumbers.ZFp3_JP
 import org.json.JSONObject
 
 @Keep
@@ -63,6 +66,13 @@ internal object PredefinedProfiles {
                             "\"0-0\":{\"2400x1080\":\"{\\\"highestHz\\\":60.0,\\\"lowestHz\\\":48.0,\\\"refreshRates\\\":[60.0,48.0],\\\"resHeight\\\":2400,\\\"resName\\\":\\\"FHD+\\\",\\\"resStrLxw\\\":\\\"2400x1080\\\",\\\"resWidth\\\":1080}\"}}"
                 )
             }
+            ZFp3, ZFp3_JP -> {
+                return JSONObject(
+                    "{\"0-2\":{\"2640x1080\":\"{\\\"highestHz\\\":120.0,\\\"lowestHz\\\":48.0,\\\"refreshRates\\\":[120.0,96.0,60.0,48.0],\\\"resHeight\\\":2640,\\\"resName\\\":\\\"FHD+\\\",\\\"resStrLxw\\\":\\\"2640x1080\\\",\\\"resWidth\\\":1080}\",\"1760x720\":\"{\\\"highestHz\\\":120.0,\\\"lowestHz\\\":48.0,\\\"refreshRates\\\":[120.0,96.0,60.0,48.0],\\\"resHeight\\\":1760,\\\"resName\\\":\\\"HD+\\\",\\\"resStrLxw\\\":\\\"1760x720\\\",\\\"resWidth\\\":720}\"}," +
+                            "\"0-1\":{\"2640x1080\":\"{\\\"highestHz\\\":120.0,\\\"lowestHz\\\":48.0,\\\"refreshRates\\\":[120.0,96.0,60.0,48.0],\\\"resHeight\\\":2640,\\\"resName\\\":\\\"FHD+\\\",\\\"resStrLxw\\\":\\\"2640x1080\\\",\\\"resWidth\\\":1080}\",\"1760x720\":\"{\\\"highestHz\\\":120.0,\\\"lowestHz\\\":48.0,\\\"refreshRates\\\":[120.0,96.0,60.0,48.0],\\\"resHeight\\\":1760,\\\"resName\\\":\\\"HD+\\\",\\\"resStrLxw\\\":\\\"1760x720\\\",\\\"resWidth\\\":720}\"}," +
+                            "\"0-0\":{\"2640x1080\":\"{\\\"highestHz\\\":60.0,\\\"lowestHz\\\":48.0,\\\"refreshRates\\\":[60.0,48.0],\\\"resHeight\\\":2640,\\\"resName\\\":\\\"FHD+\\\",\\\"resStrLxw\\\":\\\"2640x1080\\\",\\\"resWidth\\\":1080}\",\"1760x720\":\"{\\\"highestHz\\\":60.0,\\\"lowestHz\\\":48.0,\\\"refreshRates\\\":[60.0,48.0],\\\"resHeight\\\":1760,\\\"resName\\\":\\\"HD+\\\",\\\"resStrLxw\\\":\\\"1760x720\\\",\\\"resWidth\\\":720}\"}}"
+                )
+            }
             S21_U -> {
                 return JSONObject(
                     "{\"0-2\":{\"3200x1440\":\"{\\\"highestHz\\\":120.0,\\\"lowestHz\\\":48.0,\\\"refreshRates\\\":[120.0,96.0,60.0,48.0],\\\"resHeight\\\":3200,\\\"resName\\\":\\\"WQHD+\\\",\\\"resStrLxw\\\":\\\"3200x1440\\\",\\\"resWidth\\\":1440}\",\"2400x1080\":\"{\\\"highestHz\\\":120.0,\\\"lowestHz\\\":48.0,\\\"refreshRates\\\":[120.0,96.0,60.0,48.0],\\\"resHeight\\\":2400,\\\"resName\\\":\\\"FHD+\\\",\\\"resStrLxw\\\":\\\"2400x1080\\\",\\\"resWidth\\\":1080}\",\"1600x720\":\"{\\\"highestHz\\\":120.0,\\\"lowestHz\\\":48.0,\\\"refreshRates\\\":[120.0,96.0,60.0,48.0],\\\"resHeight\\\":1600,\\\"resName\\\":\\\"HD+\\\",\\\"resStrLxw\\\":\\\"1600x720\\\",\\\"resWidth\\\":720}\"}," +
@@ -79,7 +89,7 @@ internal object PredefinedProfiles {
                 )
             }
 
-            ZF2, ZF2_JP, ZF3 -> {
+            ZF2, ZF2_JP, ZF3, ZF3_JP -> {
                 return JSONObject(
                     "{\"0-2\":{\"2208x1768\":\"{\\\"highestHz\\\":120.0,\\\"lowestHz\\\":48.0,\\\"refreshRates\\\":[120.0,96.0,60.0,48.0],\\\"resHeight\\\":2208,\\\"resName\\\":\\\"WQXGA+\\\",\\\"resStrLxw\\\":\\\"2208x1768\\\",\\\"resWidth\\\":1768}\"}," +
                             "\"0-1\":{\"2208x1768\":\"{\\\"highestHz\\\":120.0,\\\"lowestHz\\\":48.0,\\\"refreshRates\\\":[120.0,96.0,60.0,48.0],\\\"resHeight\\\":2208,\\\"resName\\\":\\\"WQXGA+\\\",\\\"resStrLxw\\\":\\\"2208x1768\\\",\\\"resWidth\\\":1768}\"}," +

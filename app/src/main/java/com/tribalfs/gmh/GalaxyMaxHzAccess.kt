@@ -52,8 +52,6 @@ import com.tribalfs.gmh.hertz.HzServiceHelperStn
 import com.tribalfs.gmh.netspeed.NetSpeedServiceHelperStn
 import com.tribalfs.gmh.profiles.ProfilesObj.isProfilesLoaded
 import com.tribalfs.gmh.receivers.GmhBroadcastReceivers
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmh
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmh.Companion.NOT_USING
 import kotlinx.coroutines.*
 import java.lang.Runnable
 import kotlin.coroutines.CoroutineContext

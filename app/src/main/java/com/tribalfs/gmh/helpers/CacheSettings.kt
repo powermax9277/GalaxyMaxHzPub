@@ -106,6 +106,7 @@ object CacheSettings {
     @Volatile internal var screenOffRefreshRateMode: String?  = null
 
     internal var turnOffAutoSensorsOff = false
+    internal var preventHigh = false
    // internal var turnOnAutoSensorsOff = false
 
 }

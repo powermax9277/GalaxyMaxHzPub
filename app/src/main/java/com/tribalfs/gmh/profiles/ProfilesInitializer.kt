@@ -8,6 +8,7 @@ import android.view.Display
 import androidx.annotation.Keep
 import androidx.annotation.RequiresApi
 import com.google.gson.Gson
+import com.tribalfs.gmh.helpers.CacheSettings
 import com.tribalfs.gmh.helpers.CacheSettings.currentRefreshRateMode
 import com.tribalfs.gmh.helpers.CacheSettings.displayId
 import com.tribalfs.gmh.helpers.CacheSettings.highestHzForAllMode
@@ -17,6 +18,7 @@ import com.tribalfs.gmh.helpers.CacheSettings.lowestHzCurMode
 import com.tribalfs.gmh.helpers.CacheSettings.lowestHzForAllMode
 import com.tribalfs.gmh.helpers.CacheSettings.minHzListForAdp
 import com.tribalfs.gmh.helpers.CacheSettings.modesWithLowestHz
+import com.tribalfs.gmh.helpers.CacheSettings.preventHigh
 import com.tribalfs.gmh.helpers.CacheSettings.screenOffRefreshRateMode
 import com.tribalfs.gmh.helpers.CacheSettings.supportedHzIntAllMod
 import com.tribalfs.gmh.helpers.CacheSettings.supportedHzIntCurMod
@@ -27,6 +29,7 @@ import com.tribalfs.gmh.helpers.UtilsDeviceInfo.Companion.REFRESH_RATE_MODE_ALWA
 import com.tribalfs.gmh.helpers.UtilsDeviceInfo.Companion.REFRESH_RATE_MODE_SEAMLESS
 import com.tribalfs.gmh.helpers.UtilsDeviceInfo.Companion.REFRESH_RATE_MODE_STANDARD
 import com.tribalfs.gmh.helpers.UtilsDeviceInfo.Companion.STANDARD_REFRESH_RATE_HZ
+import com.tribalfs.gmh.helpers.UtilsRefreshRate
 import com.tribalfs.gmh.helpers.UtilsResoName.getName
 import com.tribalfs.gmh.profiles.ModelNumbers.S20FE
 import com.tribalfs.gmh.profiles.ModelNumbers.S20FE5G
@@ -62,8 +65,6 @@ internal class ProfilesInitializer private constructor(context: Context) {
     }
 
 
-
-
     private val appCtx = context.applicationContext
     private val mUtilsDeviceInfo by lazy { UtilsDeviceInfo(appCtx) }
     private val mUtilsPrefsGmh by lazy { UtilsPrefsGmh(appCtx) }
@@ -75,7 +76,7 @@ internal class ProfilesInitializer private constructor(context: Context) {
                 else -> null
             }
         }
-
+    private val mUtilsRefreshRate by lazy{ UtilsRefreshRate(appCtx) }
 
     @ExperimentalCoroutinesApi
     @Synchronized
@@ -121,6 +122,10 @@ internal class ProfilesInitializer private constructor(context: Context) {
         synchronized(this) {
             supportedHzIntCurMod = getSupportedHzIntCurModUpd()
             mUtilsDeviceInfo.getSamRefreshRateMode().let {
+                if (!isOfficialAdaptive && preventHigh && it == REFRESH_RATE_MODE_ALWAYS && currentRefreshRateMode.get() == REFRESH_RATE_MODE_SEAMLESS){
+                    mUtilsRefreshRate.setRefreshRateMode(REFRESH_RATE_MODE_SEAMLESS)
+                    return@synchronized
+                }
                 lowestHzCurMode = getForceLowestHzUpd(it)
                 currentRefreshRateMode.set(it) //should be after updating the variables above
                 screenOffRefreshRateMode =

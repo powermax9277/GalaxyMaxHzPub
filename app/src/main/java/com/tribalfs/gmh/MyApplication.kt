@@ -32,7 +32,6 @@ import com.tribalfs.gmh.helpers.CacheSettings.canApplyFakeAdaptive
 import com.tribalfs.gmh.helpers.CacheSettings.currentBrightness
 import com.tribalfs.gmh.helpers.CacheSettings.currentRefreshRateMode
 import com.tribalfs.gmh.helpers.CacheSettings.hasWriteSecureSetPerm
-import com.tribalfs.gmh.helpers.CacheSettings.highestHzForAllMode
 import com.tribalfs.gmh.helpers.CacheSettings.ignoreRrmChange
 import com.tribalfs.gmh.helpers.CacheSettings.isFakeAdaptive
 import com.tribalfs.gmh.helpers.CacheSettings.isFakeAdaptiveValid
@@ -48,6 +47,7 @@ import com.tribalfs.gmh.helpers.CacheSettings.isSpayInstalled
 import com.tribalfs.gmh.helpers.CacheSettings.isXiaomi
 import com.tribalfs.gmh.helpers.CacheSettings.keepModeOnPowerSaving
 import com.tribalfs.gmh.helpers.CacheSettings.lrrPref
+import com.tribalfs.gmh.helpers.CacheSettings.preventHigh
 import com.tribalfs.gmh.helpers.CacheSettings.prrActive
 import com.tribalfs.gmh.helpers.CacheSettings.turnOff5GOnPsm
 import com.tribalfs.gmh.helpers.DozeUpdater.updateDozValues
@@ -56,14 +56,11 @@ import com.tribalfs.gmh.helpers.UtilsDeviceInfo.Companion.DEVICE_IDLE_CONSTANTS
 import com.tribalfs.gmh.helpers.UtilsDeviceInfo.Companion.PSM_5G_MODE
 import com.tribalfs.gmh.helpers.UtilsDeviceInfo.Companion.REFRESH_RATE_MODE
 import com.tribalfs.gmh.helpers.UtilsDeviceInfo.Companion.REFRESH_RATE_MODE_SEAMLESS
-import com.tribalfs.gmh.helpers.UtilsDeviceInfo.Companion.REFRESH_RATE_MODE_STANDARD
 import com.tribalfs.gmh.helpers.UtilsDeviceInfo.Companion.SCREEN_BRIGHTNESS_FLOAT
 import com.tribalfs.gmh.helpers.UtilsDeviceInfo.Companion.STANDARD_REFRESH_RATE_HZ
 import com.tribalfs.gmh.hertz.HzServiceHelperStn
-import com.tribalfs.gmh.profiles.ModelNumbers.ZF3
 import com.tribalfs.gmh.profiles.ProfilesInitializer
 import com.tribalfs.gmh.profiles.ProfilesObj.isProfilesLoaded
-import com.tribalfs.gmh.profiles.Syncer
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsAct
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsAct.Companion.LIC_TYPE_ADFREE
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsAct.Companion.LIC_TYPE_TRIAL_ACTIVE
@@ -249,7 +246,7 @@ class MyApplication : Application() {
     override fun attachBaseContext(base: Context?) {
           super.attachBaseContext(base)
           // Initialise ACRA
-          ACRA.init(this);
+          ACRA.init(this)
       }
 
 
@@ -304,7 +301,7 @@ class MyApplication : Application() {
 
             setBrand()
 
-            while (!isProfilesLoaded) {
+           /* while (!isProfilesLoaded) {
                 delay(250)
             }
             if ((!isSamsung || ZF3 == mUtilsDeviceInfo.deviceModel)
@@ -313,7 +310,7 @@ class MyApplication : Application() {
             ) {
                 Syncer(applicationContext).postSettingsList()
                 mUtilsPrefsGmh.gmhPrefSettingListDone = true
-            }
+            }*/
         }
     }
 
@@ -348,6 +345,7 @@ class MyApplication : Application() {
 
         updateRefreshRateParams()
 
+        preventHigh = mUtilsPrefsGmh.gmhPrefPreventHigh
         isHzNotifOn.set (mUtilsPrefsGmh.gmhPrefHzIsOn && mUtilsPrefsGmh.gmhPrefHzNotifIsOn)
         isNsNotifOn.set( mUtilsPrefsGmh.gmhPrefNetSpeedIsOn)
         //fixedHzOnSystemUi =

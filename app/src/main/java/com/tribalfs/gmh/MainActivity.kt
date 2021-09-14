@@ -80,6 +80,7 @@ import com.tribalfs.gmh.helpers.CacheSettings.lrrPref
 import com.tribalfs.gmh.helpers.CacheSettings.minHzListForAdp
 import com.tribalfs.gmh.helpers.CacheSettings.modesWithLowestHz
 import com.tribalfs.gmh.helpers.CacheSettings.offScreenRefreshRate
+import com.tribalfs.gmh.helpers.CacheSettings.preventHigh
 import com.tribalfs.gmh.helpers.CacheSettings.prrActive
 import com.tribalfs.gmh.helpers.CacheSettings.screenOffRefreshRateMode
 import com.tribalfs.gmh.helpers.CacheSettings.supportedHzIntAllMod
@@ -143,12 +144,8 @@ import kotlin.math.max
 import kotlin.math.min
 
 //TODO:{option to prevent system from switching to High,
-// per model help/forum, show about premium in menu,
 // UI improvements,
-// fixed crashes,
-// warning when first enabling doz mod,
-// translation for enable
-// updated german string}
+// warning when first enabling doz mod}
 
 @ExperimentalCoroutinesApi
 class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClickHandler, CoroutineScope {
@@ -156,12 +153,14 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
     companion object {
         private const val TAG = "MainActivity"
         internal const val GMH_WEB_APP ="https://script.google.com/macros/s/AKfycbzlRKh4-YXyXLufXZfDqAs1xJEJK7BF8zmhEDGDpbP1luu97trI/exec"
-        private const val HELP_URL = "https://forum.xda-developers.com/t/app-galaxy-max-hz-refresh-rate-control-quick-resolution-switcher-screen-off-mods-adaptive-mod-keep-high-adaptive-on-power-saving-mode-and-more.4181447"
+        //private const val HELP_URL_FALLBACK = "https://forum.xda-developers.com/t/app-galaxy-max-hz-refresh-rate-control-quick-resolution-switcher-screen-off-mods-adaptive-mod-keep-high-adaptive-on-power-saving-mode-and-more.4181447"
         //private const val REWARDED_INTERSTITIAL_ID = "ca-app-pub-3239920037413959/1863514308"
         internal const val ACTION_CHANGED_RES = "$APPLICATION_ID.ACTION_CHANGED_RES"
         private const val REQUEST_LATEST_UPDATE = 0x5
         private const val KEY_JSON_LIC_TYPE = "0x11"
         private const val KEY_JSON_PAYPAL_BUY_URL = "0x12"
+        private const val KEY_JSON_PAYPAL_HELP_URL = "0x24"
+
         /*private const val SYNCMODE_POST = "1"
         private const val SYNCMODE_GET = "0"*/
     }
@@ -171,8 +170,8 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
     private lateinit var mBinding: ActivityMainBinding
 
     private val mUtilsDeviceInfo: UtilsDeviceInfo by lazy{UtilsDeviceInfo(applicationContext)}
-    private val mUtilsPrefsGmh by lazy{ UtilsPrefsGmh(applicationContext) }
-    private val mUtilsPrefsAct by lazy{ UtilsPrefsAct(applicationContext) }
+    private val mUtilsPrefsGmh by lazy{ UtilsPrefsGmh(applicationContext)}
+    private val mUtilsPrefsAct by lazy{ UtilsPrefsAct(applicationContext)}
     private val mUtilsRefreshRate by lazy{UtilsRefreshRate(applicationContext)}
 
     private val hzOverlaySizes = listOf(10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30)
@@ -386,7 +385,6 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
     @RequiresApi(VERSION_CODES.M)
     override fun onClickView(v: View) {
         when(v.id){
-
             mBinding.tvBattOptimSettings.id -> {
                 startActivity(Intent(ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS))
             }
@@ -685,6 +683,13 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
 
             mBinding.btnSyncLicense.id -> syncLicense(false, tryTrial = false)
 
+            mBinding.swPreventHigh.id -> {
+                (v as Switch).isChecked.let { checked ->
+                    preventHigh = checked
+                    mUtilsPrefsGmh.gmhPrefPreventHigh = checked
+                }
+            }
+
         }
     }
 
@@ -827,6 +832,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
                     findItem(R.id.menuAct).isVisible = (it != LIC_TYPE_ADFREE/ 2 && it != LIC_TYPE_TRIAL_ACTIVE/ 2)
                     findItem(R.id.menuAc).isVisible = it != LIC_TYPE_ADFREE/ 2
                     findItem(R.id.menuNs).isVisible = it >= LIC_TYPE_ADFREE/ 2
+                    findItem(R.id.menuPrem).isVisible = it < LIC_TYPE_ADFREE/ 2
                     findItem(R.id.menuNs).isChecked = mUtilsPrefsGmh.gmhPrefShowNetSpeedTool
                 }
             }
@@ -1055,8 +1061,11 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
                 true
             }
             R.id.menuHlp -> {
-                val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(HELP_URL))
-                startActivity(browserIntent)
+                openHelpLink()
+                true
+            }
+            R.id.menuPrem -> {
+                openPremiumLink()
                 true
             }
             R.id.menuNs -> {
@@ -1277,9 +1286,9 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
             Snackbar.LENGTH_INDEFINITE,
             android.R.string.ok
         ) {
-                val intent = Intent(ACTION_ACCESSIBILITY_SETTINGS)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                startActivity(intent)
+            val intent = Intent(ACTION_ACCESSIBILITY_SETTINGS)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(intent)
         }
     }
 
@@ -1526,11 +1535,50 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
         }
     }
 
+    private fun openPremiumLink() = launch {
+        showLoading(true)
+        try{
+            startActivity(
+                Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("https://github.com/tribalfs/GalaxyMaxHzPub/blob/main/Premium.md")
+                )
+            )
+        }catch(_: Exception){
+            showSbMsg(R.string.cie, null, null, null)
+        }
+        showLoading(false)
+    }
+
+
+    private fun openHelpLink() = launch {
+        showLoading(true)
+        try{
+            startActivity(
+                Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse(
+                        if (mUtilsPrefsGmh.gmhPrefHelpUrl != null){
+                            mUtilsPrefsGmh.gmhPrefHelpUrl!!
+                        }else {
+                            (mSyncer.getHelpUrl()?.get(KEY_JSON_PAYPAL_HELP_URL) as String).let{
+                                mUtilsPrefsGmh.gmhPrefHelpUrl = it
+                                it
+                            }
+                        }
+                    )
+                )
+            )
+        }catch(_: Exception){
+            showSbMsg(R.string.cie, null, null, null)
+        }
+        showLoading(false)
+    }
 
 
     private fun openBuyAdFreeLink() = launch {
         showLoading(true)
-        val resultJson = mSyncer.openBuyAdFreeLink()
+        val resultJson = mSyncer.getBuyAdFreeLink()
         if (resultJson != null && resultJson[KEY_JSON_RESULT] == JSON_RESPONSE_OK) {
             startActivity(
                 Intent(

@@ -141,6 +141,12 @@
     <string name="sensor_off_setup_info">Do this first: Enable \'Sensors Off\' tile in Settings > Developer options > Quick settings developer tiles. ></string>
     <string name="dev_opt_setup_info">To enable Developer options, go to Settings > About phone > Software info and tap \'Build number\' 7x.</string>
     <string name="enable_write_settings">Enable Galaxy Max Hz change/write system settings permission.</string>
-    <string name="as_desc">This service is required for galaxy max hz mods to work.</string>
+    <string name="as_desc">Táto služba je potrebná, aby fungovali režimy galaxy max hz.</string>
     <string name="enable">Olanak vermek</string>
+    <string name="allow">Allow</string>
+    <string name="allow_aot">Allow Appear on Top</string>
+    <string name="allow_bg_act">Pre stabilný chod tejto aplikácie povoľte \'Povoliť aktivitu na pozadí\' alebo deaktivujte \'Optimalizovať využitie batérie\'.</string>
+    <string name="premium_features">Prémiové funkcie</string>
+    <string name="prevent_high">Yüksek Moda geçişi engelle</string>
+    <string name="auto_sensors_off_exp">Otomatik SENSÖRLER KAPALI</string>
 </resources>

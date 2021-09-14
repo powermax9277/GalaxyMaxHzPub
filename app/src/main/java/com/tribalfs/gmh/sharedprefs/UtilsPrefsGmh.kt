@@ -56,10 +56,12 @@ internal class UtilsPrefsGmh(context: Context) {
         internal const val UPLOAD_SPEED = "up"
         internal const val DOWNLOAD_SPEED = "down"
         private const val USING_SPAY = "usg_spay"
-        private const val SETTINGS_LIST_DONE = "settings_list_done"
+        private const val SETTINGS_LIST_DONE = "list_done"
         internal const val NOT_USING = 0
         internal const val USING = 1
         internal const val NOT_ASKED = 2
+        private const val HELP_URL = "help_url"
+        private const val PREVENT_HIGH = "prev_hi"
     }
 
     val hzSharedPref: SharedPreferences = context.applicationContext.getSharedPreferences(
@@ -154,6 +156,11 @@ internal class UtilsPrefsGmh(context: Context) {
         }
         set(apply) {hzSharedPrefEditor.putBoolean(HZ_CONFIG_SYNCED, apply).apply()}
 
+    var gmhPrefPreventHigh: Boolean
+        get() {
+            return hzSharedPref.getBoolean(PREVENT_HIGH, false)
+        }
+        set(apply) {hzSharedPrefEditor.putBoolean(PREVENT_HIGH, apply).apply()}
 
     var gmhPrefRefreshRateModePref: String?
         get() {
@@ -161,6 +168,11 @@ internal class UtilsPrefsGmh(context: Context) {
         }
         set(mode){hzSharedPrefEditor.putString(REFRESH_RATE_MODE_PREF, mode).apply()}
 
+    var gmhPrefHelpUrl: String?
+        get() {
+            return hzSharedPref.getString(HELP_URL, null)
+        }
+        set(mode){hzSharedPrefEditor.putString(HELP_URL, mode).apply()}
 
     var gmhPrefHzOverlaySize: Float
         get() {
@@ -297,7 +309,7 @@ internal class UtilsPrefsGmh(context: Context) {
         get() { return hzSharedPref.getString(SPEED_TO_SHOW, TOTAL_SPEED)!! }
         set(speedType) {hzSharedPrefEditor.putString(SPEED_TO_SHOW, speedType).apply()}
 
-    var gmhPrefSettingListDone: Boolean
+    /*var gmhPrefSettingListDone: Boolean
         get() = hzSharedPref.getBoolean(SETTINGS_LIST_DONE, false)
-        set(value) = hzSharedPrefEditor.putBoolean(SETTINGS_LIST_DONE, value).apply()
+        set(value) = hzSharedPrefEditor.putBoolean(SETTINGS_LIST_DONE, value).apply()*/
 }

@@ -89,7 +89,7 @@
   <!--  <string name="error_opening_settings">Nastavení Chyba při otevírání.</string>-->
     <string name="cie">Chyba! Zkontrolujte prosím připojení k internetu a zkuste to znovu.</string>
     <string name="aca">Neplatný kód aktivace.</string>
-    <string name="afa">Prémium úspěšně aktivováno!</string>
+    <string name="afa">Prémiová úspěšně aktivováno!</string>
     <string name="afu">Prémiová zkušební verze již byla použita a její platnost vypršela.</string>
     <plurals name="aha">
         <item quantity="one">Prémiová zkušební verze aktivována: %d den zbývá.</item>
@@ -141,11 +141,18 @@
     <string name="quick_doz_mod_mwi">Interval úvodního okna údržby v minutách (0 = žádné okno údržby)</string>
     <string name="brightness_threshold">Minimální jas pro adaptivní</string>
     <string name="sensor_off_info">Senzory zařízení se automaticky vypnou, když je obrazovka vypnutá, dokud se zařízení neodemkne. To pomáhá minimalizovat pohybem vyvolané probuzení, které vybíjí baterii.</string>
-    <string name="sensors_off_note">Důležitá poznámka: Když zapnete dlaždici SensorsOff, nebudete mít přístup k fotoaparátu, mikrofonu a dalším senzorům zařízení. Na některých zařízeních to ovlivní odemykání obličejem a zvuk volání. Zkontrolujte, zda je váš hlas během hovoru slyšet nebo ne. Pokud není slyšet a vy přijmete hovor, když je zařízení zamčené, můžete stisknutím a podržením dlaždice SensorsOff zařízení odemknout a vypnout dlaždici SensorsOff-po stisknutí tlačítka pro přijetí hovoru.</string>
-
+    <string name="sensors_off_note">Důležitá poznámka: Když je dlaždice SensorsOff zapnutá, kamera a mikrofon zařízení a další senzory jsou nepřístupné.
+        Mezi ovlivněné funkce patří mimo jiné odemykání obličejem, slyšitelnost hlasových hovorů a detekce úhlu závěsu.
+        Používejte to pouze tehdy, pokud jasně rozumíte účinku vypnutí senzorů.</string>
     <string name="sensor_off_setup_info">Do this first: Enable \'Sensors Off\' tile in Settings > Developer options > Quick settings developer tiles. ></string>
     <string name="dev_opt_setup_info">To enable Developer options, go to Settings > About phone > Software info and tap \'Build number\' 7x.</string>
     <string name="enable_write_settings">Enable Galaxy Max Hz change/write system settings permission.</string>
     <string name="as_desc">This service is required for galaxy max hz mods to work.</string>
     <string name="enable">Umožnit</string>
+    <string name="allow">Dovolit</string>
+    <string name="allow_aot">Povolit zobrazit nahoře</string>
+    <string name="allow_bg_act">Pro stabilní běh této aplikace povolte \'Povolit aktivitu na pozadí\' nebo deaktivujte \'Optimalizovat využití baterie\'.</string>
+    <string name="premium_features">Prémiové funkce</string>
+    <string name="prevent_high">Zabraňte přepnutí do vysokého režimu</string>
+    <string name="auto_sensors_off_exp">Auto SENSORS OFF</string>
 </resources>

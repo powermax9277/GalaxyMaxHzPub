@@ -20,8 +20,8 @@ android {
         minSdkVersion 22
         //noinspection ExpiredTargetSdkVersion
         targetSdkVersion 22
-        versionCode 100
-        versionName "7.14.12"
+        versionCode 101
+        versionName "7.14.13"
         setProperty("archivesBaseName", "galaxy_max_hz_v${versionName}")
     }
 

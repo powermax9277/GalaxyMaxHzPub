@@ -141,11 +141,16 @@
     <string name="quick_doz_mod_mwi">Intervalo da janela de manutenção inicial em minutos (0 = sem janela de manutenção)</string>
     <string name="brightness_threshold">Brilho mínimo para adaptável</string>
     <string name="sensor_off_info">Os sensores do dispositivo são desligados automaticamente quando a tela é desligada até que o dispositivo seja desbloqueado. Isso ajuda a minimizar wake locks induzidos por movimento que drenam a bateria.</string>
-    <string name="sensors_off_note">Observação importante: enquanto o bloco SensorsOff está LIGADO, as câmeras e os microfones do dispositivo, entre outros sensores, ficam inacessíveis. Verifique se sua voz pode ser ouvida ou não durante a chamada. Se não puder ser ouvido e você receber uma chamada enquanto o dispositivo está bloqueado, você pode manter pressionado o bloco SensorsOff para desbloquear o dispositivo e desligar o bloco SensorsOff - depois de pressionar o botão de receber chamada.</string>
-
+    <string name="sensors_off_note">Observação importante: enquanto o bloco SensorsOff está ativado, a câmera e o microfone do dispositivo, entre outros sensores, ficam inacessíveis. Verifique se sua voz é audível durante a chamada. Se não for audível, você precisará desbloquear o dispositivo ao receber chamadas (você pode manter pressionado o ícone SensorsOff para desbloquear).</string>
     <string name="sensor_off_setup_info">Do this first: Enable \'Sensors Off\' tile in Settings > Developer options > Quick settings developer tiles. ></string>
     <string name="dev_opt_setup_info">To enable Developer options, go to Settings > About phone > Software info and tap \'Build number\' 7x.</string>
     <string name="enable_write_settings">Enable Galaxy Max Hz change/write system settings permission.</string>
     <string name="as_desc">This service is required for galaxy max hz mods to work.</string>
     <string name="enable">Ligar</string>
+    <string name="allow">Allow</string>
+    <string name="allow_aot">Allow Appear on Top</string>
+    <string name="allow_bg_act">For the stable running of this app, enable \'Allow background activity\' or disable \'Optimize battery usage\'.</string>
+    <string name="premium_features">Recursos premium</string>
+    <string name="prevent_high">Impedir a mudança para o modo alto</string>
+    <string name="auto_sensors_off_exp">Sensores automáticos desligados</string>
 </resources>

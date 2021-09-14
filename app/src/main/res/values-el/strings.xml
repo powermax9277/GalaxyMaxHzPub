@@ -137,7 +137,13 @@
     <string name="sensors_off_note">Σημαντική σημείωση: Εάν ο πίνακας SensorsOff είναι ενεργοποιημένος, οι κάμερες και το μικρόφωνο της συσκευής δεν είναι προσβάσιμα, όπως και άλλοι αισθητήρες. Αυτό επηρεάζει το ξεκλείδωμα προσώπου και, σε ορισμένες συσκευές, την ένταση ήχου κλήσης. Ελέγξτε αν μπορείτε να ακουστείτε κατά τη διάρκεια της κλήσης ή όχι. Εάν είναι το τελευταίο και λαμβάνετε μια κλήση ενώ η συσκευή είναι κλειδωμένη, μπορείτε να πατήσετε παρατεταμένα τον πίνακα SensorsOff για να ξεκλειδώσετε τη συσκευή και να απενεργοποιήσετε τον πίνακα SensorsOff - αφού πατήσετε το κουμπί κλήσης.</string>
     <string name="sensor_off_setup_info">Do this first: Enable \'Sensors Off\' tile in Settings > Developer options > Quick settings developer tiles. ></string>
     <string name="dev_opt_setup_info">To enable Developer options, go to Settings > About phone > Software info and tap \'Build number\' 7x.</string>
-    <string name="enable_write_settings">Enable Galaxy Max Hz change/write system settings permission.</string>
-    <string name="as_desc">This service is required for galaxy max hz mods to work.</string>
+    <string name="enable_write_settings">Ενεργοποιήστε την αλλαγή/εγγραφή δικαιωμάτων ρυθμίσεων συστήματος για το Galaxy Max Hz</string>
+    <string name="as_desc">Αυτή η υπηρεσία απαιτείται για να λειτουργούν τα mods Galaxy Max Hz.</string>
     <string name="enable">Διακόπτης</string>
+    <string name="premium_features">Premium χαρακτηριστικά</string>
+    <string name="allow">Επιτρέπω</string>
+    <string name="allow_aot">Να επιτρέπεται η εμφάνιση στην κορυφή</string>
+    <string name="allow_bg_act">Για τη σταθερή εκτέλεση αυτής της εφαρμογής, ενεργοποιήστε το \"Να επιτρέπεται η δραστηριότητα στο παρασκήνιο\" ή απενεργοποιήστε το \"Βελτιστοποίηση χρήσης μπαταρίας\".</string>
+    <string name="prevent_high">Αποτρέψτε τη μετάβαση σε Υψηλή λειτουργία</string>
+    <string name="auto_sensors_off_exp">Αυτόματοι αισθητήρες απενεργοποιημένοι</string>
 </resources>

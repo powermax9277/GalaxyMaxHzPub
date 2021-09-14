@@ -144,13 +144,20 @@
     </string>
     <string name="quick_doz_mod_mwi">Interval inicial de la finestra de manteniment en minuts (0 = cap finestra de manteniment)</string>
     <string name="brightness_threshold">Brillantor mínima per a Adaptive</string>
-    <string name="sensor_off_info">Els sensors del dispositiu s\'apaguen automàticament quan s\'apaga la pantalla fins que es desbloqueja el dispositiu. Això ajuda a minimitzar els panys de despertar induïts pel moviment que esgoten la bateria.
-    </string>
-    <string name="sensors_off_note">Nota important: quan activeu el mosaic SensorsOff, no podreu accedir a la càmera, al micròfon i a altres sensors del dispositiu. Això afectarà el desbloqueig facial i l\'audibilitat durant les trucades en alguns dispositius. Comproveu si la vostra veu es pot sentir o no durant la trucada. Si no es pot escoltar i rebre trucades quan el dispositiu està bloquejat, podeu mantenir premuda la pestanya SensorsOff per desbloquejar el dispositiu i desactivar la pestanya SensorsOff després de prémer el botó de resposta de trucada.</string>
-
-    <string name="sensor_off_setup_info">Do this first: Enable \'Sensors Off\' tile in Settings > Developer options > Quick settings developer tiles. ></string>
-    <string name="dev_opt_setup_info">To enable Developer options, go to Settings > About phone > Software info and tap \'Build number\' 7x.</string>
-    <string name="enable_write_settings">Enable Galaxy Max Hz change/write system settings permission.</string>
-    <string name="as_desc">This service is required for galaxy max hz mods to work.</string>
-    <string name="enable">Enable</string>
+    <string name="sensor_off_info">Els sensors del dispositiu s\'apaguen automàticament quan s\'apaga la pantalla fins que es desbloqueja el dispositiu.</string>
+    <string name="sensors_off_note">
+        Nota important: Mentre el mosaic SensorsOff està activat, la càmera, el micròfon i altres sensors del dispositiu són inaccessibles.
+        Les funcions afectades inclouen desbloqueig facial, audibilitat en trucades de veu i detecció d’angles de frontissa, entre d’altres.
+        Utilitzeu-ho només si enteneu clarament l’efecte d’activar els sensors.</string>
+    <string name="sensor_off_setup_info">Feu això primer: activeu el mosaic \"Sensors apagats\" a Configuració> Opcions del desenvolupador> Taules del desenvolupador de configuració ràpida.</string>
+    <string name="dev_opt_setup_info">Per activar les opcions del desenvolupador, aneu a Configuració > Quant al telèfon > Informació del programari i toqueu \"Número de compilació\" 7x.</string>
+    <string name="enable_write_settings">Activa el permís de configuració del sistema de canvi/escriptura de Galaxy Max Hz.</string>
+    <string name="as_desc">Aquest servei és necessari perquè funcionin les mods de galaxy max hz.</string>
+    <string name="enable">Activa</string>
+    <string name="allow">Permetre</string>
+    <string name="allow_aot">Permet que aparegui a la part superior</string>
+    <string name="allow_bg_act">Per al funcionament estable d\'aquesta aplicació, activeu \"Permet l\'activitat en segon pla\" o desactiveu \"Optimitzar l\'ús de la bateria\".</string>
+    <string name="premium_features">Funcions premium</string>
+    <string name="prevent_high">Eviteu canviar al mode alt</string>
+    <string name="auto_sensors_off_exp">Sensors automàtics apagats</string>
 </resources>

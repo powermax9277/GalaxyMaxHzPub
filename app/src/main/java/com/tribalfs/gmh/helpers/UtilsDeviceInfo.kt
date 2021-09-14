@@ -7,10 +7,8 @@ import android.hardware.display.DisplayManager
 import android.os.Build
 import android.os.PowerManager
 import android.provider.Settings
-import android.provider.Settings.Secure.ANDROID_ID
 import android.view.Display
 import androidx.annotation.RequiresApi
-import com.tribalfs.gmh.BuildConfig
 import com.tribalfs.gmh.R
 import com.tribalfs.gmh.helpers.CacheSettings.displayId
 import com.tribalfs.gmh.helpers.UtilsResoName.getName
@@ -47,7 +45,7 @@ class UtilsDeviceInfo(val context: Context) {
     }
     private val appCtx: Context = context.applicationContext
     private val mContentResolver = appCtx.contentResolver
-    internal val deviceModelVariant: String = /*if (BuildConfig.DEBUG) "SM-TEST" else */Build.MODEL//TODO{reason: Edit}
+    internal val deviceModelVariant: String = Build.MODEL//TODO{reason: Edit}
     internal val androidVersion: String = Build.VERSION.RELEASE
     internal val manufacturer: String = Build.MANUFACTURER.uppercase(Locale.ROOT)
     internal val deviceModel: String = if (manufacturer == "SAMSUNG") {
@@ -55,6 +53,7 @@ class UtilsDeviceInfo(val context: Context) {
     } else {
         deviceModelVariant
     }
+
     private val currentDisplay: Display = (appCtx.getSystemService(Context.DISPLAY_SERVICE) as DisplayManager).getDisplay(displayId)
 
     fun getRefreshRateInt(): Int {

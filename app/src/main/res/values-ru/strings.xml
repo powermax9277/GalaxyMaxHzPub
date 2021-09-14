@@ -136,11 +136,20 @@
     <string name="quick_doz_mod_mwi">Интервал начального окна обслуживания в минутах (0 = нет окна обслуживания)</string>
     <string name="brightness_threshold">Минимальная яркость для адаптивного мода</string>
     <string name="sensor_off_info">Датчики устройства автоматически отключаются при выключении экрана до тех пор, пока устройство не будет разблокировано. Это помогает свести к минимуму блокировки пробуждения, вызванные движением, которые разряжают аккумулятор.</string>
-    <string name="sensors_off_note">Важное примечание: когда плитка SensorsOff включена, камера (-ы) и микрофон (-ы) устройства, среди других датчиков, становятся недоступными. Проверьте, слышен ли ваш голос во время разговора. Если его не слышно и вы принимаете вызов, когда устройство заблокировано, вы можете нажать и удерживать плитку SensorsOff, чтобы разблокировать устройство, и выключить плитку SensorsOff - после нажатия кнопки приема вызова.</string>
-
-    <string name="sensor_off_setup_info">Do this first: Enable \'Sensors Off\' tile in Settings > Developer options > Quick settings developer tiles. ></string>
-    <string name="dev_opt_setup_info">To enable Developer options, go to Settings > About phone > Software info and tap \'Build number\' 7x.</string>
+    <string name="sensors_off_note">
+        Важное примечание: пока активирована плитка SensorsOff, камера, микрофон и другие датчики устройства недоступны.
+        Затронутые функции, среди прочего, включают разблокировку по лицу, слышимость при голосовых вызовах и определение угла поворота.
+        Используйте это только в том случае, если вы четко понимаете эффект отключения датчиков.
+    </string>
+    <string name="sensor_off_setup_info">Сделайте это сначала: Включите плитку «Датчики выключены» в Настройках> Параметры разработчика> Плитки разработчика быстрых настроек.</string>
+    <string name="dev_opt_setup_info">Чтобы включить параметры разработчика, перейдите в «Настройки»> «О телефоне»> «Информация о программном обеспечении» и нажмите «Номер сборки» 7x.</string>
     <string name="enable_write_settings">Enable Galaxy Max Hz change/write system settings permission.</string>
-    <string name="as_desc">This service is required for galaxy max hz mods to work.</string>
+    <string name="as_desc">Эта услуга требуется для работы модов galaxy max hz.</string>
     <string name="enable">Включить</string>
+    <string name="allow">Разрешать</string>
+    <string name="allow_aot">Разрешить появление наверху</string>
+    <string name="allow_bg_act">For the stable running of this app, enable \'Allow background activity\' or disable \'Optimize battery usage\'.</string>
+    <string name="premium_features">Премиум-функции</string>
+    <string name="prevent_high">उच्च मोड में स्विच करने से रोकें</string>
+    <string name="auto_sensors_off_exp">ऑटो सेंसर बंद</string>
 </resources>

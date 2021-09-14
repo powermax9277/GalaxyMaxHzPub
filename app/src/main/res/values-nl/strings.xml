@@ -140,6 +140,12 @@
     <string name="enable_write_settings">Enable Galaxy Max Hz change/write system settings permission.</string>
     <string name="as_desc">This service is required for galaxy max hz mods to work.</string>
     <string name="enable">Inschakelen</string>
+    <string name="allow">Allow</string>
+    <string name="allow_aot">Allow Appear on Top</string>
+    <string name="allow_bg_act">For the stable running of this app, enable \'Allow background activity\' or disable \'Optimize battery usage\'.</string>
+    <string name="premium_features">Premium eigenschappen</string>
+    <string name="prevent_high">Eviteu canviar al mode alt</string>
+    <string name="auto_sensors_off_exp">Auto SENSORS OFF</string>
 </resources>
 
     <!--    <string name="failed_show_ad">Videoadvertentie kan niet worden weergegeven. Probeer het a.u.b. opnieuw.</string>-->

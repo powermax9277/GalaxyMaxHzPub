@@ -144,4 +144,10 @@
     <string name="enable_write_settings">Enable Galaxy Max Hz change/write system settings permission.</string>
     <string name="as_desc">This service is required for galaxy max hz mods to work.</string>
     <string name="enable">Encender</string>
+    <string name="premium_features">Características premium</string>
+    <string name="allow">Permitir</string>
+    <string name="allow_aot">Permitir aparecer en la parte superior</string>
+    <string name="allow_bg_act">Para el funcionamiento estable de esta aplicación, habilite \'Permitir actividad en segundo plano\' o deshabilite \'Optimizar el uso de la batería\'.</string>
+    <string name="prevent_high">Evitar el cambio al modo alto</string>
+    <string name="auto_sensors_off_exp">Auto SENSORS OFF</string>
 </resources>

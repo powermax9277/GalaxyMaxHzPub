@@ -138,10 +138,15 @@
     <string name="sensor_off_info">डिवाइस के अनलॉक होने तक स्क्रीन बंद होने पर डिवाइस सेंसर स्वचालित रूप से बंद हो जाते हैं। यह गति-प्रेरित वेक लॉक को कम करने में मदद करता है जो बैटरी को खत्म करते हैं।</string>
     <string name="sensors_off_note">महत्वपूर्ण नोट: जबकि "SensorsOff" टाइल चालू है, डिवाइस के कैमरे और माइक्रोफ़ोन, अन्य सेंसरों के बीच, पहुंच योग्य नहीं हो जाते हैं। जांचें कि कॉल के दौरान आपकी आवाज सुनी जा सकती है या नहीं। यदि इसे नहीं सुना जा सकता है और डिवाइस लॉक होने पर आपको कॉल प्राप्त होती है, तो आप डिवाइस को अनलॉक करने के लिए "SensorsOff" टाइल को देर तक दबा सकते हैं और "SensorsOff" टाइल को बंद कर सकते हैं - रिसीव कॉल बटन दबाने के बाद।
     </string>
-    <string name="sensor_off_setup_info">Do this first: Enable \'Sensors Off\' tile in Settings > Developer options > Quick settings developer tiles. ></string>
-    <string name="dev_opt_setup_info">To enable Developer options, go to Settings > About phone > Software info and tap \'Build number\' 7x.</string>
-    <string name="enable_write_settings">Enable Galaxy Max Hz change/write system settings permission.</string>
-    <string name="as_desc">This service is required for galaxy max hz mods to work.</string>
-    <string name="enable">" स्विच"</string>
-
+    <string name="sensor_off_setup_info">यह पहले करें: सेटिंग > डेवलपर विकल्प > त्वरित सेटिंग डेवलपर टाइल में \'सेंसर बंद\' टाइल सक्षम करें।</string>
+    <string name="dev_opt_setup_info">डेवलपर विकल्पों को सक्षम करने के लिए, सेटिंग > फ़ोन के बारे में > सॉफ़्टवेयर जानकारी पर जाएं और \'बिल्ड नंबर\' 7x पर टैप करें।</string>
+    <string name="enable_write_settings">Galaxy Max Hz चेंज/राइट सिस्टम सेटिंग्स अनुमति सक्षम करें।</string>
+    <string name="as_desc">गैलेक्सी मैक्स एचजेड मोड के काम करने के लिए यह सेवा आवश्यक है।</string>
+    <string name="enable">स्विच</string>
+    <string name="allow">अनुमति देना</string>
+    <string name="allow_aot">शीर्ष पर प्रकट होने की अनुमति दें</string>
+    <string name="allow_bg_act">इस ऐप के स्थिर चलने के लिए, \'पृष्ठभूमि गतिविधि की अनुमति दें\' सक्षम करें या \'बैटरी उपयोग अनुकूलित करें\' अक्षम करें।</string>
+    <string name="premium_features">प्रीमियम सुविधाएँ</string>
+    <string name="prevent_high">उच्च मोड में स्विच करने से रोकें</string>
+    <string name="auto_sensors_off_exp">ऑटो सेंसर बंद</string>
 </resources>

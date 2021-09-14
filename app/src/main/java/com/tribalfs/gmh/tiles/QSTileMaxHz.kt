@@ -216,7 +216,7 @@ class QSTileMaxHz : TileService() {
                         Toast.LENGTH_SHORT
                     ).show()
                 }
-                //  else -> { }
+                else -> { }
             }
 
         }

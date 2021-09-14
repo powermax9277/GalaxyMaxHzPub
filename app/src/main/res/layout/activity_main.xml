@@ -336,6 +336,24 @@
                         app:layout_constraintTop_toTopOf="@+id/cg_refresh_rate_mode"
                         tools:ignore="UseCompatTextViewDrawableXml" />
 
+                    <Switch
+                        android:id="@+id/sw_prevent_high"
+                        android:layout_width="@dimen/seekbar_width"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="16dp"
+                        android:enabled="@{hasWssPerm ? true : false}"
+                        android:onClick="@{hasMotionSmoothness ? clickListener::onClickView : null}"
+                        android:text="@string/prevent_high"
+                        android:textColor="?android:attr/textColorSecondary"
+                        android:textSize="12sp"
+                        android:visibility="@{!adaptiveSupported &amp;&amp; refreshRateMode.equals(&quot;1&quot;) ? View.VISIBLE : View.GONE, default=visible}"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/cg_refresh_rate_mode"
+                        tools:ignore="UseSwitchCompatOrMaterialXml,TouchTargetSizeCheck" />
+
+
                     <TextView
                         android:id="@+id/tv_lower_limit_adapt"
                         style="?android:attr/textColorPrimary"
@@ -346,7 +364,7 @@
                         android:textSize="11sp"
                         android:visibility="@{hasMinHzOptions == true &amp;&amp; refreshRateMode.equals(&quot;1&quot;) &amp;&amp; isAdFree ? View.VISIBLE : View.GONE, default=visible}"
                         app:layout_constraintStart_toStartOf="@+id/sw_peak_hz"
-                        app:layout_constraintTop_toBottomOf="@+id/cg_refresh_rate_mode"
+                        app:layout_constraintTop_toBottomOf="@+id/sw_prevent_high"
                         tools:ignore="SmallSp" />
 
                     <androidx.appcompat.widget.AppCompatSeekBar
@@ -493,6 +511,7 @@
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="16dp"
                         android:onClick="@{hasMotionSmoothness ? clickListener::onClickView : null}"
                         android:text="@string/enable"
                         android:textColor="?android:attr/textColorPrimary"

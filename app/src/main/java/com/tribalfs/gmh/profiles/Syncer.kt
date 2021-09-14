@@ -13,8 +13,6 @@ import com.tribalfs.gmh.BuildConfig
 import com.tribalfs.gmh.MainActivity.Companion.GMH_WEB_APP
 import com.tribalfs.gmh.helpers.Certificate
 import com.tribalfs.gmh.helpers.UtilsDeviceInfo
-import com.tribalfs.gmh.helpers.UtilsSettings
-import com.tribalfs.gmh.helpers.UtilsSettings.SECURE
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsAct
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmh
 import kotlinx.coroutines.*
@@ -56,10 +54,11 @@ internal class Syncer(context: Context) {
         internal const val KEY_JSON_TRIAL_START_DATE = "0x9"
         internal const val KEY_JSON_TRIAL_DAYS = "0x10"
 
-        private const val REQUEST_SETTINGS_LIST_POST = 0x12
+       /* private const val REQUEST_SETTINGS_LIST_POST = 0x12
         private const val KEY_JSON_SECURE_LIST = "0x6"
         private const val KEY_JSON_SYSTEM_LIST = "0x15"
-        private const val KEY_JSON_GLOBAL_LIST = "0x17"
+        private const val KEY_JSON_GLOBAL_LIST = "0x17"*/
+        private const val REQUEST_HELP_URL = 0x15
     }
 
     private val deviceId by lazy {
@@ -127,13 +126,27 @@ internal class Syncer(context: Context) {
     }
 
     @ExperimentalCoroutinesApi
-    suspend fun openBuyAdFreeLink(): JSONObject? = withContext(Dispatchers.IO) {
+    suspend fun getBuyAdFreeLink(): JSONObject? = withContext(Dispatchers.IO) {
         val jsonBody = JSONObject().apply {
             put(KEY_JSON_DEVICE_ID, deviceId)
             put(KEY_JSON_MODEL_NUMBER, mUtilsDeviceInfo.deviceModelVariant)
         }
 
         val result = postDataVolley(REQUEST_BUY_LINK, GMH_WEB_APP, jsonBody)
+        return@withContext if (result != null && result[KEY_JSON_RESULT] == JSON_RESPONSE_OK){
+            result
+        } else {
+            null
+        }
+    }
+
+    @ExperimentalCoroutinesApi
+    suspend fun getHelpUrl(): JSONObject? = withContext(Dispatchers.IO) {
+        val jsonBody = JSONObject().apply {
+            put(KEY_JSON_MODEL_NUMBER, mUtilsDeviceInfo.deviceModelVariant)
+        }
+
+        val result = postDataVolley(REQUEST_HELP_URL, GMH_WEB_APP, jsonBody)
         return@withContext if (result != null && result[KEY_JSON_RESULT] == JSON_RESPONSE_OK){
             result
         } else {
@@ -161,7 +174,7 @@ internal class Syncer(context: Context) {
         }
     }*/
 
-    @ExperimentalCoroutinesApi
+/*    @ExperimentalCoroutinesApi
     @RequiresApi(VERSION_CODES.M)
     suspend fun postSettingsList() = withContext(Dispatchers.IO){
         Log.d(TAG, "Starting sync POST...")
@@ -186,7 +199,7 @@ internal class Syncer(context: Context) {
             GMH_WEB_APP,
             jsonBody
         )
-    }
+    }*/
 
 
     private suspend fun postDataVolley(requestType: Int, url: String, sendObj: JSONObject?)  = suspendCoroutine<JSONObject?> {
