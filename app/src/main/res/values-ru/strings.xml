@@ -152,4 +152,5 @@
     <string name="premium_features">Премиум-функции</string>
     <string name="prevent_high">उच्च मोड में स्विच करने से रोकें</string>
     <string name="auto_sensors_off_exp">ऑटो सेंसर बंद</string>
+    <string name="data_usage"><u>Data Usage</u></string>
 </resources>

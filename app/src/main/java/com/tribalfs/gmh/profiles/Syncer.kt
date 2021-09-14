@@ -59,6 +59,7 @@ internal class Syncer(context: Context) {
         private const val KEY_JSON_SYSTEM_LIST = "0x15"
         private const val KEY_JSON_GLOBAL_LIST = "0x17"*/
         private const val REQUEST_HELP_URL = 0x15
+        private const val VERSION_CODE = BuildConfig.VERSION_CODE
     }
 
     private val deviceId by lazy {
@@ -73,7 +74,7 @@ internal class Syncer(context: Context) {
             put(KEY_JSON_MODEL_NUMBER, mUtilsDeviceInfo.deviceModelVariant)
             put(KEY_JSON_ONEUI_VERSION, mUtilsDeviceInfo.oneUiVersion)
             put(KEY_JSON_SIGNATURE, Certificate.getEncSig(appCtx))
-            put(KEY_JSON_APP_VERSION_CODE, BuildConfig.VERSION_CODE)
+            put(KEY_JSON_APP_VERSION_CODE, VERSION_CODE)
         }
 
         Log.d(TAG, "Starting sync FETCH...")

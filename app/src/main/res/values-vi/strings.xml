@@ -153,4 +153,5 @@
     <string name="premium_features">Tính năng cao cấp</string>
     <string name="prevent_high">Ngăn chuyển sang Chế độ cao</string>
     <string name="auto_sensors_off_exp">Cảm biến tự động tắt</string>
+    <string name="data_usage"><u>Data Usage</u></string>
 </resources>

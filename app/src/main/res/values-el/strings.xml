@@ -146,4 +146,5 @@
     <string name="allow_bg_act">Για τη σταθερή εκτέλεση αυτής της εφαρμογής, ενεργοποιήστε το \"Να επιτρέπεται η δραστηριότητα στο παρασκήνιο\" ή απενεργοποιήστε το \"Βελτιστοποίηση χρήσης μπαταρίας\".</string>
     <string name="prevent_high">Αποτρέψτε τη μετάβαση σε Υψηλή λειτουργία</string>
     <string name="auto_sensors_off_exp">Αυτόματοι αισθητήρες απενεργοποιημένοι</string>
+    <string name="data_usage" translatable="false"><u>Data Usage</u></string>
 </resources>

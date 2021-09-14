@@ -155,4 +155,5 @@
     <string name="premium_features">Prémiové funkce</string>
     <string name="prevent_high">Zabraňte přepnutí do vysokého režimu</string>
     <string name="auto_sensors_off_exp">Auto SENSORS OFF</string>
+    <string name="data_usage"><u>Data Usage</u></string>
 </resources>

@@ -30,6 +30,7 @@ class QSTileMinHz : TileService() {
 
     companion object{
         // private const val TAG = "QSTileMinHz"
+        private const val APPLICATION_ID = BuildConfig.APPLICATION_ID
     }
 
     private var prevLrr: Int? = null

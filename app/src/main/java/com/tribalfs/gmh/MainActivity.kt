@@ -71,6 +71,7 @@ import com.tribalfs.gmh.helpers.CacheSettings.isFakeAdaptive
 import com.tribalfs.gmh.helpers.CacheSettings.isMultiResolution
 import com.tribalfs.gmh.helpers.CacheSettings.isNsNotifOn
 import com.tribalfs.gmh.helpers.CacheSettings.isOfficialAdaptive
+import com.tribalfs.gmh.helpers.CacheSettings.isOnePlus
 import com.tribalfs.gmh.helpers.CacheSettings.isPowerSaveModeOn
 import com.tribalfs.gmh.helpers.CacheSettings.isSpayInstalled
 import com.tribalfs.gmh.helpers.CacheSettings.keepModeOnPowerSaving
@@ -98,6 +99,7 @@ import com.tribalfs.gmh.helpers.UtilsDeviceInfo.Companion.REFRESH_RATE_MODE_STAN
 import com.tribalfs.gmh.helpers.UtilsDeviceInfo.Companion.STANDARD_REFRESH_RATE_HZ
 import com.tribalfs.gmh.helpers.UtilsSettingsIntents.autoSyncSettingsIntent
 import com.tribalfs.gmh.helpers.UtilsSettingsIntents.dataUsageSettingsIntent
+import com.tribalfs.gmh.helpers.UtilsSettingsIntents.dataUsageSettingsIntentOP
 import com.tribalfs.gmh.helpers.UtilsSettingsIntents.deviceInfoActivity
 import com.tribalfs.gmh.helpers.UtilsSettingsIntents.powerSavingModeSettingsIntent
 import com.tribalfs.gmh.hertz.*
@@ -160,6 +162,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
         private const val KEY_JSON_LIC_TYPE = "0x11"
         private const val KEY_JSON_PAYPAL_BUY_URL = "0x12"
         private const val KEY_JSON_PAYPAL_HELP_URL = "0x24"
+        private const val VERSION = BuildConfig.VERSION_NAME
 
         /*private const val SYNCMODE_POST = "1"
         private const val SYNCMODE_GET = "0"*/
@@ -430,9 +433,17 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
             }
 
             mBinding.tvDataUsage.id -> {
-                val i = dataUsageSettingsIntent
-                i.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                startActivity(i)
+                try {
+                    val i = dataUsageSettingsIntent
+                    i.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                    startActivity(i)
+                }catch(_: Exception){
+                    if (isOnePlus){
+                        val i = dataUsageSettingsIntentOP
+                        i.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                        startActivity(i)
+                    }
+                }
             }
 
             mBinding.chLeftHz.id, mBinding.chRightHz.id, mBinding.chCentHz.id -> {
@@ -1826,7 +1837,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
         supportActionBar?.apply {
             subtitle = "${mUtilsDeviceInfo.deviceModelVariant} | AOS ${mUtilsDeviceInfo.androidVersion}" +
                     if (mUtilsDeviceInfo.oneUiVersion != null) " | OneUI ${mUtilsDeviceInfo.oneUiVersion}" else ""
-            title = "$applicationName v${BuildConfig.VERSION_NAME}"
+            title = "$applicationName v$VERSION"
             setDisplayShowHomeEnabled(true)
         }
     }

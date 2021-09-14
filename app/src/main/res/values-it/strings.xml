@@ -80,9 +80,9 @@
     <string name="allow_bg_act">
         Affinché quest\'app funzioni in maniera stabile, attiva \'Consenti attività in background\' o disattiva \'Ottimizzazione utilizzo batteria\'.
     </string>
-    <string name="aot_perm_inf">
+    <!--<string name="aot_perm_inf">
         Quest\'app necessita di un\'autorizzazione per essere mostrata in alto e funzionare correttamente.
-        Puoi disattivare questa notifica eseguendo una pressione prolungata e disattivando l\'interruttore che apparirà a schermo.</string>
+        Puoi disattivare questa notifica eseguendo una pressione prolungata e disattivando l\'interruttore che apparirà a schermo.</string>-->
     <string name="apply">Applica</string>
     <string name="apps_bat_opt_settings"><u>Impostazioni Ottimizzazione Batteria App</u></string>
     <string name="as_desc">Questo servizio è necessario per far funzionare le mod di Galaxy Max Hz.</string>

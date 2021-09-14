@@ -153,4 +153,5 @@
     <string name="premium_features">Recursos premium</string>
     <string name="prevent_high">Impedir a mudança para o modo alto</string>
     <string name="auto_sensors_off_exp">Sensores automáticos desligados</string>
+    <string name="data_usage"><u>Data Usage</u></string>
 </resources>

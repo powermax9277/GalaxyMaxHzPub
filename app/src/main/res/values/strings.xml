@@ -149,7 +149,7 @@
     <string name="help">Help</string>
     <string name="reload_profiles">Reload Profiles</string>
     <string name="options">Options</string>
-    <string name="data_usage" translatable="false"><u>Data Usage</u></string>
+    <string name="data_usage"><u>Data Usage</u></string>
     <string name="psm_options"><u>Power saving mode options</u></string>
     <string name="disable_sync_on_so">Auto-disable sync</string>
     <string name="autosync_settings"><u>Autosync settings</u></string>

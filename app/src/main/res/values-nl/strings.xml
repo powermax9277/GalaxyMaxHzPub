@@ -146,6 +146,7 @@
     <string name="premium_features">Premium eigenschappen</string>
     <string name="prevent_high">Eviteu canviar al mode alt</string>
     <string name="auto_sensors_off_exp">Auto SENSORS OFF</string>
+    <string name="data_usage"><u>Data Usage</u></string>
 </resources>
 
     <!--    <string name="failed_show_ad">Videoadvertentie kan niet worden weergegeven. Probeer het a.u.b. opnieuw.</string>-->

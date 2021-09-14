@@ -17,6 +17,7 @@ import com.tribalfs.gmh.AccessibilityPermission
 import com.tribalfs.gmh.GalaxyMaxHzAccess
 import com.tribalfs.gmh.R
 import com.tribalfs.gmh.callbacks.ChangedStatusCallback
+import com.tribalfs.gmh.helpers.CacheSettings.isOnePlus
 import com.tribalfs.gmh.helpers.CacheSettings.isScreenOn
 import com.tribalfs.gmh.helpers.UtilsSettingsIntents.dataUsageSettingsIntent
 import com.tribalfs.gmh.receivers.ScreenStatusReceiverBasic
@@ -186,6 +187,7 @@ class NetSpeedService : Service(), CoroutineScope {
             notificationManagerCompat.createNotificationChannel(this)
         }
 
+
         val pendingIntent: PendingIntent = PendingIntent.getActivity(applicationContext, 0, dataUsageSettingsIntent, FLAG_IMMUTABLE)
 
         notificationBuilderInstance = (Notification.Builder(applicationContext,
@@ -197,7 +199,7 @@ class NetSpeedService : Service(), CoroutineScope {
                 setCategory(Notification.CATEGORY_SERVICE)
                 setVisibility(Notification.VISIBILITY_PUBLIC)
                 setLocalOnly(true)
-                setContentIntent(pendingIntent)
+                if (!isOnePlus) {setContentIntent(pendingIntent)}
                 setAutoCancel(false)
                 setCustomContentView(mNotificationContentView)
             }

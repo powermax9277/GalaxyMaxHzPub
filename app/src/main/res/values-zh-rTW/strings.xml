@@ -137,5 +137,6 @@
     <string name="premium_features">高級功能</string>
     <string name="prevent_high">防止切換到高模式</string>
     <string name="auto_sensors_off_exp">自動傳感器關閉</string>
+    <string name="data_usage"><u>Data Usage</u></string>
 
 </resources>

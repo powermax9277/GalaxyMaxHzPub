@@ -97,8 +97,8 @@
     <string name="afa">Premium erfolgreich aktiviert!</string>
     <string name="afu">Premium-Testversion bereits verwendet und abgelaufen.</string>
     <plurals name="aha">
-        <item quantity="one">Premium-Testversion aktiviert:% d verbleibende Tag.</item>
-        <item quantity="other">Premium-Testversion aktiviert:% d verbleibende Tage.</item>
+        <item quantity="one">Premium-Testversion aktiviert: %d verbleibende Tag.</item>
+        <item quantity="other">Premium-Testversion aktiviert: %d verbleibende Tage.</item>
     </plurals>
     <!--    <string name="eta">Fehler beim Aktivieren der werbefreien Testversion!</string>-->
     <string name="nlh">Keine Premium-Lizenz für dieses Gerät gefunden: %s</string>
@@ -161,4 +161,5 @@
     <string name="allow_bg_act">Damit diese Anwendung weiterhin ausgeführt wird, aktivieren sie \'hintergrundaktivität zulassen\' oder deaktivieren sie die option \'akkunutzung optimieren\'.</string>
     <string name="premium_features">Premium-Funktionen</string>
     <string name="prevent_high">Prevent switching to High Mode</string>
+    <string name="data_usage"><u>Data Usage</u></string>
 </resources>

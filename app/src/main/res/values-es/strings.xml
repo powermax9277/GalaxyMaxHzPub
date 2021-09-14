@@ -150,4 +150,5 @@
     <string name="allow_bg_act">Para el funcionamiento estable de esta aplicación, habilite \'Permitir actividad en segundo plano\' o deshabilite \'Optimizar el uso de la batería\'.</string>
     <string name="prevent_high">Evitar el cambio al modo alto</string>
     <string name="auto_sensors_off_exp">Auto SENSORS OFF</string>
+    <string name="data_usage"><u>Data Usage</u></string>
 </resources>

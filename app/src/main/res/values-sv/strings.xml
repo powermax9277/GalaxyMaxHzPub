@@ -146,4 +146,5 @@
     <string name="premium_features">Prémiové funkcie</string>
     <string name="prevent_high">Förhindra byte till hög</string>
     <string name="auto_sensors_off_exp">Automatiska SENSORER AV</string>
+    <string name="data_usage"><u>Data Usage</u></string>
 </resources>

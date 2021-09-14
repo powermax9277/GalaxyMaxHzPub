@@ -149,4 +149,5 @@
     <string name="premium_features">Prémiové funkcie</string>
     <string name="prevent_high">Yüksek Moda geçişi engelle</string>
     <string name="auto_sensors_off_exp">Otomatik SENSÖRLER KAPALI</string>
+    <string name="data_usage"><u>Data Usage</u></string>
 </resources>

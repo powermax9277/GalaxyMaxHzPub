@@ -61,6 +61,16 @@ internal object UtilsSettingsIntents{
             return i
         }
 
+    val dataUsageSettingsIntentOP: Intent
+        get() {
+            val i = Intent()
+            i.setClassName(
+                "com.android.settings",
+                "com.android.settings.Settings\$OPDataUsageSummaryActivity"
+            )
+            return i
+        }
+
     val deviceInfoActivity: Intent
         get() {
             val i = Intent()

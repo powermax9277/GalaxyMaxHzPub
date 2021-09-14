@@ -160,4 +160,5 @@
     <string name="premium_features">Funcions premium</string>
     <string name="prevent_high">Eviteu canviar al mode alt</string>
     <string name="auto_sensors_off_exp">Sensors automàtics apagats</string>
+    <string name="data_usage"><u>Data Usage</u></string>
 </resources>
