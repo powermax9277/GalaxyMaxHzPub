@@ -45,7 +45,7 @@ class UtilsDeviceInfo(val context: Context) {
     }
     private val appCtx: Context = context.applicationContext
     private val mContentResolver = appCtx.contentResolver
-    internal val deviceModelVariant: String = Build.MODEL//TODO{reason: Edit}
+    internal val deviceModelVariant: String = Build.MODEL
     internal val androidVersion: String = Build.VERSION.RELEASE
     internal val manufacturer: String = Build.MANUFACTURER.uppercase(Locale.ROOT)
     internal val deviceModel: String = if (manufacturer == "SAMSUNG") {
