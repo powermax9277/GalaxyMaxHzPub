@@ -567,7 +567,7 @@
 
                     <HorizontalScrollView
                         android:id="@+id/hv_op_hz"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/horizontal_spacing"
                         android:visibility="@{hideHzOverlaySettings ? View.GONE : View.VISIBLE}"

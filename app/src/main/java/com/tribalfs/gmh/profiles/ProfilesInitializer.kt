@@ -122,7 +122,7 @@ internal class ProfilesInitializer private constructor(context: Context) {
         synchronized(this) {
             supportedHzIntCurMod = getSupportedHzIntCurModUpd()
             mUtilsDeviceInfo.getSamRefreshRateMode().let {
-                if (!isOfficialAdaptive && preventHigh && it == REFRESH_RATE_MODE_ALWAYS && currentRefreshRateMode.get() == REFRESH_RATE_MODE_SEAMLESS){
+                if (!isOfficialAdaptive && preventHigh && it == REFRESH_RATE_MODE_ALWAYS){
                     mUtilsRefreshRate.setRefreshRateMode(REFRESH_RATE_MODE_SEAMLESS)
                     return@synchronized
                 }

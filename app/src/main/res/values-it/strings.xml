@@ -54,7 +54,7 @@
     <string name="combined">Combinata</string>
     <string name="upload">Upload</string>
     <string name="download">Download</string>
-    <string name="font_size">Overlay Dimensione Carattere</string>
+    <string name="font_size">Dimensione Carattere Sovrapposizione</string>
     <string name="overlay_pos">Punto di Sovrapposizione</string>
     <string name="overlay">Sovrapposizione</string>
     <string name="statusbar">Barra di stato</string>
@@ -144,7 +144,7 @@
     <string name="sot_no_perm">Permesso Mostra in Alto non consentito!</string>
     <string name="std">Standard</string>
     <string name="std_mode">Modalità Standard</string>
-    <string name="enable">Abilitar</string>
+    <string name="enable">Attivazione</string>
     <string name="premium_features">प्रीमियम सुविधाएँ</string>
     <string name="prevent_high">Prevent switching to High Mode</string>
     <plurals name="aha">
