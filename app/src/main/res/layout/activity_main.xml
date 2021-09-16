@@ -567,9 +567,9 @@
 
                     <HorizontalScrollView
                         android:id="@+id/hv_op_hz"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/horizontal_spacing"
+                        android:layout_marginHorizontal="0dp"
                         android:visibility="@{hideHzOverlaySettings ? View.GONE : View.VISIBLE}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -578,11 +578,9 @@
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:orientation="horizontal"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/tv_location_hz">
+                            android:layout_margin="0dp"
+                            android:padding="0dp"
+                            android:orientation="horizontal">
 
                             <com.google.android.material.chip.ChipGroup
                                 android:id="@+id/cg_top_bottom"
@@ -613,7 +611,7 @@
 
                             <View
                                 android:id="@+id/divider"
-                                android:layout_width="0dp"
+                                android:layout_width="1dp"
                                 android:layout_height="match_parent"
                                 android:layout_marginHorizontal="8dp"
                                 android:layout_marginVertical="4dp"

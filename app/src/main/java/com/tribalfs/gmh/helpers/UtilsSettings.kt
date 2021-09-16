@@ -11,7 +11,7 @@ object UtilsSettings {
     internal const val GLOBAL = "global"
 
 
-   /* fun getList(settings: String, appCtx: Context):List<String>{
+    fun getList(settings: String, appCtx: Context):List<String>{
         val list = mutableListOf<String>()
         val columns = arrayOf("_id", "name", "value")
         val cursor = appCtx.contentResolver.query(Uri.parse("content://settings/$settings"), columns, null, null, null)
@@ -23,6 +23,6 @@ object UtilsSettings {
         }
 
         return list
-    }*/
+    }
 
 }

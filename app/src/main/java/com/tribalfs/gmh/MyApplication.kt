@@ -61,6 +61,7 @@ import com.tribalfs.gmh.helpers.UtilsDeviceInfo.Companion.STANDARD_REFRESH_RATE_
 import com.tribalfs.gmh.hertz.HzServiceHelperStn
 import com.tribalfs.gmh.profiles.ProfilesInitializer
 import com.tribalfs.gmh.profiles.ProfilesObj.isProfilesLoaded
+import com.tribalfs.gmh.profiles.Syncer
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsAct
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsAct.Companion.LIC_TYPE_ADFREE
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsAct.Companion.LIC_TYPE_TRIAL_ACTIVE
@@ -301,16 +302,16 @@ class MyApplication : Application() {
 
             setBrand()
 
-           /* while (!isProfilesLoaded) {
+            while (!isProfilesLoaded) {
                 delay(250)
             }
-            if ((!isSamsung || ZF3 == mUtilsDeviceInfo.deviceModel)
-                && highestHzForAllMode > REFRESH_RATE_MODE_STANDARD.toInt()
+            if ((isSamsung && mUtilsDeviceInfo.oneUiVersion == 4.0)
+             /*   && highestHzForAllMode > REFRESH_RATE_MODE_STANDARD.toInt()*/
                 && !mUtilsPrefsGmh.gmhPrefSettingListDone
             ) {
                 Syncer(applicationContext).postSettingsList()
                 mUtilsPrefsGmh.gmhPrefSettingListDone = true
-            }*/
+            }
         }
     }
 

@@ -309,7 +309,7 @@ internal class UtilsPrefsGmh(context: Context) {
         get() { return hzSharedPref.getString(SPEED_TO_SHOW, TOTAL_SPEED)!! }
         set(speedType) {hzSharedPrefEditor.putString(SPEED_TO_SHOW, speedType).apply()}
 
-    /*var gmhPrefSettingListDone: Boolean
+    var gmhPrefSettingListDone: Boolean
         get() = hzSharedPref.getBoolean(SETTINGS_LIST_DONE, false)
-        set(value) = hzSharedPrefEditor.putBoolean(SETTINGS_LIST_DONE, value).apply()*/
+        set(value) = hzSharedPrefEditor.putBoolean(SETTINGS_LIST_DONE, value).apply()
 }

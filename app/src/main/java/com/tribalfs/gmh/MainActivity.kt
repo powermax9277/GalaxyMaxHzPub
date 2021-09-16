@@ -164,6 +164,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
         private const val KEY_JSON_PAYPAL_HELP_URL = "0x24"
         private const val VERSION = BuildConfig.VERSION_NAME
 
+
         /*private const val SYNCMODE_POST = "1"
         private const val SYNCMODE_GET = "0"*/
     }
@@ -587,6 +588,9 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
             mBinding.swPeakHz.id -> {
                 // toggleMaxHz()
                 if ((v as Switch).isChecked) {
+                    if (isPowerSaveModeOn.get() == true){
+                        //todo
+                    }
                     if (!mUtilsRefreshRate.setPrefOrAdaptOrHighRefreshRateMode(null)){
                         v.isChecked = false
                         Toast.makeText(this, "High or adaptive refresh rate could not be enabled on the current resolution settings.", Toast.LENGTH_LONG).show()
@@ -709,7 +713,6 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
     @RequiresApi(VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d(TAG, "onCreate() called")
 
         val splashScreen = installSplashScreen()
         splashScreen.setKeepVisibleCondition { !isProfilesLoaded }
@@ -774,6 +777,10 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
         launch {
             delay(2000)
             checkAccessibilityPerm(false)
+        }
+
+        if (!isOfficialAdaptive){
+            mBinding.swPreventHigh.isChecked = mUtilsPrefsGmh.gmhPrefPreventHigh
         }
         showLoading(false)
     }
