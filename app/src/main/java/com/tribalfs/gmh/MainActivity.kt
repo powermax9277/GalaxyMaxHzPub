@@ -66,13 +66,13 @@ import com.tribalfs.gmh.helpers.CacheSettings.displayId
 import com.tribalfs.gmh.helpers.CacheSettings.hasWriteSecureSetPerm
 import com.tribalfs.gmh.helpers.CacheSettings.hasWriteSystemSetPerm
 import com.tribalfs.gmh.helpers.CacheSettings.highestHzForAllMode
-import com.tribalfs.gmh.helpers.CacheSettings.isPremium
 import com.tribalfs.gmh.helpers.CacheSettings.isFakeAdaptive
 import com.tribalfs.gmh.helpers.CacheSettings.isMultiResolution
 import com.tribalfs.gmh.helpers.CacheSettings.isNsNotifOn
 import com.tribalfs.gmh.helpers.CacheSettings.isOfficialAdaptive
 import com.tribalfs.gmh.helpers.CacheSettings.isOnePlus
 import com.tribalfs.gmh.helpers.CacheSettings.isPowerSaveModeOn
+import com.tribalfs.gmh.helpers.CacheSettings.isPremium
 import com.tribalfs.gmh.helpers.CacheSettings.isSpayInstalled
 import com.tribalfs.gmh.helpers.CacheSettings.keepModeOnPowerSaving
 import com.tribalfs.gmh.helpers.CacheSettings.lowestHzCurMode
@@ -145,9 +145,7 @@ import kotlin.coroutines.CoroutineContext
 import kotlin.math.max
 import kotlin.math.min
 
-//TODO:{option to prevent system from switching to High,
-// UI improvements,
-// warning when first enabling doz mod}
+//TODO(UI improvements, warning when first enabling doz mod)
 
 @ExperimentalCoroutinesApi
 class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClickHandler, CoroutineScope {
@@ -588,9 +586,6 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
             mBinding.swPeakHz.id -> {
                 // toggleMaxHz()
                 if ((v as Switch).isChecked) {
-                    /*if (isPowerSaveModeOn.get() == true){
-                        //todo
-                    }*/
                     if (!mUtilsRefreshRate.setPrefOrAdaptOrHighRefreshRateMode(null)){
                         v.isChecked = false
                         Toast.makeText(this, "High or adaptive refresh rate could not be enabled on the current resolution settings.", Toast.LENGTH_LONG).show()
@@ -599,10 +594,6 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
                     mUtilsRefreshRate.setRefreshRateMode(REFRESH_RATE_MODE_STANDARD)
                 }
             }
-
-            /*mBinding.btnToggleMaxHz.id -> {
-                toggleMaxHz()
-            }*/
 
             mBinding.swKeepMode.id -> {
                 (v as Switch).isChecked.let { checked ->
@@ -1041,6 +1032,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
         //checkOffAppRefreshRateChange()
     }
 
+
     override fun onNewIntent(intent: Intent?) {
         Log.d(TAG, "onNewIntent called")
         super.onNewIntent(intent)
@@ -1343,6 +1335,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
 
     @SuppressLint("NewApi")
     private fun setupMaxHzSeekBar() {
+        var oldProg = STANDARD_REFRESH_RATE_HZ
         mBinding.sbPeakHz.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 val newProgress = supportedHzIntAllMod?.closestValue(
@@ -1352,9 +1345,16 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
                 seekBar.thumb = getThumb(newProgress)
             }
 
-            override fun onStartTrackingTouch(seekBar: SeekBar) {}
+            override fun onStartTrackingTouch(seekBar: SeekBar) {
+                oldProg = seekBar.progress
+            }
             override fun onStopTrackingTouch(seekBar: SeekBar) {
                 seekBar.progress.let {prog ->
+                    if (!UtilsPermSt.instance(applicationContext).hasWriteSystemPerm()) {
+                        seekBar.progress = oldProg
+                        UtilsPermSt.instance(applicationContext).requestWriteSettings()
+                        return
+                    }
                     mUtilsPrefsGmh.hzPrefMaxRefreshRate = prog
                     if (isPowerSaveModeOn.get() != true || !isPremium.get()!!) {
                         mUtilsPrefsGmh.hzPrefMaxRefreshRate.let{
@@ -1371,16 +1371,6 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
 
     @SuppressLint("NewApi")
     private fun updateMaxHzSbMinMax() {
-        if (!hasWriteSystemSetPerm){
-            startActivity(UtilsSettingsIntents.changeSystemSettingsIntent)
-            launch(Dispatchers.Main) {
-                Toast.makeText(
-                    applicationContext,
-                    getString(R.string.enable_write_settings),
-                    Toast.LENGTH_LONG
-                ).show()
-            }
-        }
         launch {
             delay(500)
             //Log.d(TAG,"forceLowestHz $forceLowestHz vs ${mUtilsPrefsGmh.hzPrefMaxRefreshRate}")
@@ -1394,6 +1384,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
 
     @SuppressLint("NewApi")
     private fun setupPsmMaxHzSeekBar() {
+        var oldProg = STANDARD_REFRESH_RATE_HZ
         mBinding.sbPeakHzPsm.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 val newProgress = supportedHzIntAllMod?.closestValue(
@@ -1403,10 +1394,17 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
                 seekBar.thumb = getThumb(newProgress)
             }
 
-            override fun onStartTrackingTouch(seekBar: SeekBar) {}
+            override fun onStartTrackingTouch(seekBar: SeekBar) {
+                oldProg = seekBar.progress
+            }
 
             override fun onStopTrackingTouch(seekBar: SeekBar) {
                 seekBar.progress.let {prog ->
+                    if (!UtilsPermSt.instance(applicationContext).hasWriteSystemPerm()) {
+                        seekBar.progress = oldProg
+                        UtilsPermSt.instance(applicationContext).requestWriteSettings()
+                        return
+                    }
                     mUtilsPrefsGmh.hzPrefMaxRefreshRatePsm = prog
                     if (isPowerSaveModeOn.get() == true) {
                         mUtilsPrefsGmh.hzPrefMaxRefreshRatePsm.let{
@@ -1459,7 +1457,12 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
                 seekBar.thumb = getThumb(newProgress)
             }
 
-            override fun onStartTrackingTouch(seekBar: SeekBar) {}
+            override fun onStartTrackingTouch(seekBar: SeekBar) {
+                if (!UtilsPermSt.instance(applicationContext).hasWriteSystemPerm()) {
+                    UtilsPermSt.instance(applicationContext).requestWriteSettings()
+                return
+                 }
+            }
             override fun onStopTrackingTouch(seekBar: SeekBar) {
                 if (isOfficialAdaptive) {
                     if (seekBar.progress != STANDARD_REFRESH_RATE_HZ) {
@@ -1604,12 +1607,16 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
         showLoading(true)
         val resultJson = mSyncer.getBuyAdFreeLink()
         if (resultJson != null && resultJson[KEY_JSON_RESULT] == JSON_RESPONSE_OK) {
-            startActivity(
-                Intent(
-                    Intent.ACTION_VIEW,
-                    Uri.parse(resultJson[KEY_JSON_PAYPAL_BUY_URL] as String)
+            try {
+                startActivity(
+                    Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse(resultJson[KEY_JSON_PAYPAL_BUY_URL] as String)
+                    )
                 )
-            )
+            }catch(_: ActivityNotFoundException){
+                showSbMsg("Unable to open link. Install an internet browser to open.", null, null, null)
+            }
         } else {
             showSbMsg(R.string.cie, null, null, null)
         }

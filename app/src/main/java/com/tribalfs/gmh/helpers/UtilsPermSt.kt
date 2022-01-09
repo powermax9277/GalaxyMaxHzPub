@@ -3,13 +3,22 @@ package com.tribalfs.gmh.helpers
 import android.Manifest.permission.WRITE_SECURE_SETTINGS
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.content.pm.PackageManager.PERMISSION_DENIED
 import android.content.pm.PackageManager.PERMISSION_GRANTED
+import android.net.Uri
+import android.os.Build
 import android.os.Process
 import android.provider.Settings
+import android.widget.Toast
+import androidx.annotation.RequiresApi
+import com.tribalfs.gmh.BuildConfig
+import com.tribalfs.gmh.R
 import com.tribalfs.gmh.helpers.UtilsSettings.GLOBAL
 import com.tribalfs.gmh.helpers.UtilsSettings.SECURE
 import com.tribalfs.gmh.helpers.UtilsSettings.SYSTEM
+import com.tribalfs.gmh.helpers.UtilsSettingsIntents.changeSystemSettingsIntent
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 
 class UtilsPermSt(context: Context){
@@ -56,6 +65,20 @@ class UtilsPermSt(context: Context){
     fun hasOverlayPerm(): Boolean {
         return Settings.canDrawOverlays(appCtx)
     }
+
+    @ExperimentalCoroutinesApi
+    @RequiresApi(Build.VERSION_CODES.M)
+    fun requestWriteSettings() {
+        Toast.makeText(appCtx, appCtx.getString(R.string.enable_write_settings), Toast.LENGTH_LONG).show()
+        val intent = changeSystemSettingsIntent.apply {
+            flags = FLAG_ACTIVITY_NEW_TASK
+            data = Uri.parse("package:" + BuildConfig.APPLICATION_ID)
+        }
+        appCtx.startActivity(intent)
+    }
+
+
+
 }
 
 

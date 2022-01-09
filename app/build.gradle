@@ -20,8 +20,8 @@ android {
         minSdkVersion 22
         //noinspection ExpiredTargetSdkVersion
         targetSdkVersion 22
-        versionCode 105
-        versionName "7.14.15"
+        versionCode 106
+        versionName "7.14.16"
         setProperty("archivesBaseName", "galaxy_max_hz_v${versionName}")
     }
 
@@ -61,7 +61,8 @@ android {
     }
 
 
-/*  flavorDimensions "version"
+    /*
+    flavorDimensions "version"
     productFlavors {
         xdaLab {
             dimension "version"
@@ -72,16 +73,16 @@ android {
             versionName "7.14.03"
             setProperty("archivesBaseName", "galaxy_max_hz_v${versionName}")
         }
-
-
-        *//*
     }*/
+
     /*    lintOptions {
         checkReleaseBuilds false
         // Or, if you prefer, you can continue to check for errors in release builds,
         // but continue the build even when errors are found:
         abortOnError false
     }*/
+
+
     /*  sourceSets {
           xdaLab {
               java.srcDirs = ["src/main/java", "common"]
@@ -104,10 +105,12 @@ dependencies {
     implementation project(path:':appupdater')
 
     implementation 'androidx.core:core-splashscreen:1.0.0-alpha02'
-    //implementation platform('com.google.firebase:firebase-bom:26.3.0')
-   // implementation 'com.google.firebase:firebase-analytics-ktx'
-   /* implementation "com.google.firebase:firebase-ads:$firebase_version"
-    implementation "com.google.android.gms:play-services-ads-lite:$firebase_version"*/
+    /*
+    implementation platform('com.google.firebase:firebase-bom:26.3.0')
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+    implementation "com.google.firebase:firebase-ads:$firebase_version"
+    implementation "com.google.android.gms:play-services-ads-lite:$firebase_version"
+    */
 
     // ViewModel
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
@@ -129,5 +132,4 @@ dependencies {
     implementation "ch.acra:acra-http:$acraVersion"
 
     implementation 'com.joaomgcd:taskerpluginlibrary:0.4.1'
-    //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
 }

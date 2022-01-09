@@ -12,8 +12,6 @@ internal object UtilsSettingsIntents{
     val changeSystemSettingsIntent: Intent
         @RequiresApi(Build.VERSION_CODES.M)
         get() {
-            /* i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-            i.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP*/
             return Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS)
         }
 
@@ -29,11 +27,6 @@ internal object UtilsSettingsIntents{
 
     val powerSavingModeSettingsIntent: Intent
         get() {
-            /*val i = Intent()
-            i.setClassName(
-                "com.android.settings",
-                "com.android.settings.Settings\$BatterySaverSettingsActivity"
-            )*/
             return Intent(ACTION_BATTERY_SAVER_SETTINGS)
         }
 

@@ -17,10 +17,10 @@ class PipActivity : AppCompatActivity() {
         val mBuilder = PictureInPictureParams.Builder()
         mBuilder.setAspectRatio(ratio).build()
         enterPictureInPictureMode(mBuilder.build())
-        Handler(Looper.getMainLooper()).postDelayed(exit(), 500)
+        Handler(Looper.getMainLooper()).postDelayed(Exit(), 500)
     }
 
-    internal inner class exit : Runnable {
+    internal inner class Exit : Runnable {
         override fun run() {
             finishAfterTransition()
         }

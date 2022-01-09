@@ -163,9 +163,13 @@
     <string name="auto_sensors_off_exp">Auto SENSORS OFF</string>
     <string name="sensor_off_setup_info">Do this first: Enable \'Sensors Off\' tile in Settings > Developer options > Quick settings developer tiles. ></string>
     <string name="dev_opt_setup_info">To enable Developer options, go to Settings > About phone > Software info and tap \'Build number\' 7x.</string>
-    <string name="enable_write_settings">Enable Galaxy Max Hz change/write system settings permission.</string>
+    <string name="enable_write_settings">Grant Galaxy Max Hz change system settings permission.</string>
     <string name="as_desc">This service is required for galaxy max hz mods to work.</string>
     <string name="enable">Enable</string>
     <string name="premium_features">Premium Features</string>
     <string name="prevent_high">Prevent switching to High Mode</string>
+    <plurals name="access_notif">
+        <item quantity="one">"Accessibility service is required for the following - turn this off first: %s</item>
+        <item quantity="other">Accessibility service is required for the following - turn these off first: %s</item>
+    </plurals>
 </resources>

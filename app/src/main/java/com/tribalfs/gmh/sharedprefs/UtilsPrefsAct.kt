@@ -68,7 +68,13 @@ class UtilsPrefsAct(context: Context) {
         set(licType) {gmhSharedPrefEditor.putInt(ACT_STATUS, licType).apply()}
 
     var gmhPrefSignature: String?
-        get() { return actSharedPref.getString(SIGNATURE, null) }
+        get() {
+            return try{
+                actSharedPref.getString(SIGNATURE, null)
+            }catch(_: SecurityException){
+                null
+            }
+        }
         set(devId) {gmhSharedPrefEditor.putString(SIGNATURE, devId).apply()}
 
     var gmhPrefActivationCode: String?

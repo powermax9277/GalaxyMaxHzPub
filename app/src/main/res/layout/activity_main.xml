@@ -362,7 +362,7 @@
                         android:layout_marginTop="12dp"
                         android:text="@string/adp_min_hz"
                         android:textSize="11sp"
-                        android:visibility="@{hasMinHzOptions == true &amp;&amp; refreshRateMode.equals(&quot;1&quot;) &amp;&amp; isAdFree ? View.VISIBLE : View.GONE, default=visible}"
+                        android:visibility="@{hasMinHzOptions == true &amp;&amp; refreshRateMode.equals(&quot;1&quot;) &amp;&amp; isAdFree  &amp;&amp; hasWssPerm ? View.VISIBLE : View.GONE, default=visible}"
                         app:layout_constraintStart_toStartOf="@+id/sw_peak_hz"
                         app:layout_constraintTop_toBottomOf="@+id/sw_prevent_high"
                         tools:ignore="SmallSp" />
@@ -374,11 +374,11 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="4dp"
-                        android:enabled="@{hasWssPerm}"
-                        android:visibility="@{hasMinHzOptions == true &amp;&amp; refreshRateMode.equals(&quot;1&quot;) &amp;&amp; isAdFree ? View.VISIBLE : View.GONE, default=visible}"
+                        android:visibility="@{hasMinHzOptions == true &amp;&amp; refreshRateMode.equals(&quot;1&quot;) &amp;&amp; isAdFree &amp;&amp; hasWssPerm ? View.VISIBLE : View.GONE, default=visible}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/tv_lower_limit_adapt" />
+                    <!--android:enabled="@{hasWssPerm}"-->
 
                     <TextView
                         android:id="@+id/tv_brightness"
@@ -400,8 +400,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="4dp"
-                        android:enabled="@{hasWssPerm}"
-                        android:visibility="@{refreshRateMode.equals(&quot;1&quot;) &amp;&amp; isAdFree &amp;&amp; (!adaptiveSupported || minHzAdaptive &lt; 60)  ? View.VISIBLE : View.GONE, default=visible}"
+                        android:visibility="@{refreshRateMode.equals(&quot;1&quot;) &amp;&amp; hasWssPerm &amp;&amp; isAdFree &amp;&amp; (!adaptiveSupported || minHzAdaptive &lt; 60)  ? View.VISIBLE : View.GONE, default=visible}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/tv_brightness" />

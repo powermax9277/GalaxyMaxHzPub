@@ -6,7 +6,6 @@ import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.graphics.drawable.Icon
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
-import android.util.Log
 import androidx.databinding.Observable
 import androidx.databinding.Observable.OnPropertyChangedCallback
 import com.tribalfs.gmh.BuildConfig.APPLICATION_ID
@@ -84,7 +83,7 @@ class QSTileResSw : TileService() {
             launch(Dispatchers.Main) {
                 when (result) {
                     PERMISSION_GRANTED -> {
-                        Log.d(TAG, "ChangeRes permitted")
+                       // Log.d(TAG, "ChangeRes permitted")
                         delay(800)
                         updateTile()
                         HzServiceHelperStn.instance(applicationContext).updateHzSize(null)
@@ -127,11 +126,11 @@ class QSTileResSw : TileService() {
     }
 
     private fun updateTileInner() {
-        Log.d(TAG, "updateTile() called")
+       // Log.d(TAG, "updateTile() called")
         val resMode = UtilsDeviceInfo(applicationContext).getResoAndRefRateModeArr(currentRefreshRateMode.get())
         if (prevResCat != resMode[0]) {
             prevResCat = resMode[0]
-            // if (ResoIcons.get(resMode[0]) != null) {
+
             ResoIcons.get(resMode[0])?.let {
                 qsTile.icon = Icon.createWithResource(this, it)
                 qsTile.label = resMode[1]

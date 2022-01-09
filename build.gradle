@@ -1,7 +1,7 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    ext.kotlin_version = "1.6.0"
+    ext.kotlin_version = "1.6.10"
     ext.lifecycle_version = "2.4.0"
     ext.firebase_version = "20.2.0"
     ext.material_version = "1.4.0"

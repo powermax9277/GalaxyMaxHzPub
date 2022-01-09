@@ -2,17 +2,15 @@ package com.tribalfs.gmh.helpers
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.res.Resources
 import android.hardware.display.DisplayManager
 import android.os.Build
-import android.os.PowerManager
 import android.provider.Settings
+import android.util.DisplayMetrics
 import android.view.Display
 import androidx.annotation.RequiresApi
 import com.tribalfs.gmh.R
 import com.tribalfs.gmh.helpers.CacheSettings.displayId
 import com.tribalfs.gmh.helpers.UtilsResoName.getName
-import com.tribalfs.gmh.helpers.UtilsSettings.GLOBAL
 import com.tribalfs.gmh.profiles.ResolutionBasic
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -46,7 +44,7 @@ class UtilsDeviceInfo(val context: Context) {
     }
     private val appCtx: Context = context.applicationContext
     private val mContentResolver = appCtx.contentResolver
-    internal val deviceModelVariant: String = Build.MODEL
+    internal val deviceModelVariant: String =  Build.MODEL //TOD(before release: Replace with Build.MODEL)
     internal val androidVersion: String = Build.VERSION.RELEASE
     internal val manufacturer: String = Build.MANUFACTURER.uppercase(Locale.ROOT)
     internal val deviceModel: String = if (manufacturer == "SAMSUNG") {
@@ -65,36 +63,49 @@ class UtilsDeviceInfo(val context: Context) {
         return currentDisplay.state == Display.STATE_ON
     }
 
-    @SuppressLint("NewApi")
-    fun getDisplayResolution(): ResolutionBasic {
+
+    private fun getDisplayResolution(): ResolutionBasic {
         synchronized(this) {
             val resStr = Settings.Global.getString(mContentResolver, "display_size_forced"/*custom resolution*/)
             return if (currentDisplay.displayId == Display.DEFAULT_DISPLAY && !resStr.isNullOrEmpty()) {
                 val resArr = resStr.split(",")
                 ResolutionBasic(resArr[1].toInt()/*height*/, resArr[0].toInt()/*width*/)
             } else {
-                getDisplayResolutionFromMode()
+                return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    getDisplayResolutionFromMode()
+                } else {
+                    val metrics = DisplayMetrics()
+                    currentDisplay.getMetrics(metrics)
+                    return ResolutionBasic(metrics.heightPixels, metrics.widthPixels)
+                }
             }
         }
     }
 
-    @SuppressLint("NewApi")
+
+    @RequiresApi(Build.VERSION_CODES.M)
     private fun getDisplayResolutionFromMode(): ResolutionBasic{
         synchronized(this) {
-            val dispMode = currentDisplay.mode
-            return ResolutionBasic(dispMode.physicalHeight, dispMode.physicalWidth)
+                val dispMode = currentDisplay.mode
+                return ResolutionBasic(dispMode.physicalHeight, dispMode.physicalWidth)
         }
     }
 
 
     private fun getDisplayDensity(): Int {
-        val denStr = Settings.Secure.getString(mContentResolver, "display_density_forced"/*custom density*/)
+        val denStr = try{
+            Settings.Secure.getString(mContentResolver, "display_density_forced"/*custom density*/)
+        }catch (_: Exception){
+            null
+        }
         return if (denStr != null && denStr.isNotEmpty()) {
             denStr.toInt()
         } else {
-            val metrics = Resources.getSystem().displayMetrics
+            val metrics: DisplayMetrics = appCtx.resources.displayMetrics
+            (metrics.density * 160f).toInt()
+            /*val metrics = Resources.getSystem().displayMetrics
             currentDisplay.getRealMetrics(metrics)
-            metrics.densityDpi
+            metrics.densityDpi*/
         }
     }
 
@@ -107,6 +118,7 @@ class UtilsDeviceInfo(val context: Context) {
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.M)
     internal fun getDisplayResFromModeStr(separator: String?): String {
         val res = getDisplayResolutionFromMode()
         val sep = separator?: ","
@@ -202,6 +214,7 @@ class UtilsDeviceInfo(val context: Context) {
         }
         return 255*//*Default Value*//*
     }*/
+
 
     val oneUiVersion: Double?
         @SuppressLint("PrivateApi")

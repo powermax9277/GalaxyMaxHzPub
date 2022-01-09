@@ -108,13 +108,13 @@
     <string name="perm_reqd">許可が必要です</string>
     <string name="adb_setup">ADBのセットアップ</string>
     <string name="dismiss">退出させる</string>
-    <string name="allow" translatable="false">許可する</string>
-    <string name="allow_aot" translatable="false">上に表示できるようにする</string>
-    <string name="allow_bg_act" translatable="false">このアプリを安定して実行するには、「バックグラウンドアクティビティを許可する」を有効にするか、「バッテリー使用量を最適化する」を無効にします。</string>
+    <string name="allow">許可する</string>
+    <string name="allow_aot">上に表示できるようにする</string>
+    <string name="allow_bg_act">このアプリを安定して実行するには、「バックグラウンドアクティビティを許可する」を有効にするか、「バッテリー使用量を最適化する」を無効にします。</string>
     <string name="help">ヘルプ</string>
     <string name="reload_profiles">プロファイルをリロード</string>
     <string name="options">オプション</string>
-    <string name="data_usage" translatable="false"><u>データ使用量</u></string>
+    <string name="data_usage"><u>データ使用量</u></string>
     <string name="psm_options"><u>省電力モードオプション</u></string>
     <string name="disable_sync_on_so">同期を自動無効にする</string>
     <string name="autosync_settings"><u>自動同期設定</u></string>

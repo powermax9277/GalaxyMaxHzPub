@@ -4,15 +4,12 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.provider.Settings
-import com.tribalfs.gmh.MainActivity
 import com.tribalfs.gmh.PipActivity
-import com.tribalfs.gmh.helpers.CacheSettings.isPremium
 import com.tribalfs.gmh.helpers.CacheSettings.isPowerSaveModeOn
+import com.tribalfs.gmh.helpers.CacheSettings.isPremium
 import com.tribalfs.gmh.helpers.CacheSettings.keepModeOnPowerSaving
 import com.tribalfs.gmh.helpers.CacheSettings.prrActive
 import com.tribalfs.gmh.helpers.UtilsDeviceInfo.Companion.REFRESH_RATE_MODE_STANDARD
-import com.tribalfs.gmh.profiles.ModelNumbers
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmh
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
@@ -50,6 +47,10 @@ internal class PsmChangeHandler(context: Context) {
         }else{
             if (isPremium.get()!!) {
                 //Change Max Hz back to Std Prr
+                if (!UtilsPermSt.instance(appCtx).hasWriteSystemPerm()) {
+                    UtilsPermSt.instance(appCtx).requestWriteSettings()
+                    return
+                }
                 mUtilsPrefsGmh.hzPrefMaxRefreshRate.let {
                     prrActive.set(it)
                     mUtilsRefreshRate.setRefreshRate(it)

@@ -245,10 +245,10 @@ class MyApplication : Application() {
 
     //TODO{reason: Comment out method below}
     override fun attachBaseContext(base: Context?) {
-          super.attachBaseContext(base)
-          // Initialise ACRA
-          ACRA.init(this)
-      }
+        super.attachBaseContext(base)
+        // Initialise ACRA
+        ACRA.init(this)
+    }
 
 
     @RequiresApi(Build.VERSION_CODES.M)
@@ -291,7 +291,7 @@ class MyApplication : Application() {
                     putExtra(SETUP_ADAPTIVE, true)
                     putExtra(SETUP_NETWORK_CALLBACK, true)
 
-                // putExtra(SWITCH_AUTO_SENSORS, mUtilsPrefsGmh.gmhPrefSensorsOff)
+                    // putExtra(SWITCH_AUTO_SENSORS, mUtilsPrefsGmh.gmhPrefSensorsOff)
                 }
             )
         }
@@ -306,7 +306,7 @@ class MyApplication : Application() {
                 delay(250)
             }
             if ((isSamsung && mUtilsDeviceInfo.oneUiVersion == 4.0)
-             /*   && highestHzForAllMode > REFRESH_RATE_MODE_STANDARD.toInt()*/
+                /*   && highestHzForAllMode > REFRESH_RATE_MODE_STANDARD.toInt()*/
                 && !mUtilsPrefsGmh.gmhPrefSettingListDone
             ) {
                 Syncer(applicationContext).postSettingsList()
@@ -336,7 +336,7 @@ class MyApplication : Application() {
             adaptiveDelayMillis = it
             adaptiveAccessTimeout = it * TIMEOUT_FACTOR.toLong()
         }
-        isPremium.set( (mUtilsPrefsAct.gmhPrefLicType == LIC_TYPE_ADFREE || mUtilsPrefsAct.gmhPrefLicType == LIC_TYPE_TRIAL_ACTIVE)
+        isPremium.set((mUtilsPrefsAct.gmhPrefLicType == LIC_TYPE_ADFREE || mUtilsPrefsAct.gmhPrefLicType == LIC_TYPE_TRIAL_ACTIVE)
                 && (mUtilsPrefsAct.gmhPrefSignature == internalCert))
 
 
@@ -427,58 +427,56 @@ class MyApplication : Application() {
 
 
     private fun notifyUserEffectOfAccessibility() = applicationScope.launch{
-        if (checkAccessibility()) {
-            //Check if using Access requiring features
-            val featuresOn = mutableListOf<String>()
-            if (mUtilsPrefsGmh.gmhPrefForceLowestSoIsOn) {
-                featuresOn.add("-${applicationContext.getString(R.string.force_hz_mod)}")
-            }
-            if (mUtilsPrefsGmh.gmhPrefPsmOnSo) {
-                featuresOn.add("-${applicationContext.getString(R.string.auto_psm)}")
-            }
-            if (mUtilsPrefsGmh.gmhPrefDisableSyncIsOn) {
-                featuresOn.add("-${applicationContext.getString(R.string.disable_sync_on_so)}")
-            }
-            if (mUtilsPrefsGmh.gmhPrefSensorsOff) {
-                featuresOn.add("-${applicationContext.getString(R.string.auto_sensors_off_exp)}")
-            }
-            if (isFakeAdaptive.get() == true) {
-                featuresOn.add("-${applicationContext.getString(R.string.adaptive)} mod")
-            }
 
-            if (featuresOn.size > 0) {
-                launch(Dispatchers.Main) {
-                    Toast.makeText(
-                        applicationContext,
-                        "Turn off the following Galaxy Max Hz features first:\n ${
-                            featuresOn.joinToString(
-                                ",\n"
-                            )
-                        }",
-                        Toast.LENGTH_LONG
-                    ).show()
+        //Check if using Access requiring features
+        val featuresOn = mutableListOf<String>()
+        if (mUtilsPrefsGmh.gmhPrefForceLowestSoIsOn) {
+            featuresOn.add("-${applicationContext.getString(R.string.force_hz_mod)}")
+        }
+        if (mUtilsPrefsGmh.gmhPrefPsmOnSo) {
+            featuresOn.add("-${applicationContext.getString(R.string.auto_psm)}")
+        }
+        if (mUtilsPrefsGmh.gmhPrefDisableSyncIsOn) {
+            featuresOn.add("-${applicationContext.getString(R.string.disable_sync_on_so)}")
+        }
+        if (mUtilsPrefsGmh.gmhPrefSensorsOff) {
+            featuresOn.add("-${applicationContext.getString(R.string.auto_sensors_off_exp)}")
+        }
+        if (isFakeAdaptive.get() == true) {
+            featuresOn.add("-${applicationContext.getString(R.string.adaptive)} mod")
+        }
+
+        featuresOn.size.let{
+            if (it > 0) {
+                //Will also turn on if have permission
+                if (checkAccessibility()) {
+                    launch(Dispatchers.Main) {
+                        var sec = it
+                        while(sec > 0) {
+                            Toast.makeText(
+                                applicationContext,
+                                applicationContext.resources.getQuantityString(
+                                    R.plurals.access_notif,
+                                    featuresOn.size,
+                                    "\n" + featuresOn.joinToString("" +
+                                            "\n")
+                                ),
+                                Toast.LENGTH_LONG
+                            ).show()
+                            delay(600)
+                            sec -= 1
+                        }
+                    }
                 }
-
-            }/*   allowAccessibility(
-                    applicationContext,
-                    GalaxyMaxHzAccess::class.java,
-                    true
-                )*/
-        } else {
-            launch(Dispatchers.Main) {
-                Toast.makeText(
-                    applicationContext,
-                    "Turning off accessibility disables some features of Galaxy Max Hz.",
-                    Toast.LENGTH_LONG
-                ).show()
+            } else  {
+                mUtilsPrefsGmh.gmhPrefForceLowestSoIsOn = false
+                mUtilsPrefsGmh.gmhPrefDisableSyncIsOn = false
+                if (isFakeAdaptive.get() == true && isOfficialAdaptive) {
+                    lrrPref.set(STANDARD_REFRESH_RATE_HZ)
+                    mUtilsPrefsGmh.gmhPrefMinHzAdapt = STANDARD_REFRESH_RATE_HZ
+                }
+                mUtilsPrefsGmh.gmhPrefSensorsOff = false
             }
-            mUtilsPrefsGmh.gmhPrefForceLowestSoIsOn = false
-            mUtilsPrefsGmh.gmhPrefDisableSyncIsOn = false
-            if (isFakeAdaptive.get() == true && isOfficialAdaptive) {
-                lrrPref.set(STANDARD_REFRESH_RATE_HZ)
-                mUtilsPrefsGmh.gmhPrefMinHzAdapt = STANDARD_REFRESH_RATE_HZ
-            }
-            mUtilsPrefsGmh.gmhPrefSensorsOff = false
         }
     }
 

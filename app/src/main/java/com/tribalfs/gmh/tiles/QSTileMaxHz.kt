@@ -9,19 +9,18 @@ import android.graphics.drawable.Icon
 import android.net.Uri
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
-import android.util.Log
 import android.widget.Toast
 import androidx.databinding.Observable
 import androidx.databinding.Observable.OnPropertyChangedCallback
+import com.tribalfs.gmh.BuildConfig
 import com.tribalfs.gmh.MyApplication.Companion.applicationScope
 import com.tribalfs.gmh.R
 import com.tribalfs.gmh.dialogs.ADB_SETUP_LINK
+import com.tribalfs.gmh.helpers.*
 import com.tribalfs.gmh.helpers.CacheSettings.currentRefreshRateMode
 import com.tribalfs.gmh.helpers.CacheSettings.hasWriteSecureSetPerm
 import com.tribalfs.gmh.helpers.CacheSettings.prrActive
 import com.tribalfs.gmh.helpers.CacheSettings.supportedHzIntCurMod
-import com.tribalfs.gmh.helpers.NotificationBarSt
-import com.tribalfs.gmh.helpers.UtilsChangeMaxHzSt
 import com.tribalfs.gmh.helpers.UtilsChangeMaxHzSt.Companion.CHANGE_MODE
 import com.tribalfs.gmh.helpers.UtilsChangeMaxHzSt.Companion.CHANGE_RES
 import com.tribalfs.gmh.helpers.UtilsChangeMaxHzSt.Companion.NO_CONFIG_LOADED
@@ -30,9 +29,10 @@ import com.tribalfs.gmh.helpers.UtilsDeviceInfo.Companion.REFRESH_RATE_MODE_ALWA
 import com.tribalfs.gmh.helpers.UtilsDeviceInfo.Companion.REFRESH_RATE_MODE_SEAMLESS
 import com.tribalfs.gmh.helpers.UtilsDeviceInfo.Companion.REFRESH_RATE_MODE_STANDARD
 import com.tribalfs.gmh.helpers.UtilsPermSt.Companion.CHANGE_SETTINGS
-import com.tribalfs.gmh.helpers.UtilsRefreshRate
-import com.tribalfs.gmh.helpers.UtilsSettingsIntents
 import com.tribalfs.gmh.helpers.UtilsSettingsIntents.changeSystemSettingsIntent
+import com.tribalfs.gmh.helpers.UtilsSettingsIntents.displaySettingsIntent
+import com.tribalfs.gmh.helpers.UtilsSettingsIntents.motionSmoothnessSettingsIntent
+import com.tribalfs.gmh.helpers.UtilsSettingsIntents.powerSavingModeSettingsIntent
 import com.tribalfs.gmh.profiles.ProfilesInitializer
 import com.tribalfs.gmh.profiles.ProfilesObj.loadComplete
 import kotlinx.coroutines.Dispatchers
@@ -151,7 +151,7 @@ class QSTileMaxHz : TileService() {
     override fun onClick() {
         super.onClick()
 
-        Log.d(TAG, "onClick() called")
+        //Log.d(TAG, "onClick() called")
 
         /* if (isTileExpired) {
                 mUtilsPrefsGmh.gmhPrefExpireDialogAllowed = true
@@ -159,6 +159,7 @@ class QSTileMaxHz : TileService() {
                 i.flags = Intent.FLAG_ACTIVITY_NEW_TASK
                 startActivityAndCollapse(i)
             } else {*/
+
         applicationScope.launch(Dispatchers.Main) {
 
             when (UtilsChangeMaxHzSt.instance(applicationContext).changeMaxHz(null)) {
@@ -195,15 +196,16 @@ class QSTileMaxHz : TileService() {
 
                 CHANGE_SETTINGS -> {
                     try {
-                        startActivityAndCollapse(changeSystemSettingsIntent.apply {
-                            flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                        })
                         Toast.makeText(
                             applicationContext,
                             getString(R.string.enable_write_settings),
                             Toast.LENGTH_LONG
                         ).show()
-                    } catch (_: java.lang.Exception) {
+                        startActivityAndCollapse(changeSystemSettingsIntent.apply {
+                            flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                            data = Uri.parse("package:" + BuildConfig.APPLICATION_ID)
+                        })
+                    } catch (_: Exception) {
                     }
                     // e.suppressed
                     return@launch
@@ -246,7 +248,7 @@ class QSTileMaxHz : TileService() {
                     //getResolutionChoiceDialog(context).show()
                     NotificationBarSt.instance(applicationContext).expandNotificationBar()
                 } else {
-                    val i = UtilsSettingsIntents.displaySettingsIntent
+                    val i = displaySettingsIntent
                     if (context !is Activity) {
                         i.flags = Intent.FLAG_ACTIVITY_NEW_TASK
                     }
@@ -294,13 +296,19 @@ class QSTileMaxHz : TileService() {
                 getString(R.string.open_settings)
             ) { _, _ ->
                 if (powerSaveOn) {
-                    val i = UtilsSettingsIntents.powerSavingModeSettingsIntent
+                    val i = powerSavingModeSettingsIntent
                     i.flags = Intent.FLAG_ACTIVITY_NEW_TASK
                     startActivity(i)
                 } else {
-                    val i = UtilsSettingsIntents.motionSmoothnessSettingsIntent
-                    i.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                    startActivity(i)
+                    try {
+                        val i = motionSmoothnessSettingsIntent
+                        i.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                        startActivity(i)
+                    }catch (_: Exception){
+                        val i = displaySettingsIntent
+                        i.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                        startActivity(i)
+                    }
                 }
             }
             setNegativeButton(getString(R.string.dismiss)) { dialogInterface, _ -> dialogInterface.dismiss() }

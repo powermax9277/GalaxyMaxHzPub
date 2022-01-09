@@ -31,7 +31,7 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.tribalfs.gmh.AccessibilityPermission.allowAccessibility
 import com.tribalfs.gmh.callbacks.AccessibilityCallback
-import com.tribalfs.gmh.helpers.CacheSettings
+import com.tribalfs.gmh.helpers.*
 import com.tribalfs.gmh.helpers.CacheSettings.adaptiveAccessTimeout
 import com.tribalfs.gmh.helpers.CacheSettings.adaptiveDelayMillis
 import com.tribalfs.gmh.helpers.CacheSettings.applyAdaptiveMod
@@ -313,8 +313,10 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         this.serviceInfo.apply {
             notificationTimeout = adaptiveAccessTimeout
             //Set the recommended time that interactive controls need to remain on the screen to support the user.
-            interactiveUiTimeoutMillis = 0
-            nonInteractiveUiTimeoutMillis = 0
+            try {
+                interactiveUiTimeoutMillis = 0
+                nonInteractiveUiTimeoutMillis = 0
+            }catch (_: NoSuchMethodError){}
         }
         restartOtherServices()
     }
@@ -579,11 +581,15 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                     if (isScreenOn) {
                         initialAdaptive()//initial trigger
                     }else{
-                        mUtilsRefreshRate.setMinRefreshRate(lowestHzCurMode)
+                        if (UtilsPermSt.instance(applicationContext).hasWriteSystemPerm()) {
+                            mUtilsRefreshRate.setMinRefreshRate(lowestHzCurMode)
+                        }
                     }
                     registerCameraCallback()
                 } else {
-                    mUtilsRefreshRate.setRefreshRate(prrActive.get()!!)
+                    if (UtilsPermSt.instance(applicationContext).hasWriteSystemPerm()) {
+                        mUtilsRefreshRate.setRefreshRate(prrActive.get()!!)
+                    }
                     try {
                         wm.removeView(adaptiveView)
                         adaptiveView = null

@@ -148,7 +148,7 @@
     <string name="enable">Bật</string>
     <string name="allow">Allow</string>
     <string name="allow_aot">Allow Appear on Top</string>
-    <!--<string name="adp_mod_inf" translatable="false">Note: This is an experimental feature which is continually being improved.</string>-->
+    <!--<string name="adp_mod_inf">Note: This is an experimental feature which is continually being improved.</string>-->
     <string name="allow_bg_act">For the stable running of this app, enable \'Allow background activity\' or disable \'Optimize battery usage\'.</string>
     <string name="premium_features">Tính năng cao cấp</string>
     <string name="prevent_high">Ngăn chuyển sang Chế độ cao</string>
