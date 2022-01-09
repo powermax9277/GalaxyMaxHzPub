@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" package="com.tribalfs.gmh">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.tribalfs.gmh">
 
-    <uses-permission android:name="android.permission.WRITE_SETTINGS" tools:ignore="ProtectedPermissions"/>
-    <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS" tools:ignore="ProtectedPermissions" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-sdk tools:overrideLibrary="androidx.security" />
+
+    <uses-permission
+        android:name="android.permission.WRITE_SETTINGS"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission
+        android:name="android.permission.WRITE_SECURE_SETTINGS"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
-    <uses-permission android:name="android.permission.EXPAND_STATUS_BAR"/>
+    <uses-permission android:name="android.permission.EXPAND_STATUS_BAR" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -14,91 +21,96 @@
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-sdk tools:overrideLibrary="androidx.security"/>
 
     <application
         android:name=".MyApplication"
         android:allowBackup="false"
+        android:fullBackupContent="@xml/backup_descriptor"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:resizeableActivity="true"
         android:supportsRtl="true"
         android:theme="@style/Theme.App.Starting"
         tools:ignore="GoogleAppIndexingWarning"
-        android:fullBackupContent="@xml/backup_descriptor"
-        android:resizeableActivity="true"
         tools:targetApi="n">
-        <!-- <meta-data
+        <activity
+            android:supportsPictureInPicture="true"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            android:name=".PipActivity"
+            android:exported="true" />
+        <!--
+         <meta-data
                  android:name="com.google.android.gms.ads.APPLICATION_ID"
                  android:value="ca-app-pub-3239920037413959~3923026465" />
-         <meta-data android:name="firebase_analytics_collection_enabled" android:value="false" />-->
-
-        <service android:name=".GalaxyMaxHzAccess"
-            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
+         <meta-data android:name="firebase_analytics_collection_enabled" android:value="false" />
+        -->
+        <service
+            android:name=".GalaxyMaxHzAccess"
+            android:exported="true"
             android:label="@string/app_name"
-            android:exported="true">
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
             <intent-filter>
                 <action android:name="android.accessibilityservice.AccessibilityService" />
             </intent-filter>
+
             <meta-data
                 android:name="android.accessibilityservice"
-                android:resource="@xml/accessibility_service_config"
-                />
+                android:resource="@xml/accessibility_service_config" />
         </service>
+
         <activity
-            android:name="com.tribalfs.gmh.MainActivity"
-            android:launchMode="singleTop"
-            android:exported="true">
+            android:name=".MainActivity"
+            android:exported="true"
+            android:launchMode="singleTop">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-                <action android:name="android.service.quicksettings.action.QS_TILE_PREFERENCES"/>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+
+                <action android:name="android.service.quicksettings.action.QS_TILE_PREFERENCES" />
             </intent-filter>
         </activity>
 
-        <service android:name="com.tribalfs.gmh.hertz.HzService"/>
-        <service android:name="com.tribalfs.gmh.netspeed.NetSpeedService"/>
-
+        <service android:name=".hertz.HzService" />
+        <service android:name=".netspeed.NetSpeedService" />
         <service
-            android:name="com.tribalfs.gmh.tiles.QSTileMaxHz"
+            android:name=".tiles.QSTileMaxHz"
+            android:exported="true"
             android:icon="@drawable/ic_max_hz"
             android:label="@string/max_hz"
-            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
-            android:exported="true">
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
             <intent-filter>
-                <action android:name="android.service.quicksettings.action.QS_TILE"/>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>
         </service>
-
         <service
-            android:name="com.tribalfs.gmh.tiles.QSTileHzMon"
+            android:name=".tiles.QSTileHzMon"
+            android:exported="true"
             android:icon="@drawable/ic_hz_24"
             android:label="@string/show_hz"
-            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
-            android:exported="true">
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
             <intent-filter>
-                <action android:name="android.service.quicksettings.action.QS_TILE"/>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>
         </service>
-
         <service
-            android:name="com.tribalfs.gmh.tiles.QSTileResSw"
+            android:name=".tiles.QSTileResSw"
+            android:exported="true"
             android:icon="@drawable/ic_res_switch_24"
             android:label="@string/resolution"
-            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
-            android:exported="true">
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
             <intent-filter>
-                <action android:name="android.service.quicksettings.action.QS_TILE"/>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>
         </service>
-
         <service
-            android:name="com.tribalfs.gmh.tiles.QSTileMinHz"
+            android:name=".tiles.QSTileMinHz"
+            android:exported="true"
             android:icon="@drawable/ic_max_hz"
             android:label="@string/adp_min_hz"
-            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
-            android:exported="true">
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
             <intent-filter>
-                <action android:name="android.service.quicksettings.action.QS_TILE"/>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>
         </service>
 
@@ -110,7 +122,6 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-
 
         <provider
             android:name="androidx.core.content.FileProvider"

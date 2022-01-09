@@ -8,7 +8,6 @@ import android.view.Display
 import androidx.annotation.Keep
 import androidx.annotation.RequiresApi
 import com.google.gson.Gson
-import com.tribalfs.gmh.helpers.CacheSettings
 import com.tribalfs.gmh.helpers.CacheSettings.currentRefreshRateMode
 import com.tribalfs.gmh.helpers.CacheSettings.displayId
 import com.tribalfs.gmh.helpers.CacheSettings.highestHzForAllMode
@@ -79,7 +78,7 @@ internal class ProfilesInitializer private constructor(context: Context) {
     private val mUtilsRefreshRate by lazy{ UtilsRefreshRate(appCtx) }
 
     @ExperimentalCoroutinesApi
-    @Synchronized
+    //@Synchronized
     suspend fun initProfiles(): Boolean {
         //Source 1: backend
         val isLoadedFromBackEnd = withContext(Dispatchers.IO) { loadProfilesFromBackEnd() }
@@ -198,7 +197,7 @@ internal class ProfilesInitializer private constructor(context: Context) {
 
 
     @ExperimentalCoroutinesApi
-    @Synchronized
+    //@Synchronized
     private suspend fun readAndLoadProfileFromPhone(): Boolean {
 
         val internalProfilesJson = InternalProfiles.load( false, appCtx)

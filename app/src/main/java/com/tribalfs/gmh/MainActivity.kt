@@ -588,9 +588,9 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
             mBinding.swPeakHz.id -> {
                 // toggleMaxHz()
                 if ((v as Switch).isChecked) {
-                    if (isPowerSaveModeOn.get() == true){
+                    /*if (isPowerSaveModeOn.get() == true){
                         //todo
-                    }
+                    }*/
                     if (!mUtilsRefreshRate.setPrefOrAdaptOrHighRefreshRateMode(null)){
                         v.isChecked = false
                         Toast.makeText(this, "High or adaptive refresh rate could not be enabled on the current resolution settings.", Toast.LENGTH_LONG).show()
@@ -1373,7 +1373,13 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
     private fun updateMaxHzSbMinMax() {
         if (!hasWriteSystemSetPerm){
             startActivity(UtilsSettingsIntents.changeSystemSettingsIntent)
-            Toast.makeText(applicationContext, getString(R.string.enable_write_settings), Toast.LENGTH_LONG).show()
+            launch(Dispatchers.Main) {
+                Toast.makeText(
+                    applicationContext,
+                    getString(R.string.enable_write_settings),
+                    Toast.LENGTH_LONG
+                ).show()
+            }
         }
         launch {
             delay(500)

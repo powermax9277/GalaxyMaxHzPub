@@ -41,7 +41,7 @@ object AccessibilityPermission {
 
                     if (add) {
                         delay(900)
-                        Settings.Secure.putString(mContentResolver, ENABLED_ACCESSIBILITY_SERVICES, "$str:$gmhAccessibilityStr")
+                        Settings.Secure.putString(mContentResolver, ENABLED_ACCESSIBILITY_SERVICES, if (str.isNotEmpty()) "$str:$gmhAccessibilityStr" else gmhAccessibilityStr)
                     }
                 }
             }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name" translatable="false">Galaxy Max Hz</string>
-   <!-- <string name="ad_closed" translatable="false">Video ad closed early.</string>-->
+    <!-- <string name="ad_closed" translatable="false">Video ad closed early.</string>-->
     <string name="lbl_enable_msm">Enable Motion Smoothness</string>
     <string name="show_hz">Refresh Rate Monitor</string>
     <string name="buy_adfree">Buy Premium|Coffee</string>
@@ -12,7 +12,7 @@
     <string name="max_hz_holder">Max %s Hz</string>
     <string name="feat_n_a" tools:keep="@string/feat_n_a">Feature Not Supported</string>
     <string name="unknown_mode">Unidentified Refresh Rate Mode</string>
- <!--   <string name="qs_active">Quick Settings Tiles successfully activated</string>-->
+    <!--   <string name="qs_active">Quick Settings Tiles successfully activated</string>-->
     <string name="min_hz_for_toggle">Lowest Hz for Toggle</string>
     <string name="adaptive">Adaptive</string>
     <string name="high">High</string>
@@ -42,7 +42,7 @@
         \n\nThis app can easily change the Motion Smoothness Mode to Adaptive/High once ADB setup is performed. This works even on Power Savings Mode.
     </string>
     <string name="input_ac_inf">If you lost premium because of resetting this device, enter activation code that was sent to your email to reactivate premium.</string>
- <!--   <string name="failed_show_ad">Failed to show video ad. Please try again.</string>
+    <!--   <string name="failed_show_ad">Failed to show video ad. Please try again.</string>
     <string name="failed_load_ad">Failed to load video ad. Please check internet and try again.</string>-->
     <string name="show_ns">Show Net Speed Indicator</string>
     <string name="bit" translatable="false">Bits/sec(b/s)</string>
@@ -68,14 +68,14 @@
     <string name="psm_on">Power Saving Mode is On</string>
     <string name="chng_res">Change Resolution</string>
     <string name="open_settings">Open Settings</string>
-<!--    <string name="qst_exp">Quick Settings Tiles Expired</string>-->
-<!--    <string name="ad_starting_in">"Video starting in "</string>-->
-<!--    <string name="no_thanks">No, thanks!</string>-->
+    <!--    <string name="qst_exp">Quick Settings Tiles Expired</string>-->
+    <!--    <string name="ad_starting_in">"Video starting in "</string>-->
+    <!--    <string name="no_thanks">No, thanks!</string>-->
     <string name="chng_res_failed">Failed to change screen resolution</string>
     <string name="one_res_def">Only one resolution defined in the system.</string>
     <string name="rrp_not_loaded">Refresh rates profile not yet loaded. Try again.</string>
     <string name="sot_no_perm">Show on top permission is not granted!</string>
-   <!-- <string name="error_opening_settings">Error opening settings.</string>-->
+    <!-- <string name="error_opening_settings">Error opening settings.</string>-->
     <string name="cie">Error! Please check internet connection and try again.</string>
     <string name="aca">Invalid activation code.</string>
     <string name="afa">Premium successfully activated!</string>

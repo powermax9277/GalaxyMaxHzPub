@@ -10,8 +10,12 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.*
 import android.graphics.drawable.Icon
+import android.hardware.display.DisplayManager
 import android.os.Build
+import android.os.Handler
 import android.os.IBinder
+import android.os.Looper
+import android.view.Display
 import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
@@ -24,6 +28,7 @@ import com.tribalfs.gmh.AccessibilityPermission
 import com.tribalfs.gmh.GalaxyMaxHzAccess
 import com.tribalfs.gmh.R
 import com.tribalfs.gmh.callbacks.ChangedStatusCallback
+import com.tribalfs.gmh.helpers.CacheSettings.displayId
 import com.tribalfs.gmh.helpers.CacheSettings.hzStatus
 import com.tribalfs.gmh.helpers.CacheSettings.isHzNotifOn
 import com.tribalfs.gmh.helpers.CacheSettings.isScreenOn
@@ -53,9 +58,7 @@ internal class HzService : Service(), CoroutineScope{
     private val job = SupervisorJob()
     override val coroutineContext: CoroutineContext
         get() = job + Dispatchers.IO
-    
-    // private val mLock = Any()
-    //private val mHandler = Handler(Looper.getMainLooper())
+
     private val notificationManagerCompat by lazy {NotificationManagerCompat.from(applicationContext)}
     private val mHzSharePref by lazy { UtilsPrefsGmh(applicationContext) }
     private val mUtilsDeviceInfo by lazy { UtilsDeviceInfo(applicationContext) }
@@ -75,6 +78,10 @@ internal class HzService : Service(), CoroutineScope{
     ).apply {
         gravity = HzGravity.TOP_LEFT
     } }
+    private val dm by lazy {applicationContext.getSystemService(DISPLAY_SERVICE) as DisplayManager}
+
+    private val displayListener by lazy {MyDisplayListener(dm.getDisplay(displayId))}
+
     private val stageView by lazy {(LayoutInflater.from(application).inflate(
         R.layout.hz_fps, RelativeLayout(application)
     ) as View)}
@@ -103,7 +110,7 @@ internal class HzService : Service(), CoroutineScope{
                     //  Log.d(TAG, "mScreenStatusReceiver called: $screenIsOn")
                     isScreenOn = result as Boolean
                     if (result) {
-                        startPauseHzJob()
+                        pauseHz()
                         restartHz()
                         notificationBuilderInstance.setVisibility(Notification.VISIBILITY_PRIVATE)
                         notificationManagerCompat.notify(
@@ -111,7 +118,7 @@ internal class HzService : Service(), CoroutineScope{
                             notificationBuilderInstance.build()
                         )
                     } else {
-                        startPauseHzJob()
+                        pauseHz()
                     }
                 }
             }
@@ -120,86 +127,42 @@ internal class HzService : Service(), CoroutineScope{
 
     private var hzOn: Boolean? = null
     private var overlayOn: Boolean? = null
-    //private var prevHz:AtomicInteger = AtomicInteger(0)
     private lateinit var notificationBuilderInstance: Notification.Builder
 
 
-/*    private val mHertzFrameCallback: FrameCallback =
-        FrameCallback {
-            val newHz = mUtilsDisplayInfo.getRefreshRateInt()
-            // if (prevHz.get() != newHz){
-            //  mUtilsDisplayInfo.getRefreshRateInt().let {
-            if (isHzNotifOn.get()!!) {
-                updateNotifContent(newHz.toString())
-            }
-
-            if (overlayOn == true) {
-                hzText.setTextColor(if (newHz <= 60.05) Color.RED else Color.GREEN)
-                hzText.text = newHz.toString()
-            }
-            // }
-            // prevHz.set(newHz)
-            postFrameCallback(160L)
-        }*/
-
-    private var refreshRateUpdater: Job? = null
-    private var continueRrUpdate: Boolean = false
-    //private var prevHz = 0
-
-    private fun updateRefreshRate() = launch {
-        while (continueRrUpdate){
-            refreshRateUpdater?.cancel()
-            refreshRateUpdater = null
-            val newHz = mUtilsDeviceInfo.getRefreshRateInt()
-            refreshRateUpdater = launch(Dispatchers.Main) {
-                //  mUtilsDisplayInfo.getRefreshRateInt().let {
-                if (isHzNotifOn.get()!!) {
-                    updateNotifContent(newHz.toString())
-                }
-
-                if (overlayOn == true) {
-                    hzText.setTextColor(if (newHz <= 60.05) Color.RED else Color.GREEN)
-                    hzText.text = newHz.toString()
-                }
-            }
-            refreshRateUpdater?.start()
-            delay(120)
+    private fun startHzInternal() = launch {
+        try {
+            updateRefreshRateViews(dm.getDisplay(displayId).refreshRate.toInt())
+            dm.registerDisplayListener(displayListener, Handler(Looper.getMainLooper()))
+        } catch (e: java.lang.Exception) {
         }
-    }
-
-    private fun startHzInternal(){
-        refreshRateUpdater?.cancel()
-        continueRrUpdate = true
-        updateRefreshRate()
-    }
-
-
-    private fun stopHzInternal(){
-        continueRrUpdate = false
-        refreshRateUpdater?.cancel()
 
     }
 
-
-    private fun startPauseHzJob(){
-        stopPauseHzJob()
+    private fun pauseHz(){
+        myJob?.cancel()
+        myJob = null
         myJob =  launch(Dispatchers.Main) {
             delay(7000)
-            offScreenRefreshRate =
-                "${mUtilsDeviceInfo.getRefreshRateInt()} hz"
+            offScreenRefreshRate = "${mUtilsDeviceInfo.getRefreshRateInt()} hz"
             delay(13000)
             notificationBuilderInstance.setVisibility(Notification.VISIBILITY_SECRET)
             notificationManagerCompat.notify(
                 NOTIFICATION_ID_HZ,
                 notificationBuilderInstance.build()
             )
-            pauseHz()
+
+            overlayOn?.let{if (it) showHzOverlay(false)}
+            dm.unregisterDisplayListener(displayListener)
         }
     }
 
-    private fun stopPauseHzJob(){
-        myJob?.cancel()
-        myJob = null
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun restartHz() {
+        showHzOverlay(overlayOn!!)
+        startHzInternal()
+        hzStatus.set(PLAYING)
     }
 
 
@@ -277,14 +240,14 @@ internal class HzService : Service(), CoroutineScope{
     override fun onDestroy() {
         hzStatus.set(STOP)
         showHzOverlay(false)
-        stopHzInternal()
+        dm.unregisterDisplayListener(displayListener)
         notificationManagerCompat.cancel(NOTIFICATION_ID_HZ)
         try {
             unregisterReceiver(mScreenStatusReceiver)
         }catch (_: java.lang.Exception){}
         // prevHz = 0
-        stopPauseHzJob()
-        job.cancel()
+        myJob?.cancel()
+        myJob = null
         super.onDestroy()
     }
 
@@ -309,20 +272,6 @@ internal class HzService : Service(), CoroutineScope{
     }
 
 
-//Causes notification problem
-/*    @SuppressLint("NewApi")
-    fun updateNotifContent(hzStr: String) {
-        notificationBuilderInstance.apply {
-            setSmallIcon(getIndicatorIcon(hzStr))
-            mNotificationContentView.setTextViewText(R.id.tvHz, getString(R.string.cur_rr_h, hzStr))
-            notificationManagerCompat.notify(
-                NOTIFICATION_ID_HZ,
-                build()
-            )
-        }
-    }*/
-
-
     @RequiresApi(Build.VERSION_CODES.P)
     private suspend fun getIndicatorIcon(speedValue: String): Icon? = withContext(Dispatchers.Default) {
         mIconSpeedPaint.textSize = 72f
@@ -334,17 +283,6 @@ internal class HzService : Service(), CoroutineScope{
     }
 
 
-    @RequiresApi(Build.VERSION_CODES.M)
-    private fun restartHz() {
-        showHzOverlay(overlayOn!!)
-        startHzInternal()
-        hzStatus.set(PLAYING)
-    }
-
-    private fun pauseHz() {
-        overlayOn?.let{if (it) showHzOverlay(false)}
-        stopHzInternal()
-    }
 
     private fun showHzOverlay(show: Boolean){
         if (show) {
@@ -379,6 +317,30 @@ internal class HzService : Service(), CoroutineScope{
         //prevHz = 0
     }
 
+
+    private inner class MyDisplayListener(val display: Display) : DisplayManager.DisplayListener {
+        override fun onDisplayAdded(displayId: Int) {}
+        override fun onDisplayRemoved(displayId: Int) {}
+        override fun onDisplayChanged(arg0: Int) {
+            launch(Dispatchers.Main) {
+                val newHz = display.refreshRate.toInt()
+                updateRefreshRateViews(newHz)
+            }
+        }
+    }
+
+
+    private fun updateRefreshRateViews(newHz: Int){
+        if (isHzNotifOn.get()!!) {
+            updateNotifContent(newHz.toString())
+        }
+
+        if (overlayOn == true) {
+            hzText.setTextColor(if (newHz <= 60.05) Color.RED else Color.GREEN)
+            hzText.text = newHz.toString()
+        }
+
+    }
 
 }
 

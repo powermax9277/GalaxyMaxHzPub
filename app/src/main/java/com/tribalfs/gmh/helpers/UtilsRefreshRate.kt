@@ -32,6 +32,14 @@ import com.tribalfs.gmh.profiles.ModelNumbers.fordableWithHrrExternal
 import com.tribalfs.gmh.profiles.ProfilesInitializer
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmh
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import androidx.core.content.ContextCompat.startActivity
+
+import com.tribalfs.gmh.MainActivity
+
+import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
+import androidx.core.content.ContextCompat
+import com.tribalfs.gmh.PipActivity
 
 
 internal class UtilsRefreshRate(context: Context) {
@@ -87,7 +95,7 @@ internal class UtilsRefreshRate(context: Context) {
     @Synchronized
     internal fun setRefreshRateMode(mode: String) : Boolean{
         return try {
-            Settings.Secure.putString(mContentResolver, REFRESH_RATE_MODE, mode)
+            Settings.Secure.putInt(mContentResolver, REFRESH_RATE_MODE, mode.toInt())
                     && (
                     if (fordableWithHrrExternal.indexOf(mUtilsDeviceInfo.deviceModel) != -1) {
                         Settings.Secure.putString(mContentResolver, REFRESH_RATE_MODE_COVER, mode)
@@ -161,7 +169,7 @@ internal class UtilsRefreshRate(context: Context) {
             return if (rrm != REFRESH_RATE_MODE_STANDARD) {
                 val highest = ProfilesInitializer.instance(appCtx).getResoHighestHzForCurrentMode(resStrLxw, rrm)
                 if (highest > STANDARD_REFRESH_RATE_HZ) {
-                    setRefreshRateMode(rrm) && setRefreshRate(prrActive.get()!!)
+                    setRefreshRate(prrActive.get()!!) && setRefreshRateMode(rrm)
                 } else {
                     false
                 }

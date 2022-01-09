@@ -12,6 +12,7 @@ import androidx.annotation.RequiresApi
 import com.tribalfs.gmh.R
 import com.tribalfs.gmh.helpers.CacheSettings.displayId
 import com.tribalfs.gmh.helpers.UtilsResoName.getName
+import com.tribalfs.gmh.helpers.UtilsSettings.GLOBAL
 import com.tribalfs.gmh.profiles.ResolutionBasic
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -183,7 +184,7 @@ class UtilsDeviceInfo(val context: Context) {
     }
 
     internal fun isPowerSavingsModeOn(): Boolean{
-        return (appCtx.getSystemService(Context.POWER_SERVICE) as PowerManager).isPowerSaveMode //UtilsSettingsSt.get(appCtx).getConfig(GLOBAL, "low_power") == "1"//
+        return /*(appCtx.getSystemService(Context.POWER_SERVICE) as PowerManager).isPowerSaveMode*/ Settings.Global.getString(mContentResolver, "low_power") == "1"
     }
 
 /*    private fun getMaxBrightness(): Int {
