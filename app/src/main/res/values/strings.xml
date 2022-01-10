@@ -24,7 +24,7 @@
     <string name="use_qstile_reso_switch">Use the included quick settings (qs) tile to quickly switch screen resolution.</string>
     <string name="center">Center</string>
     <string name="info_qs_max_hz">Includes a quick setting tile to change max hz</string>
-    <string name="info_qs_rtrr">Turning this on for a long period may increase the app\'s battery consumption.  Includes a quick setting tile to turn-on refresh rate monitor.</string>
+    <string name="info_qs_rtrr">Includes a quick setting tile to turn-on refresh rate monitor.</string>
     <string name="s_off_mod">Screen-off Mods</string>
     <string name="force_hz_mod">Force Lowest Hz</string>
     <string name="s_off_hz_inf">This will set the screen-off/AOD refresh rate to the lowest hz.\nScreen-off refresh rate: %s</string>
@@ -159,7 +159,7 @@
     <string name="sensors_off_note">
         Important Note: While the SensorsOff tile is on, the device\'s camera and microphone and other sensors are inaccessible.
         Functionalities affected include face unlock, audibility on voice calls (on some) and hinge angle detection, among others.
-        Only use this if you clearly understand the effect of enabling sensors off.</string>
+        Only use this if you clearly understand the effects of enabling sensors off.</string>
     <string name="auto_sensors_off_exp">Auto SENSORS OFF</string>
     <string name="sensor_off_setup_info">Do this first: Enable \'Sensors Off\' tile in Settings > Developer options > Quick settings developer tiles. ></string>
     <string name="dev_opt_setup_info">To enable Developer options, go to Settings > About phone > Software info and tap \'Build number\' 7x.</string>
@@ -169,7 +169,7 @@
     <string name="premium_features">Premium Features</string>
     <string name="prevent_high">Prevent switching to High Mode</string>
     <plurals name="access_notif">
-        <item quantity="one">"Accessibility service is required for the following - turn this off first: %s</item>
-        <item quantity="other">Accessibility service is required for the following - turn these off first: %s</item>
+        <item quantity="one">"Accessibility service is required for the following - turn this off first to disable accessibility: %s</item>
+        <item quantity="other">Accessibility service is required for the following - turn these off first to disable accessibility: %s</item>
     </plurals>
 </resources>

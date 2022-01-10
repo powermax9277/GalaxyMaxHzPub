@@ -108,5 +108,6 @@ object CacheSettings {
     internal var turnOffAutoSensorsOff = false
     internal var preventHigh = false
    // internal var turnOnAutoSensorsOff = false
+    internal var sensorOnKey: CharSequence? = null
 
 }

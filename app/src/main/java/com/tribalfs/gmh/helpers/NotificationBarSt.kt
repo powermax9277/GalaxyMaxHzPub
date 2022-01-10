@@ -4,7 +4,11 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
+import android.os.Build
 import android.widget.Toast
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 internal class NotificationBarSt private constructor (context: Context) {
 
@@ -17,15 +21,15 @@ internal class NotificationBarSt private constructor (context: Context) {
 
     private val appCtx = context.applicationContext
 
-
-    @SuppressLint("NewApi")
-    private fun isPermitted(): Boolean{
-        return (appCtx.applicationContext.checkSelfPermission(Manifest.permission.EXPAND_STATUS_BAR) == PackageManager.PERMISSION_GRANTED)
+    private val isPermitted: Boolean = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        (appCtx.applicationContext.checkSelfPermission(Manifest.permission.EXPAND_STATUS_BAR) == PackageManager.PERMISSION_GRANTED)
+    } else {
+        true
     }
 
     @SuppressLint("WrongConstant")
     fun expandNotificationBar() {
-        if (!isPermitted()) return
+        if (!isPermitted) return
         try {
             appCtx.getSystemService(STATUSBAR)?.let{
                 Class.forName(STATUSBAR_MANAGER).getMethod(EXPAND_PANEL).invoke(it)
@@ -39,17 +43,16 @@ internal class NotificationBarSt private constructor (context: Context) {
     }
 
     @SuppressLint("WrongConstant")
-    fun collapseNotificationBar() {
-        if (!isPermitted()) return
-        try {
-            appCtx.getSystemService(STATUSBAR)?.let{
-                Class.forName(STATUSBAR_MANAGER).getMethod(COLLAPSE_PANEL).invoke(it)
-            }
+    fun collapseNotificationBar(): Boolean {
+        if (!isPermitted) return false
+        return try {
+            Class.forName(STATUSBAR_MANAGER).getMethod(COLLAPSE_PANEL).invoke(appCtx.getSystemService(STATUSBAR))
+            true
         } catch (e: Exception) {
-            try {
-                Toast.makeText(appCtx, e.localizedMessage, Toast.LENGTH_SHORT)
-                    .show()
-            }catch(_: Exception){}
+            CoroutineScope(Dispatchers.Main).launch {
+                Toast.makeText(appCtx, e.localizedMessage, Toast.LENGTH_SHORT).show()
+            }
+            false
         }
     }
 

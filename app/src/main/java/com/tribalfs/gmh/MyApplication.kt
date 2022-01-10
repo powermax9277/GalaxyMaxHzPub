@@ -182,7 +182,7 @@ class MyApplication : Application() {
                                     GalaxyMaxHzAccess::class.java
                                 )
                             ) {
-                                notifyUserEffectOfAccessibility()
+                                notifyAccessibilityNeed()
                             }
                         }
                     } else {
@@ -426,7 +426,7 @@ class MyApplication : Application() {
     }
 
 
-    private fun notifyUserEffectOfAccessibility() = applicationScope.launch{
+    private fun notifyAccessibilityNeed() = applicationScope.launch{
 
         //Check if using Access requiring features
         val featuresOn = mutableListOf<String>()
@@ -448,11 +448,11 @@ class MyApplication : Application() {
 
         featuresOn.size.let{
             if (it > 0) {
-                //Will also turn on if have permission
+                //Will auto turn it back ON if have permission
                 if (checkAccessibility()) {
                     launch(Dispatchers.Main) {
-                        var sec = it
-                        while(sec > 0) {
+                        var toastRpt = it
+                        while(toastRpt > 0) {
                             Toast.makeText(
                                 applicationContext,
                                 applicationContext.resources.getQuantityString(
@@ -461,10 +461,10 @@ class MyApplication : Application() {
                                     "\n" + featuresOn.joinToString("" +
                                             "\n")
                                 ),
-                                Toast.LENGTH_LONG
+                                Toast.LENGTH_SHORT
                             ).show()
-                            delay(600)
-                            sec -= 1
+                            delay(300)
+                            toastRpt -= 1
                         }
                     }
                 }

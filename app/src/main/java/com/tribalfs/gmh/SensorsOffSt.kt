@@ -1,11 +1,15 @@
 package com.tribalfs.gmh
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.os.Build
 import android.provider.Settings
 import com.tribalfs.gmh.helpers.CacheSettings.hasWriteSecureSetPerm
+import com.tribalfs.gmh.helpers.CheckBlacklistApiSt
 import com.tribalfs.gmh.helpers.SingletonHolder
 
 
+@SuppressLint("WrongConstant", "PrivateApi")
 internal class SensorsOffSt(context: Context) {
 
     companion object : SingletonHolder<SensorsOffSt, Context>(::SensorsOffSt) {
@@ -14,6 +18,8 @@ internal class SensorsOffSt(context: Context) {
     }
 
     private val appCtx = context.applicationContext
+    private val sensorPrivacyService: Any? by lazy {appCtx.getSystemService("sensor_privacy")}
+    private val sensorPrivacyManager by lazy{Class.forName("android.hardware.SensorPrivacyManager")}
 
     fun checkQsTileInPlace(): Boolean {
         val sysuiValues = Settings.Secure.getString(appCtx.contentResolver, SYSUI_QS_TILES)
@@ -25,6 +31,26 @@ internal class SensorsOffSt(context: Context) {
             placeQSTile(sysuiValues)
         }
     }
+
+    private val isSplus =  Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
+
+    fun isSensorsOff(): Boolean? {
+        if (isSplus) return null
+        return try {
+            sensorPrivacyManager.getDeclaredMethod("isSensorPrivacyEnabled").invoke(sensorPrivacyService) as Boolean
+        }catch(_: Exception){
+            (CheckBlacklistApiSt.instance(appCtx).setAllowed())
+            /*launch(Dispatchers.Main) {
+                Toast.makeText(
+                    applicationContext,
+                    "Error reading device sensors state. Reboot this device and try again.",
+                    Toast.LENGTH_LONG
+                ).show()
+            }*/
+            null
+        }
+    }
+
 /*
     @SuppressLint("PrivateApi", "BlockedPrivateApi")
     private fun isSensorOff(): Boolean {

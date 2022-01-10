@@ -22,7 +22,7 @@
     <string name="use_qstile_reso_switch">Pomocí dodávaného rychlé nastavení dlaždice k rychlému rezoluce spínačů a režimy pohybu hladkost.</string>
     <string name="center">Centrum</string>
     <string name="info_qs_max_hz">Zahrnuje rychlé nastavení dlaždice pro přepínání max Hz</string>
-    <string name="info_qs_rtrr">To může mírně zvýšit spotřebu baterie aplikace. Zahrnuje dlaždici rychlého nastavení pro zapnutí monitoru obnovovací frekvence.</string>
+    <string name="info_qs_rtrr">Zahrnuje dlaždici rychlého nastavení pro zapnutí monitoru obnovovací frekvence.</string>
     <string name="s_off_mod">Off obnovovací frekvence obrazovky</string>
     <string name="force_hz_mod">Síla na nejnižší Hz</string>
     <string name="s_off_hz_inf">

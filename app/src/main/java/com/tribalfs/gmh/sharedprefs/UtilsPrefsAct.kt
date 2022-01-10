@@ -28,6 +28,7 @@ class UtilsPrefsAct(context: Context) {
         internal const val LIC_TYPE_TRIAL_ACTIVE = 0x701//1793
     }
 
+
     private val appCtx = context.applicationContext
     private val masterKey = MasterKey.Builder(appCtx).setKeyScheme(MasterKey.KeyScheme.AES256_GCM).build()
     private val actSharedPref = EncryptedSharedPreferences.create(
@@ -117,7 +118,7 @@ class UtilsPrefsAct(context: Context) {
             }
         }*/
 
-    private var sdf = SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.getDefault())
+    private var sdf = SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.ENGLISH)
 
     private fun stringToDate(dateStr: String): Date {
         val cal = Calendar.getInstance()

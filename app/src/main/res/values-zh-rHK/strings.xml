@@ -22,7 +22,7 @@
     <string name="use_qstile_reso_switch">使用附帶的快速設置瓷磚快速切換分辨率和平滑的運動模式。</string>
     <string name="center">中心</string>
     <string name="info_qs_max_hz">包括速凝瓷磚切換最大赫茲</string>
-    <string name="info_qs_rtrr">這可能會略微增加應用程序的電池消耗。包括用於打開刷新率監視器的快速設置磁貼。</string>
+    <string name="info_qs_rtrr">包括用於打開刷新率監視器的快速設置磁貼。</string>
     <string name="s_off_mod">關閉屏幕刷新率</string>
     <string name="force_hz_mod">強制最低Hz</string>
     <string name="s_off_hz_inf">這會將屏幕關閉或 AOD 刷新率設置為最低，以提高備用電池的使用率。 \n屏幕關閉刷新率: %s</string>

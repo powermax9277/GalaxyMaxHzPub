@@ -9,7 +9,8 @@ import java.security.MessageDigest
 
 
 object Certificate {
-    @SuppressLint("PackageManagerGetSignatures")
+    @SuppressLint("PackageManagerGetSignatures", "DEPRECATION")
+    @Suppress("DEPRECATION")
     fun getEncSig(ctx: Context): String? {
         return try {
             val signatures =

@@ -10,6 +10,7 @@ import android.os.Looper
 import android.os.PowerManager.ACTION_POWER_SAVE_MODE_CHANGED
 import android.provider.Settings
 import androidx.annotation.RequiresApi
+import com.tribalfs.gmh.SensorsOffSt
 import com.tribalfs.gmh.callbacks.AccessibilityCallback
 import com.tribalfs.gmh.helpers.CacheSettings.currentBrightness
 import com.tribalfs.gmh.helpers.CacheSettings.currentRefreshRateMode
@@ -27,6 +28,7 @@ import com.tribalfs.gmh.helpers.CacheSettings.offScreenRefreshRate
 import com.tribalfs.gmh.helpers.CacheSettings.prrActive
 import com.tribalfs.gmh.helpers.CacheSettings.restoreSync
 import com.tribalfs.gmh.helpers.CacheSettings.screenOffRefreshRateMode
+import com.tribalfs.gmh.helpers.CacheSettings.sensorOnKey
 import com.tribalfs.gmh.helpers.CacheSettings.turnOff5GOnPsm
 import com.tribalfs.gmh.helpers.CacheSettings.turnOffAutoSensorsOff
 import com.tribalfs.gmh.helpers.PsmChangeHandler
@@ -240,6 +242,11 @@ class GmhBroadcastReceivers(context: Context, private val accessibilityCallback:
                     mUtilsPrefsGmh.gmhPrefSensorsOff = false
                     turnOffAutoSensorsOff = false
                 }
+            }
+
+            Intent.ACTION_LOCALE_CHANGED -> {
+                mUtilsPrefsGmh.gmhPrefSensorOnKey = null
+                sensorOnKey = null
             }
 
             /* ACTION_PHONE_STATE ->{

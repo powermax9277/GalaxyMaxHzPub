@@ -17,7 +17,7 @@ internal class CheckBlacklistApiSt private constructor(context: Context) {
     private val mResolver = appCtx.contentResolver
 
     fun isAllowed(): Boolean{
-        return if (Build.VERSION.SDK_INT >= 29) {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             Settings.Global.getString(mResolver, HAP) == "1"
         }else {
             Settings.Global.getString(mResolver, HAP_PRE_P) == "1" &&

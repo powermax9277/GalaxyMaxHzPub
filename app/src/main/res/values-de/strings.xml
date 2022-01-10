@@ -25,7 +25,7 @@
     <string name="use_qstile_reso_switch">Verwenden Sie die Schnelleinstellungskachel, um die Auflösungs.</string>
     <string name="info_qs_max_hz">Bietet eine Schnelleinstellungskachel zum wechseln der Bildwiederholrate.</string>
     <string name="info_qs_rtrr">
-        Dies kann den Akkuverbrauch der App leicht erhöhen. Bietet eine Schnelleinstellungskachel zum Ein- und Ausschalten der Überwachung.
+        Bietet eine Schnelleinstellungskachel zum Ein- und Ausschalten der Überwachung.
     </string>
     <string name="s_off_mod">Mods für ausgeschalteten Bildschrirm</string>
     <string name="force_hz_mod">Niedrigste Bildwiederholrate erzwingen</string>

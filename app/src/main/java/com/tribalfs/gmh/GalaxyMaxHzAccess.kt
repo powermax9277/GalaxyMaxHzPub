@@ -27,7 +27,6 @@ import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityEvent.*
 import android.view.accessibility.AccessibilityNodeInfo
 import android.view.accessibility.AccessibilityNodeInfo.ACTION_CLICK
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.tribalfs.gmh.AccessibilityPermission.allowAccessibility
 import com.tribalfs.gmh.callbacks.AccessibilityCallback
@@ -44,9 +43,7 @@ import com.tribalfs.gmh.helpers.CacheSettings.isSpayInstalled
 import com.tribalfs.gmh.helpers.CacheSettings.lowestHzCurMode
 import com.tribalfs.gmh.helpers.CacheSettings.lrrPref
 import com.tribalfs.gmh.helpers.CacheSettings.prrActive
-import com.tribalfs.gmh.helpers.CheckBlacklistApiSt
-import com.tribalfs.gmh.helpers.NotificationBarSt
-import com.tribalfs.gmh.helpers.UtilsRefreshRate
+import com.tribalfs.gmh.helpers.CacheSettings.sensorOnKey
 import com.tribalfs.gmh.hertz.HzService
 import com.tribalfs.gmh.hertz.HzServiceHelperStn
 import com.tribalfs.gmh.netspeed.NetSpeedServiceHelperStn
@@ -54,6 +51,7 @@ import com.tribalfs.gmh.profiles.ProfilesObj.isProfilesLoaded
 import com.tribalfs.gmh.receivers.GmhBroadcastReceivers
 import kotlinx.coroutines.*
 import java.lang.Runnable
+import java.util.*
 import kotlin.coroutines.CoroutineContext
 
 
@@ -75,7 +73,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     private val job = SupervisorJob()
     override val coroutineContext: CoroutineContext
         get() = job + Dispatchers.IO
-     private val connectivityManager by lazy {applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager}
+    private val connectivityManager by lazy {applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager}
     private val keyguardManager by lazy {getSystemService(KEYGUARD_SERVICE) as KeyguardManager}
     private val handler by lazy {Handler(Looper.getMainLooper())}
     private val camManager by lazy {getSystemService(CAMERA_SERVICE) as CameraManager}
@@ -97,9 +95,6 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                     or WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
             PixelFormat.TRANSLUCENT
         )}
-
-    private val sensorPrivacyService: Any? by lazy {applicationContext.getSystemService("sensor_privacy")}
-    private val sensorPrivacyManager by lazy{Class.forName("android.hardware.SensorPrivacyManager")}
 
     private val mScreenStatusReceiver by lazy{
         GmhBroadcastReceivers(
@@ -130,55 +125,103 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         switchSensorsOffInner(on)
     }
 
-    private fun switchSensorsOffInner(on: Boolean) {
-        if (on != isSensorsOff() && triesA < MAX_TRY) {
+    private fun switchSensorsOffInner(targetState: Boolean) {
+
+        if ( triesA < MAX_TRY) {
             launch {
                 var childs: List<AccessibilityNodeInfo>? = null
-                while (childs == null && triesB < MAX_TRY) {
-                    performGlobalAction(GLOBAL_ACTION_NOTIFICATIONS)
-                    try {
-                        childs = rootInActiveWindow?.findAccessibilityNodeInfosByText("sensors off")
-                    } catch (_: Exception) {
-                        triesB += 1
+
+                val sensorState = SensorsOffSt.instance(applicationContext).isSensorsOff()
+
+                if (sensorState != null){
+                    if (sensorState != targetState) {
+                        while (childs == null && triesB < MAX_TRY) {
+                            performGlobalAction(GLOBAL_ACTION_NOTIFICATIONS)
+                            try {
+                                childs = rootInActiveWindow?.findAccessibilityNodeInfosByText("sensors off")
+                            } catch (_: Exception) {
+                                triesB += 1
+                                delay(200)
+                                switchSensorsOffInner(targetState)
+                            }
+                        }
+                        childs?.forEach {
+                            val contDesc = it.contentDescription
+                            if (contDesc != null && it.isClickable) {
+                                try {
+                                    it.performAction(ACTION_CLICK)
+                                    NotificationBarSt.instance(applicationContext)
+                                        .collapseNotificationBar()
+                                    return@launch
+                                } catch (_: java.lang.Exception) { }
+                            }
+                        }
+                    }else{
+                        return@launch
                     }
-                    //if(!on) delay(100) //400 works
-                }
-                childs?.forEach {
-                    if (it.isClickable && it.contentDescription !=null) {
+                    triesA += 1
+                    delay(200)
+                    switchSensorsOffInner(targetState)
+                }else {
+                    //Workaround if sensor state can't be read from isSensorsOff())
+                    while (childs == null && triesB < MAX_TRY) {
+                        performGlobalAction(GLOBAL_ACTION_NOTIFICATIONS)
                         try {
-                            it.performAction(ACTION_CLICK)
-                            NotificationBarSt.instance(applicationContext).collapseNotificationBar()
-                        } catch (_: java.lang.Exception) {
+                            childs = rootInActiveWindow?.findAccessibilityNodeInfosByText("sensors off")
+                        } catch (_: Exception) {
+                            triesB += 1
+                            delay(200)
+                            switchSensorsOffInner(targetState)
                         }
                     }
+
+                    childs?.forEach {
+                        val initDesc = it.contentDescription
+                        if (initDesc != null && it.isClickable) {
+                            if (sensorOnKey == null) {
+                                if (keyguardManager.isKeyguardLocked) {
+                                    try {
+                                        it.apply{
+                                            performAction(ACTION_CLICK)
+                                            delay(600)
+                                            refresh()
+                                            sensorOnKey = if (initDesc != contentDescription) contentDescription else initDesc
+                                            //Log.d("SENSOR_TEST", "updated sensorOnKey:$sensorOnKey")
+                                        }
+                                    }catch (_: java.lang.Exception) { }
+                                }else {
+                                    //Log.d("SENSOR_TEST", "sensorOnKey is null")
+                                    NotificationBarSt.instance(applicationContext)
+                                        .collapseNotificationBar()
+                                    return@launch
+                                }
+                            }
+                            if (sensorOnKey != null){
+                                if ((sensorOnKey == initDesc) != targetState) {
+                                    //Log.d("SENSOR_TEST", "performing click")
+                                    it.performAction(ACTION_CLICK)
+                                }
+                                if (NotificationBarSt.instance(applicationContext).collapseNotificationBar()) {
+                                    return@launch
+                                }
+                            }
+                            triesA += 1
+                            delay(200)
+                            switchSensorsOffInner(targetState)
+                        }
+                    }
+                    triesA += 1
+                    delay(200)
+                    switchSensorsOffInner(targetState)
                 }
-                triesA += 1
-                delay(200)
-                switchSensorsOffInner(on)
             }
-        } else {
-            // isSwitchingSensorsOn.set(false)
+        }else {
+            NotificationBarSt.instance(applicationContext)
+                .collapseNotificationBar()
             return
         }
     }
 
-
-    private fun isSensorsOff(): Boolean {
-        return try {
-            sensorPrivacyManager.getDeclaredMethod("isSensorPrivacyEnabled").invoke(sensorPrivacyService) as Boolean
-        }catch(_: Exception){
-            if (CheckBlacklistApiSt.instance(applicationContext).setAllowed()) {
-                launch(Dispatchers.Main) {
-                    Toast.makeText(
-                        applicationContext,
-                        "Error reading device sensors state. Reboot this device and try again.",
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
-            }
-            false
-        }
-    }
 
 
     private val networkCallback by lazy {
@@ -211,14 +254,14 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         }
     }
 
- /*   private val adaptiveRunnable: Runnable by lazy {
-        Runnable {
-            if (applyAdaptiveMod.get()!! && isScreenOn && !isGameOpen){
-                mUtilsRefreshRate.setPeakRefreshRate(
-                    if (useMin60 || cameraOpen) 60 else lrrPref.get()!!)
-            }
-        }
-    }*/
+    /*   private val adaptiveRunnable: Runnable by lazy {
+           Runnable {
+               if (applyAdaptiveMod.get()!! && isScreenOn && !isGameOpen){
+                   mUtilsRefreshRate.setPeakRefreshRate(
+                       if (useMin60 || cameraOpen) 60 else lrrPref.get()!!)
+               }
+           }
+       }*/
 
     //private val defaultKeyboard by lazy{DefaultApps.getKeyboard(applicationContext)}
     private val defaultLauncherName by lazy{DefaultApps.getLauncher(applicationContext)}
@@ -231,7 +274,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
             addAction(ACTION_SCREEN_ON)
             addAction(ACTION_USER_PRESENT)
             addAction(ACTION_POWER_SAVE_MODE_CHANGED)
-            //addAction(ACTION_PHONE_STATE)
+            addAction(ACTION_LOCALE_CHANGED)
             priority = 999
             registerReceiver(mScreenStatusReceiver, this)
         }
@@ -287,7 +330,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-       // Log.d(TAG, "onStartCommand() called")
+        // Log.d(TAG, "onStartCommand() called")
         val extras = intent?.extras
         val setupAdaptive = extras?.get(SETUP_ADAPTIVE)
         val setupNetworkCallback = extras?.get(SETUP_NETWORK_CALLBACK)
@@ -312,7 +355,9 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         setupAdaptiveEnhancer()
         this.serviceInfo.apply {
             notificationTimeout = adaptiveAccessTimeout
-            //Set the recommended time that interactive controls need to remain on the screen to support the user.
+
+            /*Set the recommended time that interactive controls
+            need to remain on the screen to support the user.*/
             try {
                 interactiveUiTimeoutMillis = 0
                 nonInteractiveUiTimeoutMillis = 0
@@ -321,6 +366,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         restartOtherServices()
     }
 
+    //if triggered by tasker
     private fun checkAutoSensorsOff(switchOn:Boolean, screenOffOnly: Boolean){
         if (switchOn){
             if ((screenOffOnly && !isScreenOn) || !screenOffOnly) {
@@ -335,11 +381,10 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     }
 
     override fun onUnbind(intent: Intent?): Boolean {
-        //job.cancel()
         if (hasWriteSecureSetPerm && isSpayInstalled == false) {
             allowAccessibility(applicationContext, GalaxyMaxHzAccess::class.java, true)
         }
-        return false//super.onUnbind(intent)
+        return super.onUnbind(intent)
     }
 
 
@@ -473,7 +518,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                                     }
                                 } else {
                                     rootInActiveWindow?.findAccessibilityNodeInfosByText("open settings")?.let{
-                                       // Log.i(TAG, "Notif is expanded")
+                                        // Log.i(TAG, "Notif is expanded")
                                         makeAdaptive()
                                     }
                                 }
@@ -505,9 +550,9 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     //@Synchronized
     private fun makeAdaptive() {
         //Log.i(TAG, "makeAdaptive called")
-    /*    mUtilsRefreshRate.setPeakRefreshRate(prrActive.get()!!)
-        handler.removeCallbacks(adaptiveRunnable)
-        handler.postDelayed(adaptiveRunnable, adaptiveDelayMillis)*/
+        /*    mUtilsRefreshRate.setPeakRefreshRate(prrActive.get()!!)
+            handler.removeCallbacks(adaptiveRunnable)
+            handler.postDelayed(adaptiveRunnable, adaptiveDelayMillis)*/
 
         mUtilsRefreshRate.setPeakRefreshRate(prrActive.get()!!)
 

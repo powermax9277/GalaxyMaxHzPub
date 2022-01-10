@@ -21,7 +21,7 @@
     <string name="use_qstile_reso_switch">Используйте прилагаемую плитку быстрых настроек (qs) для быстрого переключения разрешения экрана.</string>
     <string name="center">Центр</string>
     <string name="info_qs_max_hz">Включает плитку быстрой настройки для переключения максимального герца.</string>
-    <string name="info_qs_rtrr">Это может немного увеличить расход заряда батареи приложения. Включает плитку быстрой настройки для включения монитора частоты обновления.</string>
+    <string name="info_qs_rtrr">Включает плитку быстрой настройки для включения монитора частоты обновления.</string>
     <string name="s_off_mod">Отключение экрана mods</string>
     <string name="force_hz_mod">Принудительно наименьшая Hz</string>
     <string name="s_off_hz_inf">

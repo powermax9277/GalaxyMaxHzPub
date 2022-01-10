@@ -62,6 +62,7 @@ internal class UtilsPrefsGmh(context: Context) {
         internal const val NOT_ASKED = 2
         private const val HELP_URL = "help_url"
         private const val PREVENT_HIGH = "prev_hi"
+        private const val SENSOR_ON_KEY = "s_on"
     }
 
     val hzSharedPref: SharedPreferences = context.applicationContext.getSharedPreferences(
@@ -312,4 +313,10 @@ internal class UtilsPrefsGmh(context: Context) {
     var gmhPrefSettingListDone: Boolean
         get() = hzSharedPref.getBoolean(SETTINGS_LIST_DONE, false)
         set(value) = hzSharedPrefEditor.putBoolean(SETTINGS_LIST_DONE, value).apply()
+
+    var gmhPrefSensorOnKey: CharSequence?
+        get() {
+            return hzSharedPref.getString(SENSOR_ON_KEY, null)
+        }
+        set(key){hzSharedPrefEditor.putString(SENSOR_ON_KEY, key as String).apply()}
 }

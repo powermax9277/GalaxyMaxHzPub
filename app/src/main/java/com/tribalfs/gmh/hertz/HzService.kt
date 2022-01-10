@@ -130,15 +130,6 @@ internal class HzService : Service(), CoroutineScope{
     private lateinit var notificationBuilderInstance: Notification.Builder
 
 
-    private fun startHzInternal() = launch {
-        try {
-            updateRefreshRateViews(dm.getDisplay(displayId).refreshRate.toInt())
-            dm.registerDisplayListener(displayListener, Handler(Looper.getMainLooper()))
-        } catch (e: java.lang.Exception) {
-        }
-
-    }
-
     private fun pauseHz(){
         myJob?.cancel()
         myJob = null
@@ -160,8 +151,13 @@ internal class HzService : Service(), CoroutineScope{
 
     @RequiresApi(Build.VERSION_CODES.M)
     private fun restartHz() {
-        showHzOverlay(overlayOn!!)
-        startHzInternal()
+        launch {
+            showHzOverlay(overlayOn!!)
+            try {
+                updateRefreshRateViews(dm.getDisplay(displayId).refreshRate.toInt())
+                dm.registerDisplayListener(displayListener, Handler(Looper.getMainLooper()))
+            } catch (e: java.lang.Exception) { }
+        }
         hzStatus.set(PLAYING)
     }
 
@@ -207,7 +203,7 @@ internal class HzService : Service(), CoroutineScope{
 
     }
 
-    
+
     private fun setupScreenStatusReceiver(){
         if (!AccessibilityPermission.isAccessibilityEnabled(
                 applicationContext,
@@ -254,19 +250,21 @@ internal class HzService : Service(), CoroutineScope{
 
 
     @SuppressLint("NewApi")
-    private fun updateNotifContent(hzStr: String) = launch(Dispatchers.Main) {
+    private fun updateNotif(hzStr: String) = launch(Dispatchers.Main) {
         //Log.d(TAG, "updateNotifContent called")
-        notificationBuilderInstance.apply {
-            setSmallIcon( getIndicatorIcon(hzStr) )
-            setCustomContentView(
-                RemoteViews(mNotificationContentView).apply {
-                    setTextViewText(R.id.tvHz, getString(R.string.cur_rr_h, hzStr))
-                }
-            )
-            notificationManagerCompat.notify(
-                NOTIFICATION_ID_HZ,
-                build()
-            )
+        if (isHzNotifOn.get()!!) {
+            notificationBuilderInstance.apply {
+                setSmallIcon(getIndicatorIcon(hzStr))
+                setCustomContentView(
+                    RemoteViews(mNotificationContentView).apply {
+                        setTextViewText(R.id.tvHz, getString(R.string.cur_rr_h, hzStr))
+                    }
+                )
+                notificationManagerCompat.notify(
+                    NOTIFICATION_ID_HZ,
+                    build()
+                )
+            }
         }
 
     }
@@ -283,8 +281,7 @@ internal class HzService : Service(), CoroutineScope{
     }
 
 
-
-    private fun showHzOverlay(show: Boolean){
+    private fun showHzOverlay(show: Boolean) = launch(Dispatchers.Main){
         if (show) {
             try{
                 wm.removeView(stageView)
@@ -305,6 +302,21 @@ internal class HzService : Service(), CoroutineScope{
             } catch (_: java.lang.Exception) {
             }
         }
+    }
+
+    private fun updateOverlay(newHz: Int){
+        if (overlayOn == true) {
+             launch(Dispatchers.Main) {
+                 hzText.setTextColor(if (newHz <= 60.05) Color.RED else Color.GREEN)
+                 hzText.text = newHz.toString()
+             }
+        }
+    }
+
+
+    private fun updateRefreshRateViews(newHz: Int){
+        updateNotif(newHz.toString())
+        updateOverlay(newHz)
     }
 
 
@@ -329,18 +341,6 @@ internal class HzService : Service(), CoroutineScope{
         }
     }
 
-
-    private fun updateRefreshRateViews(newHz: Int){
-        if (isHzNotifOn.get()!!) {
-            updateNotifContent(newHz.toString())
-        }
-
-        if (overlayOn == true) {
-            hzText.setTextColor(if (newHz <= 60.05) Color.RED else Color.GREEN)
-            hzText.text = newHz.toString()
-        }
-
-    }
 
 }
 

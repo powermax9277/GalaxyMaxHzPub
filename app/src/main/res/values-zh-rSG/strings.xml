@@ -20,7 +20,7 @@
     <string name="use_qstile_reso_switch">使用随附的快速设置图块可快速切换分辨率和运动平滑度模式。</string>
     <string name="center">中央</string>
     <string name="info_qs_max_hz">包含快速设置磁贴以切换最大hz</string>
-    <string name="info_qs_rtrr">这可能会略微增加应用程序的电池消耗。包括用于激活刷新率监视器的快速设置磁贴</string>
+    <string name="info_qs_rtrr">包括用于激活刷新率监视器的快速设置磁贴</string>
     <string name="s_off_mod">屏幕关闭刷新率</string>
     <string name="force_hz_mod">强制最低Hz</string>
     <string name="s_off_hz_inf">这会将屏幕关闭或 AOD 刷新率设置为最低，以提高备用电池的使用率。\n屏幕关闭刷新率: %s</string>

@@ -84,6 +84,7 @@ import com.tribalfs.gmh.helpers.CacheSettings.offScreenRefreshRate
 import com.tribalfs.gmh.helpers.CacheSettings.preventHigh
 import com.tribalfs.gmh.helpers.CacheSettings.prrActive
 import com.tribalfs.gmh.helpers.CacheSettings.screenOffRefreshRateMode
+import com.tribalfs.gmh.helpers.CacheSettings.sensorOnKey
 import com.tribalfs.gmh.helpers.CacheSettings.supportedHzIntAllMod
 import com.tribalfs.gmh.helpers.CacheSettings.supportedHzIntCurMod
 import com.tribalfs.gmh.helpers.CacheSettings.turnOffAutoSensorsOff
@@ -145,7 +146,7 @@ import kotlin.coroutines.CoroutineContext
 import kotlin.math.max
 import kotlin.math.min
 
-//TODO(UI improvements, warning when first enabling doz mod)
+//TODO(UI improvements)
 
 @ExperimentalCoroutinesApi
 class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClickHandler, CoroutineScope {
@@ -159,7 +160,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
         private const val REQUEST_LATEST_UPDATE = 0x5
         private const val KEY_JSON_LIC_TYPE = "0x11"
         private const val KEY_JSON_PAYPAL_BUY_URL = "0x12"
-        private const val KEY_JSON_PAYPAL_HELP_URL = "0x24"
+        private const val KEY_JSON_HELP_URL = "0x24"
         private const val VERSION = BuildConfig.VERSION_NAME
 
 
@@ -504,9 +505,12 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
                         }
                     } else {
                         turnOffAutoSensorsOff = false
-                        mUtilsPrefsGmh.gmhPrefSensorsOff = checked &&
+                        mUtilsPrefsGmh.gmhPrefSensorsOff = checked /*&&
                                 (CheckBlacklistApiSt.instance(applicationContext).isAllowed()
-                                        || CheckBlacklistApiSt.instance(applicationContext).setAllowed())
+                                        || CheckBlacklistApiSt.instance(applicationContext).setAllowed())*/
+                        mUtilsPrefsGmh.gmhPrefSensorOnKey?.let{
+                            sensorOnKey = it
+                        }
 
                     }
                 }
@@ -773,7 +777,10 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
         if (!isOfficialAdaptive){
             mBinding.swPreventHigh.isChecked = mUtilsPrefsGmh.gmhPrefPreventHigh
         }
+
         showLoading(false)
+
+        launch{getHelpUrl()}
     }
 
 
@@ -1460,8 +1467,8 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
             override fun onStartTrackingTouch(seekBar: SeekBar) {
                 if (!UtilsPermSt.instance(applicationContext).hasWriteSystemPerm()) {
                     UtilsPermSt.instance(applicationContext).requestWriteSettings()
-                return
-                 }
+                    return
+                }
             }
             override fun onStopTrackingTouch(seekBar: SeekBar) {
                 if (isOfficialAdaptive) {
@@ -1582,19 +1589,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
         showLoading(true)
         try{
             startActivity(
-                Intent(
-                    Intent.ACTION_VIEW,
-                    Uri.parse(
-                        if (mUtilsPrefsGmh.gmhPrefHelpUrl != null){
-                            mUtilsPrefsGmh.gmhPrefHelpUrl!!
-                        }else {
-                            (mSyncer.getHelpUrl()?.get(KEY_JSON_PAYPAL_HELP_URL) as String).let{
-                                mUtilsPrefsGmh.gmhPrefHelpUrl = it
-                                it
-                            }
-                        }
-                    )
-                )
+                Intent(Intent.ACTION_VIEW, Uri.parse(getHelpUrl()))
             )
         }catch(_: Exception){
             showSbMsg(R.string.cie, null, null, null)
@@ -1602,6 +1597,16 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
         showLoading(false)
     }
 
+    private suspend fun getHelpUrl(): String= withContext(Dispatchers.IO){
+        return@withContext if (mUtilsPrefsGmh.gmhPrefHelpUrl != null){
+            mUtilsPrefsGmh.gmhPrefHelpUrl!!
+        }else{
+            (mSyncer.getHelpUrl()?.get(KEY_JSON_HELP_URL) as String).let{
+                mUtilsPrefsGmh.gmhPrefHelpUrl = it
+                it
+            }
+        }
+    }
 
     private fun openBuyAdFreeLink() = launch {
         showLoading(true)
@@ -1910,10 +1915,12 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
             return
         }
         mBinding.sensorsOffSupported =true
-        if (adfree && (CheckBlacklistApiSt.instance(applicationContext).isAllowed()
-                    || CheckBlacklistApiSt.instance(applicationContext).setAllowed())
+
+        if (adfree/* && (CheckBlacklistApiSt.instance(applicationContext).isAllowed()
+                    || CheckBlacklistApiSt.instance(applicationContext).setAllowed())*/
         ) {
             mBinding.swAutoSensorsOff.isChecked = mUtilsPrefsGmh.gmhPrefSensorsOff
+            mUtilsPrefsGmh.gmhPrefSensorOnKey?.let{ sensorOnKey = it }
         } else {
             mBinding.swAutoSensorsOff.isChecked = false
             mUtilsPrefsGmh.gmhPrefSensorsOff = false
@@ -1943,6 +1950,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
         currentRefreshRateMode.removeOnPropertyChangedCallback(rrmChangeCallback)
         isPowerSaveModeOn.removeOnPropertyChangedCallback(rrmChangeCallback)
         unregisterReceiver(mReceiver)
+        sensorOnKey?.let{mUtilsPrefsGmh.gmhPrefSensorOnKey = it}
         masterJob.cancel()
         super.onDestroy()
     }

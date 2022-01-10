@@ -22,7 +22,7 @@
     <string name="use_qstile_reso_switch">Utilitzeu el mosaic de configuració ràpida (qs) inclòs per canviar ràpidament la resolució de la pantalla</string>
     <string name="center">Centre</string>
     <string name="info_qs_max_hz">Inclou un mosaic de configuració ràpida per canviar el màxim de hz</string>
-    <string name="info_qs_rtrr">Això pot augmentar lleugerament el consum de bateria de l\'aplicació. Inclou un mosaic de configuració ràpida per activar el monitor de freqüència d’actualització.</string>
+    <string name="info_qs_rtrr">Inclou un mosaic de configuració ràpida per activar el monitor de freqüència d’actualització.</string>
     <string name="s_off_mod">Freqüència d’actualització quan la pantalla està apagada</string>
     <string name="force_hz_mod">Força al Mínim Hz</string>
     <string name="s_off_hz_inf">

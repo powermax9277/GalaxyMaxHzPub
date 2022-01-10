@@ -22,7 +22,7 @@
     <string name="use_qstile_reso_switch">Χρησιμοποιήστε το παρεχόμενο κεραμίδι γρήγορη ρυθμίσεις στα ψηφίσματα του διακόπτη γρήγορα και τρόπους ομαλότητα κίνησης.</string>
     <string name="center">Κέντρο</string>
     <string name="info_qs_max_hz">Περιλαμβάνει μια γρήγορη κεραμίδι ρύθμιση για εναλλαγή max hz</string>
-    <string name="info_qs_rtrr">Αυτό μπορεί να αυξήσει ελαφρώς την κατανάλωση μπαταρίας της εφαρμογής. Περιλαμβάνει ένα πλακίδιο γρήγορης ρύθμισης για να ενεργοποιήσετε την οθόνη ρυθμού ανανέωσης</string>
+    <string name="info_qs_rtrr">Περιλαμβάνει ένα πλακίδιο γρήγορης ρύθμισης για να ενεργοποιήσετε την οθόνη ρυθμού ανανέωσης</string>
     <string name="s_off_mod">Off Οθόνη Ρυθμός ανανέωσης</string>
     <string name="force_hz_mod">Δύναμη στο χαμηλότερο Hz</string>
     <string name="s_off_hz_inf">
@@ -146,5 +146,5 @@
     <string name="allow_bg_act">Για τη σταθερή εκτέλεση αυτής της εφαρμογής, ενεργοποιήστε το \"Να επιτρέπεται η δραστηριότητα στο παρασκήνιο\" ή απενεργοποιήστε το \"Βελτιστοποίηση χρήσης μπαταρίας\".</string>
     <string name="prevent_high">Αποτρέψτε τη μετάβαση σε Υψηλή λειτουργία</string>
     <string name="auto_sensors_off_exp">Αυτόματοι αισθητήρες απενεργοποιημένοι</string>
-    <string name="data_usage" translatable="false"><u>Data Usage</u></string>
+    <string name="data_usage"><u>Data Usage</u></string>
 </resources>

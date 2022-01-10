@@ -44,7 +44,7 @@ class UtilsDeviceInfo(val context: Context) {
     }
     private val appCtx: Context = context.applicationContext
     private val mContentResolver = appCtx.contentResolver
-    internal val deviceModelVariant: String =  Build.MODEL //TOD(before release: Replace with Build.MODEL)
+    internal val deviceModelVariant: String = Build.MODEL //ODO(before release: Replace with Build.MODEL)
     internal val androidVersion: String = Build.VERSION.RELEASE
     internal val manufacturer: String = Build.MANUFACTURER.uppercase(Locale.ROOT)
     internal val deviceModel: String = if (manufacturer == "SAMSUNG") {
@@ -63,7 +63,7 @@ class UtilsDeviceInfo(val context: Context) {
         return currentDisplay.state == Display.STATE_ON
     }
 
-
+    @Suppress("DEPRECATION")
     private fun getDisplayResolution(): ResolutionBasic {
         synchronized(this) {
             val resStr = Settings.Global.getString(mContentResolver, "display_size_forced"/*custom resolution*/)
