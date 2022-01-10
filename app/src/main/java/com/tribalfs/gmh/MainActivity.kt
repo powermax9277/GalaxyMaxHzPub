@@ -130,6 +130,7 @@ import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmh.Companion.FORCE_LOWEST_HZ_SO
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmh.Companion.HZ_OVERLAY_ON
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmh.Companion.IS_HZ_ON
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmh.Companion.KEEP_RRM
+import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmh.Companion.MIN_HZ_ADAPT
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmh.Companion.NOT_ASKED
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmh.Companion.NOT_USING
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmh.Companion.PREF_MAX_REFRESH_RATE
@@ -269,6 +270,16 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
                 mUtilsPrefsGmh.hzPrefMaxRefreshRate.let{mrr ->
                     if (mBinding.sbPeakHz.progress != mrr) {
                         mBinding.sbPeakHz.progress = mrr
+                    }
+                }
+            }
+
+            //Trigger with ChangeMaxHz function
+            MIN_HZ_ADAPT -> {
+                //Only max refresh rate changes
+                mUtilsPrefsGmh.gmhPrefMinHzAdapt.let{mnrr ->
+                    if (mBinding.sbMinHzAdapt.progress != mnrr) {
+                        mBinding.sbMinHzAdapt.progress = mnrr
                     }
                 }
             }

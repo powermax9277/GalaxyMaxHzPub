@@ -21,13 +21,16 @@ import com.tribalfs.gmh.GalaxyMaxHzAccess.Companion.SWITCH_AUTO_SENSORS
 import com.tribalfs.gmh.MyApplication.Companion.applicationName
 import com.tribalfs.gmh.helpers.*
 import com.tribalfs.gmh.helpers.CacheSettings.displayId
+import com.tribalfs.gmh.helpers.CacheSettings.hasWriteSecureSetPerm
 import com.tribalfs.gmh.helpers.CacheSettings.highestHzForAllMode
-import com.tribalfs.gmh.helpers.CacheSettings.isPremium
 import com.tribalfs.gmh.helpers.CacheSettings.isOfficialAdaptive
 import com.tribalfs.gmh.helpers.CacheSettings.isPowerSaveModeOn
+import com.tribalfs.gmh.helpers.CacheSettings.isPremium
 import com.tribalfs.gmh.helpers.CacheSettings.isScreenOn
 import com.tribalfs.gmh.helpers.CacheSettings.keepModeOnPowerSaving
 import com.tribalfs.gmh.helpers.CacheSettings.lowestHzCurMode
+import com.tribalfs.gmh.helpers.CacheSettings.lowestHzForAllMode
+import com.tribalfs.gmh.helpers.CacheSettings.lrrPref
 import com.tribalfs.gmh.helpers.CacheSettings.minHzListForAdp
 import com.tribalfs.gmh.helpers.CacheSettings.prrActive
 import com.tribalfs.gmh.helpers.CacheSettings.supportedHzIntAllMod
@@ -54,6 +57,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
+import kotlin.math.max
 
 
 @ExperimentalCoroutinesApi
@@ -236,7 +240,7 @@ class DynamicInputRunner : TaskerPluginRunnerActionNoOutputOrInput() {
                     keep_motion_smoothness_on_psm -> {
                         try {
                             ((info.value as String).toBoolean()).let {isKeep ->
-                                if (isPremium.get()!!) {
+                                if (isPremium.get()!! || !isKeep) {
                                     keepModeOnPowerSaving = isKeep
                                     CoroutineScope(Dispatchers.Default).launch {
                                         PsmChangeHandler.instance(appCtx).handle()
@@ -256,8 +260,8 @@ class DynamicInputRunner : TaskerPluginRunnerActionNoOutputOrInput() {
 
 
                     quick_doze_mod -> {
-                        CoroutineScope(Dispatchers.Main).launch {
-                            if (isPremium.get()!!) {
+                        if (isPremium.get()!!) {
+                            CoroutineScope(Dispatchers.IO).launch {
                                 try {
                                     (info.value as String).toInt().let { dozInt ->
                                         if (dozInt == -1){
@@ -272,20 +276,18 @@ class DynamicInputRunner : TaskerPluginRunnerActionNoOutputOrInput() {
                                         }
                                     }
                                 } catch (_: java.lang.Exception) {
+
                                     //   success = false
                                 }
-                            }else{
-                                Toast.makeText(appCtx,"This is a premium feature.",Toast.LENGTH_SHORT).show()
                             }
-
                         }
                     }
 
 
                     auto_sensors_off ->{
-                        CoroutineScope(Dispatchers.IO).launch{
-                            try {
-                                if (isPremium.get()!!) {
+                        if (isPremium.get()!!) {
+                            CoroutineScope(Dispatchers.IO).launch{
+                                try {
                                     when ((info.value as String).toInt()) {
                                         1 -> {//turn On
                                             mUtilsPrefsGmh.gmhPrefSensorsOff = (CheckBlacklistApiSt.instance(appCtx).isAllowed()
@@ -350,11 +352,32 @@ class DynamicInputRunner : TaskerPluginRunnerActionNoOutputOrInput() {
                                             }
                                         }
                                     }
-                                }
-                            }catch (_: java.lang.Exception) {
-                                //   success = false
+                                }catch (_: java.lang.Exception) { }
                             }
                         }
+                    }
+
+                   // //TODO(before release)
+                    min_hertz ->{
+                        if (isPremium.get()!! && hasWriteSecureSetPerm) {
+                            CoroutineScope(Dispatchers.IO).launch {
+                                val minHz = (info.value as String).toInt()
+                                val idx = minHzListForAdp?.indexOf(minHz)
+                                if (idx != -1){
+                                    lrrPref.set(max(lowestHzForAllMode, minHz))
+                                    mUtilsPrefsGmh.gmhPrefMinHzAdapt = minHz
+                                }else{
+                                    launch(Dispatchers.Main) {
+                                        Toast.makeText(
+                                            appCtx,
+                                            "Invalid minimum Hertz for adaptive value.",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+                                }
+                            }
+                        }
+
                     }
 
                     else -> {
