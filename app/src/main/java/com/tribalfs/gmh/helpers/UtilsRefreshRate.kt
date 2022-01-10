@@ -1,6 +1,7 @@
 package com.tribalfs.gmh.helpers
 
 import android.annotation.SuppressLint
+import android.content.ContentValues
 import android.content.Context
 import android.net.Uri
 import android.os.Build
@@ -32,14 +33,7 @@ import com.tribalfs.gmh.profiles.ModelNumbers.fordableWithHrrExternal
 import com.tribalfs.gmh.profiles.ProfilesInitializer
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmh
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import androidx.core.content.ContextCompat.startActivity
-
-import com.tribalfs.gmh.MainActivity
-
-import android.content.Intent
-import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
-import androidx.core.content.ContextCompat
-import com.tribalfs.gmh.PipActivity
+import java.lang.Float.valueOf
 
 
 internal class UtilsRefreshRate(context: Context) {
@@ -54,10 +48,26 @@ internal class UtilsRefreshRate(context: Context) {
     private val mUtilsDeviceInfo = UtilsDeviceInfo(appCtx)
 
     fun setPeakRefreshRate(refreshRate: Int){
-        Settings.System.putString(mContentResolver,PEAK_REFRESH_RATE, refreshRate.toString())
+        //Settings.System.putString(mContentResolver,PEAK_REFRESH_RATE, refreshRate.toString())
+        val cvMaxHz = ContentValues(2);
+        cvMaxHz.put("name",PEAK_REFRESH_RATE)
+        cvMaxHz.put("value", valueOf(refreshRate.toString()))
+        mContentResolver.insert(Uri.parse("content://settings/system"), cvMaxHz)
         if (isXiaomi) {
-            Settings.System.putString(mContentResolver, USER_REFRESH_RATE, refreshRate.toString())
+            //Settings.System.putString(mContentResolver, USER_REFRESH_RATE, refreshRate.toString())
+            val cvMaxHz2 = ContentValues(2);
+            cvMaxHz2.put("name", USER_REFRESH_RATE)
+            cvMaxHz2.put("value", valueOf(refreshRate.toString()))
+            mContentResolver.insert(Uri.parse("content://settings/system"), cvMaxHz2)
         }
+    }
+
+    internal fun setMinRefreshRate(refreshRate: Int){
+        //Settings.System.putString(mContentResolver,MIN_REFRESH_RATE, refreshRate.toString())
+        val cvMinHz = ContentValues(2);
+        cvMinHz.put("name",MIN_REFRESH_RATE)
+        cvMinHz.put("value", valueOf(refreshRate.toString()))
+        mContentResolver.insert(Uri.parse("content://settings/system"), cvMinHz)
     }
 
 
@@ -72,9 +82,6 @@ internal class UtilsRefreshRate(context: Context) {
         }
     }
 
-    internal fun setMinRefreshRate(refreshRate: Int){
-        Settings.System.putString(mContentResolver,MIN_REFRESH_RATE, refreshRate.toString())
-    }
 
     internal fun clearRefreshRate() {
         deleteRefreshRate(PEAK_REFRESH_RATE)
