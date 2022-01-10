@@ -49,7 +49,6 @@ import com.tribalfs.gmh.AccessibilityPermission.isAccessibilityEnabled
 import com.tribalfs.gmh.BuildConfig.APPLICATION_ID
 import com.tribalfs.gmh.GalaxyMaxHzAccess.Companion.SETUP_ADAPTIVE
 import com.tribalfs.gmh.GalaxyMaxHzAccess.Companion.SETUP_NETWORK_CALLBACK
-import com.tribalfs.gmh.GalaxyMaxHzAccess.Companion.SWITCH_AUTO_SENSORS
 import com.tribalfs.gmh.MyApplication.Companion.applicationName
 import com.tribalfs.gmh.callbacks.LvlSbMsgCallback
 import com.tribalfs.gmh.callbacks.MyClickHandler
@@ -1597,13 +1596,16 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
         showLoading(false)
     }
 
-    private suspend fun getHelpUrl(): String= withContext(Dispatchers.IO){
+    private suspend fun getHelpUrl(): String?= withContext(Dispatchers.IO){
         return@withContext if (mUtilsPrefsGmh.gmhPrefHelpUrl != null){
             mUtilsPrefsGmh.gmhPrefHelpUrl!!
         }else{
-            (mSyncer.getHelpUrl()?.get(KEY_JSON_HELP_URL) as String).let{
-                mUtilsPrefsGmh.gmhPrefHelpUrl = it
-                it
+            val result = mSyncer.getHelpUrl()?.get(KEY_JSON_HELP_URL) as String?
+            if (result != null){
+                mUtilsPrefsGmh.gmhPrefHelpUrl = result
+                result
+            }else{
+                null
             }
         }
     }
@@ -1703,10 +1705,10 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
                             ).apply {
                                 putExtra(SETUP_ADAPTIVE, true)
                                 putExtra(SETUP_NETWORK_CALLBACK, true)
-                                putExtra(
+                                /*putExtra(
                                     SWITCH_AUTO_SENSORS,
                                     mUtilsPrefsGmh.gmhPrefSensorsOff
-                                )
+                                )*/
                             }
                         )
                     } catch (_: Exception) {

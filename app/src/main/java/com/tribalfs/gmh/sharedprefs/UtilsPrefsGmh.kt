@@ -173,7 +173,7 @@ internal class UtilsPrefsGmh(context: Context) {
         get() {
             return hzSharedPref.getString(HELP_URL, null)
         }
-        set(mode){hzSharedPrefEditor.putString(HELP_URL, mode).apply()}
+        set(url){hzSharedPrefEditor.putString(HELP_URL, url).apply()}
 
     var gmhPrefHzOverlaySize: Float
         get() {

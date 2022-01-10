@@ -97,8 +97,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         )}
 
     private val mScreenStatusReceiver by lazy{
-        GmhBroadcastReceivers(
-            applicationContext,
+        GmhBroadcastReceivers(applicationContext,
             object : AccessibilityCallback {
                 override fun onChange(userPresent: Boolean, turnOffSensors: Boolean) {
                     if (userPresent) {
@@ -178,24 +177,18 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                     childs?.forEach {
                         val initDesc = it.contentDescription
                         if (initDesc != null && it.isClickable) {
-                            if (sensorOnKey == null) {
-                                if (keyguardManager.isKeyguardLocked) {
-                                    try {
-                                        it.apply{
-                                            performAction(ACTION_CLICK)
-                                            delay(600)
-                                            refresh()
-                                            sensorOnKey = if (initDesc != contentDescription) contentDescription else initDesc
-                                            //Log.d("SENSOR_TEST", "updated sensorOnKey:$sensorOnKey")
-                                        }
-                                    }catch (_: java.lang.Exception) { }
-                                }else {
-                                    //Log.d("SENSOR_TEST", "sensorOnKey is null")
-                                    NotificationBarSt.instance(applicationContext)
-                                        .collapseNotificationBar()
-                                    return@launch
-                                }
+                            if (keyguardManager.isKeyguardLocked) {
+                                try {
+                                    it.apply{
+                                        performAction(ACTION_CLICK)
+                                        delay(600)
+                                        refresh()
+                                        sensorOnKey = if (initDesc != contentDescription) contentDescription else initDesc
+                                        //Log.d("SENSOR_TEST", "updated sensorOnKey:$sensorOnKey")
+                                    }
+                                }catch (_: java.lang.Exception) { }
                             }
+
                             if (sensorOnKey != null){
                                 if ((sensorOnKey == initDesc) != targetState) {
                                     //Log.d("SENSOR_TEST", "performing click")
@@ -204,6 +197,11 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                                 if (NotificationBarSt.instance(applicationContext).collapseNotificationBar()) {
                                     return@launch
                                 }
+                            }else{
+                                //Log.d("SENSOR_TEST", "sensorOnKey is null")
+                                NotificationBarSt.instance(applicationContext)
+                                    .collapseNotificationBar()
+                                return@launch
                             }
                             triesA += 1
                             delay(200)
