@@ -145,8 +145,8 @@ class UtilsDeviceInfo(val context: Context) {
 
     @RequiresApi(Build.VERSION_CODES.M)
     internal fun getPeakRefreshRateFromSettings(): Int? {
-        val prr = Settings.System.getFloat(mContentResolver, PEAK_REFRESH_RATE)
         return try {
+            val prr = Settings.System.getFloat(mContentResolver, PEAK_REFRESH_RATE)
             prr.toInt()
         } catch (_: Exception) {
             null
