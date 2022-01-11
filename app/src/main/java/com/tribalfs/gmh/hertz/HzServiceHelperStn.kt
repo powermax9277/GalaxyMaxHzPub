@@ -2,8 +2,6 @@ package com.tribalfs.gmh.hertz
 
 import android.content.Context
 import android.content.Intent
-import android.os.Build
-import androidx.annotation.RequiresApi
 import com.tribalfs.gmh.helpers.CacheSettings.hzStatus
 import com.tribalfs.gmh.helpers.CacheSettings.isHzNotifOn
 import com.tribalfs.gmh.helpers.CacheSettings.isScreenOn
@@ -22,7 +20,6 @@ class HzServiceHelperStn private constructor(context: Context) {
     }
 
     @ExperimentalCoroutinesApi
-    @RequiresApi(Build.VERSION_CODES.M)
     fun updateHzSize(size: Int?) {
         size?.let{
             mHzSharePref.gmhPrefHzOverlaySize = it.toFloat()
@@ -31,7 +28,6 @@ class HzServiceHelperStn private constructor(context: Context) {
     }
 
     @ExperimentalCoroutinesApi
-    @RequiresApi(Build.VERSION_CODES.M)
     fun updateHzGravity(gravity: Int){
         mHzSharePref.gmhPrefHzPosition = gravity
         if (mHzSharePref.gmhPrefHzIsOn) {
@@ -52,7 +48,7 @@ class HzServiceHelperStn private constructor(context: Context) {
 
 
     @ExperimentalCoroutinesApi
-    @RequiresApi(Build.VERSION_CODES.M)
+   // @RequiresApi(Build.VERSION_CODES.M)
     fun startHertz(isSwOn: Boolean?, showOverlayHz: Boolean?, showNotifHz: Boolean?) {
         //Log.d(TAG, "HzServiceHelper/startHertz: showHzFpsOverlay() called")
         isSwOn?.let{mHzSharePref.gmhPrefHzIsOn = it}
@@ -71,7 +67,6 @@ class HzServiceHelperStn private constructor(context: Context) {
     }
 
     @ExperimentalCoroutinesApi
-    @RequiresApi(Build.VERSION_CODES.M)
     fun stopHertz(){
         //Log.d(TAG, "HzServiceHelper/stopHertz")
         try {
@@ -80,7 +75,6 @@ class HzServiceHelperStn private constructor(context: Context) {
     }
 
     @ExperimentalCoroutinesApi
-    @RequiresApi(Build.VERSION_CODES.M)
     fun isHzStop(): Boolean {
         return hzStatus.get() == STOP
     }

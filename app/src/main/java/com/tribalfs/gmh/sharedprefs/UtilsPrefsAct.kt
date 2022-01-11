@@ -3,10 +3,8 @@ package com.tribalfs.gmh.sharedprefs
 import android.content.Context
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
-import java.text.ParseException
-import java.text.SimpleDateFormat
-import java.util.*
-import java.util.concurrent.TimeUnit
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class UtilsPrefsAct(context: Context) {
 
@@ -86,18 +84,39 @@ class UtilsPrefsAct(context: Context) {
         get(){return actSharedPref.getString(TRIAL_DATE, null)}
         set(formattedDateStr){ gmhSharedPrefEditor.putString(TRIAL_DATE, formattedDateStr).apply() }
 
-    private fun gmhPrefGetTrialStartDate(): Date? {
+    private fun gmhPrefGetTrialStartDate(): LocalDate? {
         val dateStr = gmhPrefTrialStartDate
         return if (dateStr == null) {
             null
         } else {
             try {
-                stringToDate(dateStr)
-            } catch (_: ParseException) {
-                null
+                LocalDate.parse(dateStr.split(" ")[0], DateTimeFormatter.ofPattern("MM/dd/yyyy"))
+            } catch (_: Exception) {
+                try{
+                    LocalDate.parse(dateStr.split(" ")[0], DateTimeFormatter.ofPattern("MM-dd-yyyy"))
+                }catch (_: Exception) {
+                    null
+                }
             }
         }
     }
+
+    private fun isFreeTrialActive(): Boolean {
+        val rd = getFreeTrialDaysRemaining()
+        return rd != null && rd > 0
+    }
+
+    fun getFreeTrialDaysRemaining(): Int?{
+        val trialDate = gmhPrefGetTrialStartDate()
+        return if (trialDate == null) {
+            null
+        } else {
+            val currentDate = LocalDate.now() //time converts it to Date object
+            val days = trialDate.until(currentDate).days
+            return (gmhPrefPremiumTrialDays - days)
+        }
+    }
+
 
     /*var gmhPrefInstallDateStr: String?
         get() { return actSharedPref.getString(INS_DATE, null) }
@@ -118,13 +137,16 @@ class UtilsPrefsAct(context: Context) {
             }
         }*/
 
+/*
     private var sdf = SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.ENGLISH)
 
-    private fun stringToDate(dateStr: String): Date {
+    private fun stringToDate(dateStr: String): LocalDate {
         val cal = Calendar.getInstance()
         cal.time = sdf.parse(dateStr)!!
         return cal.time
+
     }
+*/
 
 /*
     fun getTileIsExpired(insertNewDate: Boolean): Boolean {
@@ -144,21 +166,5 @@ class UtilsPrefsAct(context: Context) {
     }
 */
 
-    private fun isFreeTrialActive(): Boolean {
-        val rd = getFreeTrialDaysRemaining()
-        return rd != null && rd > 0
-    }
-
-    fun getFreeTrialDaysRemaining(): Int?{
-        val trialDate = gmhPrefGetTrialStartDate()
-        return if (trialDate == null) {
-            null
-        } else {
-            val currentTime = Calendar.getInstance().time //time converts it to Date object
-            val diff: Long = currentTime.time - trialDate.time
-            val days = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS).toInt()
-            return (gmhPrefPremiumTrialDays - days)
-        }
-    }
 
 }

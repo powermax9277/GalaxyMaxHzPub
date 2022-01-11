@@ -3,9 +3,6 @@ package com.tribalfs.gmh.dialogs
 import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 
 class InfoDialog(private val tit: Int, private val msg: Int): RoundedDialogFragment(){
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -19,11 +16,4 @@ class InfoDialog(private val tit: Int, private val msg: Int): RoundedDialogFragm
         }.create()
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return super.onCreateView(inflater, container, savedInstanceState)
-    }
 }

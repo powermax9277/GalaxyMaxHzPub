@@ -51,7 +51,6 @@ import org.json.JSONArray
 import org.json.JSONObject
 
 
-@RequiresApi(Build.VERSION_CODES.M)
 internal class ProfilesInitializer private constructor(context: Context) {
 
     companion object : SingletonHolder<ProfilesInitializer, Context>(::ProfilesInitializer) {
@@ -77,6 +76,7 @@ internal class ProfilesInitializer private constructor(context: Context) {
         }
     private val mUtilsRefreshRate by lazy{ UtilsRefreshRate(appCtx) }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     @ExperimentalCoroutinesApi
     //@Synchronized
     suspend fun initProfiles(): Boolean {
@@ -103,6 +103,7 @@ internal class ProfilesInitializer private constructor(context: Context) {
         return withContext(Dispatchers.IO) { readAndLoadProfileFromPhone() }
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     private fun updateCacheSettings(){
         synchronized(this){
             supportedHzIntAllMod = getSupportedHzIntAllModUpd()
@@ -117,6 +118,7 @@ internal class ProfilesInitializer private constructor(context: Context) {
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.M)
     fun updateModeBasedVariables(){
         synchronized(this) {
             supportedHzIntCurMod = getSupportedHzIntCurModUpd()
@@ -142,6 +144,7 @@ internal class ProfilesInitializer private constructor(context: Context) {
 
 
 
+    @RequiresApi(Build.VERSION_CODES.M)
     @ExperimentalCoroutinesApi
     private suspend fun loadProfilesFromBackEnd(): Boolean{
 
@@ -176,6 +179,7 @@ internal class ProfilesInitializer private constructor(context: Context) {
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.M)
     private fun loadFromPredefinedProfiles(): Boolean{
         // Log.d(TAG, "isLocalProfileSaved: called")
         val isLocalProfileSaved = (PredefinedProfiles.get(mUtilsDeviceInfo.deviceModel))
@@ -196,8 +200,8 @@ internal class ProfilesInitializer private constructor(context: Context) {
 
 
 
+    @RequiresApi(Build.VERSION_CODES.M)
     @ExperimentalCoroutinesApi
-    //@Synchronized
     private suspend fun readAndLoadProfileFromPhone(): Boolean {
 
         val internalProfilesJson = InternalProfiles.load( false, appCtx)
@@ -342,11 +346,13 @@ internal class ProfilesInitializer private constructor(context: Context) {
         return mUtilsDeviceInfo.getDisplayResStr("x")
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     private fun getCurrentResLxwFromMode(): String{
         return mUtilsDeviceInfo.getDisplayResFromModeStr("x")
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.M)
     private fun getSupportedHzIntAllModUpd(): List<Int>{
         val arrStr: MutableList<Int> = arrayListOf()
         refreshRateModes.forEach {mode ->
@@ -373,6 +379,7 @@ internal class ProfilesInitializer private constructor(context: Context) {
         return arrStr.distinct().sorted()
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     private fun getMinHzListForAdpUpd(): List<Int> {
         val curResStr =  getCurrentResLxw()
         val curResStrMode = getCurrentResLxwFromMode()
@@ -412,6 +419,7 @@ internal class ProfilesInitializer private constructor(context: Context) {
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.M)
     private fun getSupportedHzIntCurModUpd(): List<Int>{
         val curResStr =  getCurrentResLxw()
         val curResStrMode = getCurrentResLxwFromMode()
@@ -525,6 +533,7 @@ internal class ProfilesInitializer private constructor(context: Context) {
     }*/
 
 
+    @RequiresApi(Build.VERSION_CODES.M)
     @ExperimentalCoroutinesApi
     fun getResoHighestHzForAllMode(resStrLxw: String?): Float{
         var highestResult = _listedHighestHz
@@ -559,6 +568,7 @@ internal class ProfilesInitializer private constructor(context: Context) {
         return highestResult!!
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     @Synchronized
     fun getResoHighestHzForCurrentMode(resStrLxw: String?, rrm: String?): Float {
         val curResStrLxw = resStrLxw ?: getCurrentResLxw()
@@ -579,7 +589,6 @@ internal class ProfilesInitializer private constructor(context: Context) {
 
 
     @ExperimentalCoroutinesApi
-    @RequiresApi(Build.VERSION_CODES.M)
     suspend fun getDisplayModesStrGmh(): String  {
         var modes = ""
         val curResStrLxw = getCurrentResLxw()
@@ -599,5 +608,4 @@ internal class ProfilesInitializer private constructor(context: Context) {
 
         return modes.trim()
     }
-
 }

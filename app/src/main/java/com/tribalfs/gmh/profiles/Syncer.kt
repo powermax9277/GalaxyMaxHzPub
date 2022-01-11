@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build.VERSION_CODES
 import android.provider.Settings
+import android.provider.Settings.Secure.ANDROID_ID
 import android.util.Log
 import androidx.annotation.RequiresApi
 import com.android.volley.Request
@@ -65,12 +66,10 @@ internal class Syncer(context: Context) {
     }
 
     private val deviceId by lazy {
-        Settings.Secure.getString(appCtx.contentResolver,
-            Settings.Secure.ANDROID_ID
-        )}
+        Settings.Secure.getString(appCtx.contentResolver, ANDROID_ID)
+    }
     
     @ExperimentalCoroutinesApi
-    @RequiresApi(VERSION_CODES.M)
     suspend fun fetchProfileFromBackEnd(): JSONObject? = withContext(Dispatchers.IO) {
         val jsonBody = JSONObject().apply {
             put(KEY_JSON_MODEL_NUMBER, mUtilsDeviceInfo.deviceModelVariant)
@@ -90,7 +89,6 @@ internal class Syncer(context: Context) {
 
 
     @ExperimentalCoroutinesApi
-    @RequiresApi(VERSION_CODES.M)
     suspend fun postProfileToBackEnd(): JSONObject? = withContext(Dispatchers.IO) {
         // Log.d(TAG, "Starting sync POST...")
         val jsonBody = JSONObject().apply {

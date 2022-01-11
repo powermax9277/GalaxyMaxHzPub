@@ -163,7 +163,9 @@ class UtilsDeviceInfo(val context: Context) {
     @RequiresApi(Build.VERSION_CODES.M)
     internal fun getMaxHzForCurrentReso(resStrLcw: String?): Float {
         with (getDisplayModesSet()){
-            (this[resStrLcw?:getDisplayResStr("x")]?:this[getDisplayResFromModeStr("x")]).let{
+            (this[resStrLcw?:getDisplayResStr("x")]
+                ?:
+                this[getDisplayResFromModeStr("x")]).let{
                 return it?.maxOrNull()!!
             }
         }

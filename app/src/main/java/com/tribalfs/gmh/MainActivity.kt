@@ -5,7 +5,6 @@ import android.app.Activity
 import android.app.ActivityManager
 import android.app.NotificationManager
 import android.app.NotificationManager.*
-import android.app.PictureInPictureParams
 import android.content.*
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.graphics.Bitmap
@@ -21,8 +20,6 @@ import android.os.PowerManager.*
 import android.provider.Settings.*
 import android.provider.Settings.Global.DEVELOPMENT_SETTINGS_ENABLED
 import android.text.method.LinkMovementMethod
-import android.util.Log
-import android.util.Rational
 import android.util.TypedValue
 import android.view.*
 import android.view.View.MeasureSpec
@@ -197,7 +194,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
 
     private val mReceiver = object: BroadcastReceiver() {
         @SuppressLint("InlinedApi")
-        @RequiresApi(VERSION_CODES.M)
+        // @RequiresApi(VERSION_CODES.M)
         override fun onReceive(context: Context, intent: Intent) {
             when (intent.action){
                 ACTION_NOTIFICATION_CHANNEL_BLOCK_STATE_CHANGED -> {
@@ -249,7 +246,6 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
 
 
 
-    @RequiresApi(VERSION_CODES.M)
     private val listener = OnSharedPreferenceChangeListener { _, key ->
         when (key){
             KEEP_RRM -> {
@@ -345,7 +341,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
 
 
     private val rrmChangeCallback: OnPropertyChangedCallback = object : OnPropertyChangedCallback() {
-        @RequiresApi(VERSION_CODES.M)
+        // @RequiresApi(VERSION_CODES.M)
         override fun onPropertyChanged(sender: Observable, propertyId: Int) {
             when (sender) {
                 currentRefreshRateMode -> { //triggered by MyContentObserver -> updateCacheSettings()
@@ -982,8 +978,6 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
     }
 
 
-
-    @RequiresApi(VERSION_CODES.M)
     private fun updateRefreshRateLabels(){
         launch {
             mProfilesInit.apply {
@@ -996,7 +990,6 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
     }
 
 
-    @SuppressLint("NewApi")
     private fun setupMinHzSeekBar() {
         mBinding.sbMinHz.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
@@ -1026,23 +1019,22 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
             mBinding.sbMinHz.max = highestHzForAllMode
             mBinding.sbMinHz.progress = mUtilsPrefsGmh.gmhPrefMinHzForToggle.coerceAtLeast(lowestHzForAllMode)//coerce only here
         }
-        // Log.d(TAG, "updateMinHzSeekBar called - min:$lh max:$mh")
     }
 
 
-
-    @SuppressLint("InlinedApi")
+    // @SuppressLint("InlinedApi")
     private fun setupBroadcastReceiver(){
         IntentFilter().let{
             it.addAction(ACTION_CHANGED_RES)
             it.addAction(ACTION_POWER_SAVE_MODE_CHANGED)
-            it.addAction(ACTION_NOTIFICATION_CHANNEL_BLOCK_STATE_CHANGED)
+            if (SDK_INT >= VERSION_CODES.P) {
+                it.addAction(ACTION_NOTIFICATION_CHANNEL_BLOCK_STATE_CHANGED)
+            }
             registerReceiver(mReceiver, it)
         }
     }
 
 
-    @SuppressLint("NewApi")
     override fun onResume() {
         super.onResume()
         // Log.d(TAG, "onResume() called")
@@ -1055,24 +1047,11 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
     }
 
 
-   /* override fun onNewIntent(intent: Intent?) {
-        Log.d("TESTTESTTEST", "onNewIntent called")
-        super.onNewIntent(intent)
-        if (SDK_INT >= VERSION_CODES.S) {
-            if (intent?.extras != null) {
-                enterPictureInPictureMode(mBuilder.build())
-                Handler(Looper.getMainLooper()).postDelayed(Exit(), 500)
-            }
-        }
-    //  showDialogIfTileExpired()
-    }*/
-
-    internal inner class Exit : Runnable {
-        override fun run() {
-            finishAfterTransition()
-        }
-    }
-
+    /* override fun onNewIntent(intent: Intent?) {
+         Log.d("TESTTESTTEST", "onNewIntent called")
+         super.onNewIntent(intent)
+     //  showDialogIfTileExpired()
+     }*/
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.appbar_menu, menu)
@@ -1126,13 +1105,13 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
 
     @Synchronized
     private fun checkUpdate(force: Boolean) {
-        Log.d(TAG, "MainActivity: checkUpdate called")
+        // Log.d(TAG, "MainActivity: checkUpdate called")
 
         if (isDownloading) return
         if (force) {
             showLoading(true)
         }
-        Log.d(TAG, "MainActivity: checkUpdate called")
+        // Log.d(TAG, "MainActivity: checkUpdate called")
         with(AppUpdaterLite(this)) {
             setUpdateJSON("$GMH_WEB_APP?Rq=$REQUEST_LATEST_UPDATE")
             setUpdateForce(force)
@@ -1168,14 +1147,18 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
     }
 
 
-    @SuppressLint("NewApi")
+    //@SuppressLint("NewApi")
     fun showHertz(isSwOn: Boolean, showOverlayHz: Boolean?, showNotifHz: Boolean?) {
         fun openNotifSettings() {
-            val settingsIntent: Intent =
-                Intent(ACTION_APP_NOTIFICATION_SETTINGS)
-                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    .putExtra(EXTRA_APP_PACKAGE, packageName)
-            startActivity(settingsIntent)
+            if (SDK_INT >= VERSION_CODES.O) {
+                val settingsIntent =
+                    Intent(ACTION_APP_NOTIFICATION_SETTINGS).apply{
+                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        putExtra(EXTRA_APP_PACKAGE, packageName)
+                    }
+
+                startActivity(settingsIntent)
+            }
         }
 
         isHzNotificationEnabled().let{
@@ -1193,7 +1176,9 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
                     Snackbar.LENGTH_INDEFINITE,
                     android.R.string.ok
                 ) {
-                    showAppearOnTopRequest()
+                    if (SDK_INT >= VERSION_CODES.M) {
+                        showAppearOnTopRequest()
+                    }
                 }
             }
         }
@@ -1569,8 +1554,6 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
     }
 
 
-    @SuppressLint("NewApi")
-    @RequiresApi(VERSION_CODES.M)
     private fun updateAdaptMinHzSbMinMax() {
         if (minHzListForAdp?.size?:0 < 2) {
             return
@@ -1762,7 +1745,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
 
 
     private fun getResAndRateLbl(): String {
-        Log.d(TAG,"getResAndRateLbl called" )
+        // Log.d(TAG,"getResAndRateLbl called" )
         val sfx = //if (mUtilsDeviceInfo.deviceIsSamsung) {
             when (currentRefreshRateMode.get()) {
                 REFRESH_RATE_MODE_ALWAYS -> getString(R.string.high_mode)

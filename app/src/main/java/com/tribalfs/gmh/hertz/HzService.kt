@@ -43,7 +43,6 @@ import kotlin.math.min
 
 @ExperimentalCoroutinesApi
 @SuppressLint("InlinedApi")
-@RequiresApi(Build.VERSION_CODES.M)
 internal class HzService : Service(), CoroutineScope{
 
     companion object {

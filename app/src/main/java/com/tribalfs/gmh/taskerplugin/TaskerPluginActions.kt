@@ -357,7 +357,6 @@ class DynamicInputRunner : TaskerPluginRunnerActionNoOutputOrInput() {
                         }
                     }
 
-                   // //TODO(before release)
                     min_hertz ->{
                         if (isPremium.get()!! && hasWriteSecureSetPerm) {
                             CoroutineScope(Dispatchers.IO).launch {

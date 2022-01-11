@@ -20,10 +20,13 @@ import com.tribalfs.gmh.callbacks.ChangedStatusCallback
 import com.tribalfs.gmh.helpers.CacheSettings.isOnePlus
 import com.tribalfs.gmh.helpers.CacheSettings.isScreenOn
 import com.tribalfs.gmh.helpers.UtilsSettingsIntents.dataUsageSettingsIntent
+import com.tribalfs.gmh.netspeed.SpeedCalculator.Companion.mCalcInBits
 import com.tribalfs.gmh.receivers.ScreenStatusReceiverBasic
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmh
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmh.Companion.BIT_PER_SEC
+import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmh.Companion.DOWNLOAD_SPEED
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmh.Companion.TOTAL_SPEED
+import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmh.Companion.UPLOAD_SPEED
 import kotlinx.coroutines.*
 import java.lang.Float.min
 import java.lang.String.format
@@ -39,7 +42,7 @@ class NetSpeedService : Service(), CoroutineScope {
         private const val TAG = "NetSpeedService"
         private const val NOTIFICATION_ID_NET_SPEED = 7
         private const val CHANNEL_NAME_NET_SPEED = "Net Speed Indicator"
-        private const val UPDATE_INTERVAL = 500L
+        private const val UPDATE_INTERVAL = 800L
     }
     private val mNotificationContentView: RemoteViews by lazy {RemoteViews(applicationContext.packageName, R.layout.view_indicator_notification) }
     private val notificationManagerCompat by lazy{NotificationManagerCompat.from(applicationContext)}
@@ -53,11 +56,12 @@ class NetSpeedService : Service(), CoroutineScope {
     private var mLastRxBytes: Long = 0
     private var mLastTxBytes: Long = 0
     private var mLastTime: Long = 0
-    private var mOlderRxBytes: Long = 0
+/*    private var mOlderRxBytes: Long = 0
     private var mOlderTxBytes: Long = 0
     private var mOlderTime: Long = 0
     private var mPrevUsedHBTx = 0L
     private var mPrevUsedHBRx = 0L
+    */
 
     private val job = SupervisorJob()
     override val coroutineContext: CoroutineContext
@@ -67,49 +71,46 @@ class NetSpeedService : Service(), CoroutineScope {
     private var netstatUpdaterJob: Job? = null
     private var continueRrUpdate: Boolean = false
 
-    private fun updateNetstat() = launch {
-        while (continueRrUpdate){
-            netstatUpdaterJob?.cancel()
-            netstatUpdaterJob = null
-            netstatUpdaterJob = launch {
+    private val updateNetstat
+        get() = launch {
+            while (continueRrUpdate) {
                 val currentRxBytes: Long = TrafficStats.getTotalRxBytes()
                 val currentTxBytes: Long = TrafficStats.getTotalTxBytes()
                 val currentTime = System.currentTimeMillis()
 
-                if (mOlderTime > 0L) {
-                    val usedRxdHBytes = ((currentRxBytes - mOlderRxBytes) / 100)
-                    val usedTxdHBytes = ((currentTxBytes - mOlderTxBytes) / 100)
-                    val usedTime = currentTime - mOlderTime
-                    if (mPrevUsedHBRx != usedRxdHBytes || mPrevUsedHBTx != usedTxdHBytes) {
-                        mPrevUsedHBRx = usedRxdHBytes; mPrevUsedHBTx = usedTxdHBytes
-                        SpeedTypes.instance(this@NetSpeedService)
-                            .processSpeed(usedTime / 1000, usedRxdHBytes, usedTxdHBytes)
-                        updateNotification()
+                val usedRxdHBytes = currentRxBytes - mLastRxBytes
+                val usedTxdHBytes = currentTxBytes - mLastTxBytes
+                val usedTime = currentTime - mLastTime
+
+                if (usedRxdHBytes > 10 || usedRxdHBytes > 10) {
+                    SpeedCalculator.instance(applicationContext).apply {
+                        updateNotification(
+                            getSpeed(usedTime,usedTxdHBytes),
+                            getSpeed(usedTime,usedRxdHBytes),
+                            getSpeed(usedTime,usedRxdHBytes + usedTxdHBytes)
+                        )
                     }
                 }
-                mOlderRxBytes = mLastRxBytes
-                mOlderTxBytes = mLastTxBytes
-                mOlderTime = mLastTime
+
                 mLastRxBytes = currentRxBytes
                 mLastTxBytes = currentTxBytes
                 mLastTime = currentTime
-            }
-            netstatUpdaterJob?.start()
 
-            delay(UPDATE_INTERVAL)
+                delay(UPDATE_INTERVAL)
+            }
         }
-    }
 
     private fun startNetStatInternal(){
         netstatUpdaterJob?.cancel()
         continueRrUpdate = true
-        updateNetstat()
+        updateNetstat.start()
     }
 
 
     private fun stopNetStatInternal(){
         continueRrUpdate = false
-        netstatUpdaterJob?.cancel()
+        updateNetstat.cancel()
+        //netstatUpdaterJob?.cancel()
     }
 
     private val mScreenStatusReceiver by lazy{
@@ -170,43 +171,54 @@ class NetSpeedService : Service(), CoroutineScope {
         }
     }
 
-    @SuppressLint("NewApi")
+
+    @RequiresApi(Build.VERSION_CODES.M)
     private fun setupNotification() {
         //create notification channel
-        (NotificationChannel(
-            CHANNEL_ID_NET_SPEED,
-            CHANNEL_NAME_NET_SPEED,
-            NotificationManager.IMPORTANCE_LOW
-        )).apply {
-            lightColor = Color.BLUE
-            lockscreenVisibility = Notification.VISIBILITY_SECRET
-            setShowBadge(false)
-            vibrationPattern = longArrayOf(0)
-            enableVibration(true)
-            setAllowBubbles(false)
-            notificationManagerCompat.createNotificationChannel(this)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            (NotificationChannel(
+                CHANNEL_ID_NET_SPEED,
+                CHANNEL_NAME_NET_SPEED,
+                NotificationManager.IMPORTANCE_LOW
+            )).apply {
+                lightColor = Color.BLUE
+                lockscreenVisibility = Notification.VISIBILITY_SECRET
+                setShowBadge(false)
+                vibrationPattern = longArrayOf(0)
+                enableVibration(true)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    setAllowBubbles(false)
+                }
+                notificationManagerCompat.createNotificationChannel(this)
+            }
         }
 
 
         val pendingIntent: PendingIntent = PendingIntent.getActivity(applicationContext, 0, dataUsageSettingsIntent, FLAG_IMMUTABLE)
 
-        notificationBuilderInstance = (Notification.Builder(applicationContext,
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) CHANNEL_ID_NET_SPEED else ""))
-            .apply {
-                setSmallIcon(R.drawable.ic_baseline_speed_12)
-                setOngoing(true)
-                setOnlyAlertOnce(true)
-                setCategory(Notification.CATEGORY_SERVICE)
-                setVisibility(Notification.VISIBILITY_PUBLIC)
-                setLocalOnly(true)
-                if (!isOnePlus) {setContentIntent(pendingIntent)}
-                setAutoCancel(false)
+        notificationBuilderInstance = (if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            Notification.Builder(applicationContext, CHANNEL_ID_NET_SPEED)
+        }else{
+            Notification.Builder(applicationContext)
+        })
+        notificationBuilderInstance.apply {
+            setSmallIcon(R.drawable.ic_baseline_speed_12)
+            setOngoing(true)
+            setOnlyAlertOnce(true)
+            setCategory(Notification.CATEGORY_SERVICE)
+            setVisibility(Notification.VISIBILITY_PUBLIC)
+            setLocalOnly(true)
+            if (!isOnePlus) {setContentIntent(pendingIntent)}
+            setAutoCancel(false)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 setCustomContentView(mNotificationContentView)
             }
+        }
+
     }
 
 
-    @SuppressLint("NewApi")
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate() {
         super.onCreate()
         Log.d(TAG, "onCreate() called")
@@ -241,48 +253,71 @@ class NetSpeedService : Service(), CoroutineScope {
     }
 
     @SuppressLint("NewApi")
-    private suspend fun updateNotification() = withContext(Dispatchers.Main) {
+    private suspend fun updateNotification(
+        up: SpeedCalculator.Speed.SpeedDetails,
+        down: SpeedCalculator.Speed.SpeedDetails,
+        total: SpeedCalculator.Speed.SpeedDetails
+    ) = withContext(Dispatchers.Main) {
         notificationBuilderInstance.apply {
-            SpeedTypes.instance(applicationContext).let { speedTypes ->
-                speedTypes.getSpeedDetails(mSpeedToShow).let { speedDetails ->
+
+            when (mSpeedToShow) {
+                TOTAL_SPEED ->{
                     setSmallIcon(
                         getIndicatorIcon(
-                            speedDetails.speedValue,
-                            speedDetails.speedUnit
+                            total.speedValue!!,
+                            total.speedUnit!!
                         )
                     )
                 }
-                setCustomContentView(RemoteViews(mNotificationContentView).apply {
-                    setTextViewText(
-                        R.id.notificationTextDl,
-                        format(
-                            Locale.ENGLISH,
-                            applicationContext.getString(R.string.notif_sp_dl),
-                            speedTypes.dlSpeedData.speedValue,
-                            speedTypes.dlSpeedData.speedUnit
-                        )
-                    )
-                    setTextViewText(
-                        R.id.notificationTextUl,
-                        format(
-                            Locale.ENGLISH,
-                            applicationContext.getString(R.string.notif_sp_ul),
-                            speedTypes.upSpeedData.speedValue,
-                            speedTypes.upSpeedData.speedUnit
-                        )
-                    )
-                    setTextViewText(
-                        R.id.notificationTextTot,
-                        format(
-                            Locale.ENGLISH,
-                            applicationContext.getString(R.string.notif_sp_cb),
-                            speedTypes.tlSpeedData.speedValue,
-                            speedTypes.tlSpeedData.speedUnit
+                DOWNLOAD_SPEED ->{
+                    setSmallIcon(
+                        getIndicatorIcon(
+                            down.speedValue!!,
+                            down.speedUnit!!
                         )
                     )
                 }
+                UPLOAD_SPEED ->{
+                    setSmallIcon(
+                        getIndicatorIcon(
+                            up.speedValue!!,
+                            up.speedUnit!!
+                        )
+                    )
+                }
+            }
+
+            setCustomContentView(RemoteViews(mNotificationContentView).apply {
+                setTextViewText(
+                    R.id.notificationTextDl,
+                    format(
+                        Locale.ENGLISH,
+                        applicationContext.getString(R.string.notif_sp_dl),
+                        down.speedValue,
+                        down.speedUnit
+                    )
+                )
+                setTextViewText(
+                    R.id.notificationTextUl,
+                    format(
+                        Locale.ENGLISH,
+                        applicationContext.getString(R.string.notif_sp_ul),
+                        up.speedValue,
+                        up.speedUnit
+                    )
+                )
+                setTextViewText(
+                    R.id.notificationTextTot,
+                    format(
+                        Locale.ENGLISH,
+                        applicationContext.getString(R.string.notif_sp_cb),
+                        total.speedValue,
+                        total.speedUnit
+                    )
                 )
             }
+            )
+
             notificationManagerCompat.notify(
                 NOTIFICATION_ID_NET_SPEED, build())
         }
@@ -303,7 +338,8 @@ class NetSpeedService : Service(), CoroutineScope {
 
 
     private fun handleConfigChange() {
-        SpeedTypes.instance(applicationContext).setIsSpeedUnitBits(mUtilsPrefsGmh.gmhPrefSpeedUnit == BIT_PER_SEC)
+        mCalcInBits = mUtilsPrefsGmh.gmhPrefSpeedUnit == BIT_PER_SEC
+        //SpeedCalculator.instance(applicationContext).setIsBits(mUtilsPrefsGmh.gmhPrefSpeedUnit == BIT_PER_SEC)
         mSpeedToShow = mUtilsPrefsGmh.gmhPrefSpeedToShow
     }
 
