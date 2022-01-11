@@ -10,7 +10,6 @@ import android.os.Looper
 import android.os.PowerManager.ACTION_POWER_SAVE_MODE_CHANGED
 import android.provider.Settings
 import androidx.annotation.RequiresApi
-import com.tribalfs.gmh.SensorsOffSt
 import com.tribalfs.gmh.callbacks.AccessibilityCallback
 import com.tribalfs.gmh.helpers.CacheSettings.currentBrightness
 import com.tribalfs.gmh.helpers.CacheSettings.currentRefreshRateMode
@@ -245,7 +244,7 @@ class GmhBroadcastReceivers(context: Context, private val accessibilityCallback:
             }
 
             Intent.ACTION_LOCALE_CHANGED -> {
-                mUtilsPrefsGmh.gmhPrefSensorOnKey = null
+                mUtilsPrefsGmh.gmhPrefSensorOnKey = ""
                 sensorOnKey = null
             }
 

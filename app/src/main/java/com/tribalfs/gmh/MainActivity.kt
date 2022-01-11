@@ -518,8 +518,8 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
                         mUtilsPrefsGmh.gmhPrefSensorsOff = checked /*&&
                                 (CheckBlacklistApiSt.instance(applicationContext).isAllowed()
                                         || CheckBlacklistApiSt.instance(applicationContext).setAllowed())*/
-                        mUtilsPrefsGmh.gmhPrefSensorOnKey?.let{
-                            sensorOnKey = it
+                        if (!mUtilsPrefsGmh.gmhPrefSensorOnKey.isNullOrEmpty()) {
+                                sensorOnKey = mUtilsPrefsGmh.gmhPrefSensorOnKey
                         }
 
                     }
@@ -910,7 +910,6 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
         mBinding.sbMwInterval.progress = mUtilsPrefsGmh.gmhPrefGDozeModOpt
     }
 
-    @SuppressLint("NewApi")
     private fun setupDozeSeekBar() {
         val mListener = object : OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
@@ -929,7 +928,9 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
             }
         }
         mBinding.sbMwInterval.setOnSeekBarChangeListener(mListener)
-        mBinding.sbMwInterval.min = mwInterval.minOrNull()!!
+        if (SDK_INT >= VERSION_CODES.O) {
+            mBinding.sbMwInterval.min = mwInterval.minOrNull()!!
+        }
         mBinding.sbMwInterval.max = mwInterval.maxOrNull()!!
 
     }
@@ -1012,12 +1013,13 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
     }
 
 
-    @SuppressLint("NewApi")
     private fun updateMinHzSbMinMax() {
         //Log.d(TAG, "updateMinHzSeekBar() called lh: $lowestHzForAllMode")
         launch {
             delay(500)
-            mBinding.sbMinHz.min = lowestHzForAllMode
+            if (SDK_INT >= VERSION_CODES.O) {
+                mBinding.sbMinHz.min = lowestHzForAllMode
+            }
             mBinding.sbMinHz.max = highestHzForAllMode
             mBinding.sbMinHz.progress = mUtilsPrefsGmh.gmhPrefMinHzForToggle.coerceAtLeast(lowestHzForAllMode)//coerce only here
         }
@@ -1190,7 +1192,6 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
     }
 
 
-    @SuppressLint("NewApi")
     private fun setupSizeSeekBar() {
         mBinding.sbFontSizeHz.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
@@ -1204,14 +1205,15 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
                 HzServiceHelperStn.instance(applicationContext).updateHzSize(seekBar.progress)
             }
         })
-        mBinding.sbFontSizeHz.min = hzOverlaySizes.minOrNull()!!
+        if (SDK_INT >= VERSION_CODES.O) {
+            mBinding.sbFontSizeHz.min = hzOverlaySizes.minOrNull()!!
+        }
         mBinding.sbFontSizeHz.max = hzOverlaySizes.maxOrNull()!!
         //initial value
         mBinding.sbFontSizeHz.progress = mUtilsPrefsGmh.gmhPrefHzOverlaySize.toInt()
     }
 
 
-    @SuppressLint("NewApi")
     private fun setupAdaptDelaySeekBar() {
         mBinding.sbAdaptiveDelay.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
@@ -1228,13 +1230,14 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
                 }
             }
         })
-        mBinding.sbAdaptiveDelay.min = hzAdaptiveDelays.minOrNull()!!
+        if (SDK_INT >= VERSION_CODES.O) {
+            mBinding.sbAdaptiveDelay.min = hzAdaptiveDelays.minOrNull()!!
+        }
         mBinding.sbAdaptiveDelay.max = hzAdaptiveDelays.maxOrNull()!!
         //initial value
         mBinding.sbAdaptiveDelay.progress = mUtilsPrefsGmh.hzPrefAdaptiveDelay.toInt()/1000
     }
 
-    @SuppressLint("NewApi")
     private fun setupBrightnessSeekBar() {
         mBinding.sbBrightness.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
@@ -1250,7 +1253,9 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
                 }
             }
         })
-        mBinding.sbBrightness.min = 0
+        if (SDK_INT >= VERSION_CODES.O) {
+            mBinding.sbBrightness.min = 0
+        }
         mBinding.sbBrightness.max = BRIGHTNESS_RESOLUTION
         //initial value
         mBinding.sbBrightness.progress = mUtilsPrefsGmh.gmhPrefGAdaptBrightnessMin
@@ -1386,12 +1391,13 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
     }
 
 
-    @SuppressLint("NewApi")
     private fun updateMaxHzSbMinMax() {
         launch {
             delay(500)
             //Log.d(TAG,"forceLowestHz $forceLowestHz vs ${mUtilsPrefsGmh.hzPrefMaxRefreshRate}")
-            mBinding.sbPeakHz.min = lowestHzCurMode
+            if (SDK_INT >= VERSION_CODES.O) {
+                mBinding.sbPeakHz.min = lowestHzCurMode
+            }
             mBinding.sbPeakHz.max = highestHzForAllMode
             //initial value
             mBinding.sbPeakHz.progress = mUtilsPrefsGmh.hzPrefMaxRefreshRate
@@ -1439,7 +1445,9 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
         launch {
             delay(500)
             //Log.d(TAG,"forceLowestHz PSM $forceLowestHz vs ${mUtilsPrefsGmh.hzPrefMaxRefreshRatePsm}")
-            mBinding.sbPeakHzPsm.min = lowestHzCurMode
+            if (SDK_INT >= VERSION_CODES.O) {
+                mBinding.sbPeakHzPsm.min = lowestHzCurMode
+            }
             mBinding.sbPeakHzPsm.max = highestHzForAllMode
             //initial value
             mBinding.sbPeakHzPsm.progress = mUtilsPrefsGmh.hzPrefMaxRefreshRatePsm/*.let {
@@ -1556,7 +1564,9 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
             delay(500)//don't decrease
             if (isOfficialAdaptive || isFakeAdaptive.get()!!) {
                 mBinding.sbMinHzAdapt.max = minHzListForAdp!!.maxOrNull()!!
-                mBinding.sbMinHzAdapt.min = minHzListForAdp!!.minOrNull()!!
+                if (SDK_INT >= VERSION_CODES.O) {
+                    mBinding.sbMinHzAdapt.min = minHzListForAdp!!.minOrNull()!!
+                }
                 mUtilsPrefsGmh.gmhPrefMinHzAdapt.let {
                     mBinding.sbMinHzAdapt.progress = it
                     mBinding.minHzAdaptive = it
@@ -1933,7 +1943,9 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
                     || CheckBlacklistApiSt.instance(applicationContext).setAllowed())*/
         ) {
             mBinding.swAutoSensorsOff.isChecked = mUtilsPrefsGmh.gmhPrefSensorsOff
-            mUtilsPrefsGmh.gmhPrefSensorOnKey?.let{ sensorOnKey = it }
+            if (!mUtilsPrefsGmh.gmhPrefSensorOnKey.isNullOrEmpty()) {
+                sensorOnKey = mUtilsPrefsGmh.gmhPrefSensorOnKey
+            }
         } else {
             mBinding.swAutoSensorsOff.isChecked = false
             mUtilsPrefsGmh.gmhPrefSensorsOff = false
