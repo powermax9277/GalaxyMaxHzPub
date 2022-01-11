@@ -33,11 +33,13 @@
         android:theme="@style/Theme.App.Starting"
         tools:ignore="GoogleAppIndexingWarning"
         tools:targetApi="n">
-    <!--    <activity
+        <activity
             android:supportsPictureInPicture="true"
+            android:launchMode="singleInstance"
             android:theme="@style/Theme.AppCompat.NoActionBar"
             android:name=".PipActivity"
-            android:exported="true" />-->
+            android:exported="true" >
+        </activity>
         <!--
          <meta-data
                  android:name="com.google.android.gms.ads.APPLICATION_ID"
@@ -60,8 +62,8 @@
 
         <activity
             android:name=".MainActivity"
-            android:exported="true"
-            android:launchMode="singleTop">
+            android:exported="true">
+            <!--android:launchMode="singleTop">-->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

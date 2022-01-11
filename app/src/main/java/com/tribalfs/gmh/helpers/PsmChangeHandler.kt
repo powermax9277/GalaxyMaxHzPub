@@ -2,6 +2,9 @@ package com.tribalfs.gmh.helpers
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
+import android.os.Build
+import com.tribalfs.gmh.PipActivity
 import com.tribalfs.gmh.helpers.CacheSettings.isPowerSaveModeOn
 import com.tribalfs.gmh.helpers.CacheSettings.isPremium
 import com.tribalfs.gmh.helpers.CacheSettings.keepModeOnPowerSaving
@@ -32,6 +35,12 @@ internal class PsmChangeHandler(context: Context) {
                 //Use Psm Max Hz
                 prrActive.set( mUtilsPrefsGmh.hzPrefMaxRefreshRatePsm)
                 mUtilsRefreshRate.setPrefOrAdaptOrHighRefreshRateMode(null)
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                   val pipIntent = Intent(appCtx, PipActivity::class.java)
+                   pipIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    appCtx.startActivity(pipIntent)
+                }
             } else {
                 mUtilsRefreshRate.setRefreshRateMode(REFRESH_RATE_MODE_STANDARD)
             }

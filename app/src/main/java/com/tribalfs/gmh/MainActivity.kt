@@ -5,6 +5,7 @@ import android.app.Activity
 import android.app.ActivityManager
 import android.app.NotificationManager
 import android.app.NotificationManager.*
+import android.app.PictureInPictureParams
 import android.content.*
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.graphics.Bitmap
@@ -21,6 +22,7 @@ import android.provider.Settings.*
 import android.provider.Settings.Global.DEVELOPMENT_SETTINGS_ENABLED
 import android.text.method.LinkMovementMethod
 import android.util.Log
+import android.util.Rational
 import android.util.TypedValue
 import android.view.*
 import android.view.View.MeasureSpec
@@ -519,7 +521,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
                                 (CheckBlacklistApiSt.instance(applicationContext).isAllowed()
                                         || CheckBlacklistApiSt.instance(applicationContext).setAllowed())*/
                         if (!mUtilsPrefsGmh.gmhPrefSensorOnKey.isNullOrEmpty()) {
-                                sensorOnKey = mUtilsPrefsGmh.gmhPrefSensorOnKey
+                            sensorOnKey = mUtilsPrefsGmh.gmhPrefSensorOnKey
                         }
 
                     }
@@ -721,6 +723,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
 
         val splashScreen = installSplashScreen()
         splashScreen.setKeepVisibleCondition { !isProfilesLoaded }
+
 
         inflateViews()
         updateDisplayId()
@@ -1052,12 +1055,23 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
     }
 
 
-    override fun onNewIntent(intent: Intent?) {
-        Log.d(TAG, "onNewIntent called")
+   /* override fun onNewIntent(intent: Intent?) {
+        Log.d("TESTTESTTEST", "onNewIntent called")
         super.onNewIntent(intent)
-        //  showDialogIfTileExpired()
-    }
+        if (SDK_INT >= VERSION_CODES.S) {
+            if (intent?.extras != null) {
+                enterPictureInPictureMode(mBuilder.build())
+                Handler(Looper.getMainLooper()).postDelayed(Exit(), 500)
+            }
+        }
+    //  showDialogIfTileExpired()
+    }*/
 
+    internal inner class Exit : Runnable {
+        override fun run() {
+            finishAfterTransition()
+        }
+    }
 
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -1201,6 +1215,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
+            @RequiresApi(VERSION_CODES.M)
             override fun onStopTrackingTouch(seekBar: SeekBar) {
                 HzServiceHelperStn.instance(applicationContext).updateHzSize(seekBar.progress)
             }
