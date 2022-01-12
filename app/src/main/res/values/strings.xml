@@ -128,7 +128,7 @@
     <string name="reso_opts">Enabled Options</string>
 
     <string name="requires_ws_perm_h">
-        %1$s needs an special permission to execute this feature.
+        %1$s needs a special permission to execute this feature.
         Click the ADB setup link below to learn how.
         \n\nTLDR: Run \'adb shell pm grant %2$s android.permission.WRITE_SECURE_SETTINGS\'
         \n\nThis is a one time procedure.
@@ -145,7 +145,7 @@
     <string name="allow">Allow</string>
     <string name="allow_aot">Allow Appear on Top</string>
     <!--<string name="adp_mod_inf" translatable="false">Note: This is an experimental feature which is continually being improved.</string>-->
-    <string name="allow_bg_act">For the stable running of this app, enable \'Allow background activity\' or disable \'Optimize battery usage\'.</string>
+    <string name="allow_bg_act">For the stable background operation of this app, enable \'Allow background activity\' or disable \'Optimize battery usage\'.</string>
     <string name="help">Help</string>
     <string name="reload_profiles">Reload Profiles</string>
     <string name="options">Options</string>

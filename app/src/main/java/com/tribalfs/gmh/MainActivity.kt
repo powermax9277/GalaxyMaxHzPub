@@ -541,7 +541,6 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
 
             mBinding.tvSoPsmOptions.id -> {
                 val i = powerSavingModeSettingsIntent
-                i.flags = Intent.FLAG_ACTIVITY_NEW_TASK
                 startActivity(i)
             }
 

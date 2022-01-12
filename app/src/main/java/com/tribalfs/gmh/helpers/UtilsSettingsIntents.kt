@@ -22,12 +22,15 @@ internal object UtilsSettingsIntents{
                 "com.android.settings",
                 "com.android.settings.Settings\$HighRefreshRatesSettingsActivity"
             )
+            i.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             return i
         }
 
     val powerSavingModeSettingsIntent: Intent
         get() {
-            return Intent(ACTION_BATTERY_SAVER_SETTINGS)
+            val i = Intent(ACTION_BATTERY_SAVER_SETTINGS)
+            i.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            return i
         }
 
     val autoSyncSettingsIntent: Intent

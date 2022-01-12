@@ -148,9 +148,9 @@
     <string name="enable">Включить</string>
     <string name="allow">Разрешать</string>
     <string name="allow_aot">Разрешить появление наверху</string>
-    <string name="allow_bg_act">For the stable running of this app, enable \'Allow background activity\' or disable \'Optimize battery usage\'.</string>
+    <string name="allow_bg_act">Для стабильной фоновой работы этого приложения включите «Разрешить фоновую активность» или отключите «Оптимизировать использование батареи».</string>
     <string name="premium_features">Премиум-функции</string>
-    <string name="prevent_high">उच्च मोड में स्विच करने से रोकें</string>
-    <string name="auto_sensors_off_exp">ऑटो सेंसर बंद</string>
-    <string name="data_usage"><u>Data Usage</u></string>
+    <string name="prevent_high">Предотвратить переход в высокий режим</string>
+    <string name="auto_sensors_off_exp">Автоматические датчики отключены</string>
+    <string name="data_usage"><u>Использование данных</u></string>
 </resources>

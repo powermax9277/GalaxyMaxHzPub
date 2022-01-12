@@ -297,12 +297,10 @@ class QSTileMaxHz : TileService() {
             ) { _, _ ->
                 if (powerSaveOn) {
                     val i = powerSavingModeSettingsIntent
-                    i.flags = Intent.FLAG_ACTIVITY_NEW_TASK
                     startActivity(i)
                 } else {
                     try {
                         val i = motionSmoothnessSettingsIntent
-                        i.flags = Intent.FLAG_ACTIVITY_NEW_TASK
                         startActivity(i)
                     }catch (_: Exception){
                         val i = displaySettingsIntent
