@@ -1,6 +1,7 @@
 package com.tribalfs.gmh.sharedprefs
 
 import android.content.Context
+import android.content.SharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import java.time.LocalDate
@@ -28,14 +29,35 @@ class UtilsPrefsAct(context: Context) {
 
 
     private val appCtx = context.applicationContext
-    private val masterKey = MasterKey.Builder(appCtx).setKeyScheme(MasterKey.KeyScheme.AES256_GCM).build()
+    //private val masterKey = MasterKey.Builder(appCtx).setKeyScheme(MasterKey.KeyScheme.AES256_GCM).build()
+    private lateinit var actSharedPref: SharedPreferences
+
+    init{
+        createSharedPreferences()
+    }
+
+    @Synchronized
+    fun createSharedPreferences() {
+        val masterKey =MasterKey.Builder(appCtx).setKeyScheme(MasterKey.KeyScheme.AES256_GCM).build()
+        actSharedPref = EncryptedSharedPreferences.create(
+            appCtx,
+        GMH_INFO,
+        masterKey,
+        EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+        EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+        )
+    }
+
+   /* @Synchronized
     private val actSharedPref = EncryptedSharedPreferences.create(
         appCtx,
         GMH_INFO,
         masterKey,
         EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
         EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-    )
+    )*/
+
+
     private val gmhSharedPrefEditor = actSharedPref.edit()
 
 /*    var gmhPrefTileExpiryDays: Int
