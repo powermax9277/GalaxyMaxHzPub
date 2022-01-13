@@ -1,32 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="lbl_enable_msm">Включить плавность движения</string>
-    <string name="show_hz">"Монитор обновления частоты "</string>
+    <string name="lbl_enable_msm">Повышение плавности движений</string>
     <string name="buy_adfree">Купить Премиум</string>
 <!--    <string name="info_expired">Посмотрите это видео и активируйте плитки быстрой настройки еще на %d дней.</string>-->
     <string name="resolution">Переключатель разрешения и плавности движения</string>
     <string name="act">Активировать Премиум</string>
-    <string name="max_hz">Макс Hz</string>
-    <string name="max_hz_holder">Макс %s Hz</string>
+    <string name="max_hz">Макс Гц</string>
+    <string name="max_hz_holder">Макс %s Гц</string>
     <string name="feat_n_a" tools:keep="@string/feat_n_a">Изменить разрешение не поддерживается</string>
     <string name="unknown_mode">Неопознанный режим частоты обновления</string>
 <!--    <string name="qs_active">Плитки быстрых настроек успешно активированы</string>-->
     <string name="min_hz_for_toggle">Мин. Гц для кнопки переключения</string>
-    <string name="adaptive">Адаптивный</string>
-    <string name="high">Высоко</string>
-    <string name="show_refresh_rate">Монитор частоты обновления</string>
-    <string name="left">Левая</string>
-    <string name="right">Правая</string>
-    <string name="bottom">Дно</string>
+    <string name="adaptive">Адаптивная</string>
+    <string name="high">Высокая</string>
+    <string name="refresh_rate_mon">Счетчик текущей частоты обновления</string>
+    <string name="left">Слева</string>
+    <string name="right">Справа</string>
+    <string name="bottom">Снизу</string>
     <string name="use_qstile_reso_switch">Используйте прилагаемую плитку быстрых настроек (qs) для быстрого переключения разрешения экрана.</string>
-    <string name="center">Центр</string>
-    <string name="info_qs_max_hz">Включает плитку быстрой настройки для переключения максимального герца.</string>
-    <string name="info_qs_rtrr">Включает плитку быстрой настройки для включения монитора частоты обновления.</string>
-    <string name="s_off_mod">Отключение экрана mods</string>
-    <string name="force_hz_mod">Принудительно наименьшая Hz</string>
+    <string name="center">По центру</string>
+    <string name="info_qs_max_hz">Добавляет на панель быстрых настроек кнопку быстрой смены макс. частоты.</string>
+    <string name="info_qs_rtrr">Добавляет на панель быстрых настроек кнопку активации счетчика частоты обновления.</string>
+    <string name="s_off_mod">Поведение при выкл. экране</string>
+    <string name="force_hz_mod">Принудительно наименьшая Гц</string>
     <string name="s_off_hz_inf">
         Это приведет к установке самой низкой частоты обновления, когда экран выключен или AOD включен, чтобы улучшить использование батареи в режиме ожидания.
-        \nScreen-off обновления частота: %s
+        \nЧастота при выкл. экране: %s
     </string>
     <string name="chng_res_stng">%s настройка разрешения не поддерживает высокое/адаптивное
         Частота обновления. Сначала измените разрешение в настройках.
@@ -56,8 +55,8 @@
     <string name="download">Скачать</string>
     <string name="font_size">Размер шрифта наложения</string>
     <string name="overlay_pos">Расположение наложения</string>
-    <string name="overlay">Оверлей</string>
-    <string name="statusbar">Статус бар</string>
+    <string name="overlay">Поверх всего</string>
+    <string name="statusbar">В строке состояния</string>
     <string name="perm_appx">\n\nКогда настройка adb выполнена, вы можете делать следующее с этим приложением:
         \n- Быстрое переключение разрешений экрана
         \n- Установите адаптивную / высокую плавность движения даже в режиме энергосбережения
@@ -82,7 +81,7 @@
 <!--    <string name="error_opening_settings">Ошибка открытия настроек.</string>-->
     <string name="cie">Не удалось! Пожалуйста, проверьте ваше интернет-соединение и попробуйте еще раз.</string>
     <string name="aca">Неверный код активации.</string>
-    <string name="top">Верхний</string>
+    <string name="top">Сверху</string>
     <string name="afa">Премиум успешно активирован!</string>
     <string name="afu">Пробная версия уже использовалась, и срок ее действия истек.</string>
     <plurals name="aha">
@@ -93,15 +92,15 @@
    <!-- <string name="eta">Ошибка активации пробной версии без рекламы!</string>-->
     <string name="nlh">Для этого устройства не найдено премиум-лицензий:%s</string>
     <string name="edit">Редактировать</string>
-    <string name="quick_doz_mod">Быстрый Doze Mod</string>
+    <string name="quick_doz_mod">Быстрый переход в режим глубокого сна (Doze)</string>
     <string name="quick_mod_inf">Это быстро переведет ваше устройство в спящий режим при выключенном экране, чтобы уменьшить расход заряда батареи в режиме ожидания.</string>
-    <string name="adp_min_hz">Минимальная Hz для Адаптивный</string>
+    <string name="adp_min_hz">Минимальная Гц для Адаптивный</string>
     <string name="enable_as_inf">В появившемся окне нажмите «Установленные службы», а затем включите службу «Galaxy Max Hz».</string>
-    <string name="adp_delay">Адаптивный минимум герц задержка в секундах</string>
-    <string name="cur_rr_h">Текущая частота обновления: %s Hz</string>
+    <string name="adp_delay">Задержка (в секундах) перед снижением Гц до минимума</string>
+    <string name="cur_rr_h">Текущая частота обновления: %s Гц</string>
     <string name="show_ns_card">Показать инструмент Netspeed</string>
-    <string name="lbl_rrm">Частота обновления mods</string>
-    <string name="prr_psm">Держите motion smoothness в режиме энергосбережения</string>
+    <string name="lbl_rrm">Моды на частоту обновления</string>
+    <string name="prr_psm">Сохранять плавность в режиме энергосбережения</string>
     <string name="actvt_trial">Активировать бесплатную пробную версию?</string>
     <string name="auto_psm">Режим энергосбережения при выключенном экране</string>
     <string name="reso_opts">Параметры включены</string>
@@ -113,7 +112,7 @@
     </string>
     <string name="std">стандарт</string>
     <string name="lbl_profiles_h">%sПрофили разрешения экрана и частоты обновления</string>
-    <string name="high_mode">Режим высокой</string>
+    <string name="high_mode">Высокая частота</string>
     <string name="std_mode">Стандартный режим</string>
     <string name="adp_mode">Адаптивный режим</string>
     <string name="perm_reqd">Требуется разрешение</string>
@@ -134,7 +133,7 @@
         Дозовый режим деактивируется после разблокировки устройства.
     </string>
     <string name="quick_doz_mod_mwi">Интервал начального окна обслуживания в минутах (0 = нет окна обслуживания)</string>
-    <string name="brightness_threshold">Минимальная яркость для адаптивного мода</string>
+    <string name="brightness_threshold">Мин. порог яркости для активации</string>
     <string name="sensor_off_info">Датчики устройства автоматически отключаются при выключении экрана до тех пор, пока устройство не будет разблокировано. Это помогает свести к минимуму блокировки пробуждения, вызванные движением, которые разряжают аккумулятор.</string>
     <string name="sensors_off_note">
         Важное примечание: пока активирована плитка SensorsOff, камера, микрофон и другие датчики устройства недоступны.
@@ -150,7 +149,7 @@
     <string name="allow_aot">Разрешить появление наверху</string>
     <string name="allow_bg_act">Для стабильной фоновой работы этого приложения включите «Разрешить фоновую активность» или отключите «Оптимизировать использование батареи».</string>
     <string name="premium_features">Премиум-функции</string>
-    <string name="prevent_high">Предотвратить переход в высокий режим</string>
-    <string name="auto_sensors_off_exp">Автоматические датчики отключены</string>
+    <string name="prevent_high">Не переключаться на высокую частоту</string>
+    <string name="auto_sensors_off_exp">Автоотключение всех датчиков</string>
     <string name="data_usage"><u>Использование данных</u></string>
 </resources>
