@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="lbl_enable_msm">モーションの滑らかさを有効にする</string>
-    <string name="show_hz">リフレッシュレートモニター</string>
     <string name="buy_adfree">プレミアムを購入|コーヒー</string>
     <string name="resolution">解像度とモーションスムーズトグル</string>
     <string name="act">プレミアムまたはトライアルを有効にする</string>
@@ -12,7 +11,7 @@
     <string name="min_hz_for_toggle">トグルの最低Hz</string>
     <string name="adaptive">アダプティブ</string>
     <string name="high">フォースハイ</string>
-    <string name="show_refresh_rate">リフレッシュレートモニター</string>
+    <string name="refresh_rate_mon">リフレッシュレートモニター</string>
     <string name="left">左</string>
     <string name="right">右</string>
     <string name="top">上</string>
@@ -123,7 +122,7 @@
     <string name="sensor_off_info">画面がオフの間、デバイスのロックが解除されるまで、デバイスセンサーは自動的にオフになります。これにより、デバイスがスタンバイ状態のときに、バッテリーを消耗するモーショントリガーのウェイクロックを最小限に抑えることができます。
     </string>
     <string name="sensors_off_note">重要な注意：SensorsOffタイルがオンになっている間は、デバイスのカメラ、マイク、またはその他のセンサーにアクセスできません。通話中に相手にあなたの声が聞こえるかどうかを確認します。聞こえない場合は、通話中にデバイスのロックを解除する必要があります（SensorsOffタイルを押したままにしてロックを解除します）。</string>
-    <string name="auto_sensors_off_exp">Auto SENSORS OFF (Experimental)</string>
+    <string name="auto_sensors_off_exp">自動無効化センサー</string>
     <string name="sensor_off_setup_info">最初にこれを行います。[設定]> [開発者向けオプション]> [クイック設定] [開発者向けタイル]で[センサーオフ]タイルを有効にします。</string>
     <string name="dev_opt_setup_info">開発者向けオプションを有効にするには、[設定]> [端末情報]> [ソフトウェア情報]に移動し、[ビルド番号]を7回タップします。</string>
     <string name="enable_write_settings">Galaxy Max Hzのシステム設定の変更/書き込み権限を有効にします。</string>

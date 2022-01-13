@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="lbl_enable_msm">Activa la suavitat del moviment</string>
-    <string name="show_hz">Monitor de velocitat d’actualització</string>
     <string name="buy_adfree">Compra Premium</string>
   <!--  <string name="info_expired">Mireu aquest vídeo i activeu les rajoles de configuració ràpida per a %d dies més.</string>-->
     <string name="resolution">Commutació de resolució i suavitat del moviment</string>
@@ -14,7 +13,7 @@
     <string name="min_hz_for_toggle">Límit inferior del commutador(Hz)</string>
     <string name="adaptive">Adaptive</string>
     <string name="high">High</string>
-    <string name="show_refresh_rate">Monitor de velocitat d’actualització</string>
+    <string name="refresh_rate_mon">Monitor de velocitat d’actualització</string>
     <string name="left">Esquerra</string>
     <string name="right">Dret</string>
     <string name="top">Part superior</string>

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="lbl_enable_msm">Activar suavidad de movimiento</string>
-    <string name="show_hz">" Monitor de frecuencia de actualización"</string>
     <string name="buy_adfree">Comprar Premium|Cofee</string>
   <!--  <string name="info_expired">Mire este video y obtenga mosaicos de configuración rápida activados por otros %d días.</string>-->
     <string name="resolution">" Alternar resolución y suavidad de movimiento"</string>
@@ -14,7 +13,7 @@
     <string name="min_hz_for_toggle">Min. Hz para alternar</string>
     <string name="adaptive">Adaptativo</string>
     <string name="high">Alto</string>
-    <string name="show_refresh_rate">Mostrar frecuencia de actualización en tiempo real</string>
+    <string name="refresh_rate_mon">Mostrar frecuencia de actualización en tiempo real</string>
     <string name="left">Izquierda</string>
     <string name="right">Derecha</string>
     <string name="top">Cima</string>
@@ -149,6 +148,6 @@
     <string name="allow_aot">Permitir aparecer en la parte superior</string>
     <string name="allow_bg_act">Para el funcionamiento estable de esta aplicación, habilite \'Permitir actividad en segundo plano\' o deshabilite \'Optimizar el uso de la batería\'.</string>
     <string name="prevent_high">Evitar el cambio al modo alto</string>
-    <string name="auto_sensors_off_exp">Auto SENSORS OFF</string>
+    <string name="auto_sensors_off_exp">Sensores automáticos desactivados</string>
     <string name="data_usage"><u>Data Usage</u></string>
 </resources>

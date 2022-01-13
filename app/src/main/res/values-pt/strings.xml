@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="lbl_enable_msm">Habilitar suavidade de movimento</string>
-    <string name="show_hz">Monitor de Taxa de Atualização</string>
     <string name="buy_adfree">Compre Premium</string>
 <!--    <string name="info_expired">Veja este vídeo e obter telhas de ajuste rápidas ativadas por mais %d dias.</string>-->
     <string name="resolution">Resolução e Movimento Suavidade Alternar</string>
@@ -14,7 +13,7 @@
     <string name="min_hz_for_toggle">Min. Hz para o botão de alternância</string>
     <string name="adaptive">Adaptativo</string>
     <string name="high">Alta</string>
-    <string name="show_refresh_rate">Mostrar Real-Time Taxa de actualização</string>
+    <string name="refresh_rate_mon">Mostrar Real-Time Taxa de actualização</string>
     <string name="left">Esquerda</string>
     <string name="right">Certa</string>
     <string name="top">Superior</string>

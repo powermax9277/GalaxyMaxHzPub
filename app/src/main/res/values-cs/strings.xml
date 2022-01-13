@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="lbl_enable_msm">Povolit hladkost pohybu</string>
-    <string name="show_hz">Obnovovací Frekvence Monitoru</string>
     <string name="buy_adfree">Koupit Premium</string>
   <!--  <string name="info_expired">V tomto videu a dostat aktivované rychlé nastavení dlaždice na dalších %d dní.</string>-->
     <string name="resolution">Rozlišení a Hladkost Pohybu Toggle</string>
@@ -14,7 +13,7 @@
     <string name="min_hz_for_toggle">Spodní mez přepínač (Hz)</string>
     <string name="adaptive">Adaptivní</string>
     <string name="high">Vysoký</string>
-    <string name="show_refresh_rate">Monitor Obnovovací Frekvence</string>
+    <string name="refresh_rate_mon">Monitor Obnovovací Frekvence</string>
     <string name="left">Levá</string>
     <string name="right">Pravá</string>
     <string name="top">Horní</string>

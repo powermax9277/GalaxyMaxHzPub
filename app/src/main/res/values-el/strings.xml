@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="lbl_enable_msm">Ενεργοποίηση Motion Smoothness</string>
-    <string name="show_hz">Ρυθμός ανανέωσης οθόνης</string>
     <string name="buy_adfree">Αγορά Premium|Coffee</string>
    <!-- <string name="info_expired">Παρακολουθήστε αυτό το βίντεο και να ενεργοποιηθεί γρήγορα πλακάκια ρύθμιση για ακόμη %d ημέρες.</string>-->
     <string name="resolution">Ανάλυση και κίνησης Ομαλότητα Εναλλαγή</string>
@@ -14,7 +13,7 @@
     <string name="min_hz_for_toggle">Ελάχ. Hz για την εναλλαγή</string>
     <string name="adaptive">Adaptive</string>
     <string name="high">Υψηλός</string>
-    <string name="show_refresh_rate">Ανανέωση παρακολούθησης ρυθμού</string>
+    <string name="refresh_rate_mon">Ανανέωση παρακολούθησης ρυθμού</string>
     <string name="left">Αριστερή πλευρά</string>
     <string name="right">Σωστη πλευρα</string>
     <string name="top">Άνω-πλευρά</string>

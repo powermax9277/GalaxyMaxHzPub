@@ -3,7 +3,6 @@
     <string name="app_name" translatable="false">Galaxy Max Hz</string>
     <!-- <string name="ad_closed" translatable="false">Video ad closed early.</string>-->
     <string name="lbl_enable_msm">Enable Motion Smoothness</string>
-    <string name="show_hz">Refresh Rate Monitor</string>
     <string name="buy_adfree">Buy Premium|Coffee</string>
     <!--<string name="info_expired" tools:ignore="PluralsCandidate">Watch this video and get activated quick setting tiles for another %d days.</string>-->
     <string name="resolution">Resolution &amp; Motion Smoothness Toggle</string>
@@ -16,7 +15,7 @@
     <string name="min_hz_for_toggle">Lowest Hz for Toggle</string>
     <string name="adaptive">Adaptive</string>
     <string name="high">High</string>
-    <string name="show_refresh_rate">Refresh Rate Monitor</string>
+    <string name="refresh_rate_mon">Refresh Rate Monitor</string>
     <string name="left">Left</string>
     <string name="right">Right</string>
     <string name="top">Top</string>
@@ -103,10 +102,9 @@
     <string name="kbps" translatable="false">kb/s</string>
     <string name="Mbps" translatable="false">Mb/s</string>
     <string name="plus99" translatable="false">99+</string>
-    <string name="dash" translatable="false">-</string>
-    <string name="notif_sp_dl" translatable="false">⇩ %1$s %2$s</string>
-    <string name="notif_sp_ul" translatable="false">⇧ %1$s %2$s</string>
-    <string name="notif_sp_cb" translatable="false">⇳ %1$s %2$s</string>
+    <string name="notif_sp_dl" translatable="false">↓ %1$s %2$s</string>
+    <string name="notif_sp_ul" translatable="false">↑ %1$s %2$s</string>
+    <string name="notif_sp_cb" translatable="false">↕ %1$s %2$s</string>
     <string name="Gbps" translatable="false">Gb/s</string>
     <string name="GBps" translatable="false">GB/s</string>
     <string name="Tbps" translatable="false">Tb/s</string>

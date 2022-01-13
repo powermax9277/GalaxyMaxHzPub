@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="lbl_enable_msm">Attiva Uniformità di Movimento</string>
-    <string name="show_hz">Monitoraggio Frequenza Di Aggiornamento</string>
     <string name="buy_adfree">Acquista Premium</string>
     <string name="resolution">Pulsante Risoluzione e Uniformità Di Movimento</string>
     <string name="act">Attiva Premium|Prova</string>
@@ -12,7 +11,7 @@
     <string name="min_hz_for_toggle">Min. Hz per il Pulsante</string>
     <string name="adaptive">Adattiva</string>
     <string name="high">Alta</string>
-    <string name="show_refresh_rate">Mostra Frequenza Di Aggiornamento In Tempo reale</string>
+    <string name="refresh_rate_mon">Mostra Frequenza Di Aggiornamento In Tempo reale</string>
     <string name="left">Sinistra</string>
     <string name="right">Destra</string>
     <string name="top">Superiore</string>
@@ -87,7 +86,7 @@
     <string name="apps_bat_opt_settings"><u>Impostazioni Ottimizzazione Batteria App</u></string>
     <string name="as_desc">Questo servizio è necessario per far funzionare le mod di Galaxy Max Hz.</string>
     <string name="auto_psm">Modalità di risparmio energetico a Schermo spento</string>
-    <string name="auto_sensors_off_exp">Disattivazione Automatica Sensori (sperimentale)</string>
+    <string name="auto_sensors_off_exp">Disattivazione Automatica Sensori</string>
     <string name="autosync_settings"><u>Impostazioni Sincronizzazione automatica</u></string>
     <string name="brightness_threshold">Luminosità Minima per Modalità Adattiva</string>
     <string name="chng_res_failed">Modifica della risoluzione non riuscita.</string>

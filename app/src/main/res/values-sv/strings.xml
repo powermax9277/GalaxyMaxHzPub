@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="lbl_enable_msm">Aktivera rörelsens jämnhet</string>
-    <string name="show_hz">Uppdateringsfrekvensövervakare</string>
     <string name="buy_adfree">Köp Premium</string>
 <!--    <string name="info_expired">Titta på denna video och få aktiverade snabba inställningsplattor i ytterligare %d dagar.</string>-->
     <string name="resolution">Upplösning och Motion Jämnhet Toggle</string>
@@ -14,7 +13,7 @@
     <string name="min_hz_for_toggle">Lägre gränsen för toggle (Hz)</string>
     <string name="adaptive">Adaptiv</string>
     <string name="high">Hög</string>
-    <string name="show_refresh_rate">Visa Real-Time Uppdateringshastighet</string>
+    <string name="refresh_rate_mon">Visa Real-Time Uppdateringshastighet</string>
     <string name="left">Vänster</string>
     <string name="right">Höger</string>
     <string name="top">Övre</string>

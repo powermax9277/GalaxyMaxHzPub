@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="lbl_enable_msm">Schakel bewegingsgladheid in</string>
-    <string name="show_hz">Vernieuwingsfrequentie-Monitor</string>
     <string name="buy_adfree">Koop Premium</string>
     <string name="resolution">Schakelen tussen resolutie en vloeiende beweging</string>
     <string name="act">Activeer Premium|Trial</string>
@@ -13,7 +12,7 @@
     <string name="min_hz_for_toggle">Min. Hz voor de Toggle</string>
     <string name="adaptive">Adaptieve</string>
     <string name="high">Hoge</string>
-    <string name="show_refresh_rate">Toon Real-time Vernieuwingsfrequentie</string>
+    <string name="refresh_rate_mon">Toon Real-time Vernieuwingsfrequentie</string>
     <string name="left">Links</string>
     <string name="right">Rechtsaf</string>
     <string name="top">Bovenkant</string>

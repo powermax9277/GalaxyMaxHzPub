@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="lbl_enable_msm">啟用動作平滑度</string>
-    <string name="show_hz">刷新率的顯示器</string>
     <string name="buy_adfree">購買高級版</string>
 <!--    <string name="info_expired">觀看此視頻，並得到激活快速設置瓷磚另一個%d天。</string>-->
     <string name="resolution">分辨率和運動平滑切換</string>
@@ -14,7 +13,7 @@
     <string name="min_hz_for_toggle">最小Hz限制可以在最大刷新率按鈕中選擇</string>
     <string name="adaptive">Adaptive</string>
     <string name="high">High</string>
-    <string name="show_refresh_rate">刷新率監視器</string>
+    <string name="refresh_rate_mon">刷新率監視器</string>
     <string name="left">左邊</string>
     <string name="right">右邊</string>
     <string name="top">上側</string>

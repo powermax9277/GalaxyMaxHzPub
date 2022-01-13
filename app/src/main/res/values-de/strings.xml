@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="lbl_enable_msm">Bildwiederholrate ändern</string>
-    <string name="show_hz">Bildwiederholrate Überwachen</string>
     <string name="buy_adfree">Premium kaufen</string>
     <!--  <string name="info_expired">
           Sehen Sie sich dieses Video an um die Schnelleinstellungskacheln für weitere %d Tage zu aktivieren.
@@ -16,7 +15,7 @@
     <string name="min_hz_for_toggle">Min Hz für das Umschalten</string>
     <string name="adaptive">Adaptiv</string>
     <string name="high">Hoch</string>
-    <string name="show_refresh_rate">Bildwiederholrate Überwachen</string>
+    <string name="refresh_rate_mon">Bildwiederholrate Überwachen</string>
     <string name="left">Links</string>
     <string name="right">Rechts</string>
     <string name="top">Oben</string>

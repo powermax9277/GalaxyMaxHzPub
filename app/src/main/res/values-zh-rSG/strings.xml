@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="lbl_enable_msm">启用运动平滑度</string>
-    <string name="show_hz">刷新率监视器</string>
     <string name="buy_adfree">购买高级版</string>
     <!--    <string name="info_expired">观看此视频，并在另外%d天获得激活的快速设置磁贴。</string>-->
     <string name="resolution">分辨率和运动平滑度切换</string>
@@ -12,7 +11,7 @@
     <string name="unknown_mode">不明刷新率模式</string>
     <string name="min_hz_for_toggle">最小Hz限制可以在最大刷新率按钮中选择</string>
     <string name="high">High</string>
-    <string name="show_refresh_rate">刷新率监视器</string>
+    <string name="refresh_rate_mon">刷新率监视器</string>
     <string name="left">剩下</string>
     <string name="right">对</string>
     <string name="top">最佳</string>

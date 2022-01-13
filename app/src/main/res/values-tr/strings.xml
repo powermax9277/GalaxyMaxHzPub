@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="lbl_enable_msm">Hareket Düzgünlüğünü Etkinleştir</string>
-    <string name="show_hz">Yenileme Hızı Monitör</string>
     <string name="buy_adfree">Premium Satın Al</string>
 <!--    <string name="info_expired">Bu videoyu izleyin ve başka %d gün boyunca aktive hızlı ayar fayans olsun.</string>-->
     <string name="resolution">Çözünürlük ve Hareket Düzgünlüğü Değiştirici</string>
@@ -14,7 +13,7 @@
     <string name="min_hz_for_toggle">geçiş alt sınırı (Hz)</string>
     <string name="adaptive">Adaptive</string>
     <string name="high">Yüksek</string>
-    <string name="show_refresh_rate">Gerçek Zamanlı Yenileme Hızını göster</string>
+    <string name="refresh_rate_mon">Gerçek Zamanlı Yenileme Hızını göster</string>
     <string name="left">Sol</string>
     <string name="right">Sağ</string>
     <string name="top">Üst</string>

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="lbl_enable_msm">मोशन स्मूथनेस इनेबल करें</string>
-    <string name="show_hz">ताज़ा दर मॉनिटर</string>
     <string name="buy_adfree">प्रीमियम खरीदें</string>
 <!--
     <string name="info_expired">यह वीडियो देखें और एक अन्य %d दिनों के लिए सक्रिय त्वरित सेटिंग टाइल मिलता है।</string>
@@ -16,7 +15,7 @@
     <string name="min_hz_for_toggle">टॉगल की निम्न सीमा (हर्ट्ज)</string>
     <string name="adaptive">अनुकूली</string>
     <string name="high">उच्च</string>
-    <string name="show_refresh_rate">दिखाएँ वास्तविक समय ताज़ा दर</string>
+    <string name="refresh_rate_mon">दिखाएँ वास्तविक समय ताज़ा दर</string>
     <string name="left">बाईं तरफ</string>
     <string name="right">दाईं ओर</string>
     <string name="top">ऊपरी ओर</string>

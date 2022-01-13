@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="lbl_enable_msm">Bật tính năng mượt mà của chuyển động</string>
-    <string name="show_hz">Máy đo tốc độ làm mới</string>
     <string name="buy_adfree">Mua cao cấp</string>
 <!--    <string name="info_expired">Xem video này và nhận được kích hoạt gạch thiết lập nhanh chóng cho một %d ngày.</string>-->
     <string name="resolution">Kiểm soát độ phân giải và độ mượt của chuyển động</string>
@@ -14,7 +13,7 @@
     <string name="min_hz_for_toggle">Thấp hơn giới hạn của chuyển đổi (Hz)</string>
     <string name="adaptive">Adaptive</string>
     <string name="high">Cao</string>
-    <string name="show_refresh_rate">Tốc độ làm mới theo thời gian thực</string>
+    <string name="refresh_rate_mon">Tốc độ làm mới theo thời gian thực</string>
     <string name="left">Trái</string>
     <string name="right">Phải</string>
     <string name="top">Phía trên</string>

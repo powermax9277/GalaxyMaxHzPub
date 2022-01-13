@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="lbl_enable_msm">Activer la fluidité du mouvement</string>
-    <string name="show_hz">Moniteur de taux de rafraîchissement</string>
     <string name="buy_adfree">Acheter Premium</string>
     <!--<string name="info_expired">Regardez cette vidéo et obtenez des vignettes de réglage rapide
         activées pour une autre %d days.</string>-->
@@ -15,7 +14,7 @@
     <string name="min_hz_for_toggle">Min. Hz pour le toggle</string>
     <string name="adaptive">Adaptatif</string>
     <string name="high">Haut</string>
-    <string name="show_refresh_rate">Afficher le taux de rafraîchissement en temps réel</string>
+    <string name="refresh_rate_mon">Afficher le taux de rafraîchissement en temps réel</string>
     <string name="left">La gauche</string>
     <string name="right">À droite</string>
     <string name="top">Plus haut</string>
