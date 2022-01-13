@@ -33,8 +33,6 @@ class ResolutionChangeUtilSt private constructor(val context: Context) {
     private val mUtilsPrefsGmh  by lazy {UtilsPrefsGmh(appCtx)}
     private val mUtilsRefreshRate by lazy { UtilsRefreshRate(appCtx) }
 
-
-
     @ExperimentalCoroutinesApi
     suspend fun changeRes(resLxw: String?): Int? {
         return if (hasWriteSecureSetPerm) {
@@ -103,7 +101,7 @@ class ResolutionChangeUtilSt private constructor(val context: Context) {
     }
 
 
-    private suspend fun changeResInternal(resLxw: String?): Boolean = withContext(Dispatchers.IO) {
+    private suspend fun changeResInternal(resLxw: String?): Boolean = withContext(Dispatchers.Default) {
 
         val currentDensity = mUtilsDeviceInfo.getDensity().toInt()
 
@@ -163,9 +161,27 @@ class ResolutionChangeUtilSt private constructor(val context: Context) {
             nextDen
         )
 
+        delay(300)
         if (changeResResult) {
             mUtilsRefreshRate.setPrefOrAdaptOrHighRefreshRateMode(nextRes)
+            launch(Dispatchers.Main){
+                Toast.makeText(
+                    context,
+                    "$nextRes screen resolution applied.",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
             delay(250)//don't remove
+        }else{
+            if (hasWriteSecureSetPerm){
+                launch(Dispatchers.Main){
+                    Toast.makeText(
+                        context,
+                        "Unable to execute change resolution command successfully. Try again after rebooting this device.",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
         }
 
         return@withContext changeResResult

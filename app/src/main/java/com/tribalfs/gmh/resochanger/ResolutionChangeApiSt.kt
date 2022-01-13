@@ -2,17 +2,17 @@ package com.tribalfs.gmh.resochanger
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.widget.Toast
-import com.tribalfs.gmh.helpers.CacheSettings.hasWriteSecureSetPerm
 import com.tribalfs.gmh.helpers.CheckBlacklistApiSt
 import com.tribalfs.gmh.helpers.SingletonHolder
 
 
+@SuppressLint("PrivateApi")
 class ResolutionChangeApiSt private constructor (val context: Context) {
 
     companion object : SingletonHolder<ResolutionChangeApiSt, Context>(::ResolutionChangeApiSt) {
         private const val USER_ID = -3
     }
+
 
     fun setDisplayResolution(displayId: Int, res: String, density: Int?): Boolean {
 
@@ -26,38 +26,50 @@ class ResolutionChangeApiSt private constructor (val context: Context) {
     }
 
     @SuppressLint("PrivateApi")
-    private fun setDisplayResolution(displayId: Int, x: Int, y: Int, density: Int?): Boolean {
-        try {
-            val wmService = Class.forName("android.view.WindowManagerGlobal")
-                .getDeclaredMethod("getWindowManagerService")
-                .invoke(null) ?: return false
+    private fun setDisplayResolution(displayId: Int, w: Int, h: Int, d: Int?): Boolean {
+        /*try {
+            val serviceManager  = Class.forName("android.os.ServiceManager")
+            val service : Method = serviceManager.getDeclaredMethod("getService", String::class.java)
+            val binder = service.invoke(null, "window") as IBinder
+            val windowManagerStub = Class.forName("android.view.IWindowManager").classes[0]
+            val serviceObj = windowManagerStub.getMethod("asInterface", IBinder::class.java).invoke(null, binder)
+            windowManagerStub.methods.first { it.name == "setForcedDisplaySizeDensity" }
+                .invoke(serviceObj, displayId, w, h, d, true, -1)
+           // windowManagerStub.methods.first { it.name == "setOverscan" }.invoke(serviceObj, displayId, left, top, right, bottom)
 
-            with(Class.forName("android.view.IWindowManager")) {
-                getDeclaredMethod(
-                    "setForcedDisplaySize",
-                    Int::class.javaPrimitiveType,
-                    Int::class.javaPrimitiveType,
-                    Int::class.javaPrimitiveType
-                )
-                    .invoke(wmService, displayId, x, y)
+            return true
+        } catch (_: Exception) {*/
+            try{
+                val wmService = Class.forName("android.view.WindowManagerGlobal")
+                    .getDeclaredMethod("getWindowManagerService")
+                    .invoke(null) ?: return false
 
-                density?.let {
+
+                with(Class.forName("android.view.IWindowManager")) {
+                    d?.let {d->
+                        getDeclaredMethod(
+                            "setForcedDisplayDensityForUser",
+                            Int::class.javaPrimitiveType,
+                            Int::class.javaPrimitiveType,
+                            Int::class.javaPrimitiveType
+                        )
+                            .invoke(wmService, displayId, d, USER_ID)
+                    }
+
                     getDeclaredMethod(
-                        "setForcedDisplayDensityForUser",
+                        "setForcedDisplaySize",
                         Int::class.javaPrimitiveType,
                         Int::class.javaPrimitiveType,
                         Int::class.javaPrimitiveType
                     )
-                        .invoke(wmService, displayId, it, USER_ID)
+                        .invoke(wmService, displayId, w, h)
+
                 }
+                return true
+            }catch(_:Exception) {
+                return false
             }
-            return true
-        } catch (_: Exception) {
-            if (hasWriteSecureSetPerm){
-                Toast.makeText(context, "Unable to execute change resolution command successfully. Reboot the device and try again.", Toast.LENGTH_LONG).show()
-            }
-            return false
-        }
+        //}
     }
 
 
