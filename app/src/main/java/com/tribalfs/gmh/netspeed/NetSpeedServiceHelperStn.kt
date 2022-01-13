@@ -2,7 +2,7 @@ package com.tribalfs.gmh.netspeed
 
 import android.content.Context
 import android.content.Intent
-import com.tribalfs.gmh.helpers.CacheSettings.isNsNotifOn
+import com.tribalfs.gmh.helpers.CacheSettings.isNetSpeedRunning
 import com.tribalfs.gmh.helpers.SingletonHolder
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmh
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -46,14 +46,14 @@ class NetSpeedServiceHelperStn private constructor(context: Context)  {
 
     @ExperimentalCoroutinesApi
     fun startService() {
-        isNsNotifOn.set(true)
+        isNetSpeedRunning.set(true)
         appCtx.startService(serviceIntent)
     }
 
 
     @ExperimentalCoroutinesApi
     fun stopService(isTemp: Boolean?) {
-        isNsNotifOn.set(isTemp?:false)
+        isNetSpeedRunning.set(isTemp?:false)
         try {
             appCtx.stopService(serviceIntent)
         }catch (_:Exception){}

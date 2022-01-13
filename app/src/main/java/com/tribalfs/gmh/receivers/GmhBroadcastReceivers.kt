@@ -1,9 +1,11 @@
 package com.tribalfs.gmh.receivers
 
+import android.app.Service
 import android.content.BroadcastReceiver
 import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
+import android.hardware.display.DisplayManager
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
@@ -14,11 +16,12 @@ import com.tribalfs.gmh.callbacks.AccessibilityCallback
 import com.tribalfs.gmh.helpers.CacheSettings.currentBrightness
 import com.tribalfs.gmh.helpers.CacheSettings.currentRefreshRateMode
 import com.tribalfs.gmh.helpers.CacheSettings.disablePsm
+import com.tribalfs.gmh.helpers.CacheSettings.displayId
 import com.tribalfs.gmh.helpers.CacheSettings.hasWriteSecureSetPerm
 import com.tribalfs.gmh.helpers.CacheSettings.hzStatus
 import com.tribalfs.gmh.helpers.CacheSettings.ignorePowerModeChange
 import com.tribalfs.gmh.helpers.CacheSettings.ignoreRrmChange
-import com.tribalfs.gmh.helpers.CacheSettings.isNsNotifOn
+import com.tribalfs.gmh.helpers.CacheSettings.isNetSpeedRunning
 import com.tribalfs.gmh.helpers.CacheSettings.isPowerSaveModeOn
 import com.tribalfs.gmh.helpers.CacheSettings.isScreenOn
 import com.tribalfs.gmh.helpers.CacheSettings.lowestHzCurMode
@@ -34,7 +37,7 @@ import com.tribalfs.gmh.helpers.PsmChangeHandler
 import com.tribalfs.gmh.helpers.UtilsDeviceInfo
 import com.tribalfs.gmh.helpers.UtilsDeviceInfo.Companion.PREFERRED_NETWORK_MODE
 import com.tribalfs.gmh.helpers.UtilsRefreshRate
-import com.tribalfs.gmh.hertz.HzService.Companion.PLAYING
+import com.tribalfs.gmh.hertz.HzService.Companion.DESTROYED
 import com.tribalfs.gmh.hertz.HzServiceHelperStn
 import com.tribalfs.gmh.netspeed.NetSpeedServiceHelperStn
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmh
@@ -51,11 +54,12 @@ class GmhBroadcastReceivers(context: Context, private val accessibilityCallback:
     private val mUtilsDeviceInfo by lazy { UtilsDeviceInfo(appCtx) }
     private val mUtilsRefreshRate by lazy { UtilsRefreshRate (appCtx)}
     private val handler by lazy { Handler(Looper.getMainLooper()) }
+    private val dm by lazy {appCtx.getSystemService(Service.DISPLAY_SERVICE) as DisplayManager }
     //private val keyguardManager by lazy {appCtx.getSystemService(KEYGUARD_SERVICE) as KeyguardManager }
     companion object{
         private const val PREF_NET_TYPE_LTE_GSM_WCDMA    = 9 /* LTE, GSM/WCDMA */
         private const val PREF_NET_TYPE_5G_LTE_GSM_WCDMA = 26
-        private const val LOW_POWER = "low_power"
+        private const val LOW_POWER_MODE = "low_power"
         private const val LOW_POWER_ON = "1"
         private const val LOW_POWER_OFF = "0"
         //  private const val TAG = "GmhBroadcastReceivers"
@@ -74,9 +78,9 @@ class GmhBroadcastReceivers(context: Context, private val accessibilityCallback:
                     if (!it) {
                         delay(250)
                         ignoreRrmChange = true
-                        screenOffRefreshRateMode?.let { it1 ->
+                        screenOffRefreshRateMode?.let { soRefreshrate ->
                             mUtilsRefreshRate.setRefreshRateMode(
-                                it1
+                                soRefreshrate
                             )
                         }
                     }
@@ -95,7 +99,7 @@ class GmhBroadcastReceivers(context: Context, private val accessibilityCallback:
                             if (hasWriteSecureSetPerm) {
                                 Settings.Global.putString(
                                     context.applicationContext.contentResolver,
-                                    LOW_POWER,
+                                    LOW_POWER_MODE,
                                     LOW_POWER_OFF
                                 )
                             }
@@ -152,18 +156,18 @@ class GmhBroadcastReceivers(context: Context, private val accessibilityCallback:
 
     private val captureRrRunnable: Runnable by lazy {
         Runnable {
-            offScreenRefreshRate = "${mUtilsDeviceInfo.getRefreshRateInt()} hz"
+            offScreenRefreshRate = "${dm.getDisplay(displayId).refreshRate.toInt()} hz"
         }
     }
 
-    private val hzMonNetspeedSensorsDisablerRunnable: Runnable by lazy {
+    private val autoSensorsOffRunnable: Runnable by lazy {
         Runnable {
-            if (isNsNotifOn.get()!!) {
+            /*if (isNsNotifOn.get()!!) {
                 NetSpeedServiceHelperStn.instance(appCtx).stopService(null)
-            }
-            if (hzStatus.get() == PLAYING) {
+            }*/
+            /*if (hzStatus.get() == PLAYING) {
                 HzServiceHelperStn.instance(appCtx).stopHertz()
-            }
+            }*/
             if (mUtilsPrefsGmh.gmhPrefSensorsOff) {
                 accessibilityCallback.onChange(userPresent = false, turnOffSensors = true)
             }
@@ -188,7 +192,7 @@ class GmhBroadcastReceivers(context: Context, private val accessibilityCallback:
                 disablePsm = false
 
                 // Workaround for AOD Bug on some device????
-                mUtilsRefreshRate.clearRefreshRate()
+                mUtilsRefreshRate.clearPeakAndMinRefreshRate()
 
                 if (mUtilsPrefsGmh.gmhPrefForceLowestSoIsOn) { handler.postDelayed(forceLowestRunnable,3000) }
 
@@ -198,7 +202,7 @@ class GmhBroadcastReceivers(context: Context, private val accessibilityCallback:
 
                 if (mUtilsPrefsGmh.gmhPrefDisableSyncIsOn) { handler.postDelayed(autosyncDisablerRunnable,12000) }
 
-                handler.postDelayed(hzMonNetspeedSensorsDisablerRunnable,20000)
+                handler.postDelayed(autoSensorsOffRunnable,20000)
             }
 
 
@@ -221,10 +225,11 @@ class GmhBroadcastReceivers(context: Context, private val accessibilityCallback:
                     if (restoreSync) ContentResolver.setMasterSyncAutomatically(true)
                     if (disablePsm) setPowerSaving(false)
 
-                    if (mUtilsPrefsGmh.gmhPrefNetSpeedIsOn && !isNsNotifOn.get()!!) {
+                    if (mUtilsPrefsGmh.gmhPrefNetSpeedIsOn && !isNetSpeedRunning.get()!!) {
                         NetSpeedServiceHelperStn.instance(appCtx).runNetSpeed(null)
                     }
-                    if (mUtilsPrefsGmh.gmhPrefHzIsOn && hzStatus.get() != PLAYING) {
+
+                    if (mUtilsPrefsGmh.gmhPrefHzIsOn && hzStatus.get() == DESTROYED) {
                         HzServiceHelperStn.instance(appCtx).startHertz(null, null, null)
                     }
                 }
@@ -281,7 +286,7 @@ class GmhBroadcastReceivers(context: Context, private val accessibilityCallback:
         if (hasWriteSecureSetPerm) {
             Settings.Global.putString(
                 mContentResolver,
-                LOW_POWER,
+                LOW_POWER_MODE,
                 if (psmOn) LOW_POWER_ON else LOW_POWER_OFF
             )
         }

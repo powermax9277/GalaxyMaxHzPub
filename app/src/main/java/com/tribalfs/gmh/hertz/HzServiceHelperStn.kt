@@ -6,7 +6,7 @@ import com.tribalfs.gmh.helpers.CacheSettings.hzStatus
 import com.tribalfs.gmh.helpers.CacheSettings.isHzNotifOn
 import com.tribalfs.gmh.helpers.CacheSettings.isScreenOn
 import com.tribalfs.gmh.helpers.SingletonHolder
-import com.tribalfs.gmh.hertz.HzService.Companion.STOP
+import com.tribalfs.gmh.hertz.HzService.Companion.DESTROYED
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmh
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
@@ -76,7 +76,7 @@ class HzServiceHelperStn private constructor(context: Context) {
 
     @ExperimentalCoroutinesApi
     fun isHzStop(): Boolean {
-        return hzStatus.get() == STOP
+        return hzStatus.get() == DESTROYED
     }
 
 }

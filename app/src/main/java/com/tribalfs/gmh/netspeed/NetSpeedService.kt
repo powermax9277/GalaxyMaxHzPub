@@ -13,10 +13,9 @@ import android.util.Log
 import android.widget.RemoteViews
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationManagerCompat
-import com.tribalfs.gmh.AccessibilityPermission
-import com.tribalfs.gmh.GalaxyMaxHzAccess
 import com.tribalfs.gmh.R
 import com.tribalfs.gmh.callbacks.ChangedStatusCallback
+import com.tribalfs.gmh.helpers.CacheSettings.isNetSpeedRunning
 import com.tribalfs.gmh.helpers.CacheSettings.isOnePlus
 import com.tribalfs.gmh.helpers.CacheSettings.isScreenOn
 import com.tribalfs.gmh.helpers.UtilsSettingsIntents.dataUsageSettingsIntent
@@ -42,8 +41,9 @@ class NetSpeedService : Service(), CoroutineScope {
         private const val TAG = "NetSpeedService"
         private const val NOTIFICATION_ID_NET_SPEED = 7
         private const val CHANNEL_NAME_NET_SPEED = "Net Speed Indicator"
-        private const val UPDATE_INTERVAL = 800L
+        private const val UPDATE_INTERVAL = 900L
     }
+
     private val mNotificationContentView: RemoteViews by lazy {RemoteViews(applicationContext.packageName, R.layout.view_indicator_notification) }
     private val notificationManagerCompat by lazy{NotificationManagerCompat.from(applicationContext)}
     private val mUtilsPrefsGmh by lazy{ UtilsPrefsGmh(applicationContext) }
@@ -119,8 +119,8 @@ class NetSpeedService : Service(), CoroutineScope {
                 @RequiresApi(Build.VERSION_CODES.M)
                 override fun onChange(result: Any) {
                     //Log.d(TAG, "mScreenStatusReceiver called: $isOn")
-                    isScreenOn = result as Boolean
-                    if (result) {
+                    //isScreenOn = result as Boolean
+                    if (result as Boolean) {
                         startNetStatInternal()
                         notificationBuilderInstance.setVisibility(Notification.VISIBILITY_PRIVATE)
                         notificationManagerCompat.notify(
@@ -161,14 +161,14 @@ class NetSpeedService : Service(), CoroutineScope {
 
     @ExperimentalCoroutinesApi
     private fun setupScreenStatusReceiver(){
-        if (!AccessibilityPermission.isAccessibilityEnabled(applicationContext,GalaxyMaxHzAccess::class.java)) {
-            IntentFilter().let {
-                it.addAction(Intent.ACTION_SCREEN_OFF)
-                it.addAction(Intent.ACTION_SCREEN_ON)
-                it.priority = 999
-                registerReceiver(mScreenStatusReceiver, it)
-            }
+        //if (!AccessibilityPermission.isAccessibilityEnabled(applicationContext,GalaxyMaxHzAccess::class.java)) {
+        IntentFilter().let {
+            it.addAction(Intent.ACTION_SCREEN_OFF)
+            it.addAction(Intent.ACTION_SCREEN_ON)
+            it.priority = 999
+            registerReceiver(mScreenStatusReceiver, it)
         }
+        //}
     }
 
 
@@ -242,13 +242,14 @@ class NetSpeedService : Service(), CoroutineScope {
     }
 
     override fun onDestroy() {
+        isNetSpeedRunning.set(false)
         stopNetStatInternal()
         notificationManagerCompat.cancel(NOTIFICATION_ID_NET_SPEED)
         try {
             unregisterReceiver(mScreenStatusReceiver)
         }catch(_: java.lang.Exception){}
-        stopForeground(true)
         job.cancel()
+        stopForeground(true)
         super.onDestroy()
     }
 

@@ -36,7 +36,7 @@ import com.tribalfs.gmh.helpers.CacheSettings.adaptiveDelayMillis
 import com.tribalfs.gmh.helpers.CacheSettings.applyAdaptiveMod
 import com.tribalfs.gmh.helpers.CacheSettings.hasWriteSecureSetPerm
 import com.tribalfs.gmh.helpers.CacheSettings.isFakeAdaptiveValid
-import com.tribalfs.gmh.helpers.CacheSettings.isNsNotifOn
+import com.tribalfs.gmh.helpers.CacheSettings.isNetSpeedRunning
 import com.tribalfs.gmh.helpers.CacheSettings.isOfficialAdaptive
 import com.tribalfs.gmh.helpers.CacheSettings.isScreenOn
 import com.tribalfs.gmh.helpers.CacheSettings.isSpayInstalled
@@ -44,8 +44,6 @@ import com.tribalfs.gmh.helpers.CacheSettings.lowestHzCurMode
 import com.tribalfs.gmh.helpers.CacheSettings.lrrPref
 import com.tribalfs.gmh.helpers.CacheSettings.prrActive
 import com.tribalfs.gmh.helpers.CacheSettings.sensorOnKey
-import com.tribalfs.gmh.hertz.HzService
-import com.tribalfs.gmh.hertz.HzServiceHelperStn
 import com.tribalfs.gmh.netspeed.NetSpeedServiceHelperStn
 import com.tribalfs.gmh.profiles.ProfilesObj.isProfilesLoaded
 import com.tribalfs.gmh.receivers.GmhBroadcastReceivers
@@ -225,12 +223,12 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     private val networkCallback by lazy {
         object : ConnectivityManager.NetworkCallback() {
             override fun onLost(network: Network) {
-                if (isNsNotifOn.get()!!) {
+                if (isNetSpeedRunning.get()!!) {
                     launch { NetSpeedServiceHelperStn.instance(applicationContext).stopService(true) }
                 }
             }
             override fun onAvailable(network: Network) {
-                if (isNsNotifOn.get()!!) {
+                if (isNetSpeedRunning.get()!!) {
                     launch { NetSpeedServiceHelperStn.instance(applicationContext).startService() }
                 }
             }
@@ -287,7 +285,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
     private fun setupNetworkCallback(){
         disableNetworkCallback()
-        if (isNsNotifOn.get()!!) {
+        if (isNetSpeedRunning.get()!!) {
             connectivityManager.registerDefaultNetworkCallback(networkCallback)
         }
     }
@@ -304,22 +302,22 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     }
 
     private fun restartOtherServices(){
-        if (isNsNotifOn.get()!!) {
+        /*if (isNsNotifOn.get()!!) {
             launch {
                 NetSpeedServiceHelperStn.instance(applicationContext).stopService(null)
                 delay(1000)
                 NetSpeedServiceHelperStn.instance(applicationContext).runNetSpeed(null)
             }
-        }
-        if (CacheSettings.hzStatus.get() == HzService.PLAYING) {
+        }*/
+        /*if (CacheSettings.hzStatus.get() == HzService.PLAYING) {
             launch {
                 HzServiceHelperStn.instance(applicationContext).stopHertz()
                 HzServiceHelperStn.instance(applicationContext).startHertz(null, null, null)
             }
-        }
+        }*/
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
+   // @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate() {
         setupScreenStatusReceiver()
         setupNetworkCallback()
@@ -361,7 +359,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                 nonInteractiveUiTimeoutMillis = 0
             }catch (_: NoSuchMethodError){}
         }
-        restartOtherServices()
+       // restartOtherServices()
     }
 
     //if triggered by tasker
@@ -587,7 +585,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         }
         unregisterReceiver(mScreenStatusReceiver)
         disableNetworkCallback()
-        restartOtherServices()
+        //restartOtherServices()
         makeAdaptiveJob?.cancel()
         job.cancel()
         super.onDestroy()

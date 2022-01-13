@@ -1,10 +1,13 @@
 package com.tribalfs.gmh.taskerplugin
 
-import android.accessibilityservice.AccessibilityService
+import android.accessibilityservice.AccessibilityService.*
 import android.annotation.SuppressLint
 import android.app.KeyguardManager
 import android.content.Context
 import android.content.Intent
+import android.hardware.display.DisplayManager
+import android.view.Display
+import android.view.Display.STATE_ON
 import android.widget.Toast
 import com.joaomgcd.taskerpluginlibrary.action.TaskerPluginRunnerActionNoOutputOrInput
 import com.joaomgcd.taskerpluginlibrary.config.TaskerPluginConfig
@@ -26,7 +29,6 @@ import com.tribalfs.gmh.helpers.CacheSettings.highestHzForAllMode
 import com.tribalfs.gmh.helpers.CacheSettings.isOfficialAdaptive
 import com.tribalfs.gmh.helpers.CacheSettings.isPowerSaveModeOn
 import com.tribalfs.gmh.helpers.CacheSettings.isPremium
-import com.tribalfs.gmh.helpers.CacheSettings.isScreenOn
 import com.tribalfs.gmh.helpers.CacheSettings.keepModeOnPowerSaving
 import com.tribalfs.gmh.helpers.CacheSettings.lowestHzCurMode
 import com.tribalfs.gmh.helpers.CacheSettings.lowestHzForAllMode
@@ -178,6 +180,9 @@ class DynamicInputRunner : TaskerPluginRunnerActionNoOutputOrInput() {
         val appCtx = context.applicationContext
         val mUtilsPrefsGmh by lazy { UtilsPrefsGmh(appCtx)}
         val mUtilsRefreshRate by lazy { UtilsRefreshRate(appCtx) }
+        val dm by lazy {appCtx.getSystemService(Context.DISPLAY_SERVICE) as DisplayManager}
+        val km by lazy {appCtx.getSystemService(KEYGUARD_SERVICE) as KeyguardManager}
+
         //var success = true
         infosForTasker.forEach {
             input.dynamic.getByKey(it.key)?.let { info ->
@@ -216,7 +221,7 @@ class DynamicInputRunner : TaskerPluginRunnerActionNoOutputOrInput() {
                         CoroutineScope(Dispatchers.Main).launch {
                             try {
                                 val mHz = (info.value as String).toInt()
-                                if (isScreenOn) {
+                                if (dm.getDisplay(displayId).state == Display.STATE_ON) {
                                     UtilsChangeMaxHzSt.instance(appCtx).changeMaxHz(mHz)
                                 } else {
                                     if (supportedHzIntCurMod?.indexOfFirst { hz -> hz == mHz } != -1) {
@@ -290,10 +295,10 @@ class DynamicInputRunner : TaskerPluginRunnerActionNoOutputOrInput() {
                                 try {
                                     when ((info.value as String).toInt()) {
                                         1 -> {//turn On
-                                            mUtilsPrefsGmh.gmhPrefSensorsOff = (CheckBlacklistApiSt.instance(appCtx).isAllowed()
-                                                    || CheckBlacklistApiSt.instance(appCtx).setAllowed())
+                                            /*mUtilsPrefsGmh.gmhPrefSensorsOff = (CheckBlacklistApiSt.instance(appCtx).isAllowed()
+                                                    || CheckBlacklistApiSt.instance(appCtx).setAllowed())*/
 
-                                            if (!isScreenOn && mUtilsPrefsGmh.gmhPrefSensorsOff){
+                                            if (dm.getDisplay(displayId).state != STATE_ON && mUtilsPrefsGmh.gmhPrefSensorsOff){
                                                 // turnOnAutoSensorsOff = true
                                                 appCtx.startService(
                                                     Intent(appCtx, GalaxyMaxHzAccess::class.java).apply {
@@ -304,7 +309,7 @@ class DynamicInputRunner : TaskerPluginRunnerActionNoOutputOrInput() {
                                         }
 
                                         0 -> {//turn Off
-                                            if ((appCtx.getSystemService(AccessibilityService.KEYGUARD_SERVICE) as KeyguardManager).isKeyguardLocked){
+                                            if (km.isKeyguardLocked){
                                                 turnOffAutoSensorsOff = true
                                             }else{
                                                 appCtx.startService(
@@ -328,7 +333,7 @@ class DynamicInputRunner : TaskerPluginRunnerActionNoOutputOrInput() {
                                         }
 
                                         3 -> {//turn Off Tile only
-                                            if ((appCtx.getSystemService(AccessibilityService.KEYGUARD_SERVICE) as KeyguardManager).isKeyguardLocked) {
+                                            if (km.isKeyguardLocked) {
                                                 if (!mUtilsPrefsGmh.gmhPrefSensorsOff){
                                                     //temporarily turn on to trigger on unlock
                                                     mUtilsPrefsGmh.gmhPrefSensorsOff = true
