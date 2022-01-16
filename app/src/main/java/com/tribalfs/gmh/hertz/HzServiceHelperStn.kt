@@ -5,19 +5,19 @@ import android.content.Intent
 import com.tribalfs.gmh.helpers.CacheSettings.hzStatus
 import com.tribalfs.gmh.helpers.CacheSettings.isHzNotifOn
 import com.tribalfs.gmh.helpers.CacheSettings.isScreenOn
-import com.tribalfs.gmh.helpers.SingletonHolder
+import com.tribalfs.gmh.helpers.SingletonMaker
 import com.tribalfs.gmh.hertz.HzService.Companion.DESTROYED
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmh
+import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 class HzServiceHelperStn private constructor(context: Context) {
 
-    private val appCtx = context.applicationContext
-    private val mHzSharePref = UtilsPrefsGmh(appCtx)
-
-    companion object : SingletonHolder<HzServiceHelperStn, Context>(::HzServiceHelperStn){
+    companion object : SingletonMaker<HzServiceHelperStn, Context>(::HzServiceHelperStn){
        // private const val TAG = "HzServiceHelperStn"
     }
+
+    private val appCtx = context.applicationContext
+    private val mHzSharePref by lazy {UtilsPrefsGmhSt(appCtx)}
 
     @ExperimentalCoroutinesApi
     fun updateHzSize(size: Int?) {

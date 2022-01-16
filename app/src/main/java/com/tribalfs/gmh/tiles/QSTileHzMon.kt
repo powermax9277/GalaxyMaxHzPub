@@ -6,7 +6,7 @@ import android.service.quicksettings.TileService
 import com.tribalfs.gmh.dialogs.DialogsPermissionsQs
 import com.tribalfs.gmh.helpers.UtilsPermSt
 import com.tribalfs.gmh.hertz.HzServiceHelperStn
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmh
+import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @SuppressLint("NewApi")
@@ -15,9 +15,6 @@ class QSTileHzMon : TileService() {
     /*companion object{
         private const val TAG = "QSTileHzMon"
     }*/
-
-    //private val mUtilsPrefsGmh: UtilsPrefsGmh by lazy{ UtilsPrefsGmh(applicationContext) }
-
 
     override fun onStartListening() {
         super.onStartListening()
@@ -47,7 +44,7 @@ class QSTileHzMon : TileService() {
 
          }else {*/
         if (!UtilsPermSt.instance(applicationContext).hasOverlayPerm()
-            && UtilsPrefsGmh(applicationContext).gmhPrefHzOverlayIsOn)
+            && UtilsPrefsGmhSt(applicationContext).gmhPrefHzOverlayIsOn)
         {
             val mDialog = DialogsPermissionsQs.getAppearOnTopDialog(this.applicationContext)
             showDialog(mDialog)

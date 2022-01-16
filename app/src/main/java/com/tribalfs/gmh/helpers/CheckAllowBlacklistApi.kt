@@ -7,7 +7,7 @@ import com.tribalfs.gmh.helpers.CacheSettings.hasWriteSecureSetPerm
 
 internal class CheckBlacklistApiSt private constructor(context: Context) {
 
-    companion object : SingletonHolder<CheckBlacklistApiSt, Context>(::CheckBlacklistApiSt) {
+    companion object : SingletonMaker<CheckBlacklistApiSt, Context>(::CheckBlacklistApiSt) {
         private const val HAP = "hidden_api_policy"
         private const val HAP_PRE_P = "hidden_api_policy_pre_p_apps"
         private const val HAP_P = "hidden_api_policy_p_apps"

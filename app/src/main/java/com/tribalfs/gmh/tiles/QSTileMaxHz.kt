@@ -21,19 +21,18 @@ import com.tribalfs.gmh.helpers.CacheSettings.currentRefreshRateMode
 import com.tribalfs.gmh.helpers.CacheSettings.hasWriteSecureSetPerm
 import com.tribalfs.gmh.helpers.CacheSettings.prrActive
 import com.tribalfs.gmh.helpers.CacheSettings.supportedHzIntCurMod
-import com.tribalfs.gmh.helpers.UtilsChangeMaxHzSt.Companion.CHANGE_MODE
-import com.tribalfs.gmh.helpers.UtilsChangeMaxHzSt.Companion.CHANGE_RES
-import com.tribalfs.gmh.helpers.UtilsChangeMaxHzSt.Companion.NO_CONFIG_LOADED
-import com.tribalfs.gmh.helpers.UtilsChangeMaxHzSt.Companion.POWER_SAVINGS
-import com.tribalfs.gmh.helpers.UtilsDeviceInfo.Companion.REFRESH_RATE_MODE_ALWAYS
-import com.tribalfs.gmh.helpers.UtilsDeviceInfo.Companion.REFRESH_RATE_MODE_SEAMLESS
-import com.tribalfs.gmh.helpers.UtilsDeviceInfo.Companion.REFRESH_RATE_MODE_STANDARD
+import com.tribalfs.gmh.helpers.UtilsChangeMaxHz.Companion.CHANGE_MODE
+import com.tribalfs.gmh.helpers.UtilsChangeMaxHz.Companion.CHANGE_RES
+import com.tribalfs.gmh.helpers.UtilsChangeMaxHz.Companion.NO_CONFIG_LOADED
+import com.tribalfs.gmh.helpers.UtilsChangeMaxHz.Companion.POWER_SAVINGS
+import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.REFRESH_RATE_MODE_ALWAYS
+import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.REFRESH_RATE_MODE_SEAMLESS
+import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.REFRESH_RATE_MODE_STANDARD
 import com.tribalfs.gmh.helpers.UtilsPermSt.Companion.CHANGE_SETTINGS
 import com.tribalfs.gmh.helpers.UtilsSettingsIntents.changeSystemSettingsIntent
 import com.tribalfs.gmh.helpers.UtilsSettingsIntents.displaySettingsIntent
 import com.tribalfs.gmh.helpers.UtilsSettingsIntents.motionSmoothnessSettingsIntent
 import com.tribalfs.gmh.helpers.UtilsSettingsIntents.powerSavingModeSettingsIntent
-import com.tribalfs.gmh.profiles.ProfilesInitializer
 import com.tribalfs.gmh.profiles.ProfilesObj.loadComplete
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -45,13 +44,13 @@ import kotlinx.coroutines.launch
 class QSTileMaxHz : TileService() {
 
     companion object{
-        private const val TAG = "QSTileMaxHz"
+        //private const val TAG = "QSTileMaxHz"
     }
 
     private var prevPrr: Int? = null
     private var prevMode: String? = null
 
-    private val mUtilsRefreshRate: UtilsRefreshRate by lazy { UtilsRefreshRate(applicationContext) }
+    private val mUtilsRefreshRate: UtilsRefreshRateSt by lazy { UtilsRefreshRateSt.instance(applicationContext) }
 
     @ExperimentalCoroutinesApi
     private val propertyCallback: OnPropertyChangedCallback by lazy {
@@ -162,7 +161,7 @@ class QSTileMaxHz : TileService() {
 
         applicationScope.launch(Dispatchers.Main) {
 
-            when (UtilsChangeMaxHzSt.instance(applicationContext).changeMaxHz(null)) {
+            when (UtilsChangeMaxHz(applicationContext).changeMaxHz(null)) {
                 PERMISSION_GRANTED -> {
                     updateTile()
                 }
@@ -180,8 +179,7 @@ class QSTileMaxHz : TileService() {
                     if (supportedHzIntCurMod != null && supportedHzIntCurMod?.size!! > 1) {
                         showDialog(
                             getChangeResDialog(
-                                ProfilesInitializer.instance(applicationContext)
-                                    .getCurrentResWithName()
+                                        mUtilsRefreshRate.getCurrentResWithName()
                             )
                         )
                     } else {
@@ -223,6 +221,7 @@ class QSTileMaxHz : TileService() {
 
         }
     }
+
 
     private fun getChangeResDialog(curReso: String): AlertDialog {
         return AlertDialog.Builder(applicationContext).apply {

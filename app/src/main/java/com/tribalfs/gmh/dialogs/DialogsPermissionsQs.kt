@@ -10,7 +10,7 @@ import android.provider.Settings
 import androidx.annotation.RequiresApi
 import com.tribalfs.gmh.R
 import com.tribalfs.gmh.helpers.UtilsPermSt.Companion.REQUEST_CODE_APPEAR_ON_TOP_PERM
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmh
+import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt
 
 
 object DialogsPermissionsQs {
@@ -53,7 +53,7 @@ object DialogsPermissionsQs {
             }
         }
         builder.setNeutralButton(context.getString(R.string.dismiss)) { dialogInterface, _ ->
-            UtilsPrefsGmh(context.applicationContext).gmhPrefHzOverlayIsOn = false
+            UtilsPrefsGmhSt.instance(context.applicationContext).gmhPrefHzOverlayIsOn = false
             dialogInterface.dismiss()
         }
 

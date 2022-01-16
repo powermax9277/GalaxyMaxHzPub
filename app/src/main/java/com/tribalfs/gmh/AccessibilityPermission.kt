@@ -11,37 +11,55 @@ import kotlinx.coroutines.*
 
 object AccessibilityPermission {
 
+    //@Synchronized
     fun isAccessibilityEnabled(
         context: Context,
         service: Class<out AccessibilityService?>
     ): Boolean {
-        val mContentResolver = context.applicationContext.contentResolver
-        val gmhAccessibilityStr =  "${context.applicationContext.packageName}/${service.name}"
-        return (Settings.Secure.getString(mContentResolver, ENABLED_ACCESSIBILITY_SERVICES) ?: "").contains(gmhAccessibilityStr)
+        synchronized(this) {
+            val mContentResolver = context.applicationContext.contentResolver
+            val gmhAccessibilityStr = "${context.applicationContext.packageName}/${service.name}"
+            return (Settings.Secure.getString(mContentResolver, ENABLED_ACCESSIBILITY_SERVICES)
+                ?: "").contains(gmhAccessibilityStr)
+        }
     }
 
 
     @ExperimentalCoroutinesApi
-    @Synchronized
+   // @Synchronized
     fun allowAccessibility(context: Context, service: Class<out AccessibilityService?>, add: Boolean) {
-        CoroutineScope(Dispatchers.IO).launch {
-            val mContentResolver = context.applicationContext.contentResolver
-            val gmhAccessibilityStr =  "${context.applicationContext.packageName}/${service.name}"
-            (Settings.Secure.getString(mContentResolver, ENABLED_ACCESSIBILITY_SERVICES) ?: "").let {
-                if (hasWriteSecureSetPerm) {
-                    ignoreAccessibilityChange = true
-                    var str = it
-                    while (str.contains(":$gmhAccessibilityStr")) {
-                        str = str.replace(":$gmhAccessibilityStr", "")
-                    }
-                    while (str.contains(gmhAccessibilityStr)) {
-                        str = str.replace(gmhAccessibilityStr, "")
-                    }
-                    Settings.Secure.putString(mContentResolver, ENABLED_ACCESSIBILITY_SERVICES, str)
+        synchronized(this) {
+            CoroutineScope(Dispatchers.IO).launch {
+                val mContentResolver = context.applicationContext.contentResolver
+                val gmhAccessibilityStr =
+                    "${context.applicationContext.packageName}/${service.name}"
+                (Settings.Secure.getString(mContentResolver, ENABLED_ACCESSIBILITY_SERVICES)
+                    ?: "").let {
+                    if (hasWriteSecureSetPerm) {
+                        var str = it
+                        while (str.contains(":$gmhAccessibilityStr")) {
+                            str = str.replace(":$gmhAccessibilityStr", "")
+                        }
+                        while (str.contains(gmhAccessibilityStr)) {
+                            str = str.replace(gmhAccessibilityStr, "")
+                        }
+                        ignoreAccessibilityChange = true
+                        Settings.Secure.putString(
+                            mContentResolver,
+                            ENABLED_ACCESSIBILITY_SERVICES,
+                            str
+                        )
 
-                    if (add) {
-                        delay(900)
-                        Settings.Secure.putString(mContentResolver, ENABLED_ACCESSIBILITY_SERVICES, if (str.isNotEmpty()) "$str:$gmhAccessibilityStr" else gmhAccessibilityStr)
+                        if (add) {
+                            delay(1000)
+                            //needed as first call above will set this to false
+                            ignoreAccessibilityChange = true
+                            Settings.Secure.putString(
+                                mContentResolver,
+                                ENABLED_ACCESSIBILITY_SERVICES,
+                                if (str.isNotEmpty()) "$str:$gmhAccessibilityStr" else gmhAccessibilityStr
+                            )
+                        }
                     }
                 }
             }

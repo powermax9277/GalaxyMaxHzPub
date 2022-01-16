@@ -2,11 +2,11 @@ package com.tribalfs.gmh.netspeed
 
 import android.content.Context
 import com.tribalfs.gmh.R
-import com.tribalfs.gmh.helpers.SingletonHolder
+import com.tribalfs.gmh.helpers.SingletonMaker
 
 internal class SpeedCalculator(mContext: Context) {
 
-    companion object : SingletonHolder<SpeedCalculator, Context>(::SpeedCalculator){
+    companion object : SingletonMaker<SpeedCalculator, Context>(::SpeedCalculator){
         var mCalcInBits = true
     }
 
@@ -44,10 +44,10 @@ internal class SpeedCalculator(mContext: Context) {
                 }
                 speed >= 1e+12 -> {
                     val speedUnit = mContext.getString(if (mCalcInBits) R.string.Tbps else R.string.TBps)
-                    if (speed < 1e+15) {
-                        return SpeedDetails(speedUnit, (speed / 1e+12).toString().take(3).dropLastWhile {!it.isDigit()})
+                    return if (speed < 1e+15) {
+                        SpeedDetails(speedUnit, (speed / 1e+12).toString().take(3).dropLastWhile {!it.isDigit()})
                     } else {
-                        return SpeedDetails(speedUnit, mContext.getString(R.string.plus99))
+                        SpeedDetails(speedUnit, mContext.getString(R.string.plus99))
                     }
 
                 }

@@ -1,27 +1,26 @@
 package com.tribalfs.gmh.tiles
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.graphics.drawable.Icon
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
 import androidx.databinding.Observable
 import androidx.databinding.Observable.OnPropertyChangedCallback
-import com.tribalfs.gmh.BuildConfig
-import com.tribalfs.gmh.MyApplication
+import com.tribalfs.gmh.*
 import com.tribalfs.gmh.MyApplication.Companion.applicationScope
-import com.tribalfs.gmh.R
 import com.tribalfs.gmh.dialogs.DialogsPermissionsQs
 import com.tribalfs.gmh.helpers.CacheSettings.currentRefreshRateMode
 import com.tribalfs.gmh.helpers.CacheSettings.hasWriteSecureSetPerm
+import com.tribalfs.gmh.helpers.CacheSettings.isOfficialAdaptive
 import com.tribalfs.gmh.helpers.CacheSettings.isPremium
-import com.tribalfs.gmh.helpers.CacheSettings.lowestHzForAllMode
 import com.tribalfs.gmh.helpers.CacheSettings.lrrPref
 import com.tribalfs.gmh.helpers.CacheSettings.minHzListForAdp
-import com.tribalfs.gmh.helpers.UtilsDeviceInfo.Companion.REFRESH_RATE_MODE_SEAMLESS
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmh
+import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.REFRESH_RATE_MODE_SEAMLESS
+import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.STANDARD_REFRESH_RATE_HZ
+import com.tribalfs.gmh.helpers.UtilsRefreshRateSt
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
-import kotlin.math.max
 
 
 @ExperimentalCoroutinesApi
@@ -34,7 +33,8 @@ class QSTileMinHz : TileService() {
 
     private var prevLrr: Int? = null
     private var prevMode: String? = null
-    private val mUtilsPrefsGmh by lazy{UtilsPrefsGmh(applicationContext)}
+    private val mUtilsRefreshRate by lazy{UtilsRefreshRateSt.instance(applicationContext)}
+
 
     private val propertyCallback: OnPropertyChangedCallback by lazy {
         object: OnPropertyChangedCallback() {
@@ -121,8 +121,27 @@ class QSTileMinHz : TileService() {
                     } else {
                         minHzListForAdp!![0]
                     }
-                lrrPref.set(max(lowestHzForAllMode, nexMinHz))
-                mUtilsPrefsGmh.gmhPrefMinHzAdapt = nexMinHz
+
+                if (isOfficialAdaptive && nexMinHz < STANDARD_REFRESH_RATE_HZ) {
+                    if (!AccessibilityPermission.isAccessibilityEnabled(
+                            applicationContext,
+                            GalaxyMaxHzAccess::class.java
+                        )
+                    ) {
+                        return@launch
+                    }
+                }
+
+                mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefMinHzAdapt = nexMinHz
+
+                mUtilsRefreshRate.applyMinHz()
+
+                applicationContext.startService(
+                    Intent(applicationContext,GalaxyMaxHzAccess::class.java).apply {
+                        putExtra(GalaxyMaxHzAccess.SETUP_ADAPTIVE, true)
+                    }
+                )
+
             }
         }else{
             showDialog(

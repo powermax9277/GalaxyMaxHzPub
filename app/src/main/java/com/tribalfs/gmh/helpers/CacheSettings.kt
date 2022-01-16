@@ -1,10 +1,8 @@
 package com.tribalfs.gmh.helpers
 
-import android.annotation.SuppressLint
 import android.view.Display.DEFAULT_DISPLAY
 import androidx.databinding.ObservableField
-import com.tribalfs.gmh.hertz.HzService.Companion.STOP
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import com.tribalfs.gmh.hertz.HzService.Companion.DESTROYED
 import java.lang.Long.max
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -25,8 +23,7 @@ object CacheSettings {
 
     /***Updated by MainActivity***/
    // internal var isTileExpired = false
-    internal var adaptiveDelayMillis = 1750L//ok
-    @SuppressLint("NewApi")
+    internal var adaptiveDelayMillis = 1750L
     internal var adaptiveAccessTimeout: Long = max(1500L, adaptiveDelayMillis * TIMEOUT_FACTOR.toLong())
 
    // internal var prrKey = PEAK_REFRESH_RATE
@@ -52,7 +49,7 @@ object CacheSettings {
     internal var supportedHzIntCurMod: List<Int>? = null
     internal var minHzListForAdp: List<Int>? = null
     internal var highestHzForAllMode: Int = 60 //default
-    internal val currentRefreshRateMode = ObservableField<String>()//ok
+    internal val currentRefreshRateMode = ObservableField<String>()
     internal var lowestHzForAllMode: Int = 60 //default
     internal var supportedHzIntAllMod: List<Int>? = null
     internal var modesWithLowestHz: List<String>? = null
@@ -61,22 +58,13 @@ object CacheSettings {
     internal var keepModeOnPowerSaving: Boolean = false
 
     /***Updated by MyApplication,HzService***/
-    internal val isHzNotifOn = ObservableField(false)  //ok
-    @ExperimentalCoroutinesApi
-    @SuppressLint("NewApi")
-    internal var hzStatus = ObservableField(STOP)
+    internal val isHzNotifOn = ObservableField(false)
+
+    internal var hzStatus = ObservableField(DESTROYED)
 
     /***Updated by MyApplication,NetSpeedService***/
-    internal val isNsNotifOn = ObservableField(false) //ok
-    //internal val isSwitchingSensorsOn = ObservableField(false) //ok
+    internal val isNetSpeedRunning = ObservableField(false)
 
-
-    /*internal val fixedHzOnSystemUi = object : ObservableField<Boolean>(isHzNotifOn, hzStatus, isNsNotifOn*//*, isSwitchingSensorsOn*//*) {
-        @SuppressLint("NewApi")
-        override fun get(): Boolean {
-            return (hzStatus.get() == PLAYING && isHzNotifOn.get()!!) || isNsNotifOn.get()!!*//* || isSwitchingSensorsOn.get()!!*//*
-        }
-    }*/
 
     internal val isFakeAdaptiveValid = object : ObservableField<Boolean>(isFakeAdaptive,isPremium, prrActive,lrrPref) {
         override fun get(): Boolean {
@@ -107,7 +95,6 @@ object CacheSettings {
 
     internal var turnOffAutoSensorsOff = false
     internal var preventHigh = false
-   // internal var turnOnAutoSensorsOff = false
     internal var sensorOnKey: CharSequence? = null
 
 }

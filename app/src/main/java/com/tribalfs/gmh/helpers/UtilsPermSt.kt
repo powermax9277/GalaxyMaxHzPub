@@ -14,16 +14,16 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.tribalfs.gmh.BuildConfig
 import com.tribalfs.gmh.R
-import com.tribalfs.gmh.helpers.UtilsSettings.GLOBAL
-import com.tribalfs.gmh.helpers.UtilsSettings.SECURE
-import com.tribalfs.gmh.helpers.UtilsSettings.SYSTEM
+import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.GLOBAL
+import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.SECURE
+import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.SYSTEM
 import com.tribalfs.gmh.helpers.UtilsSettingsIntents.changeSystemSettingsIntent
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 
 class UtilsPermSt(context: Context){
 
-    companion object: SingletonHolder<UtilsPermSt, Context>(::UtilsPermSt){
+    companion object: SingletonMaker<UtilsPermSt, Context>(::UtilsPermSt){
         internal const val CHANGE_SETTINGS = -11
         internal const val REQUEST_CODE_APPEAR_ON_TOP_PERM = 5
     }

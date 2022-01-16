@@ -15,6 +15,7 @@ import android.os.Looper
 import android.provider.Settings
 import android.provider.Settings.Global.DEVELOPMENT_SETTINGS_ENABLED
 import android.provider.Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
+import android.provider.Settings.System.SCREEN_BRIGHTNESS
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.databinding.Observable
@@ -22,13 +23,11 @@ import androidx.databinding.Observable.OnPropertyChangedCallback
 import com.tribalfs.gmh.AccessibilityPermission.allowAccessibility
 import com.tribalfs.gmh.GalaxyMaxHzAccess.Companion.SETUP_ADAPTIVE
 import com.tribalfs.gmh.GalaxyMaxHzAccess.Companion.SETUP_NETWORK_CALLBACK
-import com.tribalfs.gmh.SensorsOffSt.Companion.SYSUI_QS_TILES
 import com.tribalfs.gmh.helpers.*
 import com.tribalfs.gmh.helpers.CacheSettings.TIMEOUT_FACTOR
 import com.tribalfs.gmh.helpers.CacheSettings.adaptiveAccessTimeout
 import com.tribalfs.gmh.helpers.CacheSettings.adaptiveDelayMillis
 import com.tribalfs.gmh.helpers.CacheSettings.brightnessThreshold
-import com.tribalfs.gmh.helpers.CacheSettings.canApplyFakeAdaptive
 import com.tribalfs.gmh.helpers.CacheSettings.currentBrightness
 import com.tribalfs.gmh.helpers.CacheSettings.currentRefreshRateMode
 import com.tribalfs.gmh.helpers.CacheSettings.hasWriteSecureSetPerm
@@ -36,7 +35,7 @@ import com.tribalfs.gmh.helpers.CacheSettings.ignoreRrmChange
 import com.tribalfs.gmh.helpers.CacheSettings.isFakeAdaptive
 import com.tribalfs.gmh.helpers.CacheSettings.isFakeAdaptiveValid
 import com.tribalfs.gmh.helpers.CacheSettings.isHzNotifOn
-import com.tribalfs.gmh.helpers.CacheSettings.isNsNotifOn
+import com.tribalfs.gmh.helpers.CacheSettings.isNetSpeedRunning
 import com.tribalfs.gmh.helpers.CacheSettings.isOfficialAdaptive
 import com.tribalfs.gmh.helpers.CacheSettings.isOnePlus
 import com.tribalfs.gmh.helpers.CacheSettings.isPowerSaveModeOn
@@ -48,25 +47,21 @@ import com.tribalfs.gmh.helpers.CacheSettings.isXiaomi
 import com.tribalfs.gmh.helpers.CacheSettings.keepModeOnPowerSaving
 import com.tribalfs.gmh.helpers.CacheSettings.lrrPref
 import com.tribalfs.gmh.helpers.CacheSettings.preventHigh
-import com.tribalfs.gmh.helpers.CacheSettings.prrActive
 import com.tribalfs.gmh.helpers.CacheSettings.turnOff5GOnPsm
 import com.tribalfs.gmh.helpers.DozeUpdater.updateDozValues
-import com.tribalfs.gmh.helpers.UtilsDeviceInfo.Companion.BATTERY_SAVER_CONSTANTS
-import com.tribalfs.gmh.helpers.UtilsDeviceInfo.Companion.DEVICE_IDLE_CONSTANTS
-import com.tribalfs.gmh.helpers.UtilsDeviceInfo.Companion.PSM_5G_MODE
-import com.tribalfs.gmh.helpers.UtilsDeviceInfo.Companion.REFRESH_RATE_MODE
-import com.tribalfs.gmh.helpers.UtilsDeviceInfo.Companion.REFRESH_RATE_MODE_SEAMLESS
-import com.tribalfs.gmh.helpers.UtilsDeviceInfo.Companion.SCREEN_BRIGHTNESS_FLOAT
-import com.tribalfs.gmh.helpers.UtilsDeviceInfo.Companion.STANDARD_REFRESH_RATE_HZ
+import com.tribalfs.gmh.helpers.NotificationBarSt.Companion.SYSUI_QS_TILES
+import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.BATTERY_SAVER_CONSTANTS
+import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.DEVICE_IDLE_CONSTANTS
+import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.PSM_5G_MODE
+import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.REFRESH_RATE_MODE
+import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.SCREEN_BRIGHTNESS_FLOAT
+import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.STANDARD_REFRESH_RATE_HZ
 import com.tribalfs.gmh.hertz.HzServiceHelperStn
-import com.tribalfs.gmh.profiles.ProfilesInitializer
 import com.tribalfs.gmh.profiles.ProfilesObj.isProfilesLoaded
-import com.tribalfs.gmh.profiles.Syncer
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsAct
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsAct.Companion.LIC_TYPE_ADFREE
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsAct.Companion.LIC_TYPE_TRIAL_ACTIVE
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmh
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmh.Companion.NOT_USING
+import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt.Companion.NOT_USING
 import kotlinx.coroutines.*
 import org.acra.ACRA
 import org.acra.annotation.AcraCore
@@ -90,14 +85,11 @@ class MyApplication : Application() {
         internal val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     }
 
-
-
-    private val mUtilsPrefsGmh by lazy {UtilsPrefsGmh(applicationContext)}
-    private val mUtilsDeviceInfo by lazy { UtilsDeviceInfo(applicationContext) }
-    private val internalCert by lazy { Certificate.getEncSig(applicationContext)}
+    private val mUtilsRefreshRateSt by lazy {UtilsRefreshRateSt.instance(applicationContext)}
     private val mUtilsPrefsAct by lazy { UtilsPrefsAct(applicationContext) }
 
     private val brightnessFloatUri = Settings.System.getUriFor(SCREEN_BRIGHTNESS_FLOAT)
+    private val brightnessUri = Settings.System.getUriFor(SCREEN_BRIGHTNESS)
     private val refreshRateModeUri = Settings.Secure.getUriFor(REFRESH_RATE_MODE)
     private val psm5gModeUri = Settings.Global.getUriFor(PSM_5G_MODE)
     private val deviceIdleConstantsUri = Settings.Global.getUriFor(DEVICE_IDLE_CONSTANTS)
@@ -115,17 +107,17 @@ class MyApplication : Application() {
                 refreshRateModeUri -> {
                     if (!ignoreRrmChange) {
                         applicationScope.launch {
-                            while (!isProfilesLoaded) { delay(150) }
-                            ProfilesInitializer.instance(applicationContext).updateModeBasedVariables()
+                            while (!isProfilesLoaded) { delay(200) }
+                            mUtilsRefreshRateSt.updateModeBasedVariables()
                             delay(235)
-                            updateRefreshRateParams()
+                            mUtilsRefreshRateSt.updateRefreshRateParams()
                             applicationContext.startService(
                                 Intent(applicationContext, GalaxyMaxHzAccess::class.java).apply {
                                     putExtra(SETUP_ADAPTIVE, true)
                                 }
                             )
 
-                            mUtilsPrefsGmh.gmhPrefRefreshRateModePref = currentRefreshRateMode.get()
+                            mUtilsRefreshRateSt.mUtilsPrefsGmh.gmhPrefRefreshRateModePref = currentRefreshRateMode.get()
 
                         }
                     }else{
@@ -140,12 +132,12 @@ class MyApplication : Application() {
 
                 deviceIdleConstantsUri -> {
                     applicationScope.launch {
-                        if (mUtilsPrefsGmh.gmhPrefQuickDozeIsOn && DozeUpdater.getDozeVal(mUtilsPrefsGmh.gmhPrefGDozeModOpt)
+                        if (mUtilsRefreshRateSt.mUtilsPrefsGmh.gmhPrefQuickDozeIsOn && DozeUpdater.getDozeVal(mUtilsRefreshRateSt.mUtilsPrefsGmh.gmhPrefGDozeModOpt)
                             != Settings.Global.getString(mContentResolver, DEVICE_IDLE_CONSTANTS)
                         ) {
                             applicationContext.updateDozValues(
                                 true,
-                                mUtilsPrefsGmh.gmhPrefGDozeModOpt
+                                mUtilsRefreshRateSt.mUtilsPrefsGmh.gmhPrefGDozeModOpt
                             )
                         }
                     }
@@ -154,7 +146,7 @@ class MyApplication : Application() {
 
 
                 batterySaverConstantsUri -> {
-                    if (mUtilsPrefsGmh.gmhPrefQuickDozeIsOn) {
+                    if (mUtilsRefreshRateSt.mUtilsPrefsGmh.gmhPrefQuickDozeIsOn) {
                         DozePSCChecker.check(
                             applicationContext,
                             enable = true,
@@ -165,10 +157,10 @@ class MyApplication : Application() {
 
 
                 sysuiQsTilesUri, devSettingsUri -> {
-                    if (mUtilsPrefsGmh.gmhPrefSensorsOff) {
+                    if (mUtilsRefreshRateSt.mUtilsPrefsGmh.gmhPrefSensorsOff) {
                         applicationScope.launch {
-                            if (!SensorsOffSt.instance(applicationContext).checkQsTileInPlace()) {
-                                mUtilsPrefsGmh.gmhPrefSensorsOff = false
+                            if (NotificationBarSt.instance(applicationContext).checkQsTileInPlace() != true) {
+                                mUtilsRefreshRateSt.mUtilsPrefsGmh.gmhPrefSensorsOff = false
                             }
                         }
                     }
@@ -211,13 +203,14 @@ class MyApplication : Application() {
 
     }
 
+
     inner class MyBrightnessObserver(h: Handler?) : ContentObserver(h) {
         override fun onChange(selfChange: Boolean, uri: Uri?) {
             when (uri) {
-                brightnessFloatUri -> {
+                brightnessFloatUri, brightnessUri -> {
                     applicationScope.launch {
                         if (isScreenOn) {
-                            currentBrightness.set(mUtilsDeviceInfo.getScreenBrightnessPercent())
+                            currentBrightness.set(mUtilsRefreshRateSt.mUtilsDeviceInfo.getScreenBrightnessPercent())
                         }
                     }
                 }
@@ -226,21 +219,35 @@ class MyApplication : Application() {
 
 
         fun startBrightnessObserver(){
-            mContentResolver.registerContentObserver(
-                brightnessFloatUri, false, this
-            )
+            if (Build.VERSION.SDK_INT == Build.VERSION_CODES.R) {
+                mContentResolver.registerContentObserver(
+                    brightnessFloatUri, false, this
+                )
+            }else {
+                mContentResolver.registerContentObserver(
+                    brightnessUri, false, this
+                )
+            }
+
         }
 
         fun stopBrightnessObserver(){
-            mContentResolver.registerContentObserver(
-                brightnessFloatUri, false, this
-            )
+            if (Build.VERSION.SDK_INT == Build.VERSION_CODES.R) {
+                mContentResolver.registerContentObserver(
+                    brightnessFloatUri, false, this
+                )
+            }else{
+                mContentResolver.registerContentObserver(
+                    brightnessUri, false, this)
+
+            }
         }
 
         /* fun unObserve(){
              mContentResolver.unregisterContentObserver(this)
          }*/
     }
+
 
 
     //TODO{reason: Comment out method below}
@@ -259,6 +266,7 @@ class MyApplication : Application() {
             0 -> applicationInfo.nonLocalizedLabel.toString()
             else -> getString(stringId)
         }
+        checkAccessibility()
 
         mContentResolver = applicationContext.contentResolver
 
@@ -285,7 +293,7 @@ class MyApplication : Application() {
         applicationScope.launch {
             withContext(Dispatchers.IO){ cacheSettings()} //suspend function
             delay(6500)//DON'T reduce
-            checkAccessibility()
+            //checkAccessibility()
             applicationContext.startService(
                 Intent(applicationContext, GalaxyMaxHzAccess::class.java).apply {
                     putExtra(SETUP_ADAPTIVE, true)
@@ -305,12 +313,12 @@ class MyApplication : Application() {
             while (!isProfilesLoaded) {
                 delay(250)
             }
-            if ((isSamsung && mUtilsDeviceInfo.oneUiVersion == 4.0)
+            if ((isSamsung && mUtilsRefreshRateSt.mUtilsDeviceInfo.oneUiVersion == 4.0)
                 /*   && highestHzForAllMode > REFRESH_RATE_MODE_STANDARD.toInt()*/
-                && !mUtilsPrefsGmh.gmhPrefSettingListDone
+                && !mUtilsRefreshRateSt.mUtilsPrefsGmh.gmhPrefSettingListDone
             ) {
-                Syncer(applicationContext).postSettingsList()
-                mUtilsPrefsGmh.gmhPrefSettingListDone = true
+                mUtilsRefreshRateSt.mSyncer.postSettingsList()
+                mUtilsRefreshRateSt.mUtilsPrefsGmh.gmhPrefSettingListDone = true
             }
         }
     }
@@ -320,64 +328,75 @@ class MyApplication : Application() {
     @SuppressLint("NewApi")
     @ExperimentalCoroutinesApi
     private suspend fun cacheSettings() {
-        isPowerSaveModeOn.set(
+         val mUtilsPrefsGmh = mUtilsRefreshRateSt.mUtilsPrefsGmh
+
+            isPowerSaveModeOn.set(
             if (mUtilsPrefsGmh.gmhPrefPsmIsOffCache)
                 !mUtilsPrefsGmh.gmhPrefPsmIsOffCache
             else
-                mUtilsDeviceInfo.isPowerSavingsModeOn()
+                mUtilsRefreshRateSt.mUtilsDeviceInfo.isPowerSavingsModeOn
         )
         turnOff5GOnPsm = isTurnOff5GOnPsm()
         hasWriteSecureSetPerm = UtilsPermSt.instance(applicationContext).hasWriteSecurePerm()
         isSpayInstalled = isSpayInstalled()
         keepModeOnPowerSaving = mUtilsPrefsGmh.gmhPrefKmsOnPsm
-        brightnessThreshold.set(mUtilsPrefsGmh.gmhPrefGAdaptBrightnessMin)
-        currentBrightness.set(mUtilsDeviceInfo.getScreenBrightnessPercent())
+        brightnessThreshold.set(
+            if (Build.VERSION.SDK_INT == Build.VERSION_CODES.R) {
+                mUtilsPrefsGmh.gmhPrefGAdaptBrightnessMin
+            }else {
+                (mUtilsPrefsGmh.gmhPrefGAdaptBrightnessMin.toFloat() * 2.55f).toInt()
+            }
+        )
+        currentBrightness.set(mUtilsRefreshRateSt.mUtilsDeviceInfo.getScreenBrightnessPercent())
         mUtilsPrefsGmh.hzPrefAdaptiveDelay.let {
             adaptiveDelayMillis = it
             adaptiveAccessTimeout = it * TIMEOUT_FACTOR.toLong()
         }
         isPremium.set((mUtilsPrefsAct.gmhPrefLicType == LIC_TYPE_ADFREE || mUtilsPrefsAct.gmhPrefLicType == LIC_TYPE_TRIAL_ACTIVE)
-                && (mUtilsPrefsAct.gmhPrefSignature == internalCert))
+                && (mUtilsPrefsAct.gmhPrefSignature == PackageInfo.getSignatureString(applicationContext)))
 
 
-        isProfilesLoaded = withContext(Dispatchers.IO) { ProfilesInitializer.instance(applicationContext).initProfiles() }
+        isProfilesLoaded = withContext(Dispatchers.IO) { mUtilsRefreshRateSt.initProfiles() }
 
         applicationContext.startService(Intent(applicationContext, GalaxyMaxHzAccess::class.java).apply{ putExtra(SETUP_ADAPTIVE, true)})
 
-        updateRefreshRateParams()
+        mUtilsRefreshRateSt.updateRefreshRateParams()
+        //updateRefreshRateParams()
 
         preventHigh = mUtilsPrefsGmh.gmhPrefPreventHigh
         isHzNotifOn.set (mUtilsPrefsGmh.gmhPrefHzIsOn && mUtilsPrefsGmh.gmhPrefHzNotifIsOn)
-        isNsNotifOn.set( mUtilsPrefsGmh.gmhPrefNetSpeedIsOn)
+        isNetSpeedRunning.set( mUtilsPrefsGmh.gmhPrefNetSpeedIsOn)
         //fixedHzOnSystemUi =
 
     }
 
 
-    private fun updateRefreshRateParams(){
+    /*private fun updateRefreshRateParams() {
         canApplyFakeAdaptive = canApplyFakeAdaptive()//don't interchange
         isFakeAdaptive.set(isFakeAdaptive())//don't interchange
         prrActive.set (if (isPowerSaveModeOn.get() == true && isPremium.get()!!) {
-            mUtilsPrefsGmh.hzPrefMaxRefreshRatePsm
+            mUtilsRefreshRateSt.mUtilsPrefsGmh.hzPrefMaxRefreshRatePsm
         } else {
-            mUtilsPrefsGmh.hzPrefMaxRefreshRate
+            mUtilsRefreshRateSt.mUtilsPrefsGmh.hzPrefMaxRefreshRate
         })
-        lrrPref.set(mUtilsPrefsGmh.gmhPrefMinHzAdapt)
+        lrrPref.set(mUtilsRefreshRateSt.mUtilsPrefsGmh.gmhPrefMinHzAdapt)
     }
 
 
     private fun canApplyFakeAdaptive(): Boolean {
-        return isOfficialAdaptive && (currentRefreshRateMode.get() == REFRESH_RATE_MODE_SEAMLESS) && hasWriteSecureSetPerm
+        return isOfficialAdaptive && (currentRefreshRateMode.get() == REFRESH_RATE_MODE_SEAMLESS)
+                && (hasWriteSecureSetPerm || isAccessibilityEnabled(applicationContext, GalaxyMaxHzAccess::class.java))
     }
 
 
     private fun isFakeAdaptive(): Boolean {
         return if (!isOfficialAdaptive){//Adaptive NOT Supported
-            (currentRefreshRateMode.get() == REFRESH_RATE_MODE_SEAMLESS) && hasWriteSecureSetPerm
+            (currentRefreshRateMode.get() == REFRESH_RATE_MODE_SEAMLESS)
+                    && (hasWriteSecureSetPerm || isAccessibilityEnabled(applicationContext, GalaxyMaxHzAccess::class.java))
         }else{//Adaptive Supported devices
-            canApplyFakeAdaptive && mUtilsPrefsGmh.gmhPrefMinHzAdapt < STANDARD_REFRESH_RATE_HZ
+            canApplyFakeAdaptive && mUtilsRefreshRateSt.mUtilsPrefsGmh.gmhPrefMinHzAdapt < STANDARD_REFRESH_RATE_HZ
         }
-    }
+    }*/
 
     private fun isSpayInstalled(): Boolean {
         return try {
@@ -389,7 +408,7 @@ class MyApplication : Application() {
     }
 
     private fun setBrand(){
-        when (mUtilsDeviceInfo.manufacturer) {
+        when (mUtilsRefreshRateSt.mUtilsDeviceInfo.manufacturer) {
             "SAMSUNG" ->{
                 isSamsung = true
                 isXiaomi = false
@@ -411,7 +430,7 @@ class MyApplication : Application() {
 
     private fun checkAccessibility(): Boolean{
         return if (
-            (isSpayInstalled == false || mUtilsPrefsGmh.hzPrefUsingSPay == NOT_USING)
+            (isSpayInstalled == false || mUtilsRefreshRateSt.mUtilsPrefsGmh.hzPrefUsingSPay == NOT_USING)
             && hasWriteSecureSetPerm
         ) {
             allowAccessibility(
@@ -427,7 +446,7 @@ class MyApplication : Application() {
 
 
     private fun notifyAccessibilityNeed() = applicationScope.launch{
-
+        val mUtilsPrefsGmh = mUtilsRefreshRateSt.mUtilsPrefsGmh
         //Check if using Access requiring features
         val featuresOn = mutableListOf<String>()
         if (mUtilsPrefsGmh.gmhPrefForceLowestSoIsOn) {
@@ -449,25 +468,33 @@ class MyApplication : Application() {
         featuresOn.size.let{
             if (it > 0) {
                 //Will auto turn it back ON if have permission
-                if (checkAccessibility()) {
-                    launch(Dispatchers.Main) {
-                        var toastRpt = it
-                        while(toastRpt > 0) {
-                            Toast.makeText(
-                                applicationContext,
-                                applicationContext.resources.getQuantityString(
-                                    R.plurals.access_notif,
-                                    featuresOn.size,
-                                    "\n" + featuresOn.joinToString("" +
-                                            "\n")
-                                ),
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            delay(300)
-                            toastRpt -= 1
-                        }
+                launch(Dispatchers.Main) {
+                    var toastRpt = it
+                    val toastMsg = if (checkAccessibility()) {
+                        applicationContext.resources.getQuantityString(
+                            R.plurals.access_notif,
+                            featuresOn.size,
+                            "\n" + featuresOn.joinToString("" +
+                                    "\n")
+                        )
+                    }else{
+                        applicationContext.getString(
+                            R.string.no_access_notif,
+                            "\n" + featuresOn.joinToString("" +
+                                    "\n")
+                        )
+                    }
+                    while(toastRpt > 0) {
+                        Toast.makeText(
+                            applicationContext,
+                            toastMsg,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        delay(400)
+                        toastRpt -= 1
                     }
                 }
+
             } else  {
                 mUtilsPrefsGmh.gmhPrefForceLowestSoIsOn = false
                 mUtilsPrefsGmh.gmhPrefDisableSyncIsOn = false

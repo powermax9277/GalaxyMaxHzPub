@@ -21,11 +21,11 @@ import com.tribalfs.gmh.helpers.CacheSettings.isScreenOn
 import com.tribalfs.gmh.helpers.UtilsSettingsIntents.dataUsageSettingsIntent
 import com.tribalfs.gmh.netspeed.SpeedCalculator.Companion.mCalcInBits
 import com.tribalfs.gmh.receivers.ScreenStatusReceiverBasic
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmh
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmh.Companion.BIT_PER_SEC
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmh.Companion.DOWNLOAD_SPEED
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmh.Companion.TOTAL_SPEED
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmh.Companion.UPLOAD_SPEED
+import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt
+import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt.Companion.BIT_PER_SEC
+import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt.Companion.DOWNLOAD_SPEED
+import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt.Companion.TOTAL_SPEED
+import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt.Companion.UPLOAD_SPEED
 import kotlinx.coroutines.*
 import java.lang.Float.min
 import java.lang.String.format
@@ -46,7 +46,7 @@ class NetSpeedService : Service(), CoroutineScope {
 
     private val mNotificationContentView: RemoteViews by lazy {RemoteViews(applicationContext.packageName, R.layout.view_indicator_notification) }
     private val notificationManagerCompat by lazy{NotificationManagerCompat.from(applicationContext)}
-    private val mUtilsPrefsGmh by lazy{ UtilsPrefsGmh(applicationContext) }
+    private val mUtilsPrefsGmh by lazy{ UtilsPrefsGmhSt.instance(applicationContext) }
     private lateinit var notificationBuilderInstance: Notification.Builder
     private lateinit var mIconSpeedPaint: Paint
     private lateinit var mIconUnitPaint:Paint
@@ -68,7 +68,6 @@ class NetSpeedService : Service(), CoroutineScope {
         get() = job + Dispatchers.Default
 
 
-    private var netstatUpdaterJob: Job? = null
     private var continueRrUpdate: Boolean = false
 
     private val updateNetstat
@@ -101,7 +100,6 @@ class NetSpeedService : Service(), CoroutineScope {
         }
 
     private fun startNetStatInternal(){
-        netstatUpdaterJob?.cancel()
         continueRrUpdate = true
         updateNetstat.start()
     }
@@ -110,7 +108,6 @@ class NetSpeedService : Service(), CoroutineScope {
     private fun stopNetStatInternal(){
         continueRrUpdate = false
         updateNetstat.cancel()
-        //netstatUpdaterJob?.cancel()
     }
 
     private val mScreenStatusReceiver by lazy{
@@ -340,7 +337,6 @@ class NetSpeedService : Service(), CoroutineScope {
 
     private fun handleConfigChange() {
         mCalcInBits = mUtilsPrefsGmh.gmhPrefSpeedUnit == BIT_PER_SEC
-        //SpeedCalculator.instance(applicationContext).setIsBits(mUtilsPrefsGmh.gmhPrefSpeedUnit == BIT_PER_SEC)
         mSpeedToShow = mUtilsPrefsGmh.gmhPrefSpeedToShow
     }
 

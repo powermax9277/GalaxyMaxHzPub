@@ -16,10 +16,14 @@ open class RoundedDialogFragment : DialogFragment() {
     ): View? {
         // Set transparent background and no title
         if (dialog != null && dialog!!.window != null) {
-            dialog!!.window!!.setBackgroundDrawable(getDrawable(requireContext(), R.drawable.rounded_edge))
+            dialog!!.window!!.setBackgroundDrawable(
+                getDrawable(
+                    requireContext(),
+                    R.drawable.rounded_edge
+                )
+            )
             dialog!!.window!!.requestFeature(Window.FEATURE_NO_TITLE)
         }
-        val view = inflater.inflate(R.layout.dialog_rounded, container, false)
-        return view
+        return inflater.inflate(R.layout.dialog_rounded, container, false)
     }
 }

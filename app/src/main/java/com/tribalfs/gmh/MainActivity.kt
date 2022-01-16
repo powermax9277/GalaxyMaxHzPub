@@ -46,6 +46,7 @@ import com.tribalfs.appupdater.interfaces.OnUpdateCheckedCallback
 import com.tribalfs.gmh.AccessibilityPermission.allowAccessibility
 import com.tribalfs.gmh.AccessibilityPermission.isAccessibilityEnabled
 import com.tribalfs.gmh.BuildConfig.APPLICATION_ID
+import com.tribalfs.gmh.BuildConfig.VERSION_NAME
 import com.tribalfs.gmh.GalaxyMaxHzAccess.Companion.SETUP_ADAPTIVE
 import com.tribalfs.gmh.GalaxyMaxHzAccess.Companion.SETUP_NETWORK_CALLBACK
 import com.tribalfs.gmh.MyApplication.Companion.applicationName
@@ -54,6 +55,10 @@ import com.tribalfs.gmh.callbacks.MyClickHandler
 import com.tribalfs.gmh.databinding.ActivityMainBinding
 import com.tribalfs.gmh.dialogs.*
 import com.tribalfs.gmh.dialogs.DialogsPermissionsQs.getOverlaySettingIntent
+import com.tribalfs.gmh.dialogs.InfoDialog.Companion.ADB_PERM_INFO
+import com.tribalfs.gmh.dialogs.InfoDialog.Companion.CHANGE_RES_INFO
+import com.tribalfs.gmh.dialogs.InfoDialog.Companion.QDM_INFO
+import com.tribalfs.gmh.dialogs.InfoDialog.Companion.SENSORS_OFF_INFO
 import com.tribalfs.gmh.helpers.*
 import com.tribalfs.gmh.helpers.CacheSettings.TIMEOUT_FACTOR
 import com.tribalfs.gmh.helpers.CacheSettings.adaptiveAccessTimeout
@@ -66,7 +71,7 @@ import com.tribalfs.gmh.helpers.CacheSettings.hasWriteSystemSetPerm
 import com.tribalfs.gmh.helpers.CacheSettings.highestHzForAllMode
 import com.tribalfs.gmh.helpers.CacheSettings.isFakeAdaptive
 import com.tribalfs.gmh.helpers.CacheSettings.isMultiResolution
-import com.tribalfs.gmh.helpers.CacheSettings.isNsNotifOn
+import com.tribalfs.gmh.helpers.CacheSettings.isNetSpeedRunning
 import com.tribalfs.gmh.helpers.CacheSettings.isOfficialAdaptive
 import com.tribalfs.gmh.helpers.CacheSettings.isOnePlus
 import com.tribalfs.gmh.helpers.CacheSettings.isPowerSaveModeOn
@@ -75,7 +80,6 @@ import com.tribalfs.gmh.helpers.CacheSettings.isSpayInstalled
 import com.tribalfs.gmh.helpers.CacheSettings.keepModeOnPowerSaving
 import com.tribalfs.gmh.helpers.CacheSettings.lowestHzCurMode
 import com.tribalfs.gmh.helpers.CacheSettings.lowestHzForAllMode
-import com.tribalfs.gmh.helpers.CacheSettings.lrrPref
 import com.tribalfs.gmh.helpers.CacheSettings.minHzListForAdp
 import com.tribalfs.gmh.helpers.CacheSettings.modesWithLowestHz
 import com.tribalfs.gmh.helpers.CacheSettings.offScreenRefreshRate
@@ -90,12 +94,12 @@ import com.tribalfs.gmh.helpers.DozeUpdater.getDozeVal
 import com.tribalfs.gmh.helpers.DozeUpdater.mwInterval
 import com.tribalfs.gmh.helpers.DozeUpdater.updateDozValues
 import com.tribalfs.gmh.helpers.UtilsCommon.closestValue
-import com.tribalfs.gmh.helpers.UtilsDeviceInfo.Companion.BRIGHTNESS_RESOLUTION
-import com.tribalfs.gmh.helpers.UtilsDeviceInfo.Companion.DEVICE_IDLE_CONSTANTS
-import com.tribalfs.gmh.helpers.UtilsDeviceInfo.Companion.REFRESH_RATE_MODE_ALWAYS
-import com.tribalfs.gmh.helpers.UtilsDeviceInfo.Companion.REFRESH_RATE_MODE_SEAMLESS
-import com.tribalfs.gmh.helpers.UtilsDeviceInfo.Companion.REFRESH_RATE_MODE_STANDARD
-import com.tribalfs.gmh.helpers.UtilsDeviceInfo.Companion.STANDARD_REFRESH_RATE_HZ
+import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.BRIGHTNESS_RESOLUTION
+import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.DEVICE_IDLE_CONSTANTS
+import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.REFRESH_RATE_MODE_ALWAYS
+import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.REFRESH_RATE_MODE_SEAMLESS
+import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.REFRESH_RATE_MODE_STANDARD
+import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.STANDARD_REFRESH_RATE_HZ
 import com.tribalfs.gmh.helpers.UtilsSettingsIntents.autoSyncSettingsIntent
 import com.tribalfs.gmh.helpers.UtilsSettingsIntents.dataUsageSettingsIntent
 import com.tribalfs.gmh.helpers.UtilsSettingsIntents.dataUsageSettingsIntentOP
@@ -105,9 +109,8 @@ import com.tribalfs.gmh.hertz.*
 import com.tribalfs.gmh.hertz.HzService.Companion.CHANNEL_ID_HZ
 import com.tribalfs.gmh.netspeed.*
 import com.tribalfs.gmh.netspeed.NetSpeedService.Companion.CHANNEL_ID_NET_SPEED
-import com.tribalfs.gmh.profiles.ProfilesInitializer
+import com.tribalfs.gmh.profiles.ProfilesObj
 import com.tribalfs.gmh.profiles.ProfilesObj.isProfilesLoaded
-import com.tribalfs.gmh.profiles.Syncer
 import com.tribalfs.gmh.profiles.Syncer.Companion.JSON_RESPONSE_OK
 import com.tribalfs.gmh.profiles.Syncer.Companion.KEY_JSON_ACTIVATION_CODE
 import com.tribalfs.gmh.profiles.Syncer.Companion.KEY_JSON_RESULT
@@ -118,51 +121,44 @@ import com.tribalfs.gmh.sharedprefs.UtilsPrefsAct
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsAct.Companion.LIC_TYPE_ADFREE
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsAct.Companion.LIC_TYPE_INVALID_CODE
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsAct.Companion.LIC_TYPE_TRIAL_ACTIVE
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmh
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmh.Companion.APPLY_SENSORS_OFF
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmh.Companion.BIT_PER_SEC
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmh.Companion.BYTE_PER_SEC
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmh.Companion.DEEP_DOZ_OPT
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmh.Companion.DISABLE_SYNC
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmh.Companion.DOWNLOAD_SPEED
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmh.Companion.FORCE_LOWEST_HZ_SO
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmh.Companion.HZ_OVERLAY_ON
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmh.Companion.IS_HZ_ON
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmh.Companion.KEEP_RRM
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmh.Companion.MIN_HZ_ADAPT
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmh.Companion.NOT_ASKED
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmh.Companion.NOT_USING
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmh.Companion.PREF_MAX_REFRESH_RATE
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmh.Companion.PREF_MAX_REFRESH_RATE_PSM
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmh.Companion.QUICK_DOZE
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmh.Companion.TOTAL_SPEED
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmh.Companion.UPLOAD_SPEED
+import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt.Companion.APPLY_SENSORS_OFF
+import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt.Companion.BIT_PER_SEC
+import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt.Companion.BYTE_PER_SEC
+import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt.Companion.DEEP_DOZ_OPT
+import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt.Companion.DISABLE_SYNC
+import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt.Companion.DOWNLOAD_SPEED
+import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt.Companion.FORCE_LOWEST_HZ_SO
+import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt.Companion.HZ_OVERLAY_ON
+import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt.Companion.IS_HZ_ON
+import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt.Companion.KEEP_RRM
+import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt.Companion.MIN_HZ_ADAPT
+import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt.Companion.NOT_ASKED
+import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt.Companion.NOT_USING
+import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt.Companion.PREF_MAX_REFRESH_RATE
+import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt.Companion.PREF_MAX_REFRESH_RATE_PSM
+import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt.Companion.QUICK_DOZE
+import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt.Companion.TOTAL_SPEED
+import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt.Companion.UPLOAD_SPEED
 import com.tribalfs.gmh.viewmodels.MyViewModel
 import kotlinx.coroutines.*
+import java.lang.Integer.min
 import java.util.*
 import kotlin.collections.HashSet
 import kotlin.coroutines.CoroutineContext
-import kotlin.math.max
-import kotlin.math.min
 
 //TODO(UI improvements)
-
 @ExperimentalCoroutinesApi
 class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClickHandler, CoroutineScope {
 
     companion object {
-        private const val TAG = "MainActivity"
+        //private const val TAG = "MainActivity"
         internal const val GMH_WEB_APP ="https://script.google.com/macros/s/AKfycbzlRKh4-YXyXLufXZfDqAs1xJEJK7BF8zmhEDGDpbP1luu97trI/exec"
-        //private const val HELP_URL_FALLBACK = "https://forum.xda-developers.com/t/app-galaxy-max-hz-refresh-rate-control-quick-resolution-switcher-screen-off-mods-adaptive-mod-keep-high-adaptive-on-power-saving-mode-and-more.4181447"
         //private const val REWARDED_INTERSTITIAL_ID = "ca-app-pub-3239920037413959/1863514308"
         internal const val ACTION_CHANGED_RES = "$APPLICATION_ID.ACTION_CHANGED_RES"
         private const val REQUEST_LATEST_UPDATE = 0x5
         private const val KEY_JSON_LIC_TYPE = "0x11"
         private const val KEY_JSON_PAYPAL_BUY_URL = "0x12"
         private const val KEY_JSON_HELP_URL = "0x24"
-        private const val VERSION = BuildConfig.VERSION_NAME
-
-
         /*private const val SYNCMODE_POST = "1"
         private const val SYNCMODE_GET = "0"*/
     }
@@ -171,22 +167,16 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
 
     private lateinit var mBinding: ActivityMainBinding
 
-    private val mUtilsDeviceInfo: UtilsDeviceInfo by lazy{UtilsDeviceInfo(applicationContext)}
-    private val mUtilsPrefsGmh by lazy{ UtilsPrefsGmh(applicationContext)}
-    private val mUtilsPrefsAct by lazy{ UtilsPrefsAct(applicationContext)}
-    private val mUtilsRefreshRate by lazy{UtilsRefreshRate(applicationContext)}
+    private val mUtilsPrefsAct by lazy{ UtilsPrefsAct(this)}
+    private val mUtilsRefreshRate by lazy{UtilsRefreshRateSt.instance(applicationContext)}
 
     private val hzOverlaySizes = listOf(10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30)
     private val hzAdaptiveDelays = listOf(2, 3, 4, 5, 6, 7, 8, 9, 10)
     private var mList: Menu? = null
     private var ignoreUnblockHzNotifState = true
     private var ignoreUnblockNetSpeedNotifState = true
-
     private lateinit var thumbView : View
-
-    private val mProfilesInit by lazy {ProfilesInitializer.instance(applicationContext)}
-    private val mSyncer by lazy { Syncer(applicationContext) }
-    private val mContentResolver  by lazy {applicationContext.contentResolver}
+    private var buyLink: String? = null
 
     private val masterJob: Job = SupervisorJob()
     override val coroutineContext: CoroutineContext
@@ -203,11 +193,11 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
                         CHANNEL_ID_HZ -> {
                             if (intent.getBooleanExtra(EXTRA_BLOCKED_STATE, false)) {
                                 mBinding.chNotifHz.isChecked = false
-                                showHertz(mUtilsPrefsGmh.gmhPrefHzIsOn, null, false)
+                                showHertz(mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefHzIsOn, null, false)
                             } else {
                                 if (!ignoreUnblockHzNotifState) {
                                     mBinding.chNotifHz.isChecked = true
-                                    showHertz(mUtilsPrefsGmh.gmhPrefHzIsOn, null, true)
+                                    showHertz(mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefHzIsOn, null, true)
                                     ignoreUnblockHzNotifState = true
                                 }
                             }
@@ -247,6 +237,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
 
 
     private val listener = OnSharedPreferenceChangeListener { _, key ->
+        val mUtilsPrefsGmh = mUtilsRefreshRate.mUtilsPrefsGmh
         when (key){
             KEEP_RRM -> {
                 (mUtilsPrefsGmh.gmhPrefKmsOnPsm).let {
@@ -347,12 +338,15 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
                 currentRefreshRateMode -> { //triggered by MyContentObserver -> updateCacheSettings()
                     currentRefreshRateMode.get().let {
                         if (!isOfficialAdaptive && !isPremium.get()!! && it == REFRESH_RATE_MODE_SEAMLESS ) {
-                            mUtilsRefreshRate.setRefreshRateMode(
-                                if (highestHzForAllMode > STANDARD_REFRESH_RATE_HZ)
-                                    REFRESH_RATE_MODE_ALWAYS else
-                                    REFRESH_RATE_MODE_STANDARD
-                            )
-                            return
+                            if (highestHzForAllMode > STANDARD_REFRESH_RATE_HZ){
+                                mUtilsRefreshRate.setRefreshRateMode(REFRESH_RATE_MODE_ALWAYS)
+                                return
+                            }else{
+                                if (ProfilesObj.loadComplete) {
+                                    mUtilsRefreshRate.setRefreshRateMode(REFRESH_RATE_MODE_STANDARD)
+                                    return
+                                }
+                            }
                         }
                         /*Log.d(TAG, "mBinding.refreshRateMode $it")*/
                         mBinding.refreshRateMode = it
@@ -395,6 +389,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
 
     @RequiresApi(VERSION_CODES.M)
     override fun onClickView(v: View) {
+        val mUtilsPrefsGmh = mUtilsRefreshRate.mUtilsPrefsGmh
         when(v.id){
             mBinding.tvBattOptimSettings.id -> {
                 startActivity(Intent(ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS))
@@ -490,27 +485,58 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
 
             mBinding.swAutoSensorsOff.id ->{
                 mBinding.swAutoSensorsOff.isChecked.let { checked ->
-                    if (checked && !SensorsOffSt.instance(applicationContext).checkQsTileInPlace()){
-                        mBinding.swAutoSensorsOff.isChecked = false
-                        val isDevOptEnabled = Global.getString(mContentResolver, DEVELOPMENT_SETTINGS_ENABLED) == "1"
-                        showSbMsg(
-                            getString(R.string.sensor_off_setup_info) +
-                                    if (!isDevOptEnabled)
-                                        getString(R.string.dev_opt_setup_info)
-                                    else "",
-                            Snackbar.LENGTH_INDEFINITE,
-                            android.R.string.ok) {
+                    if (checked){
+                        if (!checkAccessibilityPerm(true)){
+                            mBinding.swAutoSensorsOff.isChecked = false
+                            return
+                        }
 
-                            if (isDevOptEnabled) {
-                                startActivity(Intent(ACTION_APPLICATION_DEVELOPMENT_SETTINGS))
-                            }else{
-                                try {
-                                    startActivity(deviceInfoActivity)
-                                }catch(_:Exception){
-                                    startActivity(Intent(ACTION_SETTINGS))
+                        when (NotificationBarSt.instance(applicationContext).checkQsTileInPlace()){
+                            true -> {
+                                mUtilsPrefsGmh.gmhPrefSensorsOff = checked
+                                return
+                            }
+
+                            //already in qs but not in place
+                            false -> {
+                                mBinding.swAutoSensorsOff.isChecked = false
+                                showSbMsg(
+                                    R.string.so_location_info,
+                                    Snackbar.LENGTH_INDEFINITE,
+                                    android.R.string.ok
+                                ) {NotificationBarSt.instance(applicationContext).expandNotificationBar()}
+                                return
+                            }
+
+                            //not yet enabled
+                            null -> {
+                                mBinding.swAutoSensorsOff.isChecked = false
+                                val isDevOptEnabled = Global.getString(
+                                    mUtilsRefreshRate.mContentResolver,
+                                    DEVELOPMENT_SETTINGS_ENABLED
+                                ) == "1"
+                                showSbMsg(
+                                    getString(R.string.sensor_off_setup_info) +
+                                            if (!isDevOptEnabled)
+                                                getString(R.string.dev_opt_setup_info)
+                                            else "",
+                                    Snackbar.LENGTH_INDEFINITE,
+                                    android.R.string.ok
+                                ) {
+                                    if (isDevOptEnabled) {
+                                        startActivity(Intent(ACTION_APPLICATION_DEVELOPMENT_SETTINGS))
+                                    } else {
+                                        try {
+                                            startActivity(deviceInfoActivity)
+                                        } catch (_: Exception) {
+                                            startActivity(Intent(ACTION_SETTINGS))
+                                        }
+                                    }
                                 }
+                                return
                             }
                         }
+
                     } else {
                         turnOffAutoSensorsOff = false
                         mUtilsPrefsGmh.gmhPrefSensorsOff = checked /*&&
@@ -552,6 +578,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
                     applicationContext.updateDozValues(it, mUtilsPrefsGmh.gmhPrefGDozeModOpt)
                     DozePSCChecker.check(applicationContext, it, true)
                 }
+                return
             }
 
 
@@ -575,6 +602,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
                         // DialogsPermissionsQs.getAppearOnTopDialog(this).show()
                     }
                 }
+                return
             }
 
             mBinding.chNotifHz.id -> {
@@ -583,6 +611,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
                     mBinding.chOverlayHz.isChecked,
                     (v as Chip).isChecked
                 )
+                return
             }
 
             mBinding.swHzOn.id -> {
@@ -592,6 +621,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
                     mBinding.chOverlayHz.isChecked,
                     mBinding.chNotifHz.isChecked
                 )
+                return
             }
 
             mBinding.swPeakHz.id -> {
@@ -599,11 +629,12 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
                 if ((v as Switch).isChecked) {
                     if (!mUtilsRefreshRate.setPrefOrAdaptOrHighRefreshRateMode(null)){
                         v.isChecked = false
-                        Toast.makeText(this, "High or adaptive refresh rate could not be enabled on the current resolution settings.", Toast.LENGTH_LONG).show()
-                    }
+                        InfoDialog.newInstance(CHANGE_RES_INFO).show(supportFragmentManager, null)
+                       }
                 } else {
                     mUtilsRefreshRate.setRefreshRateMode(REFRESH_RATE_MODE_STANDARD)
                 }
+                return
             }
 
             mBinding.swKeepMode.id -> {
@@ -617,13 +648,15 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
                     mUtilsPrefsGmh.gmhPrefPsmIsOffCache = (isPowerSaveModeOn.get() != true)
                     mUtilsPrefsGmh.gmhPrefKmsOnPsm = checked
                     PsmChangeHandler.instance(applicationContext).handle()
+                    return
                 }
             }
 
             mBinding.chHigh.id -> {
-                mUtilsRefreshRate.tryPrefRefreshRateMode(REFRESH_RATE_MODE_ALWAYS, null)/*.let {
+                mUtilsRefreshRate.tryThisRrm(REFRESH_RATE_MODE_ALWAYS, null)/*.let {
                     if (it) mUtilsPrefsGmh.gmhPrefRefreshRateModePref = REFRESH_RATE_MODE_ALWAYS
-                }*/
+                }*///mUtilsPrefsGmh.gmhPrefRefreshRateModePref aready updated in MyApp
+                return
 
             }
 
@@ -640,41 +673,42 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
                     )*/
                 }
 
-                /*mBinding.chAdaptive.isChecked = */mUtilsRefreshRate.tryPrefRefreshRateMode(REFRESH_RATE_MODE_SEAMLESS, null)
+                /*mBinding.chAdaptive.isChecked = */mUtilsRefreshRate.tryThisRrm(REFRESH_RATE_MODE_SEAMLESS, null)
+            }
+
+            mBinding.tvAutoSensorsOffInfo.id -> {
+                if (v.id == mBinding.tvAutoSensorsOffInfo.id) {
+                    InfoDialog.newInstance(SENSORS_OFF_INFO)
+                        .show(supportFragmentManager, null)
+                    return
+                }
             }
 
 
             mBinding.tvUseQsTileInf.id, mBinding.tvRrmAdbInf.id,
             mBinding.tvKeepModeAdbInf.id, mBinding.tvSoPsmAdbInf.id,
-            mBinding.screenOffDozeInfo.id, mBinding.tvEnableMs.id,
-            mBinding.tvAutoSensorsOffInfo.id -> {
+            mBinding.screenOffDozeInfo.id, mBinding.tvEnableMs.id -> {
                 if (hasWriteSecureSetPerm) {
                     if (v.id == mBinding.screenOffDozeInfo.id) {
-                        InfoDialog(R.string.quick_doz_mod, R.string.quick_doz_mod_inf2).show(supportFragmentManager, null)
-                    } else if (v.id == mBinding.tvAutoSensorsOffInfo.id){
-                        InfoDialog(R.string.auto_sensors_off_exp, R.string.sensors_off_note).show(supportFragmentManager, null)
-                    }else{
+                        InfoDialog.newInstance(QDM_INFO).show(supportFragmentManager, null)
+                        //InfoDialog(R.string.quick_doz_mod, R.string.quick_doz_mod_inf2).show(supportFragmentManager, null)
+                    } else{
                         if (mBinding.hasWssPerm == false) mBinding.hasWssPerm = true
                     }
                 } else {
                     if (!UtilsPermSt.instance(applicationContext).hasWriteSecurePerm()) {
-                        DialogsPermissions.newInstance(
-                            "${
-                                getString(
-                                    R.string.requires_ws_perm_h,
-                                    applicationName, APPLICATION_ID
-                                )
-                            }${getString(R.string.perm_appx)}"
-                        ).show(supportFragmentManager, null)
-                    }else{
+                        InfoDialog.newInstance(ADB_PERM_INFO).show(supportFragmentManager, null)
+                    } else {
                         hasWriteSecureSetPerm = true
                         if (mBinding.hasWssPerm == false) mBinding.hasWssPerm = true
                         Toast.makeText(
                             this,
-                            "WRITE_SECURE_SETTINGS permission already granted.", Toast.LENGTH_SHORT
+                            "WRITE_SECURE_SETTINGS permission already granted.",
+                            Toast.LENGTH_SHORT
                         ).show()
 
                     }
+                    // }
                 }
             }
 
@@ -698,7 +732,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
 
             mBinding.btnBuyAdfree.id -> openBuyAdFreeLink()
 
-            mBinding.btnSyncLicense.id -> syncLicense(false, tryTrial = false)
+            mBinding.btnSyncLicense.id -> syncLicense(false, trial = false)
 
             mBinding.swPreventHigh.id -> {
                 (v as Switch).isChecked.let { checked ->
@@ -719,6 +753,9 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
         val splashScreen = installSplashScreen()
         splashScreen.setKeepVisibleCondition { !isProfilesLoaded }
 
+        launch {
+            checkAccessibilityPerm(false)
+        }
 
         inflateViews()
         updateDisplayId()
@@ -777,18 +814,17 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
             }
         }
 
-        launch {
-            delay(2000)
-            checkAccessibilityPerm(false)
-        }
 
         if (!isOfficialAdaptive){
-            mBinding.swPreventHigh.isChecked = mUtilsPrefsGmh.gmhPrefPreventHigh
+            mBinding.swPreventHigh.isChecked = mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefPreventHigh
         }
 
         showLoading(false)
 
-        launch{getHelpUrl()}
+        launch{
+            getHelpUrl()
+
+        }
     }
 
 
@@ -857,7 +893,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
                     findItem(R.id.menuAc).isVisible = it != LIC_TYPE_ADFREE/ 2
                     findItem(R.id.menuNs).isVisible = it >= LIC_TYPE_ADFREE/ 2
                     findItem(R.id.menuPrem).isVisible = it < LIC_TYPE_ADFREE/ 2
-                    findItem(R.id.menuNs).isChecked = mUtilsPrefsGmh.gmhPrefShowNetSpeedTool
+                    findItem(R.id.menuNs).isChecked = mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefShowNetSpeedTool
                 }
             }
         }
@@ -866,14 +902,16 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
 
     private fun initDisableAutoSync(adFree: Boolean?){
         //Disable if not Ad-free
-        if (adFree?:viewModel.isValidAdFree.value != true || !checkAccessibilityPerm(false)) {
-            mUtilsPrefsGmh.gmhPrefDisableSyncIsOn = false
+        if ((adFree?:viewModel.isValidAdFree.value != true) || !checkAccessibilityPerm(false)){
+            mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefDisableSyncIsOn = false
         }else{
-            mBinding.swAutoOffSync.isChecked = mUtilsPrefsGmh.gmhPrefDisableSyncIsOn
+            mBinding.swAutoOffSync.isChecked = mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefDisableSyncIsOn
+
         }
     }
 
     private fun initDozeMod(adFree: Boolean?){
+        val mUtilsPrefsGmh = mUtilsRefreshRate.mUtilsPrefsGmh
         //Disable if not Ad-free
         if (adFree?:viewModel.isValidAdFree.value != true) {
             if (hasWriteSecureSetPerm){
@@ -885,12 +923,12 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
             if (hasWriteSecureSetPerm) {
                 //Update if Dozeval is not consistent with preference
                 if (mUtilsPrefsGmh.gmhPrefQuickDozeIsOn && getDozeVal(mUtilsPrefsGmh.gmhPrefGDozeModOpt)
-                    != Global.getString(mContentResolver, DEVICE_IDLE_CONSTANTS)){
+                    != Global.getString(mUtilsRefreshRate.mContentResolver, DEVICE_IDLE_CONSTANTS)){
                     applicationContext.updateDozValues(true, mUtilsPrefsGmh.gmhPrefGDozeModOpt)
                 }
             }else{
                 //Check if Dozeval still persist - reflect it in doze views accordingly
-                Global.getString(mContentResolver, DEVICE_IDLE_CONSTANTS).let{
+                Global.getString(mUtilsRefreshRate.mContentResolver, DEVICE_IDLE_CONSTANTS).let{
                     for (i in mwInterval) {
                         if (getDozeVal(i) == it){
                             mUtilsPrefsGmh.gmhPrefGDozeModOpt = i
@@ -920,8 +958,8 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
             override fun onStopTrackingTouch(seekBar: SeekBar) {
                 seekBar.progress.let {
-                    mUtilsPrefsGmh.gmhPrefGDozeModOpt = it
-                    applicationContext.updateDozValues(mUtilsPrefsGmh.gmhPrefQuickDozeIsOn, it)
+                    mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefGDozeModOpt = it
+                    applicationContext.updateDozValues(mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefQuickDozeIsOn, it)
                 }
             }
         }
@@ -936,7 +974,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
 
     private fun switchNetSpeed(bool: Boolean){
 
-        if (isNsNotifOn.get() == bool) return
+        if (isNetSpeedRunning.get() == bool) return
 
         if (bool) {
             if (isNetSpeedNotificationEnabled()) {
@@ -968,10 +1006,9 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
     }
 
 
-    @RequiresApi(VERSION_CODES.M)
     private fun oneTimeAutoChecks(){
         if (viewModel.isValidAdFree.value != true && !mUtilsPrefsAct.gmhPrefAdFreeAutoChecked){
-            syncLicense(silent = true, tryTrial = false)
+            syncLicense(silent = true, trial = false)
         }
         checkUpdate(false)
     }
@@ -979,7 +1016,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
 
     private fun updateRefreshRateLabels(){
         launch {
-            mProfilesInit.apply {
+            mUtilsRefreshRate.apply {
                 mBinding.tvResAndRatesLbl.text = getResAndRateLbl()
                 mBinding.tvResAndRates.text = getDisplayModesStrGmh()
                 //if (waitForSo) delay(1200)// wait for screen-off
@@ -1001,7 +1038,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
             override fun onStopTrackingTouch(seekBar: SeekBar) {
                 seekBar.progress.let {
-                    mUtilsPrefsGmh.gmhPrefMinHzForToggle = it
+                    mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefMinHzForToggle = it
                 }
             }
         })
@@ -1016,7 +1053,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
                 mBinding.sbMinHz.min = lowestHzForAllMode
             }
             mBinding.sbMinHz.max = highestHzForAllMode
-            mBinding.sbMinHz.progress = mUtilsPrefsGmh.gmhPrefMinHzForToggle.coerceAtLeast(lowestHzForAllMode)//coerce only here
+            mBinding.sbMinHz.progress = mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefMinHzForToggle.coerceAtLeast(lowestHzForAllMode)//coerce only here
         }
     }
 
@@ -1070,7 +1107,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
                 true
             }
             R.id.menuAct -> {
-                syncLicense(false, tryTrial = false)
+                syncLicense(false, trial = false)
                 true
             }
             R.id.menuAc -> {
@@ -1093,7 +1130,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
                 item.isChecked.let { checked ->
                     item.isChecked = !checked
                     mBinding.showNsTool = !checked
-                    mUtilsPrefsGmh.gmhPrefShowNetSpeedTool = !checked
+                    mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefShowNetSpeedTool = !checked
                 }
                 true
             }
@@ -1148,16 +1185,20 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
 
     //@SuppressLint("NewApi")
     fun showHertz(isSwOn: Boolean, showOverlayHz: Boolean?, showNotifHz: Boolean?) {
-        fun openNotifSettings() {
-            if (SDK_INT >= VERSION_CODES.O) {
-                val settingsIntent =
-                    Intent(ACTION_APP_NOTIFICATION_SETTINGS).apply{
-                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        putExtra(EXTRA_APP_PACKAGE, packageName)
-                    }
 
-                startActivity(settingsIntent)
+        fun openNotifSettings() {
+            @SuppressLint("InlinedApi")
+            val settingsIntent = Intent(ACTION_APP_NOTIFICATION_SETTINGS).apply{
+                if (SDK_INT >= VERSION_CODES.O) {
+                    putExtra(EXTRA_APP_PACKAGE, packageName)
+                    putExtra(EXTRA_CHANNEL_ID, CHANNEL_ID_HZ)
+                } else  {
+                    intent.putExtra("app_package", packageName)
+                    intent.putExtra("app_uid", applicationInfo.uid)
+                }
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             }
+            startActivity(settingsIntent)
         }
 
         isHzNotificationEnabled().let{
@@ -1209,7 +1250,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
         }
         mBinding.sbFontSizeHz.max = hzOverlaySizes.maxOrNull()!!
         //initial value
-        mBinding.sbFontSizeHz.progress = mUtilsPrefsGmh.gmhPrefHzOverlaySize.toInt()
+        mBinding.sbFontSizeHz.progress = mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefHzOverlaySize.toInt()
     }
 
 
@@ -1225,7 +1266,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
                 (seekBar.progress.toLong() * 1000).let {
                     adaptiveDelayMillis = it
                     adaptiveAccessTimeout = it* TIMEOUT_FACTOR.toLong()
-                    mUtilsPrefsGmh.hzPrefAdaptiveDelay = it
+                    mUtilsRefreshRate.mUtilsPrefsGmh.hzPrefAdaptiveDelay = it
                 }
             }
         })
@@ -1234,7 +1275,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
         }
         mBinding.sbAdaptiveDelay.max = hzAdaptiveDelays.maxOrNull()!!
         //initial value
-        mBinding.sbAdaptiveDelay.progress = mUtilsPrefsGmh.hzPrefAdaptiveDelay.toInt()/1000
+        mBinding.sbAdaptiveDelay.progress = mUtilsRefreshRate.mUtilsPrefsGmh.hzPrefAdaptiveDelay.toInt()/1000
     }
 
     private fun setupBrightnessSeekBar() {
@@ -1247,8 +1288,14 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
             override fun onStopTrackingTouch(seekBar: SeekBar) {
                 seekBar.progress.let {
-                    brightnessThreshold.set(it)
-                    mUtilsPrefsGmh.gmhPrefGAdaptBrightnessMin = it
+                    val converted =
+                        if (SDK_INT == VERSION_CODES.R) {
+                            it
+                        }else {
+                            (it.toFloat() * 2.55f).toInt()
+                        }
+                    brightnessThreshold.set(converted)
+                    mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefGAdaptBrightnessMin = it
                 }
             }
         })
@@ -1257,7 +1304,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
         }
         mBinding.sbBrightness.max = BRIGHTNESS_RESOLUTION
         //initial value
-        mBinding.sbBrightness.progress = mUtilsPrefsGmh.gmhPrefGAdaptBrightnessMin
+        mBinding.sbBrightness.progress = mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefGAdaptBrightnessMin
     }
 
 
@@ -1286,17 +1333,17 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
 
 
     private fun checkIfUsingSpay(){
-        if (isSpayInstalled == true && mUtilsPrefsGmh.hzPrefUsingSPay == NOT_ASKED) {
+        if (isSpayInstalled == true && mUtilsRefreshRate.mUtilsPrefsGmh.hzPrefUsingSPay == NOT_ASKED) {
             launch(Dispatchers.Main) {
                 DialogUsingSpay().show(supportFragmentManager, null)
             }
         }
     }
 
-
+    @Synchronized
     private fun checkAccessibilityPerm(showRequest: Boolean): Boolean{
         return if (!isAccessibilityEnabled(applicationContext, GalaxyMaxHzAccess::class.java)){
-            if (hasWriteSecureSetPerm && (isSpayInstalled == false ||  mUtilsPrefsGmh.hzPrefUsingSPay == NOT_USING)) {
+            if (hasWriteSecureSetPerm && (isSpayInstalled == false ||  mUtilsRefreshRate.mUtilsPrefsGmh.hzPrefUsingSPay == NOT_USING)) {
                 allowAccessibility(applicationContext, GalaxyMaxHzAccess::class.java, true)
                 true
             }else{
@@ -1346,7 +1393,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
                     && isPremium.get()!!
                 ) {
                     keepModeOnPowerSaving = true
-                    mUtilsPrefsGmh.gmhPrefKmsOnPsm = true
+                    mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefKmsOnPsm = true
                 }
             }
             mBinding.swKeepMode.isChecked = keepModeOnPowerSaving
@@ -1376,11 +1423,11 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
                         UtilsPermSt.instance(applicationContext).requestWriteSettings()
                         return
                     }
-                    mUtilsPrefsGmh.hzPrefMaxRefreshRate = prog
+                    mUtilsRefreshRate.mUtilsPrefsGmh.hzPrefMaxRefreshRate = prog
                     if (isPowerSaveModeOn.get() != true || !isPremium.get()!!) {
-                        mUtilsPrefsGmh.hzPrefMaxRefreshRate.let{
+                        mUtilsRefreshRate.mUtilsPrefsGmh.hzPrefMaxRefreshRate.let{
                             prrActive.set( it)
-                            mUtilsRefreshRate.setRefreshRate(it)
+                            mUtilsRefreshRate.setRefreshRate(it, mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefMinHzAdapt)
                         }
                     }
 
@@ -1399,7 +1446,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
             }
             mBinding.sbPeakHz.max = highestHzForAllMode
             //initial value
-            mBinding.sbPeakHz.progress = mUtilsPrefsGmh.hzPrefMaxRefreshRate
+            mBinding.sbPeakHz.progress = mUtilsRefreshRate.mUtilsPrefsGmh.hzPrefMaxRefreshRate
         }
     }
 
@@ -1427,11 +1474,11 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
                         UtilsPermSt.instance(applicationContext).requestWriteSettings()
                         return
                     }
-                    mUtilsPrefsGmh.hzPrefMaxRefreshRatePsm = prog
+                    mUtilsRefreshRate.mUtilsPrefsGmh.hzPrefMaxRefreshRatePsm = prog
                     if (isPowerSaveModeOn.get() == true) {
-                        mUtilsPrefsGmh.hzPrefMaxRefreshRatePsm.let{
+                        mUtilsRefreshRate.mUtilsPrefsGmh.hzPrefMaxRefreshRatePsm.let{
                             prrActive.set( it)
-                            mUtilsRefreshRate.setRefreshRate(it)
+                            mUtilsRefreshRate.setRefreshRate(it, mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefMinHzAdapt)
                         }
                     }
                 }
@@ -1449,7 +1496,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
             }
             mBinding.sbPeakHzPsm.max = highestHzForAllMode
             //initial value
-            mBinding.sbPeakHzPsm.progress = mUtilsPrefsGmh.hzPrefMaxRefreshRatePsm/*.let {
+            mBinding.sbPeakHzPsm.progress = mUtilsRefreshRate.mUtilsPrefsGmh.hzPrefMaxRefreshRatePsm/*.let {
                 if (it != -1) {
                     it
                 } else {
@@ -1469,40 +1516,43 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
         }
 
         mBinding.hasMinHzOptions = true
-        //Log.d(TAG, "setupMinHzAdaptSeekBar() called")
-        mBinding.sbMinHzAdapt.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
-            override fun onProgressChanged(
-                seekBar: SeekBar,
-                progress: Int,
-                fromUser: Boolean
-            ) {
-                val newProgress = min(60, supportedHzIntCurMod?.closestValue(progress)!!)
-                seekBar.progress = newProgress
-                seekBar.thumb = getThumb(newProgress)
-            }
 
-            override fun onStartTrackingTouch(seekBar: SeekBar) {
-                if (!UtilsPermSt.instance(applicationContext).hasWriteSystemPerm()) {
-                    UtilsPermSt.instance(applicationContext).requestWriteSettings()
-                    return
+        //Log.d(TAG, "setupMinHzAdaptSeekBar() called")
+        mBinding.sbMinHzAdapt.setOnSeekBarChangeListener(
+            object : OnSeekBarChangeListener {
+
+                override fun onProgressChanged(
+                    seekBar: SeekBar,
+                    progress: Int,
+                    fromUser: Boolean
+                ) {
+                    val newProgress = min(prrActive.get()!!, supportedHzIntCurMod?.closestValue(progress)!!)
+                    seekBar.progress = newProgress
+                    seekBar.thumb = getThumb(newProgress)
                 }
-            }
-            override fun onStopTrackingTouch(seekBar: SeekBar) {
-                if (isOfficialAdaptive) {
-                    if (seekBar.progress != STANDARD_REFRESH_RATE_HZ) {
+
+                override fun onStartTrackingTouch(seekBar: SeekBar) {
+                    if (!UtilsPermSt.instance(applicationContext).hasWriteSystemPerm()) {
+                        UtilsPermSt.instance(applicationContext).requestWriteSettings()
+                        return
+                    }
+                }
+                override fun onStopTrackingTouch(seekBar: SeekBar) {
+                    if (isOfficialAdaptive && seekBar.progress < STANDARD_REFRESH_RATE_HZ) {
                         if (!checkAccessibilityPerm(true)) {
                             seekBar.progress = STANDARD_REFRESH_RATE_HZ
                             return
                         }
-                        isFakeAdaptive.set( true)
-                        seekBar.progress.let {
-                            lrrPref.set( max(lowestHzForAllMode, it))
-                            mUtilsPrefsGmh.gmhPrefMinHzAdapt = it
-                            mBinding.minHzAdaptive = it
-                        }
+                    }
+
+                    mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefMinHzAdapt = seekBar.progress
+                    mBinding.minHzAdaptive = seekBar.progress
+
+                    mUtilsRefreshRate.applyMinHz()
+
+                    if (isFakeAdaptive.get() == true) {
                         (UtilsPermSt.instance(applicationContext)
-                            .hasOverlayPerm()
-                                ).let { hasPerm ->
+                            .hasOverlayPerm()).let { hasPerm ->
                                 if (!hasPerm) {
                                     showSbMsg(
                                         getString(R.string.aot_perm_inf),
@@ -1513,43 +1563,15 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
                                     }
                                 }
                             }
-
-                    } else {
-                        isFakeAdaptive.set(false)
-                        mUtilsRefreshRate.setRefreshRate(prrActive.get()!!)
-                        lrrPref.set(max(lowestHzForAllMode, STANDARD_REFRESH_RATE_HZ))
-                        mUtilsPrefsGmh.gmhPrefMinHzAdapt = STANDARD_REFRESH_RATE_HZ
-                        mBinding.minHzAdaptive = STANDARD_REFRESH_RATE_HZ
-                    }
-                } else {
-                    if (!checkAccessibilityPerm(true)) {
-                        seekBar.progress = STANDARD_REFRESH_RATE_HZ
-                        return
                     }
 
-                    if (!UtilsPermSt.instance(applicationContext).hasOverlayPerm()) {
-                        showSbMsg(
-                            getString(R.string.aot_perm_inf),
-                            Snackbar.LENGTH_INDEFINITE,
-                            android.R.string.ok
-                        ) {
-                            showAppearOnTopRequest()
+                    applicationContext.startService(
+                        Intent(applicationContext,GalaxyMaxHzAccess::class.java).apply {
+                            putExtra(SETUP_ADAPTIVE, true)
                         }
-                        seekBar.progress = STANDARD_REFRESH_RATE_HZ
-                    }
-
-                    seekBar.progress.let {
-                        mUtilsPrefsGmh.gmhPrefMinHzAdapt = it
-                        lrrPref.set(max(lowestHzForAllMode, it))
-                    }
+                    )
                 }
-                applicationContext.startService(
-                    Intent(applicationContext,GalaxyMaxHzAccess::class.java).apply {
-                        putExtra(SETUP_ADAPTIVE, true)
-                    }
-                )
-            }
-        })
+            })
     }
 
 
@@ -1557,6 +1579,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
         if (minHzListForAdp?.size?:0 < 2) {
             return
         }
+
         launch {
             delay(500)//don't decrease
             if (isOfficialAdaptive || isFakeAdaptive.get()!!) {
@@ -1564,7 +1587,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
                 if (SDK_INT >= VERSION_CODES.O) {
                     mBinding.sbMinHzAdapt.min = minHzListForAdp!!.minOrNull()!!
                 }
-                mUtilsPrefsGmh.gmhPrefMinHzAdapt.let {
+                mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefMinHzAdapt.let {
                     mBinding.sbMinHzAdapt.progress = it
                     mBinding.minHzAdaptive = it
                 }
@@ -1578,9 +1601,9 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
     private fun forceReloadProfile(){
         launch {
             showLoading(true)
-            mUtilsPrefsGmh.gmhRefetchProfile = true
-            mUtilsPrefsGmh.prefProfileFetched = false
-            mProfilesInit.initProfiles()
+            mUtilsRefreshRate.mUtilsPrefsGmh.gmhRefetchProfile = true
+            mUtilsRefreshRate.mUtilsPrefsGmh.prefProfileFetched = false
+            mUtilsRefreshRate.initProfiles()
             updateDynamicViews()
             showLoading(false)
         }
@@ -1615,12 +1638,12 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
     }
 
     private suspend fun getHelpUrl(): String?= withContext(Dispatchers.IO){
-        return@withContext if (mUtilsPrefsGmh.gmhPrefHelpUrl != null){
-            mUtilsPrefsGmh.gmhPrefHelpUrl!!
+        return@withContext if (mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefHelpUrl != null){
+            mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefHelpUrl!!
         }else{
-            val result = mSyncer.getHelpUrl()?.get(KEY_JSON_HELP_URL) as String?
+            val result = mUtilsRefreshRate.mSyncer.getHelpUrl()?.get(KEY_JSON_HELP_URL) as String?
             if (result != null){
-                mUtilsPrefsGmh.gmhPrefHelpUrl = result
+                mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefHelpUrl = result
                 result
             }else{
                 null
@@ -1628,21 +1651,35 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
         }
     }
 
+    private suspend fun getBuyLink(): String? {
+        if (buyLink != null) return buyLink
+        val resultJson = mUtilsRefreshRate.mSyncer.getBuyAdFreeLink()
+        return if (resultJson != null && resultJson[KEY_JSON_RESULT] == JSON_RESPONSE_OK) {
+            try {
+                buyLink = (resultJson[KEY_JSON_PAYPAL_BUY_URL] as String)
+                buyLink
+            } catch (_: Exception) {
+                null
+            }
+        }else{
+            null
+        }
+    }
+
     private fun openBuyAdFreeLink() = launch {
         showLoading(true)
-        val resultJson = mSyncer.getBuyAdFreeLink()
-        if (resultJson != null && resultJson[KEY_JSON_RESULT] == JSON_RESPONSE_OK) {
+        getBuyLink()?.let{
             try {
                 startActivity(
                     Intent(
                         Intent.ACTION_VIEW,
-                        Uri.parse(resultJson[KEY_JSON_PAYPAL_BUY_URL] as String)
+                        Uri.parse(it)
                     )
                 )
             }catch(_: ActivityNotFoundException){
                 showSbMsg("Unable to open link. Install an internet browser to open.", null, null, null)
             }
-        } else {
+        }?: run{
             showSbMsg(R.string.cie, null, null, null)
         }
 
@@ -1651,11 +1688,11 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
 
 
 
-    @RequiresApi(VERSION_CODES.M)
-    fun syncLicense(silent: Boolean, tryTrial: Boolean) = launch {
+    //@RequiresApi(VERSION_CODES.M)
+    fun syncLicense(silent: Boolean, trial: Boolean) = launch {
         if (!silent) showLoading(true)
 
-        val resultJson = mSyncer.syncLicense(tryTrial)
+        val resultJson = mUtilsRefreshRate.mSyncer.syncLicense(mUtilsPrefsAct.gmhPrefActivationCode?:"", trial)
         if (resultJson != null ){
             //  Log.d(TAG, "License check server response OK")
 
@@ -1663,8 +1700,11 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
                 mUtilsPrefsAct.gmhPrefLicType == LIC_TYPE_TRIAL_ACTIVE
             ) {
                 if (!silent) {
-                    LvlResultMsg.getString(
+                    LvlResultMsg(
                         this@MainActivity,
+                        mUtilsPrefsAct,
+                        mUtilsRefreshRate.mUtilsDeviceInfo.deviceModelVariant
+                    ).showMsg(
                         object : LvlSbMsgCallback {
                             override fun onResult(
                                 msg: String,
@@ -1681,7 +1721,6 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
                 showLoading(false)
 
             } else {
-
                 launch(Dispatchers.IO) {
                     mUtilsPrefsAct.apply {
                         if (silent) gmhPrefAdFreeAutoChecked = true
@@ -1699,8 +1738,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
                     }
 
                     if (!silent) {
-                        LvlResultMsg.getString(
-                            this@MainActivity,
+                        LvlResultMsg(this@MainActivity, mUtilsPrefsAct, mUtilsRefreshRate.mUtilsDeviceInfo.deviceModelVariant).showMsg(
                             object : LvlSbMsgCallback {
                                 override fun onResult(
                                     msg: String,
@@ -1757,12 +1795,13 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
 
 
 
-    @RequiresApi(VERSION_CODES.M)
+    // @RequiresApi(VERSION_CODES.M)
     private fun setupResoSwitcherFilter() {
         if (mBinding.cgResSwFilter.childCount > 0) {
             mBinding.cgResSwFilter.removeAllViews()
         }
-        mProfilesInit.getResolutionsForKey(null)?.forEach {
+
+        mUtilsRefreshRate.getResolutionsForKey(null)?.forEach {
             val key = it.keys.first()
             val res = "$key(${it[key]?.resName})"
 
@@ -1775,7 +1814,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
                     18f,
                     resources.displayMetrics
                 )
-                isChecked = mUtilsPrefsGmh.gmhPrefGetSkippedRes?.let{ skips ->
+                isChecked = mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefGetSkippedRes?.let{ skips ->
                     !skips.contains(res)
                 }?:true
                 setOnClickListener { view ->
@@ -1791,17 +1830,17 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
 
 
     private fun updateSkipRes(res: String, skip: Boolean){
-        mUtilsPrefsGmh.gmhPrefGetSkippedRes?.let {
+        mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefGetSkippedRes?.let {
             val hs = HashSet<String>(it)
             hs.apply {
                 if (skip) this.add(res) else this.remove(res)
-                mUtilsPrefsGmh.gmhPrefGetSkippedRes = this
+                mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefGetSkippedRes = this
             }
         }?: run {
             if (skip) {
                 HashSet<String>().let {
                     it.add(res)
-                    mUtilsPrefsGmh.gmhPrefGetSkippedRes = it.toSet()
+                    mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefGetSkippedRes = it.toSet()
                 }
             }
         }
@@ -1810,12 +1849,12 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
 
     private fun updateNetSpeed(addFree: Boolean){
         if (!addFree){
-            if (mUtilsPrefsGmh.gmhPrefNetSpeedIsOn) {
-                mUtilsPrefsGmh.gmhPrefNetSpeedIsOn = false
+            if (mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefNetSpeedIsOn) {
+                mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefNetSpeedIsOn = false
                 switchNetSpeed(false)
             }
         }else{
-            mUtilsPrefsGmh.gmhPrefNetSpeedIsOn.let{
+            mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefNetSpeedIsOn.let{
                 mBinding.swEnableNetspeed.isChecked = it
                 switchNetSpeed(it)
             }
@@ -1823,16 +1862,16 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
     }
 
     private fun initNeedSpeed(){
-        when (mUtilsPrefsGmh.gmhPrefSpeedUnit) {
+        when (mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefSpeedUnit) {
             BIT_PER_SEC -> mBinding.cgBytesBits.check(mBinding.chBits.id)
             BYTE_PER_SEC -> mBinding.cgBytesBits.check(mBinding.chBytes.id)
         }
-        when (mUtilsPrefsGmh.gmhPrefSpeedToShow){
+        when (mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefSpeedToShow){
             UPLOAD_SPEED -> mBinding.cgDataStream.check(mBinding.chUpStream.id)
             DOWNLOAD_SPEED -> mBinding.cgDataStream.check(mBinding.chDownStream.id)
             TOTAL_SPEED -> mBinding.cgDataStream.check(mBinding.chCombinedStream.id)
         }
-        mBinding.showNsTool = mUtilsPrefsGmh.gmhPrefShowNetSpeedTool
+        mBinding.showNsTool = mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefShowNetSpeedTool
         mBinding.tvDataUsage.movementMethod = LinkMovementMethod.getInstance()
         mBinding.tvDataUsage.setLinkTextColor(Color.BLUE)
     }
@@ -1880,9 +1919,9 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
     private fun setupActionBar() {
         setSupportActionBar(mBinding.toolbar)
         supportActionBar?.apply {
-            subtitle = "${mUtilsDeviceInfo.deviceModelVariant} | AOS ${mUtilsDeviceInfo.androidVersion}" +
-                    if (mUtilsDeviceInfo.oneUiVersion != null) " | OneUI ${mUtilsDeviceInfo.oneUiVersion}" else ""
-            title = "$applicationName v$VERSION"
+            subtitle = "${mUtilsRefreshRate.mUtilsDeviceInfo.deviceModelVariant} | AOS ${mUtilsRefreshRate.mUtilsDeviceInfo.androidVersion}" +
+                    if (mUtilsRefreshRate.mUtilsDeviceInfo.oneUiVersion != null) " | OneUI ${mUtilsRefreshRate.mUtilsDeviceInfo.oneUiVersion}" else ""
+            title = "$applicationName v$VERSION_NAME"
             setDisplayShowHomeEnabled(true)
         }
     }
@@ -1890,21 +1929,20 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
 
     @RequiresApi(VERSION_CODES.M)
     private fun registerSharedPrefListener() {
-        mUtilsPrefsGmh.hzSharedPref.registerOnSharedPreferenceChangeListener(listener)
+        mUtilsRefreshRate.mUtilsPrefsGmh.hzSharedPref.registerOnSharedPreferenceChangeListener(listener)
     }
 
     @RequiresApi(VERSION_CODES.M)
     private fun setupHzMon() {
-
-        mUtilsPrefsGmh.gmhPrefHzOverlayIsOn.let {
+        mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefHzOverlayIsOn.let {
             mBinding.chOverlayHz.isEnabled = true
             mBinding.chOverlayHz.isChecked = it
             mBinding.hideHzOverlaySettings = !it
         }
-        mBinding.chNotifHz.isChecked = mUtilsPrefsGmh.gmhPrefHzNotifIsOn && isHzNotificationEnabled()
-        mBinding.swHzOn.isChecked = mUtilsPrefsGmh.gmhPrefHzIsOn
-        mBinding.cgTopBottom.check(mUtilsPrefsGmh.gmhPrefChipIdTb)
-        mBinding.cgLeftCentRightHz.check(mUtilsPrefsGmh.gmhPrefChipIdLrc)
+        mBinding.chNotifHz.isChecked = mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefHzNotifIsOn && isHzNotificationEnabled()
+        mBinding.swHzOn.isChecked = mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefHzIsOn
+        mBinding.cgTopBottom.check(mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefChipIdTb)
+        mBinding.cgLeftCentRightHz.check(mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefChipIdLrc)
 
     }
 
@@ -1913,18 +1951,18 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
     private fun setupForceHzOnSo() {
 //Note: Place after Hz status observer
         mBinding.swSoForceLowestHz.isChecked =
-            mUtilsPrefsGmh.gmhPrefForceLowestSoIsOn && (checkAccessibilityPerm(false) /*hasWriteSecureSetPerm ||
-                    isAccessibilityEnabled(applicationContext, GalaxyMaxHzAccess::class.java)*/)
+            mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefForceLowestSoIsOn &&
+                    hasWriteSystemSetPerm && checkAccessibilityPerm(false)
     }
 
 
     private fun setupScreenOffPsm(){
         if (hasWriteSecureSetPerm) {
             mBinding.swSoPsm.isEnabled = true
-            mBinding.swSoPsm.isChecked = mUtilsPrefsGmh.gmhPrefPsmOnSo //free features
+            mBinding.swSoPsm.isChecked = mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefPsmOnSo //free features
         }else{
             mBinding.swSoPsm.isEnabled = false
-            mUtilsPrefsGmh.gmhPrefPsmOnSo = false
+            mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefPsmOnSo = false
         }
     }
 
@@ -1936,16 +1974,15 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
         }
         mBinding.sensorsOffSupported =true
 
-        if (adfree/* && (CheckBlacklistApiSt.instance(applicationContext).isAllowed()
-                    || CheckBlacklistApiSt.instance(applicationContext).setAllowed())*/
+        if (adfree && checkAccessibilityPerm(false)
         ) {
-            mBinding.swAutoSensorsOff.isChecked = mUtilsPrefsGmh.gmhPrefSensorsOff
-            if (!mUtilsPrefsGmh.gmhPrefSensorOnKey.isNullOrEmpty()) {
-                sensorOnKey = mUtilsPrefsGmh.gmhPrefSensorOnKey
+            mBinding.swAutoSensorsOff.isChecked = mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefSensorsOff
+            if (!mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefSensorOnKey.isNullOrEmpty()) {
+                sensorOnKey = mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefSensorOnKey
             }
         } else {
             mBinding.swAutoSensorsOff.isChecked = false
-            mUtilsPrefsGmh.gmhPrefSensorsOff = false
+            mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefSensorsOff = false
         }
     }
 
@@ -1968,11 +2005,11 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
     @RequiresApi(VERSION_CODES.M)
     override fun onDestroy() {
         // Log.d(TAG, "onDestroy() called")
-        mUtilsPrefsGmh.hzSharedPref.unregisterOnSharedPreferenceChangeListener(listener)
+        mUtilsRefreshRate.mUtilsPrefsGmh.hzSharedPref.unregisterOnSharedPreferenceChangeListener(listener)
         currentRefreshRateMode.removeOnPropertyChangedCallback(rrmChangeCallback)
         isPowerSaveModeOn.removeOnPropertyChangedCallback(rrmChangeCallback)
         unregisterReceiver(mReceiver)
-        sensorOnKey?.let{mUtilsPrefsGmh.gmhPrefSensorOnKey = it}
+        sensorOnKey?.let{mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefSensorOnKey = it}
         masterJob.cancel()
         super.onDestroy()
     }
@@ -2010,13 +2047,13 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
     @RequiresApi(VERSION_CODES.M)
     internal fun applyActivationCode(actCode: String){
         mUtilsPrefsAct.gmhPrefActivationCode = actCode
-        syncLicense(silent = false, tryTrial = false)
+        syncLicense(silent = false, trial = false)
     }
 
-    /*private val adRequest: AdRequest by lazy{AdRequest.Builder().build()}
-    private var isBannerAdLoaded : Boolean = false
-    private var maxRetry = 10
-    private var rewardedInterstitialAd: RewardedInterstitialAd? = null*/
+/*private val adRequest: AdRequest by lazy{AdRequest.Builder().build()}
+private var isBannerAdLoaded : Boolean = false
+private var maxRetry = 10
+private var rewardedInterstitialAd: RewardedInterstitialAd? = null*/
 
 
 /* private fun  checkTileIsExpired(){

@@ -9,20 +9,19 @@ import com.tribalfs.gmh.helpers.CacheSettings.isPowerSaveModeOn
 import com.tribalfs.gmh.helpers.CacheSettings.isPremium
 import com.tribalfs.gmh.helpers.CacheSettings.keepModeOnPowerSaving
 import com.tribalfs.gmh.helpers.CacheSettings.prrActive
-import com.tribalfs.gmh.helpers.UtilsDeviceInfo.Companion.REFRESH_RATE_MODE_STANDARD
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmh
+import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.REFRESH_RATE_MODE_STANDARD
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 internal class PsmChangeHandler(context: Context) {
 
-    companion object: SingletonHolder<PsmChangeHandler, Context>(::PsmChangeHandler){
+    companion object: SingletonMaker<PsmChangeHandler, Context>(::PsmChangeHandler){
         // private const val TAG = "PSMChangeHandler"
         // private const val SEM_POWER_MODE_REFRESH_RATE = "sem_power_mode_refresh_rate"
     }
 
     private val appCtx: Context = context.applicationContext
-    private val mUtilsPrefsGmh = UtilsPrefsGmh(appCtx)
-    private val mUtilsRefreshRate = UtilsRefreshRate(appCtx)
+    //private val mUtilsPrefsGmh by lazy {UtilsPrefsGmhSt(appCtx)}
+    private val mUtilsRefreshRate by lazy {UtilsRefreshRateSt.instance(appCtx)}
     //  private val mContentResolver = appCtx.contentResolver
 
 
@@ -33,7 +32,7 @@ internal class PsmChangeHandler(context: Context) {
         if (isPowerSaveModeOn.get() == true) {
             if (keepModeOnPowerSaving && isPremium.get()!!) {
                 //Use Psm Max Hz
-                prrActive.set( mUtilsPrefsGmh.hzPrefMaxRefreshRatePsm)
+                prrActive.set( mUtilsRefreshRate.mUtilsPrefsGmh.hzPrefMaxRefreshRatePsm)
                 mUtilsRefreshRate.setPrefOrAdaptOrHighRefreshRateMode(null)
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -51,9 +50,9 @@ internal class PsmChangeHandler(context: Context) {
                     UtilsPermSt.instance(appCtx).requestWriteSettings()
                     return
                 }
-                mUtilsPrefsGmh.hzPrefMaxRefreshRate.let {
+                mUtilsRefreshRate.mUtilsPrefsGmh.hzPrefMaxRefreshRate.let {
                     prrActive.set(it)
-                    mUtilsRefreshRate.setRefreshRate(it)
+                    mUtilsRefreshRate.setRefreshRate(it, mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefMinHzAdapt)
                 }
             }
         }

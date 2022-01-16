@@ -7,9 +7,8 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import com.tribalfs.gmh.hertz.HzServiceHelperStn
 import com.tribalfs.gmh.netspeed.NetSpeedServiceHelperStn
-import com.tribalfs.gmh.profiles.ProfilesInitializer
 import com.tribalfs.gmh.profiles.ProfilesObj.refreshRateModeMap
-import com.tribalfs.gmh.resochanger.ResolutionChangeUtilSt
+import com.tribalfs.gmh.resochanger.ResolutionChangeUtil
 import kotlinx.coroutines.*
 
 @ExperimentalCoroutinesApi
@@ -33,10 +32,10 @@ class BootCompleteReceiver : BroadcastReceiver() {
             while(refreshRateModeMap.isEmpty()) {
                 delay(250)
             }
-            val res = ProfilesInitializer.instance(appCtx).getCurrentResLxw()
-            val resName = ResolutionChangeUtilSt.instance(appCtx).getResName(null)
+            val res = UtilsDeviceInfoSt.instance(appCtx).getDisplayResStr("x")
+            val resName = ResolutionChangeUtil(appCtx).getResName(null)
             if (resName == "CQHD+"/* && currentRefreshRateMode.get() == UtilsDeviceInfo.REFRESH_RATE_MODE_STANDARD*/) {
-                ResolutionChangeUtilSt.instance(appCtx).changeRes(res)
+                ResolutionChangeUtil(appCtx).changeRes(res)
             }
         }
     }

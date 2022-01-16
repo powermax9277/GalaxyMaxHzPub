@@ -118,7 +118,7 @@
     <string name="dz_bp_inf_h" translatable="false">
         This quick-doze mod option allows regular maintenance windows, initially %s after screen-off (initial interval).
         Each succeeding interval will be twice of its previous. Intervals will reset once the device is unlocked.</string>-->
-    <string name="show_ns_card">Show Netspeed Tool</string>
+    <string name="show_ns_card">Show Netspeed Indicator Card</string>
     <string name="lbl_rrm">Refresh Rate Mods</string>
     <string name="prr_psm">Keep Motion Smoothness on Power Saving Mode</string>
     <string name="actvt_trial">Activate free trial</string>
@@ -157,17 +157,21 @@
     <string name="sensors_off_note">
         Important Note: While the SensorsOff tile is on, the device\'s camera and microphone and other sensors are inaccessible.
         Functionalities affected include face unlock, audibility on voice calls (on some) and hinge angle detection, among others.
-        Only use this if you clearly understand the effects of enabling sensors off.</string>
+        Only use this if you clearly understand the effects of enabling sensors off.
+        \n\nSecure lock screen is required starting Android 12; alternatively WRITE_SECURE_SETTINGS permission can be granted on previous android version.
+    </string>
     <string name="auto_sensors_off_exp">Auto SENSORS OFF</string>
     <string name="sensor_off_setup_info">Do this first: Enable \'Sensors Off\' tile in Settings > Developer options > Quick settings developer tiles. ></string>
     <string name="dev_opt_setup_info">To enable Developer options, go to Settings > About phone > Software info and tap \'Build number\' 7x.</string>
+    <string name="so_location_info" translatable="false">Ensure to put the SENSOR Off tile within the first 4 quick settings slots.</string>
     <string name="enable_write_settings">Grant Galaxy Max Hz change system settings permission.</string>
     <string name="as_desc">This service is required for galaxy max hz mods to work.</string>
     <string name="enable">Enable</string>
     <string name="premium_features">Premium Features</string>
     <string name="prevent_high">Prevent switching to High Mode</string>
-    <plurals name="access_notif">
+    <plurals name="access_notif" translatable="false">
         <item quantity="one">"Accessibility service is required for the following - turn this off first to disable accessibility: %s</item>
         <item quantity="other">Accessibility service is required for the following - turn these off first to disable accessibility: %s</item>
     </plurals>
+    <string name="no_access_notif" translatable="false">Disabling accessibility service will cause unexpected behavior for the following enabled feature(s): %s</string>
 </resources>

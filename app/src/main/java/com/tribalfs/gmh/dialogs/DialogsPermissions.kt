@@ -1,4 +1,5 @@
 package com.tribalfs.gmh.dialogs
+/*
 
 import android.app.AlertDialog
 import android.app.Dialog
@@ -7,7 +8,6 @@ import android.net.Uri
 import android.os.Bundle
 import com.tribalfs.gmh.R
 
-const val ADB_SETUP_LINK = "https://github.com/tribalfs/GalaxyMaxHzPub/blob/main/README.md"
 
 class DialogsPermissions : RoundedDialogFragment()  {
     private var msg: String? = null
@@ -47,4 +47,4 @@ class DialogsPermissions : RoundedDialogFragment()  {
         return builder.create()
     }
 
-}
+}*/

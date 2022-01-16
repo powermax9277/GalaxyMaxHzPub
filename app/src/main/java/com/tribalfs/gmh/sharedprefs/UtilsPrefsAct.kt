@@ -7,7 +7,7 @@ import androidx.security.crypto.MasterKey
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-class UtilsPrefsAct(context: Context) {
+class UtilsPrefsAct(val context: Context) {
 
     companion object{
         private const val GMH_INFO = "gmh_info"
@@ -28,7 +28,7 @@ class UtilsPrefsAct(context: Context) {
     }
 
 
-    private val appCtx = context.applicationContext
+   // private val appCtx = context.applicationContext
     //private val masterKey = MasterKey.Builder(appCtx).setKeyScheme(MasterKey.KeyScheme.AES256_GCM).build()
     private lateinit var actSharedPref: SharedPreferences
 
@@ -38,9 +38,9 @@ class UtilsPrefsAct(context: Context) {
 
     @Synchronized
     fun createSharedPreferences() {
-        val masterKey =MasterKey.Builder(appCtx).setKeyScheme(MasterKey.KeyScheme.AES256_GCM).build()
+        val masterKey =MasterKey.Builder(context).setKeyScheme(MasterKey.KeyScheme.AES256_GCM).build()
         actSharedPref = EncryptedSharedPreferences.create(
-            appCtx,
+            context,
         GMH_INFO,
         masterKey,
         EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
@@ -58,7 +58,7 @@ class UtilsPrefsAct(context: Context) {
     )*/
 
 
-    private val gmhSharedPrefEditor = actSharedPref.edit()
+    private val gmhSharedPrefEditor by lazy {actSharedPref.edit()}
 
 /*    var gmhPrefTileExpiryDays: Int
         get() { return actSharedPref.getInt(TILE_EXPIRY_DAYS, 0xA) }

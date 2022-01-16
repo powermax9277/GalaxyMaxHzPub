@@ -24,7 +24,7 @@ import com.tribalfs.gmh.helpers.CacheSettings.displayId
 import com.tribalfs.gmh.helpers.CacheSettings.hzStatus
 import com.tribalfs.gmh.helpers.CacheSettings.isHzNotifOn
 import com.tribalfs.gmh.receivers.ScreenStatusReceiverBasic
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmh
+import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 import kotlin.math.min
@@ -37,7 +37,7 @@ internal class HzService : Service(), CoroutineScope{
     companion object {
         internal const val CHANNEL_ID_HZ = "GMH"
         private const val NOTIFICATION_ID_HZ = 5
-        //private const val TAG = "HzService"
+       // private const val TAG = "HzService"
         private const val ANIMATION_DURATION = 700L
         internal const val PLAYING = "playing"
         internal const val DESTROYED = "stop"
@@ -50,7 +50,7 @@ internal class HzService : Service(), CoroutineScope{
         get() = job + Dispatchers.IO
 
     private val notificationManagerCompat by lazy {NotificationManagerCompat.from(applicationContext)}
-    private val mHzSharePref by lazy { UtilsPrefsGmh(applicationContext) }
+    private val mHzSharePref by lazy { UtilsPrefsGmhSt(applicationContext) }
     //private val mUtilsDeviceInfo by lazy { UtilsDeviceInfo(applicationContext) }
     private var myJob: Job? = null
     private val mNotificationContentView by lazy {RemoteViews(
@@ -65,7 +65,7 @@ internal class HzService : Service(), CoroutineScope{
         WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
                 or WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
                 or WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-        PixelFormat.TRANSLUCENT
+        PixelFormat.TRANSPARENT
     ).apply {
         gravity = HzGravity.TOP_LEFT
     } }
@@ -103,8 +103,6 @@ internal class HzService : Service(), CoroutineScope{
             object : ChangedStatusCallback {
                 @RequiresApi(Build.VERSION_CODES.M)
                 override fun onChange(result: Any) {
-                    //  Log.d(TAG, "mScreenStatusReceiver called: $screenIsOn")
-                    //isScreenOn = result as Boolean
                     if (result  as Boolean) {
                         //pauseHz()
                         myJob?.cancel()
@@ -189,8 +187,8 @@ internal class HzService : Service(), CoroutineScope{
 
         notificationBuilderInstance = Notification.Builder(
             applicationContext,
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) CHANNEL_ID_HZ else ""
-        ).setSmallIcon(R.drawable.ic_max_hz_12)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) CHANNEL_ID_HZ else "")
+            .setSmallIcon(R.drawable.ic_max_hz_12)
             .setOngoing(true)
             .setOnlyAlertOnce(true)
             .setCategory(Notification.CATEGORY_SERVICE)
@@ -300,7 +298,7 @@ internal class HzService : Service(), CoroutineScope{
             stageView.alpha = 0f
             stageView.animate()
                 .alpha(1f)
-                .setDuration(ANIMATION_DURATION.toLong())
+                .setDuration(ANIMATION_DURATION)
                 .setListener(null)
             stageView.visibility = View.VISIBLE
 

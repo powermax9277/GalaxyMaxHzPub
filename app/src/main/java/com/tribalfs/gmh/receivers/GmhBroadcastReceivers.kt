@@ -1,11 +1,9 @@
 package com.tribalfs.gmh.receivers
 
-import android.app.Service
 import android.content.BroadcastReceiver
 import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
-import android.hardware.display.DisplayManager
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
@@ -16,7 +14,6 @@ import com.tribalfs.gmh.callbacks.AccessibilityCallback
 import com.tribalfs.gmh.helpers.CacheSettings.currentBrightness
 import com.tribalfs.gmh.helpers.CacheSettings.currentRefreshRateMode
 import com.tribalfs.gmh.helpers.CacheSettings.disablePsm
-import com.tribalfs.gmh.helpers.CacheSettings.displayId
 import com.tribalfs.gmh.helpers.CacheSettings.hasWriteSecureSetPerm
 import com.tribalfs.gmh.helpers.CacheSettings.hzStatus
 import com.tribalfs.gmh.helpers.CacheSettings.ignorePowerModeChange
@@ -34,13 +31,11 @@ import com.tribalfs.gmh.helpers.CacheSettings.sensorOnKey
 import com.tribalfs.gmh.helpers.CacheSettings.turnOff5GOnPsm
 import com.tribalfs.gmh.helpers.CacheSettings.turnOffAutoSensorsOff
 import com.tribalfs.gmh.helpers.PsmChangeHandler
-import com.tribalfs.gmh.helpers.UtilsDeviceInfo
-import com.tribalfs.gmh.helpers.UtilsDeviceInfo.Companion.PREFERRED_NETWORK_MODE
-import com.tribalfs.gmh.helpers.UtilsRefreshRate
+import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.PREFERRED_NETWORK_MODE
+import com.tribalfs.gmh.helpers.UtilsRefreshRateSt
 import com.tribalfs.gmh.hertz.HzService.Companion.DESTROYED
 import com.tribalfs.gmh.hertz.HzServiceHelperStn
 import com.tribalfs.gmh.netspeed.NetSpeedServiceHelperStn
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmh
 import kotlinx.coroutines.*
 
 
@@ -50,11 +45,11 @@ class GmhBroadcastReceivers(context: Context, private val accessibilityCallback:
     private val appCtx = context.applicationContext
     private val mContentResolver = appCtx.contentResolver
 
-    private val mUtilsPrefsGmh by lazy { UtilsPrefsGmh(appCtx) }
-    private val mUtilsDeviceInfo by lazy { UtilsDeviceInfo(appCtx) }
-    private val mUtilsRefreshRate by lazy { UtilsRefreshRate (appCtx)}
+    //private val mUtilsPrefsGmh by lazy { UtilsPrefsGmhSt(appCtx) }
+    //private val mUtilsDeviceInfo by lazy { UtilsDeviceInfoSt(appCtx) }
+    private val mUtilsRefreshRate by lazy { UtilsRefreshRateSt.instance(appCtx)}
     private val handler by lazy { Handler(Looper.getMainLooper()) }
-    private val dm by lazy {appCtx.getSystemService(Service.DISPLAY_SERVICE) as DisplayManager }
+    //private val dm by lazy {appCtx.getSystemService(Service.DISPLAY_SERVICE) as DisplayManager }
     //private val keyguardManager by lazy {appCtx.getSystemService(KEYGUARD_SERVICE) as KeyguardManager }
     companion object{
         private const val PREF_NET_TYPE_LTE_GSM_WCDMA    = 9 /* LTE, GSM/WCDMA */
@@ -66,15 +61,15 @@ class GmhBroadcastReceivers(context: Context, private val accessibilityCallback:
     }
 
     init{
-        mUtilsDeviceInfo.isDisplayOn().let {
+        mUtilsRefreshRate.mUtilsDeviceInfo.isDisplayOn().let {
             isScreenOn = it
 
             //Check if app is destroyed on screen off
-            if (mUtilsPrefsGmh.gmhPrefRefreshRateModePref != null
-                && mUtilsPrefsGmh.gmhPrefRefreshRateModePref != currentRefreshRateMode.get()
+            if (mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefRefreshRateModePref != null
+                && mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefRefreshRateModePref != currentRefreshRateMode.get()
             ) {
                 scope.launch {
-                    mUtilsRefreshRate.setRefreshRateMode(mUtilsPrefsGmh.gmhPrefRefreshRateModePref!!)
+                    mUtilsRefreshRate.setRefreshRateMode(mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefRefreshRateModePref!!)
                     if (!it) {
                         delay(250)
                         ignoreRrmChange = true
@@ -89,12 +84,12 @@ class GmhBroadcastReceivers(context: Context, private val accessibilityCallback:
 
             if (it) {
                 scope.launch {
-                    if (mUtilsPrefsGmh.gmhPrefRestoreSyncIsOn) {
+                    if (mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefRestoreSyncIsOn) {
                         ContentResolver.setMasterSyncAutomatically(true)
                     }
                 }
                 scope.launch {
-                    if (mUtilsPrefsGmh.gmhPrefPsmIsOffCache) {
+                    if (mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefPsmIsOffCache) {
                         //Not ignored
                             if (hasWriteSecureSetPerm) {
                                 Settings.Global.putString(
@@ -107,8 +102,8 @@ class GmhBroadcastReceivers(context: Context, private val accessibilityCallback:
                 }
             } else {
                 //Screen is off
-                restoreSync = (mUtilsPrefsGmh.gmhPrefRestoreSyncIsOn)
-                disablePsm = (mUtilsPrefsGmh.gmhPrefPsmIsOffCache)
+                restoreSync = (mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefRestoreSyncIsOn)
+                disablePsm = (mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefPsmIsOffCache)
             }
         }
     }
@@ -118,7 +113,7 @@ class GmhBroadcastReceivers(context: Context, private val accessibilityCallback:
         Runnable {
             ContentResolver.getMasterSyncAutomatically().let {
                 restoreSync = it
-                mUtilsPrefsGmh.gmhPrefRestoreSyncIsOn = it
+                mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefRestoreSyncIsOn = it
                 if (it) {
                     ContentResolver.setMasterSyncAutomatically(false)
                 }
@@ -142,13 +137,13 @@ class GmhBroadcastReceivers(context: Context, private val accessibilityCallback:
             if (screenOffRefreshRateMode != currentRefreshRateMode.get()) {
                 ignoreRrmChange = true
                 if (mUtilsRefreshRate.setRefreshRateMode(screenOffRefreshRateMode!!)) {
-                    mUtilsRefreshRate.setRefreshRate(lowestHzForAllMode)
+                    mUtilsRefreshRate.setRefreshRate(lowestHzForAllMode, null)
                 }else{
-                    mUtilsRefreshRate.setRefreshRate(lowestHzCurMode)
+                    mUtilsRefreshRate.setRefreshRate(lowestHzCurMode, null)
                     ignoreRrmChange = false
                 }
             }else {
-                mUtilsRefreshRate.setRefreshRate(lowestHzCurMode)
+                mUtilsRefreshRate.setRefreshRate(lowestHzCurMode, null)
             }
         }
     }
@@ -156,19 +151,13 @@ class GmhBroadcastReceivers(context: Context, private val accessibilityCallback:
 
     private val captureRrRunnable: Runnable by lazy {
         Runnable {
-            offScreenRefreshRate = "${dm.getDisplay(displayId).refreshRate.toInt()} hz"
+            offScreenRefreshRate = "${mUtilsRefreshRate.mUtilsDeviceInfo.currentDisplay.refreshRate.toInt()} hz"
         }
     }
 
     private val autoSensorsOffRunnable: Runnable by lazy {
         Runnable {
-            /*if (isNsNotifOn.get()!!) {
-                NetSpeedServiceHelperStn.instance(appCtx).stopService(null)
-            }*/
-            /*if (hzStatus.get() == PLAYING) {
-                HzServiceHelperStn.instance(appCtx).stopHertz()
-            }*/
-            if (mUtilsPrefsGmh.gmhPrefSensorsOff) {
+            if (mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefSensorsOff) {
                 accessibilityCallback.onChange(userPresent = false, turnOffSensors = true)
             }
         }
@@ -180,9 +169,9 @@ class GmhBroadcastReceivers(context: Context, private val accessibilityCallback:
         when (p1.action) {
 
             ACTION_POWER_SAVE_MODE_CHANGED -> {
-                isPowerSaveModeOn.set(mUtilsDeviceInfo.isPowerSavingsModeOn())
+                isPowerSaveModeOn.set(mUtilsRefreshRate.mUtilsDeviceInfo.isPowerSavingsModeOn)
                 if (ignorePowerModeChange.getAndSet(false) || !hasWriteSecureSetPerm) return
-                mUtilsPrefsGmh.gmhPrefPsmIsOffCache = isPowerSaveModeOn.get() != true
+                mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefPsmIsOffCache = isPowerSaveModeOn.get() != true
                 PsmChangeHandler.instance(appCtx).handle()
             }
 
@@ -194,13 +183,13 @@ class GmhBroadcastReceivers(context: Context, private val accessibilityCallback:
                 // Workaround for AOD Bug on some device????
                 mUtilsRefreshRate.clearPeakAndMinRefreshRate()
 
-                if (mUtilsPrefsGmh.gmhPrefForceLowestSoIsOn) { handler.postDelayed(forceLowestRunnable,3000) }
+                if (mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefForceLowestSoIsOn) { handler.postDelayed(forceLowestRunnable,3000) }
 
-                handler.postDelayed(captureRrRunnable, 4000)
+                handler.postDelayed(captureRrRunnable, 5000)
 
-                if (mUtilsPrefsGmh.gmhPrefPsmOnSo) { handler.postDelayed(psmEnablerRunnable,8000) }
+                if (mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefPsmOnSo) { handler.postDelayed(psmEnablerRunnable,8000) }
 
-                if (mUtilsPrefsGmh.gmhPrefDisableSyncIsOn) { handler.postDelayed(autosyncDisablerRunnable,12000) }
+                if (mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefDisableSyncIsOn) { handler.postDelayed(autosyncDisablerRunnable,12000) }
 
                 handler.postDelayed(autoSensorsOffRunnable,20000)
             }
@@ -210,7 +199,7 @@ class GmhBroadcastReceivers(context: Context, private val accessibilityCallback:
                 isScreenOn = true
 
                 scope.launch {
-                    mUtilsRefreshRate.setRefreshRate(prrActive.get()!!)
+                    mUtilsRefreshRate.setRefreshRate(prrActive.get()!!, mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefMinHzAdapt)
                     currentRefreshRateMode.get()?.let {
                         if (screenOffRefreshRateMode != it) {
                             //ignoreRrmChange = true
@@ -225,31 +214,31 @@ class GmhBroadcastReceivers(context: Context, private val accessibilityCallback:
                     if (restoreSync) ContentResolver.setMasterSyncAutomatically(true)
                     if (disablePsm) setPowerSaving(false)
 
-                    if (mUtilsPrefsGmh.gmhPrefNetSpeedIsOn && !isNetSpeedRunning.get()!!) {
+                    if (mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefNetSpeedIsOn && !isNetSpeedRunning.get()!!) {
                         NetSpeedServiceHelperStn.instance(appCtx).runNetSpeed(null)
                     }
 
-                    if (mUtilsPrefsGmh.gmhPrefHzIsOn && hzStatus.get() == DESTROYED) {
+                    if (mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefHzIsOn && hzStatus.get() == DESTROYED) {
                         HzServiceHelperStn.instance(appCtx).startHertz(null, null, null)
                     }
                 }
 
                 scope.launch {
-                    currentBrightness.set(mUtilsDeviceInfo.getScreenBrightnessPercent())
+                    currentBrightness.set(mUtilsRefreshRate.mUtilsDeviceInfo.getScreenBrightnessPercent())
                 }
 
             }
 
             Intent.ACTION_USER_PRESENT -> {
-                accessibilityCallback.onChange(true, mUtilsPrefsGmh.gmhPrefSensorsOff || turnOffAutoSensorsOff)
+                accessibilityCallback.onChange(true, mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefSensorsOff || turnOffAutoSensorsOff)
                 if (turnOffAutoSensorsOff){
-                    mUtilsPrefsGmh.gmhPrefSensorsOff = false
+                    mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefSensorsOff = false
                     turnOffAutoSensorsOff = false
                 }
             }
 
             Intent.ACTION_LOCALE_CHANGED -> {
-                mUtilsPrefsGmh.gmhPrefSensorOnKey = ""
+                mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefSensorOnKey = ""
                 sensorOnKey = null
             }
 

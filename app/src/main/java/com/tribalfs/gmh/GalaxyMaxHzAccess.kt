@@ -48,6 +48,7 @@ import com.tribalfs.gmh.netspeed.NetSpeedServiceHelperStn
 import com.tribalfs.gmh.profiles.ProfilesObj.isProfilesLoaded
 import com.tribalfs.gmh.receivers.GmhBroadcastReceivers
 import kotlinx.coroutines.*
+import java.lang.Integer.max
 import java.lang.Runnable
 import java.util.*
 import kotlin.coroutines.CoroutineContext
@@ -58,7 +59,7 @@ import kotlin.coroutines.CoroutineContext
 class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
     companion object{
-        private const val TAG = "GalaxyMaxHzAccess"
+        //private const val TAG = "GalaxyMaxHzAccess"
         // var isGMHBroadcastReceiverRegistered = false
         // private val SENSORS_OFF_DELAY = if (BuildConfig.DEBUG) 5000L else 15000L
         private const val MAX_TRY = 8
@@ -68,15 +69,17 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         internal const val SCREEN_OFF_ONLY = "soo"
     }
 
+
     private val job = SupervisorJob()
     override val coroutineContext: CoroutineContext
         get() = job + Dispatchers.IO
-    private val connectivityManager by lazy {applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager}
-    private val keyguardManager by lazy {getSystemService(KEYGUARD_SERVICE) as KeyguardManager}
+    private val mConnectivityManager by lazy {applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager}
+    private val mKeyguardManager by lazy {getSystemService(KEYGUARD_SERVICE) as KeyguardManager}
     private val handler by lazy {Handler(Looper.getMainLooper())}
-    private val camManager by lazy {getSystemService(CAMERA_SERVICE) as CameraManager}
-    private val mUtilsRefreshRate by lazy {UtilsRefreshRate(applicationContext)}
-    private val wm by lazy {applicationContext.getSystemService(Context.WINDOW_SERVICE) as WindowManager}
+    private val mCameraManager by lazy {getSystemService(CAMERA_SERVICE) as CameraManager}
+    private val mUtilsRefreshRate by lazy {UtilsRefreshRateSt.instance(applicationContext)}
+    private val mWindowsManager by lazy {applicationContext.getSystemService(Context.WINDOW_SERVICE) as WindowManager}
+    private val mNotifBar by lazy {NotificationBarSt.instance(applicationContext)}
     private var triesA: Int = 0
     private var triesB: Int = 0
     private var isGameOpen = false //: AtomicBoolean = AtomicBoolean(false)
@@ -128,7 +131,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
             launch {
                 var childs: List<AccessibilityNodeInfo>? = null
 
-                val sensorState = SensorsOffSt.instance(applicationContext).isSensorsOff()
+                val sensorState = mNotifBar.isSensorsOff()
 
                 if (sensorState != null){
                     if (sensorState != targetState) {
@@ -175,31 +178,37 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                     childs?.forEach {
                         val initDesc = it.contentDescription
                         if (initDesc != null && it.isClickable) {
-                            if (keyguardManager.isKeyguardLocked) {
+
+                            if (mKeyguardManager.isKeyguardLocked) {
                                 try {
                                     it.apply{
                                         performAction(ACTION_CLICK)
                                         delay(600)
                                         refresh()
                                         sensorOnKey = if (initDesc != contentDescription) contentDescription else initDesc
-                                        //Log.d("SENSOR_TEST", "updated sensorOnKey:$sensorOnKey")
                                     }
                                 }catch (_: java.lang.Exception) { }
                             }
 
                             if (sensorOnKey != null){
                                 if ((sensorOnKey == initDesc) != targetState) {
-                                    //Log.d("SENSOR_TEST", "performing click")
                                     it.performAction(ACTION_CLICK)
                                 }
                                 if (NotificationBarSt.instance(applicationContext).collapseNotificationBar()) {
                                     return@launch
                                 }
                             }else{
-                                //Log.d("SENSOR_TEST", "sensorOnKey is null")
-                                NotificationBarSt.instance(applicationContext)
-                                    .collapseNotificationBar()
-                                return@launch
+                                when(initDesc.split(",")[1]){
+                                    "On.","已开启。","Til.","פועל.","Включено","ON","Activé","Activado" -> {
+                                        sensorOnKey = initDesc
+                                    }
+
+                                    else ->{
+                                        NotificationBarSt.instance(applicationContext)
+                                            .collapseNotificationBar()
+                                        return@launch
+                                    }
+                                }
                             }
                             triesA += 1
                             delay(200)
@@ -278,7 +287,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
     private fun disableNetworkCallback(){
         try{
-            connectivityManager.unregisterNetworkCallback(networkCallback)
+            mConnectivityManager.unregisterNetworkCallback(networkCallback)
         }catch (_: java.lang.Exception){}
     }
 
@@ -286,7 +295,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     private fun setupNetworkCallback(){
         disableNetworkCallback()
         if (isNetSpeedRunning.get()!!) {
-            connectivityManager.registerDefaultNetworkCallback(networkCallback)
+            mConnectivityManager.registerDefaultNetworkCallback(networkCallback)
         }
     }
 
@@ -294,30 +303,30 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         try{
             unregisterCameraCallback()
         }catch (_: Exception){}
-        camManager.registerAvailabilityCallback(cameraCallback, handler)
+        mCameraManager.registerAvailabilityCallback(cameraCallback, handler)
     }
 
     private fun unregisterCameraCallback(){
-        camManager.unregisterAvailabilityCallback(cameraCallback)
+        mCameraManager.unregisterAvailabilityCallback(cameraCallback)
     }
 
-    private fun restartOtherServices(){
-        /*if (isNsNotifOn.get()!!) {
+/*    private fun restartOtherServices(){
+        *//*if (isNsNotifOn.get()!!) {
             launch {
                 NetSpeedServiceHelperStn.instance(applicationContext).stopService(null)
                 delay(1000)
                 NetSpeedServiceHelperStn.instance(applicationContext).runNetSpeed(null)
             }
-        }*/
-        /*if (CacheSettings.hzStatus.get() == HzService.PLAYING) {
+        }*//*
+        *//*if (CacheSettings.hzStatus.get() == HzService.PLAYING) {
             launch {
                 HzServiceHelperStn.instance(applicationContext).stopHertz()
                 HzServiceHelperStn.instance(applicationContext).startHertz(null, null, null)
             }
-        }*/
-    }
+        }*//*
+    }*/
 
-   // @RequiresApi(Build.VERSION_CODES.N)
+    // @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate() {
         setupScreenStatusReceiver()
         setupNetworkCallback()
@@ -359,7 +368,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                 nonInteractiveUiTimeoutMillis = 0
             }catch (_: NoSuchMethodError){}
         }
-       // restartOtherServices()
+        // restartOtherServices()
     }
 
     //if triggered by tasker
@@ -370,7 +379,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                 switchSensorsOff(true)
             }
         } else {
-            if (!keyguardManager.isKeyguardLocked) {
+            if (!mKeyguardManager.isKeyguardLocked) {
                 switchSensorsOff(false)
             }
         }
@@ -440,7 +449,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     }
 
     @SuppressLint("SwitchIntDef")
-    @RequiresApi(Build.VERSION_CODES.M)
+    //@RequiresApi(Build.VERSION_CODES.M)
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
 
         /*Log.i(
@@ -508,7 +517,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                             }
 
                             "com.android.systemui" -> {
-                                if (keyguardManager.isDeviceLocked) {
+                                if (mKeyguardManager.isDeviceLocked) {
                                     if (isGameOpen) {
                                         isGameOpen = false
                                     }
@@ -546,9 +555,6 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     //@Synchronized
     private fun makeAdaptive() {
         //Log.i(TAG, "makeAdaptive called")
-        /*    mUtilsRefreshRate.setPeakRefreshRate(prrActive.get()!!)
-            handler.removeCallbacks(adaptiveRunnable)
-            handler.postDelayed(adaptiveRunnable, adaptiveDelayMillis)*/
 
         mUtilsRefreshRate.setPeakRefreshRate(prrActive.get()!!)
 
@@ -560,7 +566,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
             delay(adaptiveDelayMillis)
             if (applyAdaptiveMod.get()!! && isScreenOn && !isGameOpen) {
                 mUtilsRefreshRate.setPeakRefreshRate(
-                    if (useMin60 || cameraOpen) 60 else lrrPref.get()!!
+                    if (useMin60 || cameraOpen) max(60,lrrPref.get()!!) else lrrPref.get()!!
                 )
             }
         }
@@ -569,7 +575,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
 
     private fun initialAdaptive() {
-        mUtilsRefreshRate.setRefreshRate(prrActive.get()!!)
+        mUtilsRefreshRate.setRefreshRate(prrActive.get()!!, mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefMinHzAdapt)
         makeAdaptive()
     }
 
@@ -578,7 +584,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         // Log.d(TAG, "onDestroy() called")
 
         try {
-            wm.removeView(adaptiveView)
+            mWindowsManager.removeView(adaptiveView)
         } catch (_: java.lang.Exception) {
         }finally{
             adaptiveView = null
@@ -614,10 +620,10 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                         }
                     }
                     try {
-                        wm.removeView(adaptiveView)
+                        mWindowsManager.removeView(adaptiveView)
                     } catch (_: Exception) {
                     } finally {
-                        wm.addView(adaptiveView, paramsAdaptive)
+                        mWindowsManager.addView(adaptiveView, paramsAdaptive)
                     }
                     if (isScreenOn) {
                         initialAdaptive()//initial trigger
@@ -629,10 +635,10 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                     registerCameraCallback()
                 } else {
                     if (UtilsPermSt.instance(applicationContext).hasWriteSystemPerm()) {
-                        mUtilsRefreshRate.setRefreshRate(prrActive.get()!!)
+                        mUtilsRefreshRate.setRefreshRate(prrActive.get()!!,mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefMinHzAdapt)
                     }
                     try {
-                        wm.removeView(adaptiveView)
+                        mWindowsManager.removeView(adaptiveView)
                         adaptiveView = null
                     } catch (_: java.lang.Exception) {
                     }

@@ -5,7 +5,7 @@ import android.content.Context
 import android.os.PowerManager.*
 import android.provider.Settings
 import com.tribalfs.gmh.helpers.CacheSettings.hasWriteSecureSetPerm
-import com.tribalfs.gmh.helpers.UtilsDeviceInfo.Companion.BATTERY_SAVER_CONSTANTS
+import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.BATTERY_SAVER_CONSTANTS
 
 object DozePSCChecker {
     @SuppressLint("InlinedApi")

@@ -92,7 +92,7 @@ class DialogActCode : RoundedDialogFragment()  {
                         setOnClickListener {
                             (requireActivity() as MainActivity).syncLicense(
                                 silent = false,
-                                tryTrial = true
+                                trial = true
                             )
                             dialogInterface.dismiss()
                         }

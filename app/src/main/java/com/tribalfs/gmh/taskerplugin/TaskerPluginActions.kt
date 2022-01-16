@@ -6,7 +6,6 @@ import android.app.KeyguardManager
 import android.content.Context
 import android.content.Intent
 import android.hardware.display.DisplayManager
-import android.view.Display
 import android.view.Display.STATE_ON
 import android.widget.Toast
 import com.joaomgcd.taskerpluginlibrary.action.TaskerPluginRunnerActionNoOutputOrInput
@@ -17,22 +16,21 @@ import com.joaomgcd.taskerpluginlibrary.input.TaskerInputInfo
 import com.joaomgcd.taskerpluginlibrary.input.TaskerInputInfos
 import com.joaomgcd.taskerpluginlibrary.runner.TaskerPluginResult
 import com.joaomgcd.taskerpluginlibrary.runner.TaskerPluginResultSucess
+import com.tribalfs.gmh.AccessibilityPermission.isAccessibilityEnabled
 import com.tribalfs.gmh.GalaxyMaxHzAccess
 import com.tribalfs.gmh.GalaxyMaxHzAccess.Companion.SCREEN_OFF_ONLY
 import com.tribalfs.gmh.GalaxyMaxHzAccess.Companion.SETUP_ADAPTIVE
 import com.tribalfs.gmh.GalaxyMaxHzAccess.Companion.SWITCH_AUTO_SENSORS
+import com.tribalfs.gmh.MainActivity
 import com.tribalfs.gmh.MyApplication.Companion.applicationName
 import com.tribalfs.gmh.helpers.*
 import com.tribalfs.gmh.helpers.CacheSettings.displayId
-import com.tribalfs.gmh.helpers.CacheSettings.hasWriteSecureSetPerm
 import com.tribalfs.gmh.helpers.CacheSettings.highestHzForAllMode
 import com.tribalfs.gmh.helpers.CacheSettings.isOfficialAdaptive
 import com.tribalfs.gmh.helpers.CacheSettings.isPowerSaveModeOn
 import com.tribalfs.gmh.helpers.CacheSettings.isPremium
 import com.tribalfs.gmh.helpers.CacheSettings.keepModeOnPowerSaving
 import com.tribalfs.gmh.helpers.CacheSettings.lowestHzCurMode
-import com.tribalfs.gmh.helpers.CacheSettings.lowestHzForAllMode
-import com.tribalfs.gmh.helpers.CacheSettings.lrrPref
 import com.tribalfs.gmh.helpers.CacheSettings.minHzListForAdp
 import com.tribalfs.gmh.helpers.CacheSettings.prrActive
 import com.tribalfs.gmh.helpers.CacheSettings.supportedHzIntAllMod
@@ -41,13 +39,12 @@ import com.tribalfs.gmh.helpers.CacheSettings.turnOffAutoSensorsOff
 import com.tribalfs.gmh.helpers.DozeUpdater.mwInterval
 import com.tribalfs.gmh.helpers.DozeUpdater.updateDozValues
 import com.tribalfs.gmh.helpers.UtilsCommon.closestValue
-import com.tribalfs.gmh.helpers.UtilsDeviceInfo.Companion.REFRESH_RATE_MODE_ALWAYS
-import com.tribalfs.gmh.helpers.UtilsDeviceInfo.Companion.REFRESH_RATE_MODE_SEAMLESS
-import com.tribalfs.gmh.helpers.UtilsDeviceInfo.Companion.REFRESH_RATE_MODE_STANDARD
-import com.tribalfs.gmh.helpers.UtilsDeviceInfo.Companion.STANDARD_REFRESH_RATE_HZ
+import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.REFRESH_RATE_MODE_ALWAYS
+import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.REFRESH_RATE_MODE_SEAMLESS
+import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.REFRESH_RATE_MODE_STANDARD
+import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.STANDARD_REFRESH_RATE_HZ
 import com.tribalfs.gmh.profiles.ProfilesObj
-import com.tribalfs.gmh.resochanger.ResolutionChangeUtilSt
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmh
+import com.tribalfs.gmh.resochanger.ResolutionChangeUtil
 import com.tribalfs.gmh.taskerplugin.TaskerKeys.auto_sensors_off
 import com.tribalfs.gmh.taskerplugin.TaskerKeys.change_res
 import com.tribalfs.gmh.taskerplugin.TaskerKeys.keep_motion_smoothness_on_psm
@@ -55,11 +52,7 @@ import com.tribalfs.gmh.taskerplugin.TaskerKeys.max_hertz
 import com.tribalfs.gmh.taskerplugin.TaskerKeys.min_hertz
 import com.tribalfs.gmh.taskerplugin.TaskerKeys.motion_smoothness_mode
 import com.tribalfs.gmh.taskerplugin.TaskerKeys.quick_doze_mod
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.launch
-import kotlin.math.max
+import kotlinx.coroutines.*
 
 
 @ExperimentalCoroutinesApi
@@ -178,8 +171,7 @@ class DynamicInputRunner : TaskerPluginRunnerActionNoOutputOrInput() {
     @SuppressLint("NewApi")
     override fun run(context: Context, input: TaskerInput<Unit>): TaskerPluginResult<Unit> {
         val appCtx = context.applicationContext
-        val mUtilsPrefsGmh by lazy { UtilsPrefsGmh(appCtx)}
-        val mUtilsRefreshRate by lazy { UtilsRefreshRate(appCtx) }
+        val mUtilsRefreshRate by lazy { UtilsRefreshRateSt.instance(appCtx) }
         val dm by lazy {appCtx.getSystemService(Context.DISPLAY_SERVICE) as DisplayManager}
         val km by lazy {appCtx.getSystemService(KEYGUARD_SERVICE) as KeyguardManager}
 
@@ -193,9 +185,9 @@ class DynamicInputRunner : TaskerPluginRunnerActionNoOutputOrInput() {
                     change_res -> {
                         CoroutineScope(Dispatchers.IO).launch {
                             try {
-
-                                ResolutionChangeUtilSt.instance(appCtx)
-                                    .changeRes(info.value as String)
+                                appCtx.sendBroadcast(Intent(MainActivity.ACTION_CHANGED_RES))
+                                delay(550)
+                                ResolutionChangeUtil(appCtx).changeRes(info.value as String)
                             } catch (_: Exception) {
                             }
                         }
@@ -205,10 +197,10 @@ class DynamicInputRunner : TaskerPluginRunnerActionNoOutputOrInput() {
                         try{
                             when (val msm = info.value as String){
                                 REFRESH_RATE_MODE_STANDARD -> mUtilsRefreshRate.setRefreshRateMode(msm)
-                                REFRESH_RATE_MODE_ALWAYS -> mUtilsRefreshRate.tryPrefRefreshRateMode(msm, null)
+                                REFRESH_RATE_MODE_ALWAYS -> mUtilsRefreshRate.tryThisRrm(msm, null)
                                 REFRESH_RATE_MODE_SEAMLESS ->{
                                     if (isPremium.get()!! || isOfficialAdaptive) {
-                                        mUtilsRefreshRate.tryPrefRefreshRateMode(msm, null)
+                                        mUtilsRefreshRate.tryThisRrm(msm, null)
                                     }
                                 }
                             }
@@ -220,9 +212,10 @@ class DynamicInputRunner : TaskerPluginRunnerActionNoOutputOrInput() {
                     max_hertz -> {
                         CoroutineScope(Dispatchers.Main).launch {
                             try {
+                                val mUtilsPrefsGmh = mUtilsRefreshRate.mUtilsPrefsGmh
                                 val mHz = (info.value as String).toInt()
-                                if (dm.getDisplay(displayId).state == Display.STATE_ON) {
-                                    UtilsChangeMaxHzSt.instance(appCtx).changeMaxHz(mHz)
+                                if (dm.getDisplay(displayId).state == STATE_ON) {
+                                    UtilsChangeMaxHz(appCtx).changeMaxHz(mHz)
                                 } else {
                                     if (supportedHzIntCurMod?.indexOfFirst { hz -> hz == mHz } != -1) {
                                         prrActive.set(mHz.coerceAtLeast(lowestHzCurMode))
@@ -249,7 +242,7 @@ class DynamicInputRunner : TaskerPluginRunnerActionNoOutputOrInput() {
                                     keepModeOnPowerSaving = isKeep
                                     CoroutineScope(Dispatchers.Default).launch {
                                         PsmChangeHandler.instance(appCtx).handle()
-                                        mUtilsPrefsGmh.gmhPrefKmsOnPsm = isKeep
+                                        mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefKmsOnPsm = isKeep
                                         appCtx.startService(Intent(appCtx, GalaxyMaxHzAccess::class.java).apply{
                                             putExtra(SETUP_ADAPTIVE, true)
                                         })
@@ -269,6 +262,7 @@ class DynamicInputRunner : TaskerPluginRunnerActionNoOutputOrInput() {
                             CoroutineScope(Dispatchers.IO).launch {
                                 try {
                                     (info.value as String).toInt().let { dozInt ->
+                                        val mUtilsPrefsGmh = mUtilsRefreshRate.mUtilsPrefsGmh
                                         if (dozInt == -1){
                                             mUtilsPrefsGmh.gmhPrefQuickDozeIsOn = false
                                             appCtx.updateDozValues(false, null)
@@ -293,13 +287,11 @@ class DynamicInputRunner : TaskerPluginRunnerActionNoOutputOrInput() {
                         if (isPremium.get()!!) {
                             CoroutineScope(Dispatchers.IO).launch{
                                 try {
+                                    val mUtilsPrefsGmh = mUtilsRefreshRate.mUtilsPrefsGmh
                                     when ((info.value as String).toInt()) {
                                         1 -> {//turn On
-                                            /*mUtilsPrefsGmh.gmhPrefSensorsOff = (CheckBlacklistApiSt.instance(appCtx).isAllowed()
-                                                    || CheckBlacklistApiSt.instance(appCtx).setAllowed())*/
-
+                                            mUtilsPrefsGmh.gmhPrefSensorsOff = true
                                             if (dm.getDisplay(displayId).state != STATE_ON && mUtilsPrefsGmh.gmhPrefSensorsOff){
-                                                // turnOnAutoSensorsOff = true
                                                 appCtx.startService(
                                                     Intent(appCtx, GalaxyMaxHzAccess::class.java).apply {
                                                         putExtra(SWITCH_AUTO_SENSORS, true)
@@ -363,13 +355,26 @@ class DynamicInputRunner : TaskerPluginRunnerActionNoOutputOrInput() {
                     }
 
                     min_hertz ->{
-                        if (isPremium.get()!! && hasWriteSecureSetPerm) {
+                        if (isPremium.get()!!) {
                             CoroutineScope(Dispatchers.IO).launch {
                                 val minHz = (info.value as String).toInt()
-                                val idx = minHzListForAdp?.indexOf(minHz)
-                                if (idx != -1){
-                                    lrrPref.set(max(lowestHzForAllMode, minHz))
-                                    mUtilsPrefsGmh.gmhPrefMinHzAdapt = minHz
+                                if (minHzListForAdp?.indexOf(minHz) != -1){
+
+                                    if (isOfficialAdaptive && minHz < STANDARD_REFRESH_RATE_HZ) {
+                                        if (!isAccessibilityEnabled(appCtx, GalaxyMaxHzAccess::class.java)) {
+                                            return@launch
+                                        }
+                                    }
+
+                                    mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefMinHzAdapt = minHz
+
+                                    mUtilsRefreshRate.applyMinHz()
+
+                                    appCtx.startService(
+                                        Intent(appCtx,GalaxyMaxHzAccess::class.java).apply {
+                                            putExtra(SETUP_ADAPTIVE, true)
+                                        }
+                                    )
                                 }else{
                                     launch(Dispatchers.Main) {
                                         Toast.makeText(

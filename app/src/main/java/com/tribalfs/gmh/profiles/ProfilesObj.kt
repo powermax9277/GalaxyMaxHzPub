@@ -13,9 +13,9 @@ object ProfilesObj: Serializable {
     @get:Synchronized @set:Synchronized
     var adaptiveModelsObj = mutableListOf<String>()
 
-    @get:Synchronized @set:Synchronized
+    @Volatile @get:Synchronized @set:Synchronized
     var isProfilesLoaded: Boolean = false
 
-    @Volatile
+    @Volatile @get:Synchronized @set:Synchronized
     var loadComplete: Boolean = false// means all modes completely loaded
 }

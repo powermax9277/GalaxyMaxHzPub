@@ -12,12 +12,12 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.tribalfs.gmh.BuildConfig
 import com.tribalfs.gmh.MainActivity.Companion.GMH_WEB_APP
-import com.tribalfs.gmh.helpers.Certificate
-import com.tribalfs.gmh.helpers.UtilsDeviceInfo
-import com.tribalfs.gmh.helpers.UtilsSettings
-import com.tribalfs.gmh.helpers.UtilsSettings.SECURE
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsAct
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmh
+import com.tribalfs.gmh.helpers.PackageInfo
+import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt
+import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.GLOBAL
+import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.SECURE
+import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.SYSTEM
+import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt
 import kotlinx.coroutines.*
 import org.json.JSONObject
 import java.util.*
@@ -27,10 +27,12 @@ import kotlin.coroutines.suspendCoroutine
 
 @SuppressLint("HardwareIds")
 internal class Syncer(context: Context) {
+
+    //private val mUtilsPrefsAct by lazy { UtilsPrefsAct(context) }
     private val appCtx = context.applicationContext
-    private val mUtilsDeviceInfo by lazy { UtilsDeviceInfo(appCtx) }
-    private val mUtilsPrefsAct by lazy { UtilsPrefsAct(appCtx) }
-    private val mUtilsPrefsGmh by lazy { UtilsPrefsGmh(appCtx) }
+    private val mUtilsDeviceInfo by lazy { UtilsDeviceInfoSt.instance(appCtx) }
+    private val mUtilsPrefsGmh by lazy { UtilsPrefsGmhSt.instance(appCtx) }
+
 
     companion object{
         private const val TAG = "ProfilesSync"
@@ -62,7 +64,6 @@ internal class Syncer(context: Context) {
         private const val KEY_JSON_SYSTEM_LIST = "0x15"
         private const val KEY_JSON_GLOBAL_LIST = "0x17"
         private const val REQUEST_HELP_URL = 0x15
-        private const val VERSION_CODE = BuildConfig.VERSION_CODE
     }
 
     private val deviceId by lazy {
@@ -74,8 +75,8 @@ internal class Syncer(context: Context) {
         val jsonBody = JSONObject().apply {
             put(KEY_JSON_MODEL_NUMBER, mUtilsDeviceInfo.deviceModelVariant)
             put(KEY_JSON_ONEUI_VERSION, mUtilsDeviceInfo.oneUiVersion)
-            put(KEY_JSON_SIGNATURE, Certificate.getEncSig(appCtx))
-            put(KEY_JSON_APP_VERSION_CODE, VERSION_CODE)
+            put(KEY_JSON_SIGNATURE, PackageInfo.getSignatureString(appCtx))
+            put(KEY_JSON_APP_VERSION_CODE, BuildConfig.VERSION_CODE)
         }
 
         Log.d(TAG, "Starting sync FETCH...")
@@ -94,7 +95,7 @@ internal class Syncer(context: Context) {
         val jsonBody = JSONObject().apply {
             put(KEY_JSON_MODEL_NUMBER, mUtilsDeviceInfo.deviceModelVariant)
             put(KEY_JSON_ONEUI_VERSION, mUtilsDeviceInfo.oneUiVersion)
-            put(KEY_JSON_SIGNATURE, Certificate.getEncSig(appCtx))
+            put(KEY_JSON_SIGNATURE, PackageInfo.getSignatureString(appCtx))
             put(KEY_JSON_REFRESH_RATES_PROFILE, mUtilsPrefsGmh.gmhPrefDisplayModesObjectInJson)
         }
 
@@ -107,16 +108,15 @@ internal class Syncer(context: Context) {
     }
 
     @ExperimentalCoroutinesApi
-    suspend fun syncLicense(tryTrial: Boolean): JSONObject? = withContext(Dispatchers.IO) {
+    suspend fun syncLicense(activationCode: String, trial: Boolean): JSONObject? = withContext(Dispatchers.IO) {
         val jsonObject = JSONObject().apply {
             put(KEY_JSON_DEVICE_ID, deviceId)
             put(KEY_JSON_MODEL_NUMBER, mUtilsDeviceInfo.deviceModelVariant)
             put(
-                KEY_JSON_ACTIVATION_CODE,
-                mUtilsPrefsAct.gmhPrefActivationCode ?: ""
+                KEY_JSON_ACTIVATION_CODE, activationCode /*mUtilsPrefsAct.gmhPrefActivationCode?:""*/
             )//don't remove
-            put(KEY_JSON_SIGNATURE, Certificate.getEncSig(appCtx))
-            put(KEY_JSON_TRIAL, tryTrial)
+            put(KEY_JSON_SIGNATURE, PackageInfo.getSignatureString(appCtx))
+            put(KEY_JSON_TRIAL, trial)
         }
         val result = postDataVolley(REQUEST_VERIFY_LICENSE, GMH_WEB_APP, jsonObject)
         return@withContext if (result != null && result[KEY_JSON_RESULT] == JSON_RESPONSE_OK) {
@@ -180,19 +180,19 @@ internal class Syncer(context: Context) {
     suspend fun postSettingsList() = withContext(Dispatchers.IO){
         Log.d(TAG, "Starting sync POST...")
 
-        val deferreds = listOf(
+        val settingsListAsync = listOf(
             // fetch  at the same time
-            async{ UtilsSettings.getList(SECURE, appCtx)},
-            async{ UtilsSettings.getList(UtilsSettings.SYSTEM, appCtx)},
-            async{ UtilsSettings.getList(UtilsSettings.GLOBAL, appCtx)}
+            async{ mUtilsDeviceInfo.getSettingsList(SECURE)},
+            async{ mUtilsDeviceInfo.getSettingsList(SYSTEM)},
+            async{ mUtilsDeviceInfo.getSettingsList(GLOBAL)}
         )
-        deferreds.awaitAll()
+        settingsListAsync.awaitAll()
 
         val jsonBody = JSONObject().apply {
             put(KEY_JSON_MODEL_NUMBER, mUtilsDeviceInfo.deviceModelVariant)
-            put(KEY_JSON_SECURE_LIST, deferreds[0].getCompleted().joinToString(";"))
-            put(KEY_JSON_SYSTEM_LIST, deferreds[1].getCompleted().joinToString(";"))
-            put(KEY_JSON_GLOBAL_LIST, deferreds[2].getCompleted().joinToString(";"))
+            put(KEY_JSON_SECURE_LIST, settingsListAsync[0].getCompleted().joinToString(";"))
+            put(KEY_JSON_SYSTEM_LIST, settingsListAsync[1].getCompleted().joinToString(";"))
+            put(KEY_JSON_GLOBAL_LIST, settingsListAsync[2].getCompleted().joinToString(";"))
         }
 
        postDataVolley(

@@ -33,13 +33,23 @@
         android:theme="@style/Theme.App.Starting"
         tools:ignore="GoogleAppIndexingWarning"
         tools:targetApi="n">
+        <!--<activity
+            android:name=".resochanger.ResolutionActivity"
+            android:exported="false"
+            android:theme="@style/AppThemeTilePref"
+             android:launchMode="singleTop"
+            android:permission= "android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE_PREFERENCES" />
+            </intent-filter>
+        </activity>-->
+
         <activity
-            android:supportsPictureInPicture="true"
-            android:launchMode="singleInstance"
-            android:theme="@style/Theme.AppCompat.NoActionBar"
             android:name=".PipActivity"
-            android:exported="true" >
-        </activity>
+            android:exported="true"
+            android:launchMode="singleInstance"
+            android:supportsPictureInPicture="true"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
         <!--
          <meta-data
                  android:name="com.google.android.gms.ads.APPLICATION_ID"
@@ -52,7 +62,9 @@
             android:label="@string/app_name"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
             <intent-filter>
-                <action android:name="android.accessibilityservice.AccessibilityService" />
+                <action
+                    android:name="android.accessibilityservice.AccessibilityService"
+                    />
             </intent-filter>
 
             <meta-data
@@ -63,18 +75,16 @@
         <activity
             android:name=".MainActivity"
             android:exported="true">
-            <!--android:launchMode="singleTop">-->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
-
                 <action android:name="android.service.quicksettings.action.QS_TILE_PREFERENCES" />
             </intent-filter>
         </activity>
 
         <service android:name=".hertz.HzService" />
         <service android:name=".netspeed.NetSpeedService" />
+
         <service
             android:name=".tiles.QSTileMaxHz"
             android:exported="true"
@@ -89,7 +99,7 @@
             android:name=".tiles.QSTileHzMon"
             android:exported="true"
             android:icon="@drawable/ic_hz_24"
-            android:label="@string/show_hz"
+            android:label="@string/refresh_rate_mon"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
