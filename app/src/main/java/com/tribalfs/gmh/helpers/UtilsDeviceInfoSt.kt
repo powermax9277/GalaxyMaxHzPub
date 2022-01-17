@@ -190,11 +190,11 @@ class UtilsDeviceInfoSt private constructor(val context: Context) {
 
     internal var isPowerSavingsModeOn: Boolean
         get() {
-            try {
-                return Settings.Global.getInt(mContentResolver, POWER_SAVING_MODE) == 1
+            return try {
+                Settings.Global.getInt(mContentResolver, POWER_SAVING_MODE) == 1
             }catch(_:Exception){
                 val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
-                return powerManager.isPowerSaveMode
+                powerManager.isPowerSaveMode
             }
         }
         set(on) { try{Settings.Global.putInt(mContentResolver, POWER_SAVING_MODE, if (on) 1 else 0) }catch(_:Exception){}}

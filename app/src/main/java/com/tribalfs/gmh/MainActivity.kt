@@ -382,7 +382,9 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
 
     //@RequiresApi(VERSION_CODES.M)
     private fun showAppearOnTopRequest(){
-        startForResult.launch(getOverlaySettingIntent(this@MainActivity))
+        if (SDK_INT >= VERSION_CODES.M) {
+            startForResult.launch(getOverlaySettingIntent(this@MainActivity))
+        }
     }
 
 
