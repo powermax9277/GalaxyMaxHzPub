@@ -96,7 +96,7 @@ class ResolutionChangeUtil (context: Context) {
 
     private suspend fun changeResInternal(resLxw: String?): Boolean = withContext(Dispatchers.Default) {
 
-        val currentDensity = mUtilsRefreshRate.mUtilsDeviceInfo.getDensity().toInt()
+        val currentDensity = mUtilsRefreshRate.mUtilsDeviceInfo.getDisplayDensity()
 
         if (!isMultiResolution) {
             launch(Dispatchers.Main) {

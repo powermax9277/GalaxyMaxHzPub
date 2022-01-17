@@ -48,16 +48,6 @@ class UtilsPrefsAct(val context: Context) {
         )
     }
 
-   /* @Synchronized
-    private val actSharedPref = EncryptedSharedPreferences.create(
-        appCtx,
-        GMH_INFO,
-        masterKey,
-        EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-        EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-    )*/
-
-
     private val gmhSharedPrefEditor by lazy {actSharedPref.edit()}
 
 /*    var gmhPrefTileExpiryDays: Int
@@ -138,55 +128,5 @@ class UtilsPrefsAct(val context: Context) {
             return (gmhPrefPremiumTrialDays - days)
         }
     }
-
-
-    /*var gmhPrefInstallDateStr: String?
-        get() { return actSharedPref.getString(INS_DATE, null) }
-        set(dateStr) {gmhSharedPrefEditor.putString(INS_DATE, dateStr).apply()}
-
-
-    val gmhPrefGetInstallDate: Date?
-        get() {
-            val dateStr = gmhPrefInstallDateStr
-            return if (dateStr == null) {
-                null
-            } else {
-                try {
-                    stringToDate(dateStr)
-                } catch (_: ParseException) {
-                    null
-                }
-            }
-        }*/
-
-/*
-    private var sdf = SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.ENGLISH)
-
-    private fun stringToDate(dateStr: String): LocalDate {
-        val cal = Calendar.getInstance()
-        cal.time = sdf.parse(dateStr)!!
-        return cal.time
-
-    }
-*/
-
-/*
-    fun getTileIsExpired(insertNewDate: Boolean): Boolean {
-        return if (gmhPrefLicType == LIC_TYPE_ADFREE || gmhPrefLicType == LIC_TYPE_TRIAL_ACTIVE || gmhPrefGetInstallDate == null) {
-            if (insertNewDate) {
-                gmhPrefInstallDateStr = sdf.format(Calendar.getInstance().time */
-/*time converts it to Date object*//*
-)
-            }
-            false
-        } else {
-            TimeUnit.DAYS.convert(
-                Calendar.getInstance().time.time
-                    - gmhPrefGetInstallDate!!.time, TimeUnit.MILLISECONDS
-            ) > gmhPrefTileExpiryDays
-        }
-    }
-*/
-
 
 }

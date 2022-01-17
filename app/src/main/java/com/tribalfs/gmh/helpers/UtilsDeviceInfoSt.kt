@@ -5,13 +5,14 @@ import android.content.Context
 import android.hardware.display.DisplayManager
 import android.net.Uri
 import android.os.Build
+import android.os.PowerManager
 import android.provider.Settings
 import android.provider.Settings.System.SCREEN_BRIGHTNESS
 import android.util.DisplayMetrics
+import android.util.Size
 import android.view.Display
 import androidx.annotation.RequiresApi
 import com.tribalfs.gmh.helpers.CacheSettings.displayId
-import com.tribalfs.gmh.profiles.ResolutionBasic
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.lang.reflect.Field
@@ -69,31 +70,31 @@ class UtilsDeviceInfoSt private constructor(val context: Context) {
     }
 
     @Suppress("DEPRECATION")
-    fun getDisplayResolution(): ResolutionBasic {
+    fun getDisplayResolution(): Size {
             val resStr = Settings.Global.getString(mContentResolver, "display_size_forced"/*custom resolution*/)
             return if (currentDisplay.displayId == Display.DEFAULT_DISPLAY && !resStr.isNullOrEmpty()) {
                 val resArr = resStr.split(",")
-                ResolutionBasic(resArr[1].toInt()/*height*/, resArr[0].toInt()/*width*/)
+                Size(resArr[0].toInt()/*width*/,resArr[1].toInt()/*height*/)
             } else {
                 return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     getDisplayResolutionFromMode()
                 } else {
                     val metrics = DisplayMetrics()
                     currentDisplay.getMetrics(metrics)
-                    return ResolutionBasic(metrics.heightPixels, metrics.widthPixels)
+                    Size(metrics.widthPixels, metrics.heightPixels)
                 }
             }
     }
 
 
     @RequiresApi(Build.VERSION_CODES.M)
-    private fun getDisplayResolutionFromMode(): ResolutionBasic{
+    private fun getDisplayResolutionFromMode(): Size{
             val dispMode = currentDisplay.mode
-            return ResolutionBasic(dispMode.physicalHeight, dispMode.physicalWidth)
+            return Size(dispMode.physicalWidth, dispMode.physicalHeight)
     }
 
 
-    private fun getDisplayDensity(): Int {
+    internal fun getDisplayDensity(): Int {
             val denStr = try {
                 Settings.Secure.getString(
                     mContentResolver,
@@ -107,9 +108,7 @@ class UtilsDeviceInfoSt private constructor(val context: Context) {
             } else {
                 val metrics: DisplayMetrics = appCtx.resources.displayMetrics
                 (metrics.density * 160f).toInt()
-                /*val metrics = Resources.getSystem().displayMetrics
-            currentDisplay.getRealMetrics(metrics)
-            metrics.densityDpi*/
+                /*resources.configuration.densityDpi*/
             }
     }
 
@@ -118,7 +117,7 @@ class UtilsDeviceInfoSt private constructor(val context: Context) {
     internal fun getDisplayResStr(separator: String?): String {
             val res = getDisplayResolution()
             val sep = separator ?: ","
-            return "${res.resHeight}$sep${res.resWidth}"
+            return "${res.height}$sep${res.width}"
     }
 
 
@@ -126,11 +125,7 @@ class UtilsDeviceInfoSt private constructor(val context: Context) {
     internal fun getDisplayResFromModeStr(separator: String?): String {
             val res = getDisplayResolutionFromMode()
             val sep = separator ?: ","
-            return "${res.resHeight}$sep${res.resWidth}"
-    }
-
-    fun getDensity(): String {
-            return getDisplayDensity().toString()
+            return "${res.height}$sep${res.width}"
     }
 
 
@@ -195,7 +190,12 @@ class UtilsDeviceInfoSt private constructor(val context: Context) {
 
     internal var isPowerSavingsModeOn: Boolean
         get() {
-            return Settings.Global.getInt(mContentResolver, POWER_SAVING_MODE) == 1
+            try {
+                return Settings.Global.getInt(mContentResolver, POWER_SAVING_MODE) == 1
+            }catch(_:Exception){
+                val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
+                return powerManager.isPowerSaveMode
+            }
         }
         set(on) { try{Settings.Global.putInt(mContentResolver, POWER_SAVING_MODE, if (on) 1 else 0) }catch(_:Exception){}}
 

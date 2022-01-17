@@ -620,14 +620,26 @@ class UtilsRefreshRateSt private constructor (val context: Context)  {
 
 
     fun setPeakRefreshRate(refreshRate: Int){
-        Settings.System.putString(mContentResolver,PEAK_REFRESH_RATE, refreshRate.toString())
-        if (isXiaomi) {
-            Settings.System.putString(mContentResolver, USER_REFRESH_RATE, refreshRate.toString())
+        try {
+            Settings.System.putString(mContentResolver, PEAK_REFRESH_RATE, refreshRate.toString())
+            if (isXiaomi) {
+                Settings.System.putString(
+                    mContentResolver,
+                    USER_REFRESH_RATE,
+                    refreshRate.toString()
+                )
+            }
+        }catch(_:Exception){
+            Toast.makeText(appCtx, "Error! ${appCtx.getString(R.string.enable_write_settings)}", Toast.LENGTH_SHORT).show()
         }
     }
 
     internal fun setMinRefreshRate(refreshRate: Int){
-        Settings.System.putString(mContentResolver,MIN_REFRESH_RATE, refreshRate.toString())
+        try {
+            Settings.System.putString(mContentResolver, MIN_REFRESH_RATE, refreshRate.toString())
+        }catch(_:Exception){
+            Toast.makeText(appCtx, "Error! ${appCtx.getString(R.string.enable_write_settings)}", Toast.LENGTH_SHORT).show()
+        }
     }
 
 
@@ -667,8 +679,8 @@ class UtilsRefreshRateSt private constructor (val context: Context)  {
     internal fun getResoAndRefRateModeArr(currentRefreshRateMode: String?): Array<String> {
         val reso = mUtilsDeviceInfo.getDisplayResolution()
         val resoCat = UtilsResoName.getName(
-            reso.resHeight,
-            reso.resWidth
+            reso.height,
+            reso.width
         )
 
         val mode = when (currentRefreshRateMode ?: samRefreshRateMode) {
@@ -758,19 +770,23 @@ class UtilsRefreshRateSt private constructor (val context: Context)  {
     @ExperimentalCoroutinesApi
     @SuppressLint("NewApi")
     internal fun setPrefOrAdaptOrHighRefreshRateMode(resStrLxw: String?): Boolean{
-        val rrm =
-            if (mUtilsPrefsGmh.gmhPrefRefreshRateModePref != null
-                && mUtilsPrefsGmh.gmhPrefRefreshRateModePref != REFRESH_RATE_MODE_STANDARD
-            ){
-                mUtilsPrefsGmh.gmhPrefRefreshRateModePref
-            }else{
-                if (isOfficialAdaptive) {
-                    REFRESH_RATE_MODE_SEAMLESS
+        try {
+            val rrm =
+                if (mUtilsPrefsGmh.gmhPrefRefreshRateModePref != null
+                    && mUtilsPrefsGmh.gmhPrefRefreshRateModePref != REFRESH_RATE_MODE_STANDARD
+                ) {
+                    mUtilsPrefsGmh.gmhPrefRefreshRateModePref
                 } else {
-                    REFRESH_RATE_MODE_ALWAYS
+                    if (isOfficialAdaptive) {
+                        REFRESH_RATE_MODE_SEAMLESS
+                    } else {
+                        REFRESH_RATE_MODE_ALWAYS
+                    }
                 }
-            }
-        return tryThisRrm(rrm!!,resStrLxw)
+            return tryThisRrm(rrm!!, resStrLxw)
+        }catch (_:Exception){
+            return false
+        }
     }
 
 

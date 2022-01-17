@@ -380,9 +380,9 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
         }
     }
 
-    @RequiresApi(VERSION_CODES.M)
+    //@RequiresApi(VERSION_CODES.M)
     private fun showAppearOnTopRequest(){
-        startForResult.launch(Intent(getOverlaySettingIntent(this@MainActivity)))
+        startForResult.launch(getOverlaySettingIntent(this@MainActivity))
     }
 
 
@@ -751,7 +751,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
         super.onCreate(savedInstanceState)
 
         val splashScreen = installSplashScreen()
-        splashScreen.setKeepVisibleCondition { !isProfilesLoaded }
+        splashScreen.setKeepOnScreenCondition { !isProfilesLoaded }
 
         launch {
             checkAccessibilityPerm(false)
@@ -1183,7 +1183,6 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
     }
 
 
-    //@SuppressLint("NewApi")
     fun showHertz(isSwOn: Boolean, showOverlayHz: Boolean?, showNotifHz: Boolean?) {
 
         fun openNotifSettings() {
