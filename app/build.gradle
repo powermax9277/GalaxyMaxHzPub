@@ -20,7 +20,7 @@ android {
         minSdkVersion 22
         //noinspection ExpiredTargetSdkVersion
         targetSdkVersion 22
-        versionCode 113
+        versionCode 114
         versionName "7.14.18"
         setProperty("archivesBaseName", "galaxy_max_hz_v${versionName}")
     }
@@ -109,7 +109,7 @@ dependencies {
 
     implementation project(path:':appupdater')
 
-    implementation 'androidx.core:core-splashscreen:1.0.0-alpha02'
+    implementation 'androidx.core:core-splashscreen:1.0.0-beta01'
     /*
     implementation platform('com.google.firebase:firebase-bom:26.3.0')
     implementation 'com.google.firebase:firebase-analytics-ktx'
