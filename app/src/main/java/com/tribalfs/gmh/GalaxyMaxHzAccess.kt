@@ -295,7 +295,9 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     private fun setupNetworkCallback(){
         disableNetworkCallback()
         if (isNetSpeedRunning.get()!!) {
-            mConnectivityManager.registerDefaultNetworkCallback(networkCallback)
+            try {
+                mConnectivityManager.registerDefaultNetworkCallback(networkCallback)
+            }catch(_:Exception){}
         }
     }
 
