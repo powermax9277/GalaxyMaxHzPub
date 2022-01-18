@@ -2,6 +2,7 @@ package com.tribalfs.gmh.helpers
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.res.Configuration
 import android.hardware.display.DisplayManager
 import android.net.Uri
 import android.os.Build
@@ -76,13 +77,18 @@ class UtilsDeviceInfoSt private constructor(val context: Context) {
                 val resArr = resStr.split(",")
                 Size(resArr[0].toInt()/*width*/,resArr[1].toInt()/*height*/)
             } else {
-                return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                /*return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    //render
                     getDisplayResolutionFromMode()
-                } else {
+                } else {*/
                     val metrics = DisplayMetrics()
-                    currentDisplay.getMetrics(metrics)
-                    Size(metrics.widthPixels, metrics.heightPixels)
-                }
+                    currentDisplay.getRealMetrics(metrics)
+                    if (appCtx.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+                        Size(metrics.widthPixels, metrics.heightPixels)
+                    }else{
+                        Size(metrics.heightPixels, metrics.widthPixels)
+                    }
+                //}
             }
     }
 
