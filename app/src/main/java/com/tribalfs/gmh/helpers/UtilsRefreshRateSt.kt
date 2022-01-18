@@ -578,7 +578,6 @@ class UtilsRefreshRateSt private constructor (val context: Context)  {
     }
 
 
-    // @RequiresApi(Build.VERSION_CODES.M)
     @ExperimentalCoroutinesApi
     fun getResoHighestHzForAllMode(resStrLxw: String?): Float{
 
@@ -675,7 +674,7 @@ class UtilsRefreshRateSt private constructor (val context: Context)  {
         return true
     }
 
-    //@RequiresApi(Build.VERSION_CODES.N)
+
     internal fun getResoAndRefRateModeArr(currentRefreshRateMode: String?): Array<String> {
         val reso = mUtilsDeviceInfo.getDisplayResolution()
         val resoCat = UtilsResoName.getName(
