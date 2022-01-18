@@ -2,9 +2,7 @@ package com.tribalfs.gmh.resochanger
 
 import android.content.Context
 import android.content.pm.PackageManager
-import android.os.Build
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import com.tribalfs.gmh.R
 import com.tribalfs.gmh.helpers.*
 import com.tribalfs.gmh.helpers.CacheSettings.displayId
@@ -17,20 +15,17 @@ import com.tribalfs.gmh.profiles.ResolutionDetails
 import kotlinx.coroutines.*
 
 
-@ExperimentalCoroutinesApi
-@RequiresApi(Build.VERSION_CODES.M)
 class ResolutionChangeUtil (context: Context) {
 
     /*companion object : Singleton<ResolutionChangeUtilSt, Context>(::ResolutionChangeUtilSt){
         // private const val TAG = "ResolutionChangeUtil"
-    }
-*/
+    }*/
     private val appCtx = context.applicationContext
     private val mUtilsRefreshRate by lazy { UtilsRefreshRateSt.instance(appCtx) }
 
     @ExperimentalCoroutinesApi
     suspend fun changeRes(resLxw: String?): Int? {
-        return if (hasWriteSecureSetPerm) {
+        return if (hasWriteSecureSetPerm || UtilsPermSt.instance(appCtx).hasWriteSecurePerm()) {
             if (changeResInternal(resLxw)) {
                 PackageManager.PERMISSION_GRANTED
             } else {
@@ -93,7 +88,7 @@ class ResolutionChangeUtil (context: Context) {
         return ("$nextResH,$nextResW,$newDen").split(",")
     }
 
-
+    @ExperimentalCoroutinesApi
     private suspend fun changeResInternal(resLxw: String?): Boolean = withContext(Dispatchers.Default) {
 
         val currentDensity = mUtilsRefreshRate.mUtilsDeviceInfo.getDisplayDensity()

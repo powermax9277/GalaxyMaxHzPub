@@ -15,7 +15,9 @@ import com.tribalfs.gmh.MyApplication.Companion.applicationScope
 import com.tribalfs.gmh.R
 import com.tribalfs.gmh.dialogs.DialogsPermissionsQs
 import com.tribalfs.gmh.helpers.CacheSettings.currentRefreshRateMode
+import com.tribalfs.gmh.helpers.CacheSettings.hasWriteSecureSetPerm
 import com.tribalfs.gmh.helpers.CacheSettings.isMultiResolution
+import com.tribalfs.gmh.helpers.UtilsPermSt
 import com.tribalfs.gmh.helpers.UtilsPermSt.Companion.CHANGE_SETTINGS
 import com.tribalfs.gmh.helpers.UtilsRefreshRateSt
 import com.tribalfs.gmh.helpers.UtilsSettingsIntents.changeSystemSettingsIntent
@@ -37,7 +39,7 @@ class QSTileResSw : TileService() {
     private var prevResCat: String? = null
     private var prevMode: String? = null
     private var ignoreCallback = false
-
+    private val mUtilsPermSt by lazy {UtilsPermSt.instance(applicationContext)}
 
     private val propertyCallback: OnPropertyChangedCallback by lazy {
         object: OnPropertyChangedCallback() {
@@ -116,6 +118,8 @@ class QSTileResSw : TileService() {
                             )
                         )
                     }
+                    else ->{
+                        hasWriteSecureSetPerm = mUtilsPermSt.hasWriteSecurePerm()}
                 }
 
             }
