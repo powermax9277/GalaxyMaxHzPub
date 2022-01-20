@@ -38,10 +38,6 @@ import kotlinx.coroutines.launch
 @RequiresApi(Build.VERSION_CODES.N)
 class QSTileMaxHz : TileService() {
 
-    companion object{
-        //private const val TAG = "QSTileMaxHz"
-    }
-
     private val mUtilsRefreshRate: UtilsRefreshRateSt by lazy { UtilsRefreshRateSt.instance(applicationContext) }
 
     override fun onTileAdded() {

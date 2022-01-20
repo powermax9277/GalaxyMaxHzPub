@@ -16,9 +16,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 @RequiresApi(Build.VERSION_CODES.N)
 @ExperimentalCoroutinesApi
 class QSTileHzMon : TileService() {
-    /*companion object{
-        private const val TAG = "QSTileHzMon"
-    }*/
+
     private val qsHzMonTileComponent by lazy {ComponentName(applicationContext, QSTileHzMon::class.java)}
 
     override fun onStartListening() {

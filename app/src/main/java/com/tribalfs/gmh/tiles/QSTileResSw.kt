@@ -32,10 +32,6 @@ import kotlinx.coroutines.launch
 @RequiresApi(Build.VERSION_CODES.N)
 class QSTileResSw : TileService() {
 
-    companion object{
-        // private const val TAG = "QSTileResSw"
-    }
-
     private val mUtilsPermSt by lazy {UtilsPermSt.instance(applicationContext)}
 
 
@@ -117,7 +113,6 @@ class QSTileResSw : TileService() {
     }
 
     private fun updateTileInner() {
-        // Log.d(TAG, "updateTile() called")
         val reso = UtilsRefreshRateSt.instance(applicationContext).mUtilsDeviceInfo.getDisplayResolution()//  getResoAndRefRateModeArr(currentRefreshRateMode.get())
         val resoCat = UtilsResoName.getName(
             reso.height,
