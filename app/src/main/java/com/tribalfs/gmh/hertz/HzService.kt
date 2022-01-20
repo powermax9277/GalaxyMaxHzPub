@@ -11,8 +11,14 @@ import android.content.IntentFilter
 import android.graphics.*
 import android.graphics.drawable.Icon
 import android.hardware.display.DisplayManager
-import android.os.*
-import android.view.*
+import android.os.Build
+import android.os.Handler
+import android.os.IBinder
+import android.os.Looper
+import android.view.Display
+import android.view.LayoutInflater
+import android.view.View
+import android.view.WindowManager
 import android.widget.RelativeLayout
 import android.widget.RemoteViews
 import android.widget.TextView
@@ -239,7 +245,6 @@ internal class HzService : Service(), CoroutineScope{
 
 
 
-    @SuppressLint("NewApi")
     private fun updateNotif(hzStr: String) = launch(Dispatchers.Main) {
         //Log.d(TAG, "updateNotifContent called")
         if (isHzNotifOn.get()!!) {
@@ -260,14 +265,13 @@ internal class HzService : Service(), CoroutineScope{
     }
 
 
-    @RequiresApi(Build.VERSION_CODES.P)
-    private suspend fun getIndicatorIcon(speedValue: String): Icon? = withContext(Dispatchers.Default) {
+    private fun getIndicatorIcon(speedValue: String): Icon {
         mIconSpeedPaint.textSize = 72f
         mIconSpeedPaint.textSize = min(72 * 96 / mIconSpeedPaint.measureText(speedValue), 72f)
         mIconCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR)
         mIconCanvas.drawText(speedValue, 48f, 50f, mIconSpeedPaint)
         mIconCanvas.drawText("Hz", 48f, 90f, mIconUnitPaint)
-        return@withContext Icon.createWithBitmap(mIconBitmap)
+        return Icon.createWithBitmap(mIconBitmap)
     }
 
 

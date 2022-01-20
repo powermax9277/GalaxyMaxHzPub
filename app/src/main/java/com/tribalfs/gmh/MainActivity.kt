@@ -20,7 +20,6 @@ import android.os.PowerManager.*
 import android.provider.Settings.*
 import android.provider.Settings.Global.DEVELOPMENT_SETTINGS_ENABLED
 import android.text.method.LinkMovementMethod
-import android.util.Log
 import android.util.TypedValue
 import android.view.*
 import android.view.View.MeasureSpec
@@ -675,8 +674,6 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
 
 
                 if (!mUtilsRefreshRate.tryThisRrm(REFRESH_RATE_MODE_ALWAYS, null)){
-                    //TODO
-                    Log.d("TESTEST","chHigh failed")
                     v.isChecked = false
                     when (currentRefreshRateMode.get()){
                         REFRESH_RATE_MODE_SEAMLESS ->{

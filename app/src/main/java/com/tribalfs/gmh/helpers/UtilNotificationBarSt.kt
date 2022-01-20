@@ -78,7 +78,7 @@ internal class UtilNotificationBarSt private constructor (context: Context) {
                 placeQSTile(sysUiValues)
             }
             else ->{
-                false
+                null
             }
 
         }

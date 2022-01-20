@@ -74,6 +74,7 @@ import org.acra.data.StringFormat
 import org.acra.sender.HttpSender
 
 //TODO{reason: Comment out ACRA below}
+@ExperimentalCoroutinesApi
 @AcraCore(reportFormat= StringFormat.JSON)
 @AcraHttpSender(uri = "https://script.google.com/macros/s/AKfycbybr-F6rCLr8fTk0jYvz_ohCOcNLwsSPCNxhYUlX-KtvLE9JT0/exec",
     httpMethod = HttpSender.Method.POST,
@@ -106,7 +107,9 @@ class MyApplication : Application() {
     private lateinit var myBrightnessObserver: MyBrightnessObserver
 
     @RequiresApi(Build.VERSION_CODES.M)
+    @ExperimentalCoroutinesApi
     inner class MyRequiredObservers(h: Handler?) : ContentObserver(h) {
+
         override fun onChange(selfChange: Boolean, uri: Uri?) {
             when (uri) {
                 refreshRateModeUri -> {

@@ -8,7 +8,10 @@ import android.content.IntentFilter
 import android.graphics.*
 import android.graphics.drawable.Icon
 import android.net.TrafficStats
-import android.os.*
+import android.os.Build
+import android.os.Handler
+import android.os.IBinder
+import android.os.Looper
 import android.util.Log
 import android.widget.RemoteViews
 import androidx.annotation.RequiresApi
@@ -26,10 +29,10 @@ import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt.Companion.DOWNLOAD_SPEED
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt.Companion.TOTAL_SPEED
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt.Companion.UPLOAD_SPEED
 import kotlinx.coroutines.*
-import java.lang.Float.min
 import java.lang.String.format
 import java.util.*
 import kotlin.coroutines.CoroutineContext
+import kotlin.math.min
 
 
 
@@ -40,7 +43,7 @@ class NetSpeedService : Service(), CoroutineScope {
         private const val TAG = "NetSpeedService"
         private const val NOTIFICATION_ID_NET_SPEED = 7
         private const val CHANNEL_NAME_NET_SPEED = "Net Speed Indicator"
-        private const val UPDATE_INTERVAL = 900L
+        private const val UPDATE_INTERVAL = 1000L
     }
 
     private val mNotificationContentView: RemoteViews by lazy {RemoteViews(applicationContext.packageName, R.layout.view_indicator_notification) }
@@ -59,7 +62,7 @@ class NetSpeedService : Service(), CoroutineScope {
 
     private val job = SupervisorJob()
     override val coroutineContext: CoroutineContext
-        get() = job + Dispatchers.Default
+        get() = job + Dispatchers.IO
 
 
     private var continueRrUpdate: Boolean = false
@@ -78,8 +81,8 @@ class NetSpeedService : Service(), CoroutineScope {
                 if (usedRxdHBytes > 10 || usedRxdHBytes > 10) {
                     SpeedCalculator.instance(applicationContext).apply {
                         updateNotification(
-                            getSpeed(usedTime,usedTxdHBytes),
-                            getSpeed(usedTime,usedRxdHBytes),
+                            getSpeed(usedTime,usedRxdHBytes)/*down*/,
+                            getSpeed(usedTime,usedTxdHBytes)/*up*/,
                             getSpeed(usedTime,usedRxdHBytes + usedTxdHBytes)
                         )
                     }
@@ -315,8 +318,9 @@ class NetSpeedService : Service(), CoroutineScope {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
-    private suspend fun getIndicatorIcon(speedValue: String, speedUnit: String): Icon? = withContext(Dispatchers.Default){
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun getIndicatorIcon(speedValue: String, speedUnit: String): Icon? {
         mIconSpeedPaint.textSize = 72f
         mIconUnitPaint.textSize = 50f
         mIconSpeedPaint.textSize = min(72*96/mIconSpeedPaint.measureText(speedValue),72f)
@@ -324,7 +328,7 @@ class NetSpeedService : Service(), CoroutineScope {
         mIconCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR)
         mIconCanvas.drawText(speedValue, 48f, 50f, mIconSpeedPaint)
         mIconCanvas.drawText(speedUnit, 48f, 92f, mIconUnitPaint)
-        return@withContext Icon.createWithBitmap(mIconBitmap)
+        return Icon.createWithBitmap(mIconBitmap)
     }
 
 

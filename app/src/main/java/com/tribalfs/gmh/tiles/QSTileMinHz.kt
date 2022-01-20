@@ -74,7 +74,6 @@ class QSTileMinHz : TileService() {
     override fun onClick() {
         super.onClick()
 
-
         applicationScope.launch {
             var idx = minHzListForAdp?.indexOf(lrrPref.get())
             var nexMinHzTemp = 500
