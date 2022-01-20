@@ -64,95 +64,93 @@ class UtilsDeviceInfoSt private constructor(val context: Context) {
 
     internal val currentDisplay: Display
         get() = (appCtx.getSystemService(Context.DISPLAY_SERVICE) as DisplayManager).getDisplay(
-                displayId
-            )
+            displayId
+        )
 
     internal fun isDisplayOn(): Boolean{
-            return currentDisplay.state == Display.STATE_ON
+        return currentDisplay.state == Display.STATE_ON
     }
 
     @Suppress("DEPRECATION")
     fun getDisplayResolution(): Size {
-            val resStr = Settings.Global.getString(mContentResolver, DISPLAY_SIZE_FORCED/*custom resolution*/)
-            return if (currentDisplay.displayId == Display.DEFAULT_DISPLAY && !resStr.isNullOrEmpty()) {
-                val resArr = resStr.split(",")
-                Size(resArr[0].toInt()/*width*/,resArr[1].toInt()/*height*/)
-            } else {
-                /*return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    //render
-                    getDisplayResolutionFromMode()
-                } else {*/
-                    val metrics = DisplayMetrics()
-                    currentDisplay.getRealMetrics(metrics)
-                    if (appCtx.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
-                        Size(metrics.widthPixels, metrics.heightPixels)
-                    }else{
-                        Size(metrics.heightPixels, metrics.widthPixels)
-                    }
-                //}
+        val resStr = Settings.Global.getString(mContentResolver, DISPLAY_SIZE_FORCED/*custom resolution*/)
+        return if (currentDisplay.displayId == Display.DEFAULT_DISPLAY && !resStr.isNullOrEmpty()) {
+            val resArr = resStr.split(",")
+            Size(resArr[0].toInt()/*width*/,resArr[1].toInt()/*height*/)
+        } else {
+            val metrics = DisplayMetrics()
+            currentDisplay.getRealMetrics(metrics)
+            if (appCtx.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+                Size(metrics.widthPixels, metrics.heightPixels)
+            }else{
+                Size(metrics.heightPixels, metrics.widthPixels)
             }
+
+        }
     }
 
 
     @RequiresApi(Build.VERSION_CODES.M)
     private fun getDisplayResolutionFromMode(): Size{
-            val dispMode = currentDisplay.mode
-            return Size(dispMode.physicalWidth, dispMode.physicalHeight)
+        val dispMode = currentDisplay.mode
+        return Size(dispMode.physicalWidth, dispMode.physicalHeight)
     }
 
 
     internal fun getDisplayDensity(): Int {
-            val denStr = try {
-                Settings.Secure.getString(
-                    mContentResolver,
-                    "display_density_forced"/*custom density*/
-                )
-            } catch (_: Exception) {
-                null
-            }
-            return if (!denStr.isNullOrEmpty()) {
-                denStr.toInt()
-            } else {
-                val metrics: DisplayMetrics = appCtx.resources.displayMetrics
-                (metrics.density * 160f).toInt()
-                /*resources.configuration.densityDpi*/
-            }
+        val denStr = try {
+            Settings.Secure.getString(
+                mContentResolver,
+                "display_density_forced"/*custom density*/
+            )
+        } catch (_: Exception) {
+            null
+        }
+        return if (!denStr.isNullOrEmpty()) {
+            denStr.toInt()
+        } else {
+            val metrics: DisplayMetrics = appCtx.resources.displayMetrics
+            (metrics.density * 160f).toInt()
+            /*resources.configuration.densityDpi*/
+        }
     }
 
 
 
     internal fun getDisplayResoStr(separator: String?): String {
-            val res = getDisplayResolution()
-            val sep = separator ?: ","
-            return "${res.height}$sep${res.width}"
+        val res = getDisplayResolution()
+        val sep = separator ?: ","
+        return "${res.height}$sep${res.width}"
     }
 
 
     @RequiresApi(Build.VERSION_CODES.M)
     internal fun getDisplayResFromModeStr(separator: String?): String {
-            val res = getDisplayResolutionFromMode()
-            val sep = separator ?: ","
-            return "${res.height}$sep${res.width}"
+        val res = getDisplayResolutionFromMode()
+        val sep = separator ?: ","
+        return "${res.height}$sep${res.width}"
     }
 
 
     fun getDisplayModesSet(): Map<String, List<Float>> {
-            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                currentDisplay.supportedModes.let {modes ->
-                    modes.asSequence()
-                        .distinct()
-                        .groupBy(
-                            {y -> y.physicalHeight.toString() + "x" + y.physicalWidth.toString() },
-                            {x -> round(x.refreshRate * 100) / 100 })
-                        .mapValues { (_, values) -> values }
-                }
-            } else {
-                val metrics = DisplayMetrics()
-                currentDisplay.getMetrics(metrics)
-                val resoKey = "${metrics.heightPixels}x${metrics.widthPixels}"
-                val map = mutableMapOf<String, List<Float>>()
-                map[resoKey] = currentDisplay.supportedRefreshRates.toList()
-                map
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            currentDisplay.supportedModes.let {modes ->
+                modes.asSequence()
+                    .distinct()
+                    .groupBy(
+                        {y -> y.physicalHeight.toString() + "x" + y.physicalWidth.toString() },
+                        {x -> round(x.refreshRate * 100) / 100 })
+                    .mapValues { (_, values) -> values }
+            }
+        } else {
+            val metrics = DisplayMetrics()
+            @Suppress("DEPRECATION")
+            currentDisplay.getMetrics(metrics)
+            val resoKey = "${metrics.heightPixels}x${metrics.widthPixels}"
+            val map = mutableMapOf<String, List<Float>>()
+            @Suppress("DEPRECATION")
+            map[resoKey] = currentDisplay.supportedRefreshRates.toList()
+            map
         }
     }
 
@@ -169,26 +167,27 @@ class UtilsDeviceInfoSt private constructor(val context: Context) {
 
     // @RequiresApi(Build.VERSION_CODES.M)
     internal fun getMaxHzForCurrentReso(resStrLcw: String?): Float {
-            var refreshRates: List<Float>?
+        var refreshRates: List<Float>?
 
-            refreshRates = if (resStrLcw != null) {
-                getDisplayModesSet()[resStrLcw]
-            } else {
-                getDisplayModesSet()[getDisplayResoStr("x")]
-            }
+        refreshRates = if (resStrLcw != null) {
+            getDisplayModesSet()[resStrLcw]
+        } else {
+            getDisplayModesSet()[getDisplayResoStr("x")]
+        }
 
-            if (refreshRates != null) {
-                return refreshRates.maxOrNull()!!
-            }
+        if (refreshRates != null) {
+            return refreshRates.maxOrNull()!!
+        }
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                refreshRates = getDisplayModesSet()[getDisplayResFromModeStr("x")]
-            }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            refreshRates = getDisplayModesSet()[getDisplayResFromModeStr("x")]
+        }
 
-            return if (refreshRates != null) {
-                refreshRates.maxOrNull()!!
-            } else {
-                currentDisplay.supportedRefreshRates.maxOrNull()!!
+        return if (refreshRates != null) {
+            refreshRates.maxOrNull()!!
+        } else {
+            @Suppress("DEPRECATION")
+            currentDisplay.supportedRefreshRates.maxOrNull()!!
         }
     }
 
@@ -206,22 +205,6 @@ class UtilsDeviceInfoSt private constructor(val context: Context) {
         }
         set(on) { try{Settings.Global.putInt(mContentResolver, POWER_SAVING_MODE, if (on) 1 else 0) }catch(_:Exception){}}
 
-
-/*    private fun getMaxBrightness(): Int {
-        val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
-        val fields = powerManager.javaClass.declaredFields
-        for (field in fields) {
-            if (field.name == "BRIGHTNESS_ON") {
-                field.isAccessible = true
-                return try {
-                    field[powerManager] as Int
-                } catch (e: IllegalAccessException) {
-                    255
-                }
-            }
-        }
-        return 255*//*Default Value*//*
-    }*/
 
 
     val oneUiVersion: Double?
