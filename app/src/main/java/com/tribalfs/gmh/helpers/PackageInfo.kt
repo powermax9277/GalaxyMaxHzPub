@@ -9,8 +9,7 @@ import java.security.MessageDigest
 
 
 object PackageInfo {
-    @SuppressLint("PackageManagerGetSignatures", "DEPRECATION")
-    @Suppress("DEPRECATION")
+
     fun getSignatureString(ctx: Context): String? {
         return try {
             val signatures =
@@ -20,11 +19,15 @@ object PackageInfo {
                     PackageManager.GET_SIGNING_CERTIFICATES
                 ).signingInfo.apkContentsSigners
             } else {
+                @Suppress("DEPRECATION")
+                @SuppressLint("PackageManagerGetSignatures")
                 val packageInfo = ctx.packageManager.getPackageInfo(ctx.packageName, PackageManager.GET_SIGNATURES)
+                    @Suppress("DEPRECATION")
                 if (packageInfo?.signatures.isNullOrEmpty() || packageInfo.signatures[0] == null
                 ) {
                     null
                 } else {
+                    @Suppress("DEPRECATION")
                     packageInfo.signatures
                 }
             }

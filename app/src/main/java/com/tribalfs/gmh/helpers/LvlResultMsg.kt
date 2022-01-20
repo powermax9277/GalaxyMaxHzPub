@@ -14,8 +14,6 @@ internal class LvlResultMsg(
     private val mUtilsPrefsAct: UtilsPrefsAct,
     private val modelVariant: String) {
 
-    //val mUtilsPrefsAct by lazy { UtilsPrefsAct(appCompatActivity) }
-
     
    @ExperimentalCoroutinesApi
    fun showMsg(lvlSbMsgCallback: LvlSbMsgCallback, licType: Int?){

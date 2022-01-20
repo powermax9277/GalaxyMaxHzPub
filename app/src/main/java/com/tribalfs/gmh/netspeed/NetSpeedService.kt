@@ -190,6 +190,7 @@ class NetSpeedService : Service(), CoroutineScope {
         notificationBuilderInstance = (if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             Notification.Builder(applicationContext, CHANNEL_ID_NET_SPEED)
         }else{
+            @Suppress("DEPRECATION")
             Notification.Builder(applicationContext)
         })
         notificationBuilderInstance.apply {

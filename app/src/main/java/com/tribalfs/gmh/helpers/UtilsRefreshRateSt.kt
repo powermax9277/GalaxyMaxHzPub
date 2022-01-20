@@ -563,6 +563,7 @@ class UtilsRefreshRateSt private constructor (val context: Context)  {
                     "x"
                 )]
             } else {
+                @Suppress("DEPRECATION")
                 mUtilsDeviceInfo.currentDisplay.supportedRefreshRates.toList()
             }
         }

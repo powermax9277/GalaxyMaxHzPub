@@ -19,9 +19,7 @@ import kotlinx.coroutines.*
 
 class ResolutionChangeUtil (context: Context) {
 
-    /*companion object : Singleton<ResolutionChangeUtilSt, Context>(::ResolutionChangeUtilSt){
-        // private const val TAG = "ResolutionChangeUtil"
-    }*/
+
     private val appCtx = context.applicationContext
     internal val mUtilsRefreshRate by lazy { UtilsRefreshRateSt.instance(appCtx) }
 

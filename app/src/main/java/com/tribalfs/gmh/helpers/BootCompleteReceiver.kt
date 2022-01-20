@@ -9,12 +9,10 @@ import com.tribalfs.gmh.hertz.HzServiceHelperStn
 import com.tribalfs.gmh.netspeed.NetSpeedServiceHelperStn
 import com.tribalfs.gmh.profiles.ProfilesObj.refreshRateModeMap
 import com.tribalfs.gmh.resochanger.ResolutionChangeUtil
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 
+@ExperimentalCoroutinesApi
 class BootCompleteReceiver : BroadcastReceiver() {
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onReceive(context: Context, intent: Intent) {

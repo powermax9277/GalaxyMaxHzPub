@@ -24,7 +24,6 @@ class UtilsPermSt(context: Context){
 
     companion object: SingletonMaker<UtilsPermSt, Context>(::UtilsPermSt){
         internal const val CHANGE_SETTINGS = -11
-        internal const val REQUEST_CODE_APPEAR_ON_TOP_PERM = 5
     }
 
     private val appCtx: Context = context.applicationContext

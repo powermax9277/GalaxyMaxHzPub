@@ -37,15 +37,12 @@ object InternalProfiles {
     }
 
     
-    //@RequiresApi(Build.VERSION_CODES.M)
-    suspend fun loadToProfilesObj(currentModeOnly: Boolean, overwriteExisting: Boolean, mUtilsRefreshRateSt: UtilsRefreshRateSt): JSONObject = withContext(Dispatchers.IO) {
 
-        // val mUtilsDeviceInfo = UtilsDeviceInfoSt.instance(context.applicationContext)
+    suspend fun loadToProfilesObj(currentModeOnly: Boolean, overwriteExisting: Boolean, mUtilsRefreshRateSt: UtilsRefreshRateSt): JSONObject = withContext(Dispatchers.IO) {
 
         if (!currentModeOnly && hasWriteSecureSetPerm
             //Ensure that device is not resolution with no high refresh rate support
             /*&& (!isSamsung || mUtilsDeviceInfo.samRefreshRateMode != REFRESH_RATE_MODE_STANDARD)*/){
-
 
             val originalRefreshRateMode = mUtilsRefreshRateSt.samRefreshRateMode
             delay(100)
@@ -53,7 +50,6 @@ object InternalProfiles {
             //loadComplete = withContext(Dispatchers.IO) {
             var modeAddedCnt = 0
             try {
-                //UtilsRefreshRateSt.instance(mUtilsDeviceInfo.appCtx).clearPeakAndMinRefreshRate()
                 refreshRateModes.forEach { rrm ->
                     val key = "$displayId-$rrm"
                     if (overwriteExisting || !isModeProfilesAdded(key, mUtilsRefreshRateSt.mContentResolver)) {
@@ -69,8 +65,7 @@ object InternalProfiles {
                     delay(200)
                 }
             } catch (_: Exception) { }
-            // modeAddedCnt == refreshRateModes.size
-            // }
+
 
             //restore user refresh rate mode
             if (originalRefreshRateMode != endingRefreshRateMode) {
@@ -142,10 +137,7 @@ object InternalProfiles {
                     mode.value.minOrNull()!!,//lowest refresh rate
                     mode.value.maxOrNull()!!//highest refresh rate
                 )
-                /*Log.d(
-                    "TESTTEST",
-                    "RRM:${deviceInfoSt.getSamRefreshRateMode()} Adding ${mode.key}: ${resMap[mode.key]?.refreshRates}"
-                )*/
+
                 resMapList.add(resMap)
             }
             refreshRateModeMap[key ?: getKey(mUtilsRefreshRateSt.mContentResolver)] = resMapList

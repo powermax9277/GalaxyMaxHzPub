@@ -19,9 +19,7 @@ internal class PsmChangeHandler(context: Context) {
     }
 
     private val appCtx: Context = context.applicationContext
-    //private val mUtilsPrefsGmh by lazy {UtilsPrefsGmhSt(appCtx)}
     private val mUtilsRefreshRate by lazy {UtilsRefreshRateSt.instance(appCtx)}
-    //  private val mContentResolver = appCtx.contentResolver
 
     @Synchronized
     @RequiresApi(Build.VERSION_CODES.M)
