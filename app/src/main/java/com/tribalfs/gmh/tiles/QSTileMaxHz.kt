@@ -31,7 +31,6 @@ import com.tribalfs.gmh.helpers.UtilsSettingsIntents.displaySettingsIntent
 import com.tribalfs.gmh.helpers.UtilsSettingsIntents.motionSmoothnessSettingsIntent
 import com.tribalfs.gmh.helpers.UtilsSettingsIntents.powerSavingModeSettingsIntent
 import com.tribalfs.gmh.profiles.ProfilesObj.loadComplete
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 

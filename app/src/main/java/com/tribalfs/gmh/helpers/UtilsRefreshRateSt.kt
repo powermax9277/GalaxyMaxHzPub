@@ -97,6 +97,7 @@ class UtilsRefreshRateSt private constructor (val context: Context)  {
         }
 
 
+    @ExperimentalCoroutinesApi
     suspend fun initProfiles(): Boolean {
         //Source 1: backend
         val isLoadedFromBackEnd = withContext(Dispatchers.IO) { loadProfilesFromBackEnd() }
@@ -125,6 +126,7 @@ class UtilsRefreshRateSt private constructor (val context: Context)  {
     }
 
 
+    @ExperimentalCoroutinesApi
     @Synchronized
     private fun updateCacheSettings(){
         supportedHzIntAllMod = getSupportedHzIntAllModUpd()
@@ -137,6 +139,7 @@ class UtilsRefreshRateSt private constructor (val context: Context)  {
         updateModeBasedVariables()
     }
 
+    @ExperimentalCoroutinesApi
     @Synchronized
     fun updateModeBasedVariables(){
         supportedHzIntCurMod = getSupportedHzIntCurModUpd()
@@ -157,17 +160,16 @@ class UtilsRefreshRateSt private constructor (val context: Context)  {
                     it
                 }
 
-            requestListeningHzTiles()
+            requestListeningAllTiles()
         }
     }
 
     @ExperimentalCoroutinesApi
     internal fun requestListeningAllTiles(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            TileService.requestListeningState(appCtx, qsResoTileComponent)
             TileService.requestListeningState(appCtx, qsMinHzTileComponent)
             TileService.requestListeningState(appCtx, qsMaxHzTileComponent)
-
+            TileService.requestListeningState(appCtx, qsResoTileComponent)
         }
     }
 
@@ -178,6 +180,7 @@ class UtilsRefreshRateSt private constructor (val context: Context)  {
         }
     }
 
+    @ExperimentalCoroutinesApi
     private suspend fun loadProfilesFromBackEnd(): Boolean{
 
         if (mUtilsPrefsGmh.gmhRefetchProfile) {//Forced or Scheduled Refetch
@@ -211,6 +214,7 @@ class UtilsRefreshRateSt private constructor (val context: Context)  {
     }
 
 
+    @ExperimentalCoroutinesApi
     private fun loadFromPredefinedProfiles(): Boolean{
         // Log.d(TAG, "isLocalProfileSaved: called")
         val isLocalProfileSaved = (PredefinedProfiles.get(mUtilsDeviceInfo.deviceModel))
