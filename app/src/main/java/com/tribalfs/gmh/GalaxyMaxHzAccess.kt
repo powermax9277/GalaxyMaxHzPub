@@ -87,20 +87,20 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     private var cameraOpen: Boolean = false
 
 
-    @Suppress ("DECRECATION")
     private val paramsAdaptive by lazy {
-            WindowManager.LayoutParams(
-                0, 0, 0, 0,
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
-                }else{
-                    WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY
-                     },
-                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-                        or WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
-                        or WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
-                PixelFormat.TRANSLUCENT
-            )
+        WindowManager.LayoutParams(
+            0, 0, 0, 0,
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
+            }else{
+                @Suppress("DEPRECATION")
+                WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY
+            },
+            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                    or WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+                    or WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
+            PixelFormat.TRANSLUCENT
+        )
 
     }
 
@@ -340,9 +340,9 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     // @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate() {
         setupScreenStatusReceiver()
-       /* if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            setupNetworkCallback()
-        }*/
+        /* if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+             setupNetworkCallback()
+         }*/
     }
 
 
@@ -376,15 +376,13 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         this.serviceInfo.apply {
             notificationTimeout = adaptiveAccessTimeout
 
-            /*Set the recommended time that interactive controls
-            need to remain on the screen to support the user.*/
-
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                /*Set the recommended time that interactive controls
+                need to remain on the screen to support the user.*/
                 interactiveUiTimeoutMillis = 0
                 nonInteractiveUiTimeoutMillis = 0
             }
         }
-        // restartOtherServices()
     }
 
     //if triggered by tasker

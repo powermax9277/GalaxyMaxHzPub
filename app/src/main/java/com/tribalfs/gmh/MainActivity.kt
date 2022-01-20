@@ -1128,7 +1128,6 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
     }
 
 
-    // @SuppressLint("InlinedApi")
     private fun setupBroadcastReceiver(){
         IntentFilter().let{
             it.addAction(ACTION_CHANGED_RES)

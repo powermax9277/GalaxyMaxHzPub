@@ -52,9 +52,6 @@
         <variable
             name="clickListener"
             type="com.tribalfs.gmh.MainActivity"/>
-<!--        <variable
-            name="clickListener"
-            type="com.tribalfs.gmh.callbacks.MyClickHandler"/>-->
         <import type="android.view.View"/>
     </data>
     <androidx.coordinatorlayout.widget.CoordinatorLayout
