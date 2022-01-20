@@ -1,13 +1,17 @@
 package com.tribalfs.gmh.hertz
 
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.os.Build
+import android.service.quicksettings.TileService
 import com.tribalfs.gmh.helpers.CacheSettings.hzStatus
 import com.tribalfs.gmh.helpers.CacheSettings.isHzNotifOn
 import com.tribalfs.gmh.helpers.CacheSettings.isScreenOn
 import com.tribalfs.gmh.helpers.SingletonMaker
 import com.tribalfs.gmh.hertz.HzService.Companion.DESTROYED
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt
+import com.tribalfs.gmh.tiles.QSTileHzMon
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 class HzServiceHelperStn private constructor(context: Context) {
@@ -18,6 +22,8 @@ class HzServiceHelperStn private constructor(context: Context) {
 
     private val appCtx = context.applicationContext
     private val mHzSharePref by lazy {UtilsPrefsGmhSt(appCtx)}
+    @ExperimentalCoroutinesApi
+    private val qsHzMonTileComponent = ComponentName(appCtx, QSTileHzMon::class.java)
 
     @ExperimentalCoroutinesApi
     fun updateHzSize(size: Int?) {
@@ -48,7 +54,6 @@ class HzServiceHelperStn private constructor(context: Context) {
 
 
     @ExperimentalCoroutinesApi
-   // @RequiresApi(Build.VERSION_CODES.M)
     fun startHertz(isSwOn: Boolean?, showOverlayHz: Boolean?, showNotifHz: Boolean?) {
         //Log.d(TAG, "HzServiceHelper/startHertz: showHzFpsOverlay() called")
         isSwOn?.let{mHzSharePref.gmhPrefHzIsOn = it}
@@ -64,17 +69,22 @@ class HzServiceHelperStn private constructor(context: Context) {
         }else{
             stopHertz()
         }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            TileService.requestListeningState(appCtx, qsHzMonTileComponent)
+        }
     }
 
-    @ExperimentalCoroutinesApi
-    fun stopHertz(){
+
+    private fun stopHertz(){
         //Log.d(TAG, "HzServiceHelper/stopHertz")
         try {
             appCtx.stopService(Intent(appCtx, HzService::class.java))
         }catch(_:Exception){}
+
     }
 
-    @ExperimentalCoroutinesApi
+
     fun isHzStop(): Boolean {
         return hzStatus.get() == DESTROYED
     }

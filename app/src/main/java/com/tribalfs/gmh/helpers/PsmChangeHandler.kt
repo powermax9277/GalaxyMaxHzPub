@@ -1,16 +1,15 @@
 package com.tribalfs.gmh.helpers
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import androidx.annotation.RequiresApi
 import com.tribalfs.gmh.PipActivity
 import com.tribalfs.gmh.helpers.CacheSettings.isPowerSaveModeOn
 import com.tribalfs.gmh.helpers.CacheSettings.isPremium
 import com.tribalfs.gmh.helpers.CacheSettings.keepModeOnPowerSaving
 import com.tribalfs.gmh.helpers.CacheSettings.prrActive
 import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.REFRESH_RATE_MODE_STANDARD
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 internal class PsmChangeHandler(context: Context) {
 
@@ -24,9 +23,8 @@ internal class PsmChangeHandler(context: Context) {
     private val mUtilsRefreshRate by lazy {UtilsRefreshRateSt.instance(appCtx)}
     //  private val mContentResolver = appCtx.contentResolver
 
-
-    @ExperimentalCoroutinesApi
-    @SuppressLint("NewApi")
+    @Synchronized
+    @RequiresApi(Build.VERSION_CODES.M)
     fun handle() {
         // Log.d(TAG, "execute called $isPowerSaveModeOn")
         if (isPowerSaveModeOn.get() == true) {

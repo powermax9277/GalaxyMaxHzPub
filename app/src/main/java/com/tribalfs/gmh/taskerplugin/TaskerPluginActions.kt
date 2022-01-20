@@ -1,13 +1,15 @@
 package com.tribalfs.gmh.taskerplugin
 
 import android.accessibilityservice.AccessibilityService.*
-import android.annotation.SuppressLint
 import android.app.KeyguardManager
 import android.content.Context
 import android.content.Intent
 import android.hardware.display.DisplayManager
+import android.os.Build
+import android.util.Size
 import android.view.Display.STATE_ON
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import com.joaomgcd.taskerpluginlibrary.action.TaskerPluginRunnerActionNoOutputOrInput
 import com.joaomgcd.taskerpluginlibrary.config.TaskerPluginConfig
 import com.joaomgcd.taskerpluginlibrary.config.TaskerPluginConfigHelperNoOutputOrInput
@@ -134,7 +136,7 @@ private val infosForTasker = InfosFromMainApp().apply {
         if (minHzListForAdp?.size ?: 0 > 1) {
             add(
                 InfoFromMainApp(
-                    "Minimum Refresh Rate for Adaptive Mod",
+                    "Minimum Refresh Rate for Adaptive",
                     min_hertz,
                     "Valid value: Any of following: ${minHzListForAdp?.joinToStringWithOr(", ")}."
                 )
@@ -168,7 +170,7 @@ private val infosForTasker = InfosFromMainApp().apply {
 
 @ExperimentalCoroutinesApi
 class DynamicInputRunner : TaskerPluginRunnerActionNoOutputOrInput() {
-    @SuppressLint("NewApi")
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun run(context: Context, input: TaskerInput<Unit>): TaskerPluginResult<Unit> {
         val appCtx = context.applicationContext
         val mUtilsRefreshRate by lazy { UtilsRefreshRateSt.instance(appCtx) }
@@ -187,7 +189,9 @@ class DynamicInputRunner : TaskerPluginRunnerActionNoOutputOrInput() {
                             try {
                                 appCtx.sendBroadcast(Intent(MainActivity.ACTION_CHANGED_RES))
                                 delay(550)
-                                ResolutionChangeUtil(appCtx).changeRes(info.value as String)
+                                val resStrSplit = (info.value as String).split("x")
+                                val reso = Size(resStrSplit[1].toInt(),resStrSplit[0].toInt())
+                                ResolutionChangeUtil(appCtx).changeRes(reso)
                             } catch (_: Exception) {
                             }
                         }
@@ -365,6 +369,7 @@ class DynamicInputRunner : TaskerPluginRunnerActionNoOutputOrInput() {
                                             return@launch
                                         }
                                     }
+                                    if (minHz >= prrActive.get()!!) return@launch
 
                                     mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefMinHzAdapt = minHz
 

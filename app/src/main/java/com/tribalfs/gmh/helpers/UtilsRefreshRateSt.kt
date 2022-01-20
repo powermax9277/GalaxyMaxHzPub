@@ -1,10 +1,11 @@
 package com.tribalfs.gmh.helpers
 
-import android.annotation.SuppressLint
+import android.content.ComponentName
 import android.content.Context
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
+import android.service.quicksettings.TileService
 import android.view.Display
 import android.widget.Toast
 import androidx.annotation.Keep
@@ -26,12 +27,14 @@ import com.tribalfs.gmh.helpers.CacheSettings.isPowerSaveModeOn
 import com.tribalfs.gmh.helpers.CacheSettings.isPremium
 import com.tribalfs.gmh.helpers.CacheSettings.isXiaomi
 import com.tribalfs.gmh.helpers.CacheSettings.keepModeOnPowerSaving
+import com.tribalfs.gmh.helpers.CacheSettings.lowestHzCurMode
 import com.tribalfs.gmh.helpers.CacheSettings.lowestHzForAllMode
 import com.tribalfs.gmh.helpers.CacheSettings.lrrPref
 import com.tribalfs.gmh.helpers.CacheSettings.minHzListForAdp
 import com.tribalfs.gmh.helpers.CacheSettings.modesWithLowestHz
 import com.tribalfs.gmh.helpers.CacheSettings.preventHigh
 import com.tribalfs.gmh.helpers.CacheSettings.prrActive
+import com.tribalfs.gmh.helpers.CacheSettings.screenOffRefreshRateMode
 import com.tribalfs.gmh.helpers.CacheSettings.supportedHzIntAllMod
 import com.tribalfs.gmh.helpers.CacheSettings.supportedHzIntCurMod
 import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.MIN_REFRESH_RATE
@@ -59,6 +62,9 @@ import com.tribalfs.gmh.profiles.ModelNumbers.ZFp3
 import com.tribalfs.gmh.profiles.ModelNumbers.adaptiveModelsLocal
 import com.tribalfs.gmh.profiles.ModelNumbers.fordableWithHrrExternal
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt
+import com.tribalfs.gmh.tiles.QSTileMaxHz
+import com.tribalfs.gmh.tiles.QSTileMinHz
+import com.tribalfs.gmh.tiles.QSTileResSw
 import kotlinx.coroutines.*
 import org.json.JSONArray
 import org.json.JSONObject
@@ -75,6 +81,11 @@ class UtilsRefreshRateSt private constructor (val context: Context)  {
     internal val mUtilsPrefsGmh by lazy {UtilsPrefsGmhSt.instance(appCtx)}
     internal val mUtilsDeviceInfo by lazy { UtilsDeviceInfoSt.instance(appCtx)}
     internal val mSyncer by lazy { Syncer(appCtx) }
+    private val qsMinHzTileComponent = ComponentName(appCtx, QSTileMinHz::class.java)
+    private val qsMaxHzTileComponent = ComponentName(appCtx, QSTileMaxHz::class.java)
+    @ExperimentalCoroutinesApi
+    private val qsResoTileComponent = ComponentName(appCtx, QSTileResSw::class.java)
+
     //var adaptiveHzListLimiter = highestHzForAllMode //STANDARD_REFRESH_RATE_HZ
 
     private val _listedHighestHz: Float?
@@ -86,7 +97,6 @@ class UtilsRefreshRateSt private constructor (val context: Context)  {
         }
 
 
-    @ExperimentalCoroutinesApi
     suspend fun initProfiles(): Boolean {
         //Source 1: backend
         val isLoadedFromBackEnd = withContext(Dispatchers.IO) { loadProfilesFromBackEnd() }
@@ -135,9 +145,9 @@ class UtilsRefreshRateSt private constructor (val context: Context)  {
                 setRefreshRateMode(REFRESH_RATE_MODE_SEAMLESS)
                 return
             }
-            CacheSettings.lowestHzCurMode = getForceLowestHzUpd(it)
+            lowestHzCurMode = getForceLowestHzUpd(it)
             currentRefreshRateMode.set(it) //should be after updating the variables above
-            CacheSettings.screenOffRefreshRateMode =
+            screenOffRefreshRateMode =
                 if (mUtilsPrefsGmh.gmhPrefForceLowestSoIsOn
                     && modesWithLowestHz?.size?:0 > 0
                     && !modesWithLowestHz!!.contains(it)
@@ -146,12 +156,28 @@ class UtilsRefreshRateSt private constructor (val context: Context)  {
                 } else {
                     it
                 }
+
+            requestListeningHzTiles()
         }
     }
 
-
-
     @ExperimentalCoroutinesApi
+    internal fun requestListeningAllTiles(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            TileService.requestListeningState(appCtx, qsResoTileComponent)
+            TileService.requestListeningState(appCtx, qsMinHzTileComponent)
+            TileService.requestListeningState(appCtx, qsMaxHzTileComponent)
+
+        }
+    }
+
+    private fun requestListeningHzTiles(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            TileService.requestListeningState(appCtx, qsMinHzTileComponent)
+            TileService.requestListeningState(appCtx, qsMaxHzTileComponent)
+        }
+    }
+
     private suspend fun loadProfilesFromBackEnd(): Boolean{
 
         if (mUtilsPrefsGmh.gmhRefetchProfile) {//Forced or Scheduled Refetch
@@ -204,8 +230,6 @@ class UtilsRefreshRateSt private constructor (val context: Context)  {
     }
 
 
-
-    @ExperimentalCoroutinesApi
     private suspend fun readAndLoadProfileFromPhone(): Boolean = withContext(Dispatchers.IO) {
 
 
@@ -339,7 +363,7 @@ class UtilsRefreshRateSt private constructor (val context: Context)  {
 
     @Synchronized
     fun getThisRrmAndResoHighestHz(resStrLxw: String?, rrm: String?): Float {
-        val curResStrLxw = resStrLxw ?: mUtilsDeviceInfo.getDisplayResStr("x")
+        val curResStrLxw = resStrLxw ?: mUtilsDeviceInfo.getDisplayResoStr("x")
         val key = if (rrm != null) "${displayId}-$rrm" else getKey()
         if (ProfilesObj.refreshRateModeMap[key] != null) {
             ProfilesObj.refreshRateModeMap[key]?.forEach {
@@ -357,7 +381,7 @@ class UtilsRefreshRateSt private constructor (val context: Context)  {
     }
 
 
-    @ExperimentalCoroutinesApi
+    
     suspend fun getDisplayModesStrGmh(): String {
 
         if (!ProfilesObj.loadComplete) {
@@ -368,7 +392,7 @@ class UtilsRefreshRateSt private constructor (val context: Context)  {
         }
 
         var modes = ""
-        val curResStrLxw = mUtilsDeviceInfo.getDisplayResStr("x")
+        val curResStrLxw = mUtilsDeviceInfo.getDisplayResoStr("x")
         ProfilesObj.refreshRateModeMap[getKey()]?.forEach { map ->
             modes += if (map.containsKey(curResStrLxw)) {
                 ("[ ${map[curResStrLxw]!!.resName}(${map[curResStrLxw]!!.resStrLxw}) " +
@@ -415,7 +439,7 @@ class UtilsRefreshRateSt private constructor (val context: Context)  {
 
 
     fun getCurrentResWithName(): String{
-        val res = mUtilsDeviceInfo.getDisplayResStr("x").split("x")//getDisplayResolution()
+        val res = mUtilsDeviceInfo.getDisplayResoStr("x").split("x")//getDisplayResolution()
         return "${UtilsResoName.getName(res[0].toInt(), res[1].toInt())}(${res[0]}x${res[1]})"
     }
 
@@ -446,9 +470,9 @@ class UtilsRefreshRateSt private constructor (val context: Context)  {
     }
 
 
-
+    @Synchronized
     private fun getMinHzListForAdpUpd(): List<Int> {
-        val curResStr = mUtilsDeviceInfo.getDisplayResStr("x")
+        val curResStr = mUtilsDeviceInfo.getDisplayResoStr("x")
         val arrStr: MutableList<Int> = arrayListOf()
         ProfilesObj.refreshRateModeMap["$displayId-$REFRESH_RATE_MODE_SEAMLESS"]?.forEach {
             if (it.containsKey(curResStr)) {
@@ -492,7 +516,7 @@ class UtilsRefreshRateSt private constructor (val context: Context)  {
 
 
     private fun getSupportedHzIntCurModUpd(): List<Int>{
-        val curResStr = mUtilsDeviceInfo.getDisplayResStr("x")
+        val curResStr = mUtilsDeviceInfo.getDisplayResoStr("x")
         val arrayHz: MutableList<Int> = arrayListOf()
         ProfilesObj.refreshRateModeMap[getKey()]?.forEach {
             if (it.containsKey(curResStr)) {
@@ -531,7 +555,7 @@ class UtilsRefreshRateSt private constructor (val context: Context)  {
     private fun getRefreshRatesFromActiveSettings(): List<Float>?{
 
         var refreshRatesfromDevice =
-            mUtilsDeviceInfo.getDisplayModesSet()[mUtilsDeviceInfo.getDisplayResStr("x")]
+            mUtilsDeviceInfo.getDisplayModesSet()[mUtilsDeviceInfo.getDisplayResoStr("x")]
 
         if (refreshRatesfromDevice == null) {
             refreshRatesfromDevice = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -578,7 +602,7 @@ class UtilsRefreshRateSt private constructor (val context: Context)  {
     }
 
 
-    @ExperimentalCoroutinesApi
+    
     fun getResoHighestHzForAllMode(resStrLxw: String?): Float{
 
         var highestResult = _listedHighestHz
@@ -591,7 +615,7 @@ class UtilsRefreshRateSt private constructor (val context: Context)  {
             }
         }
 
-        val curResStr = resStrLxw ?: mUtilsDeviceInfo.getDisplayResStr("x")
+        val curResStr = resStrLxw ?: mUtilsDeviceInfo.getDisplayResoStr("x")
 
         // if (mUtilsDeviceInfo.deviceIsSamsung) {
         refreshRateModes.forEach { rrm ->
@@ -617,7 +641,7 @@ class UtilsRefreshRateSt private constructor (val context: Context)  {
         return highestResult!!
     }
 
-
+    //Note: Don't add requestListening here - always called by makeAdaptive
     fun setPeakRefreshRate(refreshRate: Int){
         try {
             Settings.System.putString(mContentResolver, PEAK_REFRESH_RATE, refreshRate.toString())
@@ -671,11 +695,12 @@ class UtilsRefreshRateSt private constructor (val context: Context)  {
         }else{
             clearPeakAndMinRefreshRate()
         }
+        requestListeningHzTiles()
         return true
     }
 
 
-    internal fun getResoAndRefRateModeArr(currentRefreshRateMode: String?): Array<String> {
+/*    internal fun getResoAndRefRateModeArr(currentRefreshRateMode: String?): ResoNameMode{
         val reso = mUtilsDeviceInfo.getDisplayResolution()
         val resoCat = UtilsResoName.getName(
             reso.height,
@@ -688,8 +713,8 @@ class UtilsRefreshRateSt private constructor (val context: Context)  {
             REFRESH_RATE_MODE_ALWAYS -> appCtx.getString(R.string.high_mode)
             else -> "?"
         }
-        return arrayOf(resoCat, mode)
-    }
+        return ResoNameMode(resoCat, mode)
+    }*/
 
 
     internal var samRefreshRateMode: String
@@ -723,7 +748,6 @@ class UtilsRefreshRateSt private constructor (val context: Context)  {
     }
 
 
-    @ExperimentalCoroutinesApi
     internal fun getPeakRefreshRate(): Int {
         var prr =  if (isFakeAdaptive.get()!!) {
             (if (keepModeOnPowerSaving && isPowerSaveModeOn.get() ==true)
@@ -756,24 +780,24 @@ class UtilsRefreshRateSt private constructor (val context: Context)  {
     }
 
 
-    //@RequiresApi(Build.VERSION_CODES.M)
     private fun getPeakRefreshRateFromSettings(): Int? {
         return try {
             val prr =  Settings.System.getString(mContentResolver, PEAK_REFRESH_RATE)
             prr.toInt()
         } catch (_: Exception) {
-            null
+           //TODO(REFLECTION: android.provider.Settings.config)
+            //null
+            mUtilsDeviceInfo.currentDisplay.refreshRate.toInt()
         }
     }
 
-    @ExperimentalCoroutinesApi
-    @SuppressLint("NewApi")
+
+    @RequiresApi(Build.VERSION_CODES.M)
     internal fun setPrefOrAdaptOrHighRefreshRateMode(resStrLxw: String?): Boolean{
         try {
             val rrm =
                 if (mUtilsPrefsGmh.gmhPrefRefreshRateModePref != null
-                    && mUtilsPrefsGmh.gmhPrefRefreshRateModePref != REFRESH_RATE_MODE_STANDARD
-                ) {
+                    && mUtilsPrefsGmh.gmhPrefRefreshRateModePref != REFRESH_RATE_MODE_STANDARD) {
                     mUtilsPrefsGmh.gmhPrefRefreshRateModePref
                 } else {
                     if (isOfficialAdaptive) {
@@ -789,7 +813,6 @@ class UtilsRefreshRateSt private constructor (val context: Context)  {
     }
 
 
-    @ExperimentalCoroutinesApi
     @RequiresApi(Build.VERSION_CODES.M)
     internal fun tryThisRrm(rrm: String, resStrLxw: String?) : Boolean {
         if (hasWriteSecureSetPerm) {
@@ -807,14 +830,17 @@ class UtilsRefreshRateSt private constructor (val context: Context)  {
         return false
     }
 
-    @ExperimentalCoroutinesApi
+
     internal fun applyMinHz(){
         setMinRefreshRate(mUtilsPrefsGmh.gmhPrefMinHzAdapt)
         lrrPref.set(mUtilsPrefsGmh.gmhPrefMinHzAdapt)
         isFakeAdaptive.set(isFakeAdaptive())//don't interchange
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            TileService.requestListeningState(appCtx, qsMinHzTileComponent)
+        }
     }
 
-    @ExperimentalCoroutinesApi
+
     internal fun updateRefreshRateParams() {
         canApplyFakeAdaptive = canApplyFakeAdaptiveInt()//don't interchange
         isFakeAdaptive.set(isFakeAdaptive())//don't interchange
@@ -829,7 +855,6 @@ class UtilsRefreshRateSt private constructor (val context: Context)  {
     }
 
 
-    @ExperimentalCoroutinesApi
     private fun canApplyFakeAdaptiveInt(): Boolean {
 
         return isOfficialAdaptive && (currentRefreshRateMode.get() == REFRESH_RATE_MODE_SEAMLESS)
@@ -839,7 +864,6 @@ class UtilsRefreshRateSt private constructor (val context: Context)  {
     }
 
 
-    @ExperimentalCoroutinesApi
     private fun isFakeAdaptive(): Boolean {
         return (currentRefreshRateMode.get() == REFRESH_RATE_MODE_SEAMLESS)
                 && (hasWriteSecureSetPerm || isAccessibilityEnabled(

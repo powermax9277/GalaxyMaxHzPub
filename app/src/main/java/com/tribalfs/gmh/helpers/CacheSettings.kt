@@ -47,6 +47,7 @@ object CacheSettings {
     internal var isMultiResolution: Boolean = true
     internal var lowestHzCurMode: Int = 60 //default
     internal var supportedHzIntCurMod: List<Int>? = null
+    @Volatile
     internal var minHzListForAdp: List<Int>? = null
     internal var highestHzForAllMode: Int = 60 //default
     internal val currentRefreshRateMode = ObservableField<String>()
@@ -96,5 +97,6 @@ object CacheSettings {
     internal var turnOffAutoSensorsOff = false
     internal var preventHigh = false
     internal var sensorOnKey: CharSequence? = null
+
 
 }

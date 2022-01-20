@@ -6,10 +6,8 @@
     <string name="resolution">" Alternar resolución y suavidad de movimiento"</string>
     <string name="act">Activar Premium|Trial</string>
     <string name="max_hz">Hz máx</string>
-    <string name="max_hz_holder">%s Hz máx.</string>
     <string name="feat_n_a" tools:keep="@string/feat_n_a">No se admite el cambio de resolución</string>
-    <string name="unknown_mode">Modo de frecuencia de actualización no identificado</string>
-<!--    <string name="qs_active">Azulejos de configuración rápida activados correctamente</string>-->
+    <!--    <string name="qs_active">Azulejos de configuración rápida activados correctamente</string>-->
     <string name="min_hz_for_toggle">Min. Hz para alternar</string>
     <string name="adaptive">Adaptativo</string>
     <string name="high">Alto</string>
@@ -150,4 +148,6 @@
     <string name="prevent_high">Evitar el cambio al modo alto</string>
     <string name="auto_sensors_off_exp">Sensores automáticos desactivados</string>
     <string name="data_usage"><u>Data Usage</u></string>
+    <string name="acces_req">Enable Accessibility Service</string>
+    <string name="max_hz_for_psm">Hz máximo para el modo de ahorro de energía</string>
 </resources>

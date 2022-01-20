@@ -8,10 +8,8 @@
     <string name="resolution">संकल्प और मोशन चिकनाई टॉगल</string>
     <string name="act">प्रीमियम सक्षम गर्नुहोस्|परीक्षण</string>
     <string name="max_hz">मैक्स हर्ट्ज</string>
-    <string name="max_hz_holder">मैक्स %s हर्ट्ज</string>
     <string name="feat_n_a" tools:keep="@string/feat_n_a">बदलें संकल्प नहीं समर्थित</string>
-    <string name="unknown_mode">अज्ञात मोड ताज़ा दर</string>
-<!--    <string name="qs_active">त्वरित सेटिंग्स टाइलें सफलतापूर्वक सक्रिय</string>-->
+    <!--    <string name="qs_active">त्वरित सेटिंग्स टाइलें सफलतापूर्वक सक्रिय</string>-->
     <string name="min_hz_for_toggle">टॉगल की निम्न सीमा (हर्ट्ज)</string>
     <string name="adaptive">अनुकूली</string>
     <string name="high">उच्च</string>
@@ -149,4 +147,6 @@
     <string name="prevent_high">उच्च मोड में स्विच करने से रोकें</string>
     <string name="auto_sensors_off_exp">ऑटो सेंसर बंद</string>
     <string name="data_usage"><u>Data Usage</u></string>
+    <string name="acces_req">Enable Accessibility Service</string>
+    <string name="max_hz_for_psm">पावर सेविंग मोड के लिए अधिकतम हर्ट्ज</string>
 </resources>

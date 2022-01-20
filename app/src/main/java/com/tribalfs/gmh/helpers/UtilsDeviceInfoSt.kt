@@ -43,6 +43,7 @@ class UtilsDeviceInfoSt private constructor(val context: Context) {
         internal const val ONEPLUS_RATE_MODE_SEAMLESS = "1"
         internal const val BRIGHTNESS_RESOLUTION = 100
         internal const val SCREEN_BRIGHTNESS_FLOAT = "screen_brightness_float"
+        internal const val DISPLAY_SIZE_FORCED = "display_size_forced"
         internal const val POWER_SAVING_MODE = "low_power"
         internal const val SYSTEM = "system"
         internal const val SECURE = "secure"
@@ -51,7 +52,7 @@ class UtilsDeviceInfoSt private constructor(val context: Context) {
 
     internal val appCtx: Context = context.applicationContext
     private val mContentResolver = appCtx.contentResolver
-    internal val deviceModelVariant: String = Build.MODEL //"SM-TEST" //TODO(before release: Replace with Build.MODEL)
+    internal val deviceModelVariant: String = Build.MODEL //"SM-TEST" //ODO(before release: Replace with Build.MODEL)
     internal val androidVersion: String = Build.VERSION.RELEASE
     internal val manufacturer: String = Build.MANUFACTURER.uppercase(Locale.ROOT)
     internal val deviceModel: String = if (manufacturer == "SAMSUNG") {
@@ -72,7 +73,7 @@ class UtilsDeviceInfoSt private constructor(val context: Context) {
 
     @Suppress("DEPRECATION")
     fun getDisplayResolution(): Size {
-            val resStr = Settings.Global.getString(mContentResolver, "display_size_forced"/*custom resolution*/)
+            val resStr = Settings.Global.getString(mContentResolver, DISPLAY_SIZE_FORCED/*custom resolution*/)
             return if (currentDisplay.displayId == Display.DEFAULT_DISPLAY && !resStr.isNullOrEmpty()) {
                 val resArr = resStr.split(",")
                 Size(resArr[0].toInt()/*width*/,resArr[1].toInt()/*height*/)
@@ -120,7 +121,7 @@ class UtilsDeviceInfoSt private constructor(val context: Context) {
 
 
 
-    internal fun getDisplayResStr(separator: String?): String {
+    internal fun getDisplayResoStr(separator: String?): String {
             val res = getDisplayResolution()
             val sep = separator ?: ","
             return "${res.height}$sep${res.width}"
@@ -173,7 +174,7 @@ class UtilsDeviceInfoSt private constructor(val context: Context) {
             refreshRates = if (resStrLcw != null) {
                 getDisplayModesSet()[resStrLcw]
             } else {
-                getDisplayModesSet()[getDisplayResStr("x")]
+                getDisplayModesSet()[getDisplayResoStr("x")]
             }
 
             if (refreshRates != null) {

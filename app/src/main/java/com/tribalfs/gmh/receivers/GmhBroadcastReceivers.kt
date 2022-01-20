@@ -9,7 +9,6 @@ import android.os.Handler
 import android.os.Looper
 import android.os.PowerManager.ACTION_POWER_SAVE_MODE_CHANGED
 import android.provider.Settings
-import androidx.annotation.RequiresApi
 import com.tribalfs.gmh.callbacks.AccessibilityCallback
 import com.tribalfs.gmh.helpers.CacheSettings.currentBrightness
 import com.tribalfs.gmh.helpers.CacheSettings.currentRefreshRateMode
@@ -36,21 +35,18 @@ import com.tribalfs.gmh.helpers.UtilsRefreshRateSt
 import com.tribalfs.gmh.hertz.HzService.Companion.DESTROYED
 import com.tribalfs.gmh.hertz.HzServiceHelperStn
 import com.tribalfs.gmh.netspeed.NetSpeedServiceHelperStn
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Runnable
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
-@ExperimentalCoroutinesApi
-@RequiresApi(Build.VERSION_CODES.M)
 class GmhBroadcastReceivers(context: Context, private val accessibilityCallback: AccessibilityCallback, private val scope: CoroutineScope): BroadcastReceiver() {
     private val appCtx = context.applicationContext
     private val mContentResolver = appCtx.contentResolver
 
-    //private val mUtilsPrefsGmh by lazy { UtilsPrefsGmhSt(appCtx) }
-    //private val mUtilsDeviceInfo by lazy { UtilsDeviceInfoSt(appCtx) }
     private val mUtilsRefreshRate by lazy { UtilsRefreshRateSt.instance(appCtx)}
     private val handler by lazy { Handler(Looper.getMainLooper()) }
-    //private val dm by lazy {appCtx.getSystemService(Service.DISPLAY_SERVICE) as DisplayManager }
-    //private val keyguardManager by lazy {appCtx.getSystemService(KEYGUARD_SERVICE) as KeyguardManager }
     companion object{
         private const val PREF_NET_TYPE_LTE_GSM_WCDMA    = 9 /* LTE, GSM/WCDMA */
         private const val PREF_NET_TYPE_5G_LTE_GSM_WCDMA = 26
@@ -164,7 +160,6 @@ class GmhBroadcastReceivers(context: Context, private val accessibilityCallback:
     }
 
 
-    @RequiresApi(Build.VERSION_CODES.M)
     override fun onReceive(p0: Context, p1: Intent) {
         when (p1.action) {
 
@@ -172,7 +167,9 @@ class GmhBroadcastReceivers(context: Context, private val accessibilityCallback:
                 isPowerSaveModeOn.set(mUtilsRefreshRate.mUtilsDeviceInfo.isPowerSavingsModeOn)
                 if (ignorePowerModeChange.getAndSet(false) || !hasWriteSecureSetPerm) return
                 mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefPsmIsOffCache = isPowerSaveModeOn.get() != true
-                PsmChangeHandler.instance(appCtx).handle()
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    PsmChangeHandler.instance(appCtx).handle()
+                }
             }
 
             Intent.ACTION_SCREEN_OFF -> {

@@ -6,10 +6,8 @@
     <string name="resolution">Переключатель разрешения и плавности движения</string>
     <string name="act">Активировать Премиум</string>
     <string name="max_hz">Макс Гц</string>
-    <string name="max_hz_holder">Макс %s Гц</string>
     <string name="feat_n_a" tools:keep="@string/feat_n_a">Изменить разрешение не поддерживается</string>
-    <string name="unknown_mode">Неопознанный режим частоты обновления</string>
-<!--    <string name="qs_active">Плитки быстрых настроек успешно активированы</string>-->
+    <!--    <string name="qs_active">Плитки быстрых настроек успешно активированы</string>-->
     <string name="min_hz_for_toggle">Мин. Гц для кнопки переключения</string>
     <string name="adaptive">Адаптивная</string>
     <string name="high">Высокая</string>
@@ -152,4 +150,6 @@
     <string name="prevent_high">Не переключаться на высокую частоту</string>
     <string name="auto_sensors_off_exp">Автоотключение всех датчиков</string>
     <string name="data_usage"><u>Использование данных</u></string>
+    <string name="acces_req">Enable Accessibility Service</string>
+    <string name="max_hz_for_psm">Максимум Гц для режима энергосбережения</string>
 </resources>

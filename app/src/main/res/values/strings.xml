@@ -8,9 +8,8 @@
     <string name="resolution">Resolution &amp; Motion Smoothness Toggle</string>
     <string name="act">Activate Premium|Trial</string>
     <string name="max_hz">Max Hz</string>
-    <string name="max_hz_holder">Max %s Hz</string>
+    <string name="max_hz_for_psm">Max Hz for Power Saving Mode</string>
     <string name="feat_n_a" tools:keep="@string/feat_n_a">Feature Not Supported</string>
-    <string name="unknown_mode">Unidentified Refresh Rate Mode</string>
     <!--   <string name="qs_active">Quick Settings Tiles successfully activated</string>-->
     <string name="min_hz_for_toggle">Lowest Hz for Toggle</string>
     <string name="adaptive">Adaptive</string>
@@ -120,7 +119,7 @@
         Each succeeding interval will be twice of its previous. Intervals will reset once the device is unlocked.</string>-->
     <string name="show_ns_card">Show Netspeed Indicator Card</string>
     <string name="lbl_rrm">Refresh Rate Mods</string>
-    <string name="prr_psm">Keep Motion Smoothness on Power Saving Mode</string>
+    <string name="prr_psm">Keep Smoothness on Power Saving Mode</string>
     <string name="actvt_trial">Activate free trial</string>
     <string name="auto_psm">Power Saving Mode on Screen-off</string>
     <string name="reso_opts">Enabled Options</string>
@@ -174,4 +173,6 @@
         <item quantity="other">Accessibility service is required for the following - turn these off first to disable accessibility: %s</item>
     </plurals>
     <string name="no_access_notif" translatable="false">Disabling accessibility service will cause unexpected behavior for the following enabled feature(s): %s</string>
+    <string name="acces_req">Enable Accessibility Service</string>
+
 </resources>

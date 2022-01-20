@@ -1,20 +1,25 @@
 package com.tribalfs.gmh.tiles
 
-import android.annotation.SuppressLint
+import android.content.ComponentName
+import android.content.Intent
+import android.os.Build
+import android.os.IBinder
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
-import com.tribalfs.gmh.dialogs.DialogsPermissionsQs
+import androidx.annotation.RequiresApi
+import com.tribalfs.gmh.dialogs.QSDialogs
 import com.tribalfs.gmh.helpers.UtilsPermSt
 import com.tribalfs.gmh.hertz.HzServiceHelperStn
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
-@SuppressLint("NewApi")
+@RequiresApi(Build.VERSION_CODES.N)
 @ExperimentalCoroutinesApi
 class QSTileHzMon : TileService() {
     /*companion object{
         private const val TAG = "QSTileHzMon"
     }*/
+    private val qsHzMonTileComponent by lazy {ComponentName(applicationContext, QSTileHzMon::class.java)}
 
     override fun onStartListening() {
         super.onStartListening()
@@ -23,13 +28,8 @@ class QSTileHzMon : TileService() {
 
 
     private fun updateTile(){
-        updateTile(!HzServiceHelperStn.instance(applicationContext).isHzStop())
-    }
-
-
-    private fun updateTile(bool : Boolean){
-        //  Log.d(TAG, "updateTile() called: $bool" )
-        if (bool) qsTile.state = Tile.STATE_ACTIVE else qsTile.state = Tile.STATE_INACTIVE
+        val isOn = !HzServiceHelperStn.instance(applicationContext).isHzStop()
+        if (isOn) qsTile.state = Tile.STATE_ACTIVE else qsTile.state = Tile.STATE_INACTIVE
         qsTile.updateTile()
     }
 
@@ -46,14 +46,18 @@ class QSTileHzMon : TileService() {
         if (!UtilsPermSt.instance(applicationContext).hasOverlayPerm()
             && UtilsPrefsGmhSt(applicationContext).gmhPrefHzOverlayIsOn)
         {
-            val mDialog = DialogsPermissionsQs.getAppearOnTopDialog(this.applicationContext)
+            val mDialog = QSDialogs.getAppearOnTopDialog(this.applicationContext)
             showDialog(mDialog)
             return
         }
         val newStat = HzServiceHelperStn.instance(applicationContext).isHzStop()
-        if (newStat) qsTile.state = Tile.STATE_ACTIVE else qsTile.state = Tile.STATE_INACTIVE
-        qsTile.updateTile()
+
         HzServiceHelperStn.instance(applicationContext).startHertz(newStat, null, null)
         // }
+    }
+
+    override fun onBind(intent: Intent?): IBinder? {
+        requestListeningState(applicationContext, qsHzMonTileComponent)
+        return super.onBind(intent)
     }
 }

@@ -15,7 +15,6 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationManagerCompat
 import com.tribalfs.gmh.R
 import com.tribalfs.gmh.callbacks.ChangedStatusCallback
-import com.tribalfs.gmh.helpers.CacheSettings.isNetSpeedRunning
 import com.tribalfs.gmh.helpers.CacheSettings.isOnePlus
 import com.tribalfs.gmh.helpers.CacheSettings.isScreenOn
 import com.tribalfs.gmh.helpers.UtilsSettingsIntents.dataUsageSettingsIntent
@@ -33,7 +32,7 @@ import java.util.*
 import kotlin.coroutines.CoroutineContext
 
 
-@ExperimentalCoroutinesApi
+
 class NetSpeedService : Service(), CoroutineScope {
 
     companion object {
@@ -56,12 +55,7 @@ class NetSpeedService : Service(), CoroutineScope {
     private var mLastRxBytes: Long = 0
     private var mLastTxBytes: Long = 0
     private var mLastTime: Long = 0
-/*    private var mOlderRxBytes: Long = 0
-    private var mOlderTxBytes: Long = 0
-    private var mOlderTime: Long = 0
-    private var mPrevUsedHBTx = 0L
-    private var mPrevUsedHBRx = 0L
-    */
+
 
     private val job = SupervisorJob()
     override val coroutineContext: CoroutineContext
@@ -156,7 +150,7 @@ class NetSpeedService : Service(), CoroutineScope {
         mIconCanvas = Canvas(mIconBitmap)
     }
 
-    @ExperimentalCoroutinesApi
+    
     private fun setupScreenStatusReceiver(){
         //if (!AccessibilityPermission.isAccessibilityEnabled(applicationContext,GalaxyMaxHzAccess::class.java)) {
         IntentFilter().let {
@@ -239,7 +233,6 @@ class NetSpeedService : Service(), CoroutineScope {
     }
 
     override fun onDestroy() {
-        isNetSpeedRunning.set(false)
         stopNetStatInternal()
         notificationManagerCompat.cancel(NOTIFICATION_ID_NET_SPEED)
         try {

@@ -18,7 +18,6 @@ import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.GLOBAL
 import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.SECURE
 import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.SYSTEM
 import com.tribalfs.gmh.helpers.UtilsSettingsIntents.changeSystemSettingsIntent
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 
 class UtilsPermSt(context: Context){
@@ -66,7 +65,7 @@ class UtilsPermSt(context: Context){
         return Settings.canDrawOverlays(appCtx)
     }
 
-    @ExperimentalCoroutinesApi
+    
     @RequiresApi(Build.VERSION_CODES.M)
     fun requestWriteSettings() {
         Toast.makeText(appCtx, appCtx.getString(R.string.enable_write_settings), Toast.LENGTH_LONG).show()

@@ -13,7 +13,7 @@ import com.tribalfs.gmh.R
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @ExperimentalCoroutinesApi
-class DialogActCode : RoundedDialogFragment()  {
+class DialogActCode : MyDialogFragment()  {
 
     companion object {
         internal const val KEY_AC = "0X1"

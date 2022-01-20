@@ -6,12 +6,14 @@ import android.provider.Settings
 import android.provider.Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
 import com.tribalfs.gmh.MyApplication.Companion.ignoreAccessibilityChange
 import com.tribalfs.gmh.helpers.CacheSettings.hasWriteSecureSetPerm
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 object AccessibilityPermission {
 
-    //@Synchronized
     fun isAccessibilityEnabled(
         context: Context,
         service: Class<out AccessibilityService?>
@@ -25,8 +27,7 @@ object AccessibilityPermission {
     }
 
 
-    @ExperimentalCoroutinesApi
-   // @Synchronized
+
     fun allowAccessibility(context: Context, service: Class<out AccessibilityService?>, add: Boolean) {
         synchronized(this) {
             CoroutineScope(Dispatchers.IO).launch {

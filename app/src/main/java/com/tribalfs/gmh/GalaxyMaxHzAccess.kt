@@ -54,8 +54,7 @@ import java.util.*
 import kotlin.coroutines.CoroutineContext
 
 
-@ExperimentalCoroutinesApi
-@SuppressLint("NewApi", "WrongConstant", "PrivateApi")
+@RequiresApi(Build.VERSION_CODES.M)
 class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
     companion object{
@@ -79,7 +78,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     private val mCameraManager by lazy {getSystemService(CAMERA_SERVICE) as CameraManager}
     private val mUtilsRefreshRate by lazy {UtilsRefreshRateSt.instance(applicationContext)}
     private val mWindowsManager by lazy {applicationContext.getSystemService(Context.WINDOW_SERVICE) as WindowManager}
-    private val mNotifBar by lazy {NotificationBarSt.instance(applicationContext)}
+    private val mNotifBar by lazy {UtilNotificationBarSt.instance(applicationContext)}
     private var triesA: Int = 0
     private var triesB: Int = 0
     private var isGameOpen = false //: AtomicBoolean = AtomicBoolean(false)
@@ -87,15 +86,24 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     private var useMin60 = false //: AtomicBoolean = AtomicBoolean(false)
     private var cameraOpen: Boolean = false
 
+
+    @Suppress ("DECRECATION")
     private val paramsAdaptive by lazy {
-        WindowManager.LayoutParams(
-            0, 0, 0, 0,
-            WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
-            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-                    or WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
-                    or WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
-            PixelFormat.TRANSLUCENT
-        )}
+            WindowManager.LayoutParams(
+                0, 0, 0, 0,
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
+                }else{
+                    WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY
+                     },
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                        or WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+                        or WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
+                PixelFormat.TRANSLUCENT
+            )
+
+    }
+
 
     private val mScreenStatusReceiver by lazy{
         GmhBroadcastReceivers(applicationContext,
@@ -150,7 +158,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                             if (contDesc != null && it.isClickable) {
                                 try {
                                     it.performAction(ACTION_CLICK)
-                                    NotificationBarSt.instance(applicationContext)
+                                    UtilNotificationBarSt.instance(applicationContext)
                                         .collapseNotificationBar()
                                     return@launch
                                 } catch (_: java.lang.Exception) { }
@@ -194,7 +202,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                                 if ((sensorOnKey == initDesc) != targetState) {
                                     it.performAction(ACTION_CLICK)
                                 }
-                                if (NotificationBarSt.instance(applicationContext).collapseNotificationBar()) {
+                                if (UtilNotificationBarSt.instance(applicationContext).collapseNotificationBar()) {
                                     return@launch
                                 }
                             }else{
@@ -204,7 +212,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                                     }
 
                                     else ->{
-                                        NotificationBarSt.instance(applicationContext)
+                                        UtilNotificationBarSt.instance(applicationContext)
                                             .collapseNotificationBar()
                                         return@launch
                                     }
@@ -221,7 +229,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                 }
             }
         }else {
-            NotificationBarSt.instance(applicationContext)
+            UtilNotificationBarSt.instance(applicationContext)
                 .collapseNotificationBar()
             return
         }
@@ -292,6 +300,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.N)
     private fun setupNetworkCallback(){
         disableNetworkCallback()
         if (isNetSpeedRunning.get()!!) {
@@ -331,7 +340,9 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     // @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate() {
         setupScreenStatusReceiver()
-        setupNetworkCallback()
+       /* if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            setupNetworkCallback()
+        }*/
     }
 
 
@@ -348,7 +359,9 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
             setupAdaptiveEnhancer()
         }
         if (setupNetworkCallback == true) {
-            setupNetworkCallback()
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                setupNetworkCallback()
+            }
         }
         if (switchAutoSensors != null) {
             checkAutoSensorsOff(switchAutoSensors as Boolean, onScreenOffOnly as Boolean)
@@ -365,10 +378,11 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
             /*Set the recommended time that interactive controls
             need to remain on the screen to support the user.*/
-            try {
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 interactiveUiTimeoutMillis = 0
                 nonInteractiveUiTimeoutMillis = 0
-            }catch (_: NoSuchMethodError){}
+            }
         }
         // restartOtherServices()
     }
@@ -451,7 +465,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     }
 
     @SuppressLint("SwitchIntDef")
-    //@RequiresApi(Build.VERSION_CODES.M)
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
 
         /*Log.i(
@@ -557,6 +571,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     //@Synchronized
     private fun makeAdaptive() {
         //Log.i(TAG, "makeAdaptive called")
+        //if(resources.configuration.keyboardHidden ==  KEYBOARDHIDDEN_NO) return
 
         mUtilsRefreshRate.setPeakRefreshRate(prrActive.get()!!)
 

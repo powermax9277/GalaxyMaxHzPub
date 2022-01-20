@@ -6,10 +6,8 @@
     <string name="resolution">分辨率和運動平滑切換</string>
     <string name="act">激活高級|試用</string>
     <string name="max_hz">最大Hz</string>
-    <string name="max_hz_holder">馬克斯 %sHz</string>
     <string name="feat_n_a" tools:keep="@string/feat_n_a">更改分辨率不支持</string>
-    <string name="unknown_mode">不明模式刷新率</string>
-<!--    <string name="qs_active">快速設置磁貼已成功激活</string>-->
+    <!--    <string name="qs_active">快速設置磁貼已成功激活</string>-->
     <string name="min_hz_for_toggle">最小Hz限制可以在最大刷新率按鈕中選擇</string>
     <string name="adaptive">Adaptive</string>
     <string name="high">High</string>
@@ -138,4 +136,6 @@
     <string name="prevent_high">防止切換到高模式</string>
     <string name="auto_sensors_off_exp">自動傳感器關閉</string>
     <string name="data_usage"><u>Data Usage</u></string>
+    <string name="acces_req">Enable Accessibility Service</string>
+    <string name="max_hz_for_psm">Max Hz for Power Saving Mode</string>
 </resources>

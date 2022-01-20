@@ -28,11 +28,15 @@ internal class CheckBlacklistApiSt private constructor(context: Context) {
 
     fun setAllowed(): Boolean{
         return if (hasWriteSecureSetPerm) {
-            if (Build.VERSION.SDK_INT >= 29) {
-                Settings.Global.putString(mResolver, HAP, "1")
-            } else {
-                Settings.Global.putString(mResolver, HAP_PRE_P, "1") &&
-                        Settings.Global.putString(mResolver, HAP_P, "1")
+            try {
+                if (Build.VERSION.SDK_INT >= 29) {
+                    Settings.Global.putString(mResolver, HAP, "1")
+                } else {
+                    Settings.Global.putString(mResolver, HAP_PRE_P, "1") &&
+                            Settings.Global.putString(mResolver, HAP_P, "1")
+                }
+            }catch (_: Exception){
+                false
             }
         }else{
             false

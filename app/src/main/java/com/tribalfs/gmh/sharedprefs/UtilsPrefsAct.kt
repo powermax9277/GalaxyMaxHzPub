@@ -28,8 +28,6 @@ class UtilsPrefsAct(val context: Context) {
     }
 
 
-   // private val appCtx = context.applicationContext
-    //private val masterKey = MasterKey.Builder(appCtx).setKeyScheme(MasterKey.KeyScheme.AES256_GCM).build()
     private lateinit var actSharedPref: SharedPreferences
 
     init{

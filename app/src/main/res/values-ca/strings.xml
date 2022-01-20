@@ -6,10 +6,9 @@
     <string name="resolution">Commutació de resolució i suavitat del moviment</string>
     <string name="act">Activeu Premium | Prova</string>
     <string name="max_hz">Max Hz</string>
-    <string name="max_hz_holder">Max%s Hz</string>
+    <string name="max_hz_for_psm">Hz màxim per al mode d\'estalvi d\'energia</string>
     <string name="feat_n_a" tools:keep="@string/feat_n_a">No s\'admet</string>
-    <string name="unknown_mode">Mode de velocitat d’actualització no identificat</string>
-<!--    <string name="qs_active">Configuració ràpida Rajoles activades correctament.</string>-->
+    <!--    <string name="qs_active">Configuració ràpida Rajoles activades correctament.</string>-->
     <string name="min_hz_for_toggle">Límit inferior del commutador(Hz)</string>
     <string name="adaptive">Adaptive</string>
     <string name="high">High</string>
@@ -160,4 +159,6 @@
     <string name="prevent_high">Eviteu canviar al mode alt</string>
     <string name="auto_sensors_off_exp">Sensors automàtics apagats</string>
     <string name="data_usage"><u>Data Usage</u></string>
+    <string name="acces_req">Enable Accessibility Service</string>
+
 </resources>

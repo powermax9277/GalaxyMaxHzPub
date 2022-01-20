@@ -20,6 +20,7 @@ import android.os.PowerManager.*
 import android.provider.Settings.*
 import android.provider.Settings.Global.DEVELOPMENT_SETTINGS_ENABLED
 import android.text.method.LinkMovementMethod
+import android.util.Log
 import android.util.TypedValue
 import android.view.*
 import android.view.View.MeasureSpec
@@ -35,7 +36,6 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.databinding.DataBindingUtil
 import androidx.databinding.Observable
 import androidx.databinding.Observable.OnPropertyChangedCallback
 import com.google.android.material.chip.Chip
@@ -51,14 +51,13 @@ import com.tribalfs.gmh.GalaxyMaxHzAccess.Companion.SETUP_ADAPTIVE
 import com.tribalfs.gmh.GalaxyMaxHzAccess.Companion.SETUP_NETWORK_CALLBACK
 import com.tribalfs.gmh.MyApplication.Companion.applicationName
 import com.tribalfs.gmh.callbacks.LvlSbMsgCallback
-import com.tribalfs.gmh.callbacks.MyClickHandler
 import com.tribalfs.gmh.databinding.ActivityMainBinding
 import com.tribalfs.gmh.dialogs.*
-import com.tribalfs.gmh.dialogs.DialogsPermissionsQs.getOverlaySettingIntent
 import com.tribalfs.gmh.dialogs.InfoDialog.Companion.ADB_PERM_INFO
 import com.tribalfs.gmh.dialogs.InfoDialog.Companion.CHANGE_RES_INFO
 import com.tribalfs.gmh.dialogs.InfoDialog.Companion.QDM_INFO
 import com.tribalfs.gmh.dialogs.InfoDialog.Companion.SENSORS_OFF_INFO
+import com.tribalfs.gmh.dialogs.QSDialogs.getOverlaySettingIntent
 import com.tribalfs.gmh.helpers.*
 import com.tribalfs.gmh.helpers.CacheSettings.TIMEOUT_FACTOR
 import com.tribalfs.gmh.helpers.CacheSettings.adaptiveAccessTimeout
@@ -148,7 +147,7 @@ import kotlin.coroutines.CoroutineContext
 
 //TODO(UI improvements)
 @ExperimentalCoroutinesApi
-class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClickHandler, CoroutineScope {
+class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickHandler*/, CoroutineScope {
 
     companion object {
         //private const val TAG = "MainActivity"
@@ -170,7 +169,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
     private val mUtilsPrefsAct by lazy{ UtilsPrefsAct(this)}
     private val mUtilsRefreshRate by lazy{UtilsRefreshRateSt.instance(applicationContext)}
 
-    private val hzOverlaySizes = listOf(10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30)
+    private val hzOverlaySizes = listOf(10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40)
     private val hzAdaptiveDelays = listOf(2, 3, 4, 5, 6, 7, 8, 9, 10)
     private var mList: Menu? = null
     private var ignoreUnblockHzNotifState = true
@@ -261,6 +260,11 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
                         mBinding.sbPeakHz.progress = mrr
                     }
                 }
+                /*mUtilsPrefsGmh.hzPrefMaxRefreshRate.let{mrr ->
+                    if (mBinding.sbPeakHz.valueTo != mrr.toFloat() && mrr.toFloat() > mBinding.sbPeakHz.valueFrom) {
+                        mBinding.sbPeakHz.valueTo = mrr.toFloat()
+                    }
+                }*/
             }
 
             //Trigger with ChangeMaxHz function
@@ -269,8 +273,15 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
                 mUtilsPrefsGmh.gmhPrefMinHzAdapt.let{mnrr ->
                     if (mBinding.sbMinHzAdapt.progress != mnrr) {
                         mBinding.sbMinHzAdapt.progress = mnrr
+                        mBinding.minHzAdaptive = mnrr
                     }
                 }
+                /*mUtilsPrefsGmh.hzPrefMaxRefreshRate.let{mnrr ->
+                    if (mBinding.sbPeakHz.valueFrom != mnrr.toFloat() && mnrr.toFloat() < mBinding.sbPeakHz.valueTo) {
+                        mBinding.sbPeakHz.valueFrom = mnrr.toFloat()
+                        mBinding.minHzAdaptive = mnrr
+                    }
+                }*/
             }
 
             PREF_MAX_REFRESH_RATE_PSM -> {
@@ -348,7 +359,6 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
                                 }
                             }
                         }
-                        /*Log.d(TAG, "mBinding.refreshRateMode $it")*/
                         mBinding.refreshRateMode = it
                         updateRefreshRateLabels()
                         updateMinHzSbMinMax()
@@ -390,7 +400,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
 
 
     @RequiresApi(VERSION_CODES.M)
-    override fun onClickView(v: View) {
+     fun onClickView(v: View) {
         val mUtilsPrefsGmh = mUtilsRefreshRate.mUtilsPrefsGmh
         when(v.id){
             mBinding.tvBattOptimSettings.id -> {
@@ -493,7 +503,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
                             return
                         }
 
-                        when (NotificationBarSt.instance(applicationContext).checkQsTileInPlace()){
+                        when (UtilNotificationBarSt.instance(applicationContext).checkQsTileInPlace()){
                             true -> {
                                 mUtilsPrefsGmh.gmhPrefSensorsOff = checked
                                 return
@@ -506,7 +516,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
                                     R.string.so_location_info,
                                     Snackbar.LENGTH_INDEFINITE,
                                     android.R.string.ok
-                                ) {NotificationBarSt.instance(applicationContext).expandNotificationBar()}
+                                ) {UtilNotificationBarSt.instance(applicationContext).expandNotificationBar()}
                                 return
                             }
 
@@ -626,17 +636,21 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
                 return
             }
 
-            mBinding.swPeakHz.id -> {
-                // toggleMaxHz()
-                if ((v as Switch).isChecked) {
-                    if (!mUtilsRefreshRate.setPrefOrAdaptOrHighRefreshRateMode(null)){
-                        v.isChecked = false
-                        InfoDialog.newInstance(CHANGE_RES_INFO).show(supportFragmentManager, null)
-                       }
-                } else {
-                    mUtilsRefreshRate.setRefreshRateMode(REFRESH_RATE_MODE_STANDARD)
-                }
-                return
+            /*  mBinding.swPeakHz.id -> {
+                  // toggleMaxHz()
+                  if ((v as Switch).isChecked) {
+                      if (!mUtilsRefreshRate.setPrefOrAdaptOrHighRefreshRateMode(null)){
+                          v.isChecked = false
+                          InfoDialog.newInstance(CHANGE_RES_INFO).show(supportFragmentManager, null)
+                      }
+                  } else {
+                      mUtilsRefreshRate.setRefreshRateMode(REFRESH_RATE_MODE_STANDARD)
+                  }
+                  return
+              }*/
+
+            mBinding.chStandard.id ->{
+                mUtilsRefreshRate.setRefreshRateMode(REFRESH_RATE_MODE_STANDARD)
             }
 
             mBinding.swKeepMode.id -> {
@@ -655,11 +669,31 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
             }
 
             mBinding.chHigh.id -> {
-                mUtilsRefreshRate.tryThisRrm(REFRESH_RATE_MODE_ALWAYS, null)/*.let {
-                    if (it) mUtilsPrefsGmh.gmhPrefRefreshRateModePref = REFRESH_RATE_MODE_ALWAYS
-                }*///mUtilsPrefsGmh.gmhPrefRefreshRateModePref aready updated in MyApp
-                return
+                if ((v as Chip).isChecked == (currentRefreshRateMode.get() == REFRESH_RATE_MODE_ALWAYS)) {
+                    return
+                }
 
+
+                if (!mUtilsRefreshRate.tryThisRrm(REFRESH_RATE_MODE_ALWAYS, null)){
+                    //TODO
+                    Log.d("TESTEST","chHigh failed")
+                    v.isChecked = false
+                    when (currentRefreshRateMode.get()){
+                        REFRESH_RATE_MODE_SEAMLESS ->{
+                            mBinding.chAdaptive.isChecked = true
+
+                        }
+                        REFRESH_RATE_MODE_STANDARD ->{
+                            mBinding.chStandard.isChecked = true
+                            InfoDialog.newInstance(CHANGE_RES_INFO).show(supportFragmentManager, null)
+                        }
+                    }
+                    return
+                }
+
+                startPipAtivity()
+
+                return
             }
 
             mBinding.chAdaptive.id -> {
@@ -668,15 +702,39 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
                 }
 
                 if (!isOfficialAdaptive && !checkAccessibilityPerm(hasWriteSecureSetPerm)) {
-                    mBinding.chHigh.isChecked = true
+                    mBinding.chAdaptive.isChecked = false
+                    when (currentRefreshRateMode.get()){
+                        REFRESH_RATE_MODE_ALWAYS ->{
+                            mBinding.chHigh.isChecked = true
+                        }
+                        REFRESH_RATE_MODE_STANDARD ->{
+                            mBinding.chStandard.isChecked = true
+                        }
+                    }
                     return
                     /*showSbMsg(
                         getString(R.string.adp_mod_inf), null, null, null
                     )*/
                 }
 
-                /*mBinding.chAdaptive.isChecked = */mUtilsRefreshRate.tryThisRrm(REFRESH_RATE_MODE_SEAMLESS, null)
+                if (!mUtilsRefreshRate.tryThisRrm(REFRESH_RATE_MODE_SEAMLESS, null)){
+                    v.isChecked = false
+                    when (currentRefreshRateMode.get()){
+                        REFRESH_RATE_MODE_ALWAYS ->{
+                            mBinding.chHigh.isChecked = true
+
+                        }
+                        REFRESH_RATE_MODE_STANDARD ->{
+                            mBinding.chStandard.isChecked = true
+                            InfoDialog.newInstance(CHANGE_RES_INFO).show(supportFragmentManager, null)
+                        }
+                    }
+                    return
+                }
+                startPipAtivity()
+                return
             }
+
 
             mBinding.tvAutoSensorsOffInfo.id -> {
                 if (v.id == mBinding.tvAutoSensorsOffInfo.id) {
@@ -689,7 +747,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
 
             mBinding.tvUseQsTileInf.id, mBinding.tvRrmAdbInf.id,
             mBinding.tvKeepModeAdbInf.id, mBinding.tvSoPsmAdbInf.id,
-            mBinding.screenOffDozeInfo.id, mBinding.tvEnableMs.id -> {
+            mBinding.screenOffDozeInfo.id -> {
                 if (hasWriteSecureSetPerm) {
                     if (v.id == mBinding.screenOffDozeInfo.id) {
                         InfoDialog.newInstance(QDM_INFO).show(supportFragmentManager, null)
@@ -746,8 +804,14 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
         }
     }
 
+    private fun startPipAtivity(){
+        if (isPowerSaveModeOn.get() == true && SDK_INT >= VERSION_CODES.S) {
+            val pipIntent = Intent(applicationContext, PipActivity::class.java)
+            pipIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            applicationContext.startActivity(pipIntent)
+        }
+    }
 
-    @SuppressLint("InflateParams")
     @RequiresApi(VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -768,7 +832,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
         showLoading(true)
         //  setupVolley()
         registerSharedPrefListener()
-        mBinding.clickListener = this
+
 
         setupKeepMod()
         initNeedSpeed()
@@ -785,7 +849,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
             //syncInsDate(SYNCMODE_GET, null, adFree)
             updateNetSpeed(adFree)
             //setupMenuVisibility()
-            mBinding.isAdFree = adFree
+            mBinding.premium = adFree
             //  checkTileIsExpired()
             //loadBannerAd(adFree)
             initDozeMod(adFree)
@@ -830,11 +894,10 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
     }
 
 
-    @SuppressLint("NewApi")
     private fun updateDynamicViews(){
         /*Wait for loadDone to Update Dynamic Views*/
         launch {
-            while(!isProfilesLoaded) delay(250)
+            while(!isProfilesLoaded) delay(300)
             mBinding.hasMotionSmoothness = highestHzForAllMode > STANDARD_REFRESH_RATE_HZ
             mBinding.isMultiRes = isMultiResolution
             mBinding.adaptiveSupported = isOfficialAdaptive
@@ -960,6 +1023,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
             override fun onStopTrackingTouch(seekBar: SeekBar) {
                 seekBar.progress.let {
+                    seekBar.thumb = getThumb(it)
                     mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefGDozeModOpt = it
                     applicationContext.updateDozValues(mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefQuickDozeIsOn, it)
                 }
@@ -974,7 +1038,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
     }
 
 
-    private fun switchNetSpeed(bool: Boolean){
+    private fun switchNetSpeed(bool: Boolean) {
 
         if (isNetSpeedRunning.get() == bool) return
 
@@ -1000,11 +1064,14 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
         } else {
             NetSpeedServiceHelperStn.instance(applicationContext).runNetSpeed(bool)
         }
-        applicationContext.startService(
-            Intent(applicationContext, GalaxyMaxHzAccess::class.java).apply{
-                putExtra(SETUP_NETWORK_CALLBACK, true)
-            }
-        )
+
+        if (SDK_INT >= VERSION_CODES.M) {
+            applicationContext.startService(
+                Intent(applicationContext, GalaxyMaxHzAccess::class.java).apply {
+                    putExtra(SETUP_NETWORK_CALLBACK, true)
+                }
+            )
+        }
     }
 
 
@@ -1040,6 +1107,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
             override fun onStopTrackingTouch(seekBar: SeekBar) {
                 seekBar.progress.let {
+                    seekBar.thumb = getThumb(it)
                     mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefMinHzForToggle = it
                 }
             }
@@ -1096,6 +1164,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
         mList = menu
         return true
     }
+
 
     @RequiresApi(VERSION_CODES.M)
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -1243,6 +1312,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
             @RequiresApi(VERSION_CODES.M)
             override fun onStopTrackingTouch(seekBar: SeekBar) {
+                seekBar.thumb = getThumb(seekBar.progress)
                 HzServiceHelperStn.instance(applicationContext).updateHzSize(seekBar.progress)
             }
         })
@@ -1264,6 +1334,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
 
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
             override fun onStopTrackingTouch(seekBar: SeekBar) {
+                seekBar.thumb = getThumb(seekBar.progress)
                 (seekBar.progress.toLong() * 1000).let {
                     adaptiveDelayMillis = it
                     adaptiveAccessTimeout = it* TIMEOUT_FACTOR.toLong()
@@ -1289,6 +1360,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
             override fun onStopTrackingTouch(seekBar: SeekBar) {
                 seekBar.progress.let {
+                    seekBar.thumb = getThumb(it)
                     val converted =
                         if (SDK_INT == VERSION_CODES.R) {
                             it
@@ -1333,7 +1405,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
     }
 
 
-    private fun checkIfUsingSpay(){
+  private fun checkIfUsingSpay(){
         if (isSpayInstalled == true && mUtilsRefreshRate.mUtilsPrefsGmh.hzPrefUsingSPay == NOT_ASKED) {
             launch(Dispatchers.Main) {
                 DialogUsingSpay().show(supportFragmentManager, null)
@@ -1349,25 +1421,12 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
                 true
             }else{
                 if (showRequest) {
-                    showEnableAccessibilityIns()
+                    InfoDialog.newInstance(InfoDialog.ENABLE_ACCESS).show(supportFragmentManager, null)
                 }
                 false
             }
         }else{
             true
-        }
-    }
-
-
-    private fun showEnableAccessibilityIns(){
-        showSbMsg(
-            R.string.enable_as_inf,
-            Snackbar.LENGTH_INDEFINITE,
-            android.R.string.ok
-        ) {
-            val intent = Intent(ACTION_ACCESSIBILITY_SETTINGS)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            startActivity(intent)
         }
     }
 
@@ -1385,7 +1444,9 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
                 if (isPowerSaveModeOn.get() == true
                     && hasWriteSecureSetPerm && keepModeOnPowerSaving && isPremium.get()!!
                 ) {
-                    mUtilsRefreshRate.setPrefOrAdaptOrHighRefreshRateMode(null)
+                    if (SDK_INT >= VERSION_CODES.M) {
+                        mUtilsRefreshRate.setPrefOrAdaptOrHighRefreshRateMode(null)
+                    }
                 }
             } else {
                 //High/Adaptive mode
@@ -1404,7 +1465,70 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
 
     @SuppressLint("NewApi")
     private fun setupMaxHzSeekBar() {
-        var oldProg = STANDARD_REFRESH_RATE_HZ
+  /*      var oldProgMax: Float? = null
+        var oldProgMin: Float? = null
+        mBinding.sbPeakHz.addOnSliderTouchListener(object : RangeSlider.OnSliderTouchListener{
+
+            override fun onStartTrackingTouch(slider: RangeSlider) {
+                *//*oldProgMax = slider.valueTo
+                oldProgMin = slider.valueFrom*//*
+            }
+            override fun onStopTrackingTouch(slider: RangeSlider) {
+                if (!UtilsPermSt.instance(applicationContext).hasWriteSystemPerm()) {
+                    *//*try {
+                        oldProgMin?.let { slider.valueFrom = it }
+                        oldProgMax?.let { slider.valueTo = it }
+                    }catch(_: Exception){}*//*
+                    UtilsPermSt.instance(applicationContext).requestWriteSettings()
+                    return
+                }
+
+                mUtilsRefreshRate.mUtilsPrefsGmh.hzPrefMaxRefreshRate = slider.valueTo.toInt()
+
+                mUtilsRefreshRate.mUtilsPrefsGmh.hzPrefMaxRefreshRate.let{
+                        prrActive.set( it)
+                        mUtilsRefreshRate.setRefreshRate(it, mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefMinHzAdapt)
+                    }
+
+                if (isOfficialAdaptive && slider.valueFrom < STANDARD_REFRESH_RATE_HZ) {
+                    if (!checkAccessibilityPerm(true)) {
+                        slider.valueFrom = STANDARD_REFRESH_RATE_HZ.toFloat()
+                        return
+                    }
+                }
+
+                mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefMinHzAdapt = slider.valueFrom.toInt()
+                mBinding.minHzAdaptive = slider.valueFrom.toInt()
+
+                mUtilsRefreshRate.applyMinHz()
+
+                if (isFakeAdaptive.get() == true) {
+                    (UtilsPermSt.instance(applicationContext)
+                        .hasOverlayPerm()).let { hasPerm ->
+                            if (!hasPerm) {
+                                showSbMsg(
+                                    getString(R.string.aot_perm_inf),
+                                    Snackbar.LENGTH_INDEFINITE,
+                                    android.R.string.ok
+                                ) {
+                                    showAppearOnTopRequest()
+                                }
+                            }
+                        }
+                }
+
+                applicationContext.startService(
+                    Intent(applicationContext,GalaxyMaxHzAccess::class.java).apply {
+                        putExtra(SETUP_ADAPTIVE, true)
+                    }
+                )
+
+            }
+        })
+        */
+
+
+         var oldProg = 60
         mBinding.sbPeakHz.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 val newProgress = supportedHzIntAllMod?.closestValue(
@@ -1419,6 +1543,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
             }
             override fun onStopTrackingTouch(seekBar: SeekBar) {
                 seekBar.progress.let {prog ->
+                    seekBar.thumb = getThumb(prog)
                     if (!UtilsPermSt.instance(applicationContext).hasWriteSystemPerm()) {
                         seekBar.progress = oldProg
                         UtilsPermSt.instance(applicationContext).requestWriteSettings()
@@ -1439,6 +1564,19 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
 
 
     private fun updateMaxHzSbMinMax() {
+       /* launch {
+            delay(500)
+            //Log.d(TAG,"forceLowestHz $forceLowestHz vs ${mUtilsPrefsGmh.hzPrefMaxRefreshRate}")
+
+            mBinding.sbPeakHz.values =  supportedHzIntAllMod!!.map{i -> i.toFloat()} //lowestHzCurMode highestHzForAllMode
+            //initial value
+            *//*try {
+                mBinding.sbPeakHz.valueTo =
+                    mUtilsRefreshRate.mUtilsPrefsGmh.hzPrefMaxRefreshRate.toFloat()
+                mBinding.sbPeakHz.valueFrom =
+                    mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefMinHzAdapt.toFloat()
+            }catch (_: Exception){}*//*
+        }*/
         launch {
             delay(500)
             //Log.d(TAG,"forceLowestHz $forceLowestHz vs ${mUtilsPrefsGmh.hzPrefMaxRefreshRate}")
@@ -1448,63 +1586,6 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
             mBinding.sbPeakHz.max = highestHzForAllMode
             //initial value
             mBinding.sbPeakHz.progress = mUtilsRefreshRate.mUtilsPrefsGmh.hzPrefMaxRefreshRate
-        }
-    }
-
-
-    @SuppressLint("NewApi")
-    private fun setupPsmMaxHzSeekBar() {
-        var oldProg = STANDARD_REFRESH_RATE_HZ
-        mBinding.sbPeakHzPsm.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                val newProgress = supportedHzIntAllMod?.closestValue(
-                    progress
-                )!!
-                seekBar.progress = newProgress
-                seekBar.thumb = getThumb(newProgress)
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar) {
-                oldProg = seekBar.progress
-            }
-
-            override fun onStopTrackingTouch(seekBar: SeekBar) {
-                seekBar.progress.let {prog ->
-                    if (!UtilsPermSt.instance(applicationContext).hasWriteSystemPerm()) {
-                        seekBar.progress = oldProg
-                        UtilsPermSt.instance(applicationContext).requestWriteSettings()
-                        return
-                    }
-                    mUtilsRefreshRate.mUtilsPrefsGmh.hzPrefMaxRefreshRatePsm = prog
-                    if (isPowerSaveModeOn.get() == true) {
-                        mUtilsRefreshRate.mUtilsPrefsGmh.hzPrefMaxRefreshRatePsm.let{
-                            prrActive.set( it)
-                            mUtilsRefreshRate.setRefreshRate(it, mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefMinHzAdapt)
-                        }
-                    }
-                }
-            }
-        })
-    }
-
-    @SuppressLint("NewApi")
-    private fun updatePsmMaxHzSbMinMax() {
-        launch {
-            delay(500)
-            //Log.d(TAG,"forceLowestHz PSM $forceLowestHz vs ${mUtilsPrefsGmh.hzPrefMaxRefreshRatePsm}")
-            if (SDK_INT >= VERSION_CODES.O) {
-                mBinding.sbPeakHzPsm.min = lowestHzCurMode
-            }
-            mBinding.sbPeakHzPsm.max = highestHzForAllMode
-            //initial value
-            mBinding.sbPeakHzPsm.progress = mUtilsRefreshRate.mUtilsPrefsGmh.hzPrefMaxRefreshRatePsm/*.let {
-                if (it != -1) {
-                    it
-                } else {
-                    mUtilsPrefsGmh.hzPrefMaxRefreshRatePsm = highestHzForAllMode
-                    highestHzForAllMode
-                }
-            }*/
         }
     }
 
@@ -1539,6 +1620,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
                     }
                 }
                 override fun onStopTrackingTouch(seekBar: SeekBar) {
+                    seekBar.thumb = getThumb(seekBar.progress)
                     if (isOfficialAdaptive && seekBar.progress < STANDARD_REFRESH_RATE_HZ) {
                         if (!checkAccessibilityPerm(true)) {
                             seekBar.progress = STANDARD_REFRESH_RATE_HZ
@@ -1595,6 +1677,64 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
             }
         }
     }
+
+    @SuppressLint("NewApi")
+    private fun setupPsmMaxHzSeekBar() {
+        var oldProg = STANDARD_REFRESH_RATE_HZ
+        mBinding.sbPeakHzPsm.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                val newProgress = supportedHzIntAllMod?.closestValue(
+                    progress
+                )!!
+                seekBar.progress = newProgress
+                seekBar.thumb = getThumb(newProgress)
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar) {
+                oldProg = seekBar.progress
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar) {
+                seekBar.progress.let {prog ->
+                    seekBar.thumb = getThumb(prog)
+                    if (!UtilsPermSt.instance(applicationContext).hasWriteSystemPerm()) {
+                        seekBar.progress = oldProg
+                        UtilsPermSt.instance(applicationContext).requestWriteSettings()
+                        return
+                    }
+                    mUtilsRefreshRate.mUtilsPrefsGmh.hzPrefMaxRefreshRatePsm = prog
+                    if (isPowerSaveModeOn.get() == true) {
+                        mUtilsRefreshRate.mUtilsPrefsGmh.hzPrefMaxRefreshRatePsm.let{
+                            prrActive.set( it)
+                            mUtilsRefreshRate.setRefreshRate(it, mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefMinHzAdapt)
+                        }
+                    }
+                }
+            }
+        })
+    }
+
+    @SuppressLint("NewApi")
+    private fun updatePsmMaxHzSbMinMax() {
+        launch {
+            delay(500)
+            //Log.d(TAG,"forceLowestHz PSM $forceLowestHz vs ${mUtilsPrefsGmh.hzPrefMaxRefreshRatePsm}")
+            if (SDK_INT >= VERSION_CODES.O) {
+                mBinding.sbPeakHzPsm.min = lowestHzCurMode
+            }
+            mBinding.sbPeakHzPsm.max = highestHzForAllMode
+            //initial value
+            mBinding.sbPeakHzPsm.progress = mUtilsRefreshRate.mUtilsPrefsGmh.hzPrefMaxRefreshRatePsm/*.let {
+                if (it != -1) {
+                    it
+                } else {
+                    mUtilsPrefsGmh.hzPrefMaxRefreshRatePsm = highestHzForAllMode
+                    highestHzForAllMode
+                }
+            }*/
+        }
+    }
+
 
 
 
@@ -1755,19 +1895,21 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
 
                     try {
                         //Needed
-                        applicationContext.startService(
-                            Intent(
-                                applicationContext,
-                                GalaxyMaxHzAccess::class.java
-                            ).apply {
-                                putExtra(SETUP_ADAPTIVE, true)
-                                putExtra(SETUP_NETWORK_CALLBACK, true)
-                                /*putExtra(
+                        if (SDK_INT >= VERSION_CODES.M) {
+                            applicationContext.startService(
+                                Intent(
+                                    applicationContext,
+                                    GalaxyMaxHzAccess::class.java
+                                ).apply {
+                                    putExtra(SETUP_ADAPTIVE, true)
+                                    putExtra(SETUP_NETWORK_CALLBACK, true)
+                                    /*putExtra(
                                     SWITCH_AUTO_SENSORS,
                                     mUtilsPrefsGmh.gmhPrefSensorsOff
                                 )*/
-                            }
-                        )
+                                }
+                            )
+                        }
                     } catch (_: Exception) {
                     }
                     showLoading(false)
@@ -1890,9 +2032,13 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
     }
 
 
-    @SuppressLint("InflateParams")
+
     private fun inflateViews(){
-        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        mBinding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(mBinding.root)
+        mBinding.clickListener = this@MainActivity
+
+        @SuppressLint("InflateParams")
         thumbView = LayoutInflater.from(this).inflate(R.layout.com_seekbar_thumb, null, false)
     }
 
@@ -1988,19 +2134,23 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener*/, MyClic
     }
 
 
-    fun getThumb(progress: Int): Drawable {
+    private fun getThumb(progress: Int): Drawable {
         (thumbView.findViewById<View>(R.id.tvProgress) as TextView).text = progress.toString()
         thumbView.measure(MeasureSpec.UNSPECIFIED, MeasureSpec.UNSPECIFIED)
         val bitmap = Bitmap.createBitmap(
-            thumbView.measuredWidth,
-            thumbView.measuredHeight,
-            Bitmap.Config.ARGB_8888
+        thumbView.measuredWidth,
+        thumbView.measuredHeight,
+        Bitmap.Config.ARGB_8888
         )
-        val canvas = Canvas(bitmap)
+
         thumbView.layout(0, 0, thumbView.measuredWidth, thumbView.measuredHeight)
+
+        val canvas = Canvas(bitmap)
+
         thumbView.draw(canvas)
         return BitmapDrawable(resources, bitmap)
     }
+
 
 
     @RequiresApi(VERSION_CODES.M)

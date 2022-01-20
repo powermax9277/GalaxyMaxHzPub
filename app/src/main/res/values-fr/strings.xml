@@ -7,10 +7,8 @@
     <string name="resolution">Bascule résolution et fluidité</string>
     <string name="act">Activer Premium|Trial</string>
     <string name="max_hz">Max Hz</string>
-    <string name="max_hz_holder">Max %s Hz</string>
     <string name="feat_n_a" tools:keep="@string/feat_n_a">Modifier la résolution non prise en charge</string>
-    <string name="unknown_mode">Mode de taux de rafraîchissement non identifié</string>
-<!--    <string name="qs_active">Les vignettes de réglages rapides ont bien été activées</string>-->
+    <!--    <string name="qs_active">Les vignettes de réglages rapides ont bien été activées</string>-->
     <string name="min_hz_for_toggle">Min. Hz pour le toggle</string>
     <string name="adaptive">Adaptatif</string>
     <string name="high">Haut</string>
@@ -159,4 +157,6 @@
     <string name="prevent_high">Empêcher le passage en mode haut</string>
     <string name="auto_sensors_off_exp">Auto SENSORS OFF</string>
     <string name="data_usage"><u>Data Usage</u></string>
+    <string name="acces_req">Enable Accessibility Service</string>
+    <string name="max_hz_for_psm">" Hz max pour le mode d'économie d'énergie"</string>
 </resources>

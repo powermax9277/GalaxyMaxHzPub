@@ -30,7 +30,7 @@ import kotlin.coroutines.CoroutineContext
 import kotlin.math.min
 
 
-@ExperimentalCoroutinesApi
+
 @SuppressLint("InlinedApi")
 internal class HzService : Service(), CoroutineScope{
 
@@ -52,7 +52,8 @@ internal class HzService : Service(), CoroutineScope{
     private val notificationManagerCompat by lazy {NotificationManagerCompat.from(applicationContext)}
     private val mHzSharePref by lazy { UtilsPrefsGmhSt(applicationContext) }
     //private val mUtilsDeviceInfo by lazy { UtilsDeviceInfo(applicationContext) }
-    private var myJob: Job? = null
+    private var mPauseHzJob: Job? = null
+    private var mTransfyHzJob: Job? = null
     private val mNotificationContentView by lazy {RemoteViews(
         applicationContext.packageName,
         R.layout.view_hz_notification
@@ -105,7 +106,7 @@ internal class HzService : Service(), CoroutineScope{
                 override fun onChange(result: Any) {
                     if (result  as Boolean) {
                         //pauseHz()
-                        myJob?.cancel()
+                        mPauseHzJob?.cancel()
                         startHz()
                         notificationBuilderInstance.setVisibility(Notification.VISIBILITY_PRIVATE)
                         notificationManagerCompat.notify(
@@ -113,13 +114,13 @@ internal class HzService : Service(), CoroutineScope{
                             notificationBuilderInstance.build()
                         )
                     } else {
-                        myJob?.cancel()
-                        myJob = null
-                        myJob = launch{
+                        mPauseHzJob?.cancel()
+                        mPauseHzJob = null
+                        mPauseHzJob = launch{
                             delay(7000)
                             pauseHz()
                         }
-                        myJob?.start()
+                        mPauseHzJob?.start()
                     }
                 }
             }
@@ -132,16 +133,11 @@ internal class HzService : Service(), CoroutineScope{
 
     private fun pauseHz(){
         dm.unregisterDisplayListener(displayListener)
-        /*delay(7000)
-        offScreenRefreshRate = "${mDisplay.refreshRate.toInt()} hz"
-        delay(13000)*/
         notificationBuilderInstance.setVisibility(Notification.VISIBILITY_SECRET)
         notificationManagerCompat.notify(
             NOTIFICATION_ID_HZ,
             notificationBuilderInstance.build()
         )
-
-        //overlayOn?.let{if (it) showHzOverlay(false)}
         showHzOverlay(false)
         hzStatus.set(PAUSE)
     }
@@ -149,15 +145,9 @@ internal class HzService : Service(), CoroutineScope{
 
     @RequiresApi(Build.VERSION_CODES.M)
     private fun startHz() {
-        //launch {
         showHzOverlay(overlayOn!!)
         updateRefreshRateViews(mDisplay.refreshRate.toInt())
         dm.registerDisplayListener(displayListener, Handler(Looper.getMainLooper()))
-        /*     try {
-                 dm.registerDisplayListener(displayListener, Handler(Looper.getMainLooper()))
-                 updateRefreshRateViews(mDisplay.refreshRate.toInt())
-             } catch (e: java.lang.Exception) { }*/
-        //}
         hzStatus.set(PLAYING)
     }
 
@@ -203,23 +193,17 @@ internal class HzService : Service(), CoroutineScope{
         super.onCreate()
         setupNotification()
         registerScreenStatusReceiver()
-        //wm.addView(stageView, params)
         hzStatus.set(CREATED)
     }
 
 
     private fun registerScreenStatusReceiver(){
-        /*if (!AccessibilityPermission.isAccessibilityEnabled(
-                applicationContext,
-                GalaxyMaxHzAccess::class.java
-            )) {*/
         IntentFilter().let {
             it.addAction(Intent.ACTION_SCREEN_OFF)
             it.addAction(Intent.ACTION_SCREEN_ON)
             it.priority = 999
             registerReceiver(mScreenStatusReceiver, it)
         }
-        //}
     }
 
 
@@ -248,8 +232,8 @@ internal class HzService : Service(), CoroutineScope{
         try {
             wm.removeView(stageView)
         }catch (_: java.lang.Exception){}
-        myJob?.cancel()
-        myJob = null
+        mPauseHzJob?.cancel()
+        mPauseHzJob = null
         super.onDestroy()
     }
 
@@ -315,8 +299,16 @@ internal class HzService : Service(), CoroutineScope{
     private fun updateOverlay(newHz: Int){
         if (overlayOn == true) {
             launch(Dispatchers.Main) {
+                mTransfyHzJob?.cancel()
                 hzText.setTextColor(if (newHz <= 60.05) Color.RED else Color.GREEN)
+                hzText.alpha = 0.8f
                 hzText.text = newHz.toString()
+                mTransfyHzJob = null
+                mTransfyHzJob = launch(Dispatchers.Main) {
+                    delay(4000)
+                    hzText.alpha = 0.2f
+                }
+                mTransfyHzJob?.start()
             }
         }
     }
@@ -334,7 +326,6 @@ internal class HzService : Service(), CoroutineScope{
         isHzNotifOn.set(mHzSharePref.gmhPrefHzNotifIsOn)
         overlayOn = mHzSharePref.gmhPrefHzOverlayIsOn
         params.gravity = mHzSharePref.gmhPrefHzPosition
-        //prevHz = 0
     }
 
 

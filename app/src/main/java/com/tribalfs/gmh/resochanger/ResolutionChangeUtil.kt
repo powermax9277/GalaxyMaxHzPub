@@ -2,6 +2,8 @@ package com.tribalfs.gmh.resochanger
 
 import android.content.Context
 import android.content.pm.PackageManager
+import android.os.Build
+import android.util.Size
 import android.widget.Toast
 import com.tribalfs.gmh.R
 import com.tribalfs.gmh.helpers.*
@@ -21,12 +23,12 @@ class ResolutionChangeUtil (context: Context) {
         // private const val TAG = "ResolutionChangeUtil"
     }*/
     private val appCtx = context.applicationContext
-    private val mUtilsRefreshRate by lazy { UtilsRefreshRateSt.instance(appCtx) }
+    internal val mUtilsRefreshRate by lazy { UtilsRefreshRateSt.instance(appCtx) }
 
     @ExperimentalCoroutinesApi
-    suspend fun changeRes(resLxw: String?): Int? {
+    suspend fun changeRes(reso: Size?): Int? {
         return if (hasWriteSecureSetPerm || UtilsPermSt.instance(appCtx).hasWriteSecurePerm()) {
-            if (changeResInternal(resLxw)) {
+            if (changeResInternal(reso)) {
                 PackageManager.PERMISSION_GRANTED
             } else {
                 withContext(Dispatchers.Main) {
@@ -52,7 +54,7 @@ class ResolutionChangeUtil (context: Context) {
     }
 
     internal fun getResName(resLxw: String?): String {
-        val reso = resLxw?:mUtilsRefreshRate.mUtilsDeviceInfo.getDisplayResStr("x")
+        val reso = resLxw?:mUtilsRefreshRate.mUtilsDeviceInfo.getDisplayResoStr("x")
         mUtilsRefreshRate.getResolutionsForKey(null)?.forEach{
             it[reso]?.let{res ->
                 return res.resName
@@ -65,8 +67,8 @@ class ResolutionChangeUtil (context: Context) {
     }
 
 
-    private fun getNextResAndDen(density : Int) : List<String>{
-        val currentResString = mUtilsRefreshRate.mUtilsDeviceInfo.getDisplayResStr("x")
+    private fun getNextResAndDen(density : Int) : SizeDensity/*List<String>*/{
+        val currentResString = mUtilsRefreshRate.mUtilsDeviceInfo.getDisplayResoStr("x")
         val resList = getFilteredResList()
 
         // Log.d(TAG, "resList ${resList?.joinToString(",").toString()}")
@@ -75,7 +77,7 @@ class ResolutionChangeUtil (context: Context) {
         }
 
         var nextResDetails: ResolutionDetails? =  null
-        resList[if(idx-1>= 0) idx-1 else resList.size-1].forEach{
+        resList[if (idx-1>= 0) idx-1 else resList.size-1].forEach{
             nextResDetails = it.value
         }
         val nextResH = nextResDetails!!.resHeight
@@ -85,11 +87,11 @@ class ResolutionChangeUtil (context: Context) {
         val newDen = ( (density.toFloat() / curResH.toFloat()) * (nextResH.toFloat()) ).toInt()
 
         // Log.d(TAG, "ChangeRes / Current Resolution detected: $currentResString DPI: $newDen")
-        return ("$nextResH,$nextResW,$newDen").split(",")
+        return SizeDensity(nextResW, nextResH, newDen) /* ("$nextResH,$nextResW,$newDen").split(",")*/
     }
 
     @ExperimentalCoroutinesApi
-    private suspend fun changeResInternal(resLxw: String?): Boolean = withContext(Dispatchers.Default) {
+    private suspend fun changeResInternal(reso: Size?/*String?*/): Boolean = withContext(Dispatchers.Default) {
 
         val currentDensity = mUtilsRefreshRate.mUtilsDeviceInfo.getDisplayDensity()
 
@@ -105,27 +107,29 @@ class ResolutionChangeUtil (context: Context) {
             return@withContext false
         }
 
-        val nextRes: String?
+        val nextReso: Size?
         val nextDen: Int?
 
-        if (resLxw == null) {
+        if (reso == null) {
             val nextResAndDen = getNextResAndDen(currentDensity)
-            nextRes = "${nextResAndDen[0]}x${nextResAndDen[1]}"
-            nextDen = nextResAndDen[2].toInt()
+            nextReso = Size(nextResAndDen.w,nextResAndDen.h)
+            nextDen = nextResAndDen.dpi
         } else {
             if (getFilteredResList().indexOfFirst {
-                    it.containsKey(resLxw)
+                    it.containsKey("${reso.height}x${reso.width}")
                 } != -1) {
-                nextRes = resLxw
-                val currentResString =mUtilsRefreshRate.mUtilsDeviceInfo.getDisplayResStr("x")
-                val curResH = currentResString.split("x")[0]
-                nextDen = ((currentDensity.toFloat() / curResH.toFloat()) * (resLxw.split("x")[0].toFloat())).toInt()
+                nextReso = reso
+                val nexResoH = reso.height.toFloat()
+                val currentReso = mUtilsRefreshRate.mUtilsDeviceInfo.getDisplayResolution()
+                val curResH = currentReso.height
+                nextDen = ((currentDensity.toFloat() / curResH.toFloat()) * nexResoH).toInt()
             } else {
                 return@withContext false
             }
         }
 
-        val nextResName =  getResName(nextRes)
+        val nextResStr = "${nextReso.height}x${nextReso.width}"
+        val nextResName =  getResName(nextResStr)
         val curResName = getResName(null)
 
         if (isSamsung) {
@@ -134,29 +138,28 @@ class ResolutionChangeUtil (context: Context) {
         }
 
         if (nextResName == "CQHD+" && listOf("WQHD+","CQHD+").indexOf(curResName) != -1){
-            nextRes.split("x").let { nextResSplit ->
                 ResolutionChangeApi(appCtx).setDisplaySizeDensity(
-                    displayId,
-                    "${(nextResSplit[0].toFloat()/nextResSplit[1].toFloat() * 1080f).toInt()}x1080",
+                    displayId,Size(1080, (nextReso.height.toFloat()/nextReso.width.toFloat()*1080f).toInt()),
                     null
                 )
-            }
         }
 
         val changeResResult = ResolutionChangeApi(appCtx).setDisplaySizeDensity(
             displayId,
-            nextRes,
+            nextReso,
             nextDen
         )
 
         delay(300)
         if (changeResResult) {
-            mUtilsRefreshRate.setPrefOrAdaptOrHighRefreshRateMode(nextRes)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                mUtilsRefreshRate.setPrefOrAdaptOrHighRefreshRateMode(nextResStr)
             delay(250)//don't remove
+            }
             launch(Dispatchers.Main){
                 Toast.makeText(
                     appCtx,
-                    "$nextResName[$nextRes] display resolution applied.",
+                    "$nextResName[$nextReso] display resolution applied.",
                     Toast.LENGTH_LONG
                 ).show()
             }

@@ -20,7 +20,6 @@ class LatestAppVersion(
     private var isCancelled: Boolean = true
 
 
-    @ExperimentalCoroutinesApi
     private val job: Job = CoroutineScope(Dispatchers.IO).launch {
         cancel(false)
         val appDetailsDeferred: Deferred<AppDetails?> = async(Dispatchers.IO) {

@@ -10,7 +10,3 @@ data class ResolutionDetails(
     val highestHz: Float
 )
 
-/*data class ResolutionBasic(
-    val resHeight: Int,
-    val resWidth: Int
-)*/

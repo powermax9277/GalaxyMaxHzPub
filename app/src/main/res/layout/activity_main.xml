@@ -11,7 +11,7 @@
             name="isMultiRes"
             type="Boolean"/>
         <variable
-            name="isAdFree"
+            name="premium"
             type="Boolean" />
         <variable
             name="hideHzOverlaySettings"
@@ -51,7 +51,10 @@
             type="Boolean" />
         <variable
             name="clickListener"
-            type="com.tribalfs.gmh.callbacks.MyClickHandler"/>
+            type="com.tribalfs.gmh.MainActivity"/>
+<!--        <variable
+            name="clickListener"
+            type="com.tribalfs.gmh.callbacks.MyClickHandler"/>-->
         <import type="android.view.View"/>
     </data>
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -126,7 +129,7 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_margin="8dp"
                         android:drawableEnd="@{hasWssPerm ? null : @android:drawable/ic_menu_info_details}"
-                        android:onClick="@{hasWssPerm ? null : clickListener::onClickView}"
+                        android:onClick="@{(v) -> (hasWssPerm ? null : clickListener.onClickView(v))}"
                         android:text="@string/use_qstile_reso_switch"
                         android:textAlignment="center"
                         android:textAllCaps="false"
@@ -142,7 +145,7 @@
                         style="?android:attr/textColorPrimary"
                         android:textSize="12sp"
                         android:layout_gravity="center_horizontal"
-                        android:visibility="@{(isMultiRes &amp;&amp; isAdFree) ? View.VISIBLE : View.GONE, default=visible}" />
+                        android:visibility="@{(isMultiRes &amp;&amp; premium) ? View.VISIBLE : View.GONE, default=visible}" />
 
 
 
@@ -150,7 +153,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:visibility="@{(isMultiRes &amp;&amp; isAdFree) ? View.VISIBLE : View.GONE, default=visible}">
+                        android:visibility="@{(isMultiRes &amp;&amp; premium) ? View.VISIBLE : View.GONE, default=visible}">
 
                         <com.google.android.material.chip.ChipGroup
                             android:id="@+id/cgResSwFilter"
@@ -171,7 +174,7 @@
                          style="@style/cardViewStyle"
                          android:id="@+id/adView"
                          app:adSize="SMART_BANNER"
-                         android:visibility="@{isAdFree ? View.GONE : View.VISIBLE, default=visible}"
+                         android:visibility="@{premium ? View.GONE : View.VISIBLE, default=visible}"
                          app:adUnitId="ca-app-pub-3239920037413959/2300282594"
                          android:layout_marginTop="2dp"
                          android:layout_marginBottom="2dp" />-->
@@ -192,35 +195,125 @@
                         app:layout_constraintTop_toTopOf="parent"
                         tools:ignore="UseCompatTextViewDrawableXml" />
 
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/cg_refresh_rate_mode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:orientation="horizontal"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.44"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tvRefreshRateMods"
+                        app:selectionRequired="true"
+                        app:singleLine="true"
+                        app:singleSelection="true">
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/ch_standard"
+                            style="@style/chipStyle"
+                            android:checked="@{refreshRateMode.equals(&quot;0&quot;)}"
+                            android:enabled="@{hasWssPerm}"
+                            android:onClick="@{(v) -> (hasMotionSmoothness ? clickListener.onClickView(v) : null)}"
+                            android:text="@string/std"
+                            app:chipIconSize="18dp" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/ch_adaptive"
+                            style="@style/chipStyle"
+                            android:checked="@{refreshRateMode.equals(&quot;1&quot;)}"
+                            android:enabled="@{hasWssPerm &amp;&amp; hasMotionSmoothness}"
+                            android:onClick="@{(v) -> (hasMotionSmoothness ? clickListener.onClickView(v) : null)}"
+                            android:text="@string/adaptive"
+                            android:visibility="@{(adaptiveSupported || premium) ? View.VISIBLE : View.GONE, default=visible}"
+                            app:chipIconSize="18dp" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/ch_high"
+                            style="@style/chipStyle"
+                            android:checked="@{refreshRateMode.equals(&quot;2&quot;)}"
+                            android:enabled="@{hasWssPerm &amp;&amp; hasMotionSmoothness}"
+                            android:onClick="@{(v) -> (hasMotionSmoothness ? clickListener.onClickView(v) : null)}"
+                            android:text="@string/high"
+                            app:chipIconSize="18dp" />
+                    </com.google.android.material.chip.ChipGroup>
+
+
+                    <TextView
+                        android:id="@+id/tv_rrm_adb_inf"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableEnd="@android:drawable/ic_menu_info_details"
+                        android:onClick="@{(v) -> hasWssPerm ? null : clickListener.onClickView(v)}"
+                        android:visibility="@{!hasWssPerm ? View.VISIBLE : View.GONE, default=visible}"
+                        app:layout_constraintBottom_toBottomOf="@+id/cg_refresh_rate_mode"
+                        app:layout_constraintStart_toEndOf="@+id/cg_refresh_rate_mode"
+                        app:layout_constraintTop_toTopOf="@+id/cg_refresh_rate_mode"
+                        tools:ignore="UseCompatTextViewDrawableXml" />
+
                     <Switch
-                        android:id="@+id/sw_peak_hz"
+                        android:id="@+id/sw_prevent_high"
                         android:layout_width="@dimen/seekbar_width"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="16dp"
-                        android:checked="@{refreshRateMode.equals(&quot;2&quot;) || refreshRateMode.equals(&quot;1&quot;) ? true : false}"
-                        android:enabled="@{(hasMotionSmoothness &amp;&amp; hasWssPerm &amp;&amp; (!isAdFree || !powerSavingIsOn)) ? true : false}"
-                        android:onClick="@{hasMotionSmoothness ? clickListener::onClickView : null}"
-                        android:text="@string/lbl_enable_msm"
+                        android:layout_marginTop="12dp"
+                        android:enabled="@{hasWssPerm ? true : false}"
+                        android:onClick="@{(v) -> (hasMotionSmoothness ? clickListener.onClickView(v) : null)}"
+                        android:text="@string/prevent_high"
                         android:textColor="?android:attr/textColorSecondary"
                         android:textSize="12sp"
+                        android:visibility="@{(!adaptiveSupported &amp;&amp; refreshRateMode.equals(&quot;1&quot;)) ? View.VISIBLE : View.GONE, default=visible}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tvRefreshRateMods"
+                        app:layout_constraintTop_toBottomOf="@+id/cg_refresh_rate_mode"
                         tools:ignore="UseSwitchCompatOrMaterialXml,TouchTargetSizeCheck" />
 
+
+                    <Switch
+                        android:id="@+id/sw_keep_mode"
+                        android:layout_width="@dimen/seekbar_width"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="12dp"
+                        android:enabled="@{hasWssPerm ? true : false}"
+                        android:onClick="@{(v) -> hasMotionSmoothness ? clickListener.onClickView(v) : null}"
+                        android:text="@string/prr_psm"
+                        android:textColor="?android:attr/textColorSecondary"
+                        android:textSize="12sp"
+                        android:visibility="@{premium ? View.VISIBLE : View.GONE, default=visible}"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/sw_prevent_high"
+                        tools:ignore="UseSwitchCompatOrMaterialXml,TouchTargetSizeCheck" />
+                    <!--Note: isChecked handled in MainActivity-->
+
                     <TextView
-                        android:id="@+id/tv_enable_ms"
+                        android:id="@+id/tv_keep_mode_adb_inf"
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
                         android:drawableEnd="@android:drawable/ic_menu_info_details"
-                        android:onClick="@{hasWssPerm ? null : clickListener::onClickView}"
+                        android:onClick="@{(v) -> hasWssPerm ? null : clickListener.onClickView(v)}"
                         android:textSize="14sp"
-                        android:visibility="@{!hasWssPerm  ? View.VISIBLE : View.GONE, default=visible}"
-                        app:layout_constraintBottom_toBottomOf="@+id/sw_peak_hz"
-                        app:layout_constraintStart_toEndOf="@+id/sw_peak_hz"
-                        app:layout_constraintTop_toTopOf="@id/sw_peak_hz"
+                        android:enabled="@{refreshRateMode.equals(&quot;1&quot;) || refreshRateMode.equals(&quot;2&quot;)  ? true : false}"
+                        android:visibility="@{!hasWssPerm &amp;&amp; premium ? View.VISIBLE : View.GONE, default=visible}"
+                        app:layout_constraintBottom_toBottomOf="@+id/sw_keep_mode"
+                        app:layout_constraintStart_toEndOf="@+id/sw_keep_mode"
+                        app:layout_constraintTop_toTopOf="@id/sw_keep_mode"
                         tools:ignore="UseCompatTextViewDrawableXml" />
+
+                    <TextView
+                        android:id="@+id/lbl_sb_peak_hz"
+                        style="?android:attr/textColorPrimary"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        android:labelFor="@+id/sb_peak_hz"
+                        android:text="@string/max_hz"
+                        android:textSize="11sp"
+                        app:layout_constraintStart_toStartOf="@+id/sb_peak_hz"
+                        app:layout_constraintTop_toBottomOf="@id/sw_keep_mode"
+                        tools:ignore="SmallSp" />
 
                     <androidx.appcompat.widget.AppCompatSeekBar
                         android:id="@+id/sb_peak_hz"
@@ -232,38 +325,36 @@
                         android:enabled="@{refreshRateMode.equals(&quot;1&quot;) || refreshRateMode.equals(&quot;2&quot;)  ? true : false}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/sw_peak_hz" />
+                        app:layout_constraintTop_toBottomOf="@+id/lbl_sb_peak_hz"
+                        tools:layout_editor_absoluteY="79dp" />
 
-                    <Switch
-                        android:id="@+id/sw_keep_mode"
+                 <!--   <com.google.android.material.slider.RangeSlider
+                        android:id="@+id/sb_peak_hz"
+                        style="@style/MySeekBarTheme"
                         android:layout_width="@dimen/seekbar_width"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="16dp"
-                        android:enabled="@{hasWssPerm ? true : false}"
-                        android:onClick="@{hasMotionSmoothness ? clickListener::onClickView : null}"
-                        android:text="@string/prr_psm"
-                        android:textColor="?android:attr/textColorSecondary"
-                        android:textSize="12sp"
-                        android:visibility="@{isAdFree ? View.VISIBLE : View.GONE, default=visible}"
+                        android:layout_marginTop="4dp"
+                        android:enabled="@{refreshRateMode.equals(&quot;1&quot;) || refreshRateMode.equals(&quot;2&quot;)  ? true : false}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/sb_peak_hz"
-                        tools:ignore="UseSwitchCompatOrMaterialXml,TouchTargetSizeCheck" />
-                    <!--Note: isChecked handled in MainActivity-->
+                        app:layout_constraintTop_toBottomOf="@+id/lbl_sb_peak_hz"
+                 />-->
+
 
                     <TextView
-                        android:id="@+id/tv_keep_mode_adb_inf"
+                        android:id="@+id/lbl_sb_peak_hz_psm"
+                        style="?android:attr/textColorPrimary"
                         android:layout_width="wrap_content"
-                        android:layout_height="0dp"
-                        android:drawableEnd="@android:drawable/ic_menu_info_details"
-                        android:onClick="@{hasWssPerm ? null : clickListener::onClickView}"
-                        android:textSize="14sp"
-                        android:visibility="@{(isAdFree &amp;&amp; !hasWssPerm)  ? View.VISIBLE : View.GONE, default=visible}"
-                        app:layout_constraintBottom_toBottomOf="@+id/sw_keep_mode"
-                        app:layout_constraintStart_toEndOf="@+id/sw_keep_mode"
-                        app:layout_constraintTop_toTopOf="@id/sw_keep_mode"
-                        tools:ignore="UseCompatTextViewDrawableXml" />
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:labelFor="@+id/sb_peak_hz_psm"
+                        android:text="@string/max_hz_for_psm"
+                        android:textSize="11sp"
+                        app:layout_constraintStart_toStartOf="@+id/sb_peak_hz_psm"
+                        app:layout_constraintTop_toBottomOf="@+id/sb_peak_hz"
+                        tools:ignore="SmallSp" />
+
 
                     <androidx.appcompat.widget.AppCompatSeekBar
                         android:id="@+id/sb_peak_hz_psm"
@@ -273,85 +364,10 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="4dp"
                         android:enabled="@{(refreshRateMode.equals(&quot;1&quot;) || refreshRateMode.equals(&quot;2&quot;)) ? true : false}"
-                        android:visibility="@{isAdFree &amp;&amp; hasMotionSmoothness ? View.VISIBLE : View.GONE, default=visible}"
+                        android:visibility="@{premium &amp;&amp; hasMotionSmoothness ? View.VISIBLE : View.GONE, default=visible}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/sw_keep_mode" />
-
-                    <View
-                        android:id="@+id/divider1"
-                        android:layout_width="265dp"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginBottom="8dp"
-                        android:background="?android:attr/listDivider"
-                        android:visibility="@{(isAdFree || adaptiveSupported) ? View.VISIBLE :  View.GONE, default=visible}"
-                        app:layout_constraintBottom_toTopOf="@+id/cg_refresh_rate_mode"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/sb_peak_hz_psm" />
-
-                    <com.google.android.material.chip.ChipGroup
-                        android:id="@+id/cg_refresh_rate_mode"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:orientation="horizontal"
-                        android:visibility="@{(adaptiveSupported || isAdFree) ? View.VISIBLE : View.GONE, default=visible}"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/divider1"
-                        app:selectionRequired="@{(refreshRateMode.equals(&quot;1&quot;) || refreshRateMode.equals(&quot;2&quot;)) ? true : false}"
-                        app:singleLine="true"
-                        app:singleSelection="true">
-
-                        <com.google.android.material.chip.Chip
-                            android:id="@+id/ch_adaptive"
-                            style="@style/chipStyle"
-                            android:checked="@{refreshRateMode.equals(&quot;1&quot;)}"
-                            android:enabled="@{hasWssPerm &amp;&amp; (refreshRateMode.equals(&quot;1&quot;) || refreshRateMode.equals(&quot;2&quot;))}"
-                            android:onClick="@{hasMotionSmoothness ? clickListener::onClickView : null}"
-                            android:text="@string/adaptive"
-                            app:chipIconSize="18dp" />
-
-                        <com.google.android.material.chip.Chip
-                            android:id="@+id/ch_high"
-                            style="@style/chipStyle"
-                            android:checked="@{refreshRateMode.equals(&quot;2&quot;)}"
-                            android:enabled="@{hasWssPerm &amp;&amp; (refreshRateMode.equals(&quot;1&quot;) || refreshRateMode.equals(&quot;2&quot;))}"
-                            android:onClick="@{hasMotionSmoothness ? clickListener::onClickView : null}"
-                            android:text="@string/high"
-                            app:chipIconSize="18dp" />
-                    </com.google.android.material.chip.ChipGroup>
-
-                    <TextView
-                        android:id="@+id/tv_rrm_adb_inf"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:drawableEnd="@android:drawable/ic_menu_info_details"
-                        android:onClick="@{hasWssPerm ? null : clickListener::onClickView}"
-                        android:visibility="@{((adaptiveSupported || isAdFree) &amp;&amp; !hasWssPerm) ? View.VISIBLE : View.GONE, default=visible}"
-                        app:layout_constraintBottom_toBottomOf="@+id/cg_refresh_rate_mode"
-                        app:layout_constraintStart_toEndOf="@+id/cg_refresh_rate_mode"
-                        app:layout_constraintTop_toTopOf="@+id/cg_refresh_rate_mode"
-                        tools:ignore="UseCompatTextViewDrawableXml" />
-
-                    <Switch
-                        android:id="@+id/sw_prevent_high"
-                        android:layout_width="@dimen/seekbar_width"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="16dp"
-                        android:enabled="@{hasWssPerm ? true : false}"
-                        android:onClick="@{hasMotionSmoothness ? clickListener::onClickView : null}"
-                        android:text="@string/prevent_high"
-                        android:textColor="?android:attr/textColorSecondary"
-                        android:textSize="12sp"
-                        android:visibility="@{!adaptiveSupported &amp;&amp; refreshRateMode.equals(&quot;1&quot;) ? View.VISIBLE : View.GONE, default=visible}"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/cg_refresh_rate_mode"
-                        tools:ignore="UseSwitchCompatOrMaterialXml,TouchTargetSizeCheck" />
+                        app:layout_constraintTop_toBottomOf="@id/lbl_sb_peak_hz_psm" />
 
 
                     <TextView
@@ -362,9 +378,9 @@
                         android:layout_marginTop="12dp"
                         android:text="@string/adp_min_hz"
                         android:textSize="11sp"
-                        android:visibility="@{hasMinHzOptions == true &amp;&amp; refreshRateMode.equals(&quot;1&quot;) &amp;&amp; isAdFree  &amp;&amp; hasWssPerm ? View.VISIBLE : View.GONE, default=visible}"
-                        app:layout_constraintStart_toStartOf="@+id/sw_peak_hz"
-                        app:layout_constraintTop_toBottomOf="@+id/sw_prevent_high"
+                        android:visibility="@{hasMinHzOptions == true &amp;&amp; refreshRateMode.equals(&quot;1&quot;) &amp;&amp; (premium || adaptiveSupported) ? View.VISIBLE : View.GONE, default=visible}"
+                        app:layout_constraintStart_toStartOf="@+id/sb_min_hz_adapt"
+                        app:layout_constraintTop_toBottomOf="@id/sb_peak_hz_psm"
                         tools:ignore="SmallSp" />
 
                     <androidx.appcompat.widget.AppCompatSeekBar
@@ -374,7 +390,8 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="4dp"
-                        android:visibility="@{hasMinHzOptions == true &amp;&amp; refreshRateMode.equals(&quot;1&quot;) &amp;&amp; isAdFree &amp;&amp; hasWssPerm ? View.VISIBLE : View.GONE, default=visible}"
+                        android:enabled="@{refreshRateMode.equals(&quot;1&quot;)  ? true : false}"
+                        android:visibility="@{hasMinHzOptions == true &amp;&amp; refreshRateMode.equals(&quot;1&quot;) &amp;&amp; (premium || adaptiveSupported) ? View.VISIBLE : View.GONE, default=visible}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/tv_lower_limit_adapt" />
@@ -388,8 +405,8 @@
                         android:layout_marginTop="12dp"
                         android:text="@string/brightness_threshold"
                         android:textSize="11sp"
-                        android:visibility="@{refreshRateMode.equals(&quot;1&quot;) &amp;&amp; hasWssPerm &amp;&amp; isAdFree &amp;&amp; (!adaptiveSupported || minHzAdaptive &lt; 60) ? View.VISIBLE : View.GONE, default=visible}"
-                        app:layout_constraintStart_toStartOf="@+id/sw_peak_hz"
+                        android:visibility="@{refreshRateMode.equals(&quot;1&quot;)  &amp;&amp; premium &amp;&amp; (!adaptiveSupported || minHzAdaptive &lt; 60) ? View.VISIBLE : View.GONE, default=visible}"
+                        app:layout_constraintStart_toStartOf="@+id/sb_brightness"
                         app:layout_constraintTop_toBottomOf="@+id/sb_min_hz_adapt"
                         tools:ignore="SmallSp" />
 
@@ -400,7 +417,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="4dp"
-                        android:visibility="@{refreshRateMode.equals(&quot;1&quot;) &amp;&amp; hasWssPerm &amp;&amp; isAdFree &amp;&amp; (!adaptiveSupported || minHzAdaptive &lt; 60)  ? View.VISIBLE : View.GONE, default=visible}"
+                        android:visibility="@{refreshRateMode.equals(&quot;1&quot;) &amp;&amp; hasWssPerm &amp;&amp; premium &amp;&amp; (!adaptiveSupported || minHzAdaptive &lt; 60)  ? View.VISIBLE : View.GONE, default=visible}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/tv_brightness" />
@@ -413,8 +430,8 @@
                         android:layout_marginTop="12dp"
                         android:text="@string/adp_delay"
                         android:textSize="11sp"
-                        android:visibility="@{(refreshRateMode.equals(&quot;1&quot;) &amp;&amp; hasWssPerm &amp;&amp; isAdFree &amp;&amp; !adaptiveSupported) ? View.VISIBLE : View.GONE, default=visible}"
-                        app:layout_constraintStart_toStartOf="@+id/sw_peak_hz"
+                        android:visibility="@{(refreshRateMode.equals(&quot;1&quot;) &amp;&amp; hasWssPerm &amp;&amp; premium &amp;&amp; !adaptiveSupported) ? View.VISIBLE : View.GONE, default=visible}"
+                        app:layout_constraintStart_toStartOf="@+id/sb_adaptive_delay"
                         app:layout_constraintTop_toBottomOf="@+id/sb_brightness"
                         tools:ignore="SmallSp" />
 
@@ -425,10 +442,11 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="4dp"
-                        android:visibility="@{(refreshRateMode.equals(&quot;1&quot;) &amp;&amp; hasWssPerm &amp;&amp; isAdFree &amp;&amp; !adaptiveSupported) ? View.VISIBLE : View.GONE, default=visible}"
+                        android:visibility="@{(refreshRateMode.equals(&quot;1&quot;) &amp;&amp; hasWssPerm &amp;&amp; premium &amp;&amp; !adaptiveSupported) ? View.VISIBLE : View.GONE, default=visible}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/tv_adaptive_delay" />
+
 
                     <View
                         android:id="@+id/divider2"
@@ -465,7 +483,7 @@
                         android:layout_marginTop="8dp"
                         android:text="@string/min_hz_for_toggle"
                         android:textSize="11sp"
-                        app:layout_constraintStart_toStartOf="@+id/sw_peak_hz"
+                        app:layout_constraintStart_toStartOf="@+id/sb_min_hz"
                         app:layout_constraintTop_toBottomOf="@+id/toggleMaxHzTileInf"
                         tools:ignore="SmallSp" />
 
@@ -509,7 +527,7 @@
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="8dp"
-                        android:onClick="@{hasMotionSmoothness ? clickListener::onClickView : null}"
+                        android:onClick="@{(v) -> hasMotionSmoothness ? clickListener.onClickView(v) : null}"
                         android:text="@string/enable"
                         android:textColor="?android:attr/textColorPrimary"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -532,16 +550,17 @@
                         <com.google.android.material.chip.Chip
                             android:id="@+id/ch_overlay_hz"
                             style="@style/chipStyle"
-                            android:onClick="@{hasMotionSmoothness ? clickListener::onClickView : null}"
+                            android:onClick="@{(v) -> (hasMotionSmoothness ? clickListener.onClickView(v) : null)}"
                             android:text="@string/overlay"
                             app:chipIconSize="18dp"
                             app:chipMinTouchTargetSize="40dp"
                             tools:ignore="TouchTargetSizeCheck" />
+                 <!--       android:onClick="@{hasMotionSmoothness ? clickListener.onClickView(v) : null}"-->
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/ch_notif_hz"
                             style="@style/chipStyle"
-                            android:onClick="@{hasMotionSmoothness ? clickListener::onClickView : null}"
+                            android:onClick="@{(v) ->  (hasMotionSmoothness ? clickListener.onClickView(v) : null)}"
                             android:text="@string/statusbar"
                             app:checkedIconVisible="true"
                             app:chipIconSize="18dp"
@@ -594,7 +613,7 @@
                                 style="@style/chipStyle"
                                 android:clipChildren="false"
                                 android:clipToPadding="false"
-                                android:onClick="@{hasMotionSmoothness ? clickListener::onClickView : null}"
+                                android:onClick="@{(v) -> (hasMotionSmoothness ?  clickListener.onClickView(v) : null)}"
                                 android:text="@string/top"
                                 app:chipIconSize="16dp"
                                 app:chipMinTouchTargetSize="40dp" />
@@ -602,7 +621,7 @@
                             <com.google.android.material.chip.Chip
                                 android:id="@+id/ch_bottom_hz"
                                 style="@style/chipStyle"
-                                android:onClick="@{hasMotionSmoothness ? clickListener::onClickView : null}"
+                                android:onClick="@{(v) -> (hasMotionSmoothness ? clickListener.onClickView(v) : null)}"
                                 android:text="@string/bottom"
                                 app:checkedIconVisible="true"
                                 app:chipIconSize="16dp"
@@ -623,7 +642,7 @@
                             <com.google.android.material.chip.Chip
                                 android:id="@+id/ch_left_hz"
                                 style="@style/chipStyle"
-                                android:onClick="@{hasMotionSmoothness ? clickListener::onClickView : null}"
+                                android:onClick="@{(v) -> (hasMotionSmoothness ? clickListener.onClickView(v) : null)}"
                                 android:text="@string/left"
                                 app:chipIconSize="16dp"
                                 app:chipMinTouchTargetSize="40dp" />
@@ -631,7 +650,7 @@
                             <com.google.android.material.chip.Chip
                                 android:id="@+id/ch_cent_hz"
                                 style="@style/chipStyle"
-                                android:onClick="@{hasMotionSmoothness ? clickListener::onClickView : null}"
+                                android:onClick="@{(v) -> (hasMotionSmoothness ? clickListener.onClickView(v) : null)}"
                                 android:text="@string/center"
                                 app:chipIconSize="16dp"
                                 app:chipMinTouchTargetSize="40dp" />
@@ -639,7 +658,7 @@
                             <com.google.android.material.chip.Chip
                                 android:id="@+id/ch_right_hz"
                                 style="@style/chipStyle"
-                                android:onClick="@{hasMotionSmoothness ? clickListener::onClickView : null}"
+                                android:onClick="@{(v) -> (hasMotionSmoothness ? clickListener.onClickView(v) : null)}"
                                 android:text="@string/right"
                                 app:chipIconSize="16dp"
                                 app:chipMinTouchTargetSize="40dp" />
@@ -707,7 +726,7 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginHorizontal="0dp"
                         android:layout_marginTop="16dp"
-                        android:onClick="@{hasMotionSmoothness ? clickListener::onClickView : null}"
+                        android:onClick="@{(v) -> (hasMotionSmoothness ? clickListener.onClickView(v) : null)}"
                         android:text="@string/force_hz_mod"
                         android:textColor="?android:attr/textColorPrimary"
                         android:visibility="@{hasMotionSmoothness ? View.VISIBLE : View.GONE}"
@@ -739,7 +758,7 @@
                         android:layout_marginVertical="8dp"
                         android:layout_marginTop="16dp"
                         android:enabled="@{hasWssPerm ? true : false}"
-                        android:onClick="@{hasWssPerm ? clickListener::onClickView : null}"
+                        android:onClick="@{(v) -> (hasWssPerm ? clickListener.onClickView(v) : null)}"
                         android:text="@string/auto_psm"
                         android:textColor="?android:attr/textColorPrimary"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -753,7 +772,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="0dp"
                         android:drawableEnd="@{hasWssPerm ? null : @android:drawable/ic_menu_info_details}"
-                        android:onClick="@{hasWssPerm ? null : clickListener::onClickView}"
+                        android:onClick="@{(v) -> (hasWssPerm ? null : clickListener.onClickView(v))}"
                         android:padding="0dp"
                         android:translationX="-30dp"
                         android:visibility="@{!hasWssPerm ? View.VISIBLE : View.GONE}"
@@ -768,7 +787,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="0dp"
                         android:layout_marginBottom="8dp"
-                        android:onClick="@{hasWssPerm ? clickListener::onClickView : clickListener::onClickView}"
+                        android:onClick="@{(v) ->  clickListener.onClickView(v)}"
                         android:text="@string/psm_options"
                         android:textColor="@color/primary_color"
                         android:textSize="13sp"
@@ -784,10 +803,10 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="16dp"
-                        android:onClick="@{isAdFree ? clickListener::onClickView : null}"
+                        android:onClick="@{(v) -> (premium ? clickListener.onClickView(v) : null)}"
                         android:text="@string/disable_sync_on_so"
                         android:textColor="?android:attr/textColorPrimary"
-                        android:visibility="@{isAdFree ? View.VISIBLE : View.GONE}"
+                        android:visibility="@{premium ? View.VISIBLE : View.GONE}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tv_so_psm_options"
@@ -799,11 +818,11 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="0dp"
                         android:layout_marginBottom="8dp"
-                        android:onClick="@{isAdFree ? clickListener::onClickView : null}"
+                        android:onClick="@{(v) -> premium ? clickListener.onClickView(v) : null}"
                         android:text="@string/autosync_settings"
                         android:textColor="@color/primary_color"
                         android:textSize="13sp"
-                        android:visibility="@{isAdFree ? View.VISIBLE : View.GONE}"
+                        android:visibility="@{premium ? View.VISIBLE : View.GONE}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/sw_auto_off_sync"
@@ -817,10 +836,10 @@
                         android:layout_marginTop="16dp"
                         android:checked="@{dozeIsOn}"
                         android:enabled="@{hasWssPerm}"
-                        android:onClick="@{hasWssPerm ? clickListener::onClickView : null}"
+                        android:onClick="@{(v) -> hasWssPerm ? clickListener.onClickView(v) : null}"
                         android:text="@string/quick_doz_mod"
                         android:textColor="?android:attr/textColorPrimary"
-                        android:visibility="@{isAdFree ? View.VISIBLE : View.GONE}"
+                        android:visibility="@{premium ? View.VISIBLE : View.GONE}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tv_auto_sync_settings"
@@ -833,10 +852,10 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginHorizontal="48dp"
                         android:drawableEnd="@{hasWssPerm ? @android:drawable/ic_dialog_info : @android:drawable/ic_menu_info_details}"
-                        android:onClick="@{hasWssPerm ? clickListener::onClickView : clickListener::onClickView}"
+                        android:onClick="@{(v) -> hasWssPerm ? clickListener.onClickView(v) : clickListener.onClickView(v)}"
                         android:text="@string/quick_mod_inf"
                         android:textSize="13sp"
-                        android:visibility="@{isAdFree ? View.VISIBLE : View.GONE}"
+                        android:visibility="@{premium ? View.VISIBLE : View.GONE}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/sw_screen_off_doze"
@@ -848,11 +867,11 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:layout_marginBottom="8dp"
-                        android:onClick="@{isAdFree ? clickListener::onClickView : null}"
+                        android:onClick="@{(v) -> (premium ? clickListener.onClickView(v) : null)}"
                         android:text="@string/apps_bat_opt_settings"
                         android:textColor="@color/primary_color"
                         android:textSize="13sp"
-                        android:visibility="@{isAdFree ? View.VISIBLE : View.GONE}"
+                        android:visibility="@{premium ? View.VISIBLE : View.GONE}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/screen_off_doze_info" />
@@ -865,7 +884,7 @@
                         android:layout_marginTop="8dp"
                         android:text="@string/quick_doz_mod_mwi"
                         android:textSize="11sp"
-                        android:visibility="@{isAdFree ? View.VISIBLE : View.GONE}"
+                        android:visibility="@{premium ? View.VISIBLE : View.GONE}"
                         app:layout_constraintEnd_toEndOf="@+id/screen_off_doze_info"
                         app:layout_constraintStart_toStartOf="@+id/screen_off_doze_info"
                         app:layout_constraintTop_toBottomOf="@+id/tv_batt_optim_settings"
@@ -880,7 +899,7 @@
                         android:layout_marginTop="4dp"
                         android:layout_marginBottom="12dp"
                         android:enabled="@{hasWssPerm}"
-                        android:visibility="@{isAdFree ? View.VISIBLE : View.GONE, default=visible}"
+                        android:visibility="@{premium ? View.VISIBLE : View.GONE, default=visible}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/tv_dze_mw_interval" />
@@ -891,10 +910,10 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="16dp"
-                        android:onClick="@{isAdFree ? clickListener::onClickView : null}"
+                        android:onClick="@{(v) -> (premium ? clickListener.onClickView(v) : null)}"
                         android:text="@string/auto_sensors_off_exp"
                         android:textColor="?android:attr/textColorPrimary"
-                        android:visibility="@{sensorsOffSupported == true &amp;&amp; isAdFree ? View.VISIBLE : View.GONE}"
+                        android:visibility="@{sensorsOffSupported == true &amp;&amp; premium ? View.VISIBLE : View.GONE}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/sb_mw_interval"
@@ -907,10 +926,10 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginHorizontal="48dp"
                         android:drawableEnd="@android:drawable/ic_dialog_info"
-                        android:onClick="@{hasWssPerm ? clickListener::onClickView : clickListener::onClickView}"
+                        android:onClick="@{(v) -> hasWssPerm ? clickListener.onClickView(v) : clickListener.onClickView(v)}"
                         android:text="@string/sensor_off_info"
                         android:textSize="13sp"
-                        android:visibility="@{sensorsOffSupported == true &amp;&amp; isAdFree ? View.VISIBLE : View.GONE}"
+                        android:visibility="@{sensorsOffSupported == true &amp;&amp; premium ? View.VISIBLE : View.GONE}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/sw_auto_sensors_off"
@@ -919,7 +938,7 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     style="@style/cardViewStyle"
-                    android:visibility="@{isAdFree &amp;&amp; showNsTool ? View.VISIBLE : View.GONE, default=visible}">
+                    android:visibility="@{ (showNsTool &amp;&amp; premium) ? View.VISIBLE : View.GONE, default=visible}">
 
                     <TextView
                         style="@style/topTitle"
@@ -936,7 +955,7 @@
                         android:layout_width="@dimen/seekbar_width"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
-                        android:onClick="@{isAdFree ? clickListener::onClickView : null}"
+                        android:onClick="@{(v) -> (premium ? clickListener.onClickView(v) : null)}"
                         android:text="@string/enable"
                         android:textColor="?android:attr/textColorPrimary"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -977,7 +996,7 @@
                             android:id="@+id/ch_down_stream"
                             android:layout_height="wrap_content"
                             android:layout_width="wrap_content"
-                            android:onClick="@{isAdFree ? clickListener::onClickView : null}"
+                            android:onClick="@{(v) -> (premium ? clickListener.onClickView(v) : null)}"
                             tools:ignore="SmallSp" />
 
                         <com.google.android.material.chip.Chip
@@ -988,7 +1007,7 @@
                             android:id="@+id/ch_up_stream"
                             android:layout_height="wrap_content"
                             android:layout_width="wrap_content"
-                            android:onClick="@{isAdFree ? clickListener::onClickView : null}"
+                            android:onClick="@{(v) -> (premium ? clickListener.onClickView(v) : null)}"
                             tools:ignore="SmallSp" />
 
                         <com.google.android.material.chip.Chip
@@ -999,7 +1018,7 @@
                             android:id="@+id/ch_combined_stream"
                             android:layout_height="wrap_content"
                             android:layout_width="wrap_content"
-                            android:onClick="@{isAdFree ? clickListener::onClickView : null}"
+                            android:onClick="@{(v) -> (premium ? clickListener.onClickView(v) : null)}"
                             tools:ignore="SmallSp" />
                     </com.google.android.material.chip.ChipGroup>
 
@@ -1024,7 +1043,7 @@
                             android:id="@+id/ch_bytes"
                             android:layout_height="wrap_content"
                             android:layout_width="wrap_content"
-                            android:onClick="@{isAdFree ? clickListener::onClickView : null}"
+                            android:onClick="@{(v) -> (premium ? clickListener.onClickView(v) : null)}"
                             tools:ignore="SmallSp" />
 
                         <com.google.android.material.chip.Chip
@@ -1035,7 +1054,7 @@
                             android:id="@+id/ch_bits"
                             android:layout_height="wrap_content"
                             android:layout_width="wrap_content"
-                            android:onClick="@{isAdFree ? clickListener::onClickView : null}"
+                            android:onClick="@{(v) -> (premium ? clickListener.onClickView(v) : null)}"
                             tools:ignore="SmallSp" />
 
                     </com.google.android.material.chip.ChipGroup>
@@ -1047,7 +1066,7 @@
                         android:layout_marginTop="12dp"
                         android:clickable="true"
                         android:focusable="true"
-                        android:onClick="@{isAdFree ? clickListener::onClickView : null}"
+                        android:onClick="@{(v) -> (premium ? clickListener.onClickView(v) : null)}"
                         android:text="@string/data_usage"
                         android:textColor="@color/primary_color"
                         android:textSize="14sp"
@@ -1063,7 +1082,7 @@
                     android:orientation="horizontal"
                     android:layout_gravity="center_horizontal"
                     android:id="@+id/linear_buy_activate"
-                    android:visibility="@{isAdFree ? View.GONE : View.VISIBLE}"
+                    android:visibility="@{premium ? View.GONE : View.VISIBLE}"
                     android:layout_marginBottom="2dp">
 
                     <androidx.appcompat.widget.AppCompatButton
@@ -1074,7 +1093,7 @@
                         android:textSize="11sp"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginEnd="4dp"
-                        android:onClick="@{!isAdFree ? clickListener::onClickView : null}"
+                        android:onClick="@{(v) -> (premium ? null : clickListener.onClickView(v))}"
                         tools:ignore="SmallSp"
                         android:maxLines="1" />
 
@@ -1087,7 +1106,7 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="8dp"
-                        android:onClick="@{!isAdFree ? clickListener::onClickView : null}"
+                        android:onClick="@{(v) -> (premium ? null : clickListener.onClickView(v))}"
                         tools:ignore="SmallSp"
                         android:maxLines="1" />
                 </LinearLayout>

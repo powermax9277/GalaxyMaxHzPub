@@ -85,9 +85,20 @@
         <item name="windowNoTitle">true</item>
     </style>
 
- <!--   <style name="AppThemeTilePref" parent="Theme.MaterialComponents.DayNight">
-        <item name="android:alertDialogTheme">@style/AlertDialogTheme</item>
-        <item name="android:colorControlActivated">@color/design_default_color_primary</item>
-        <item name="android:itemTextAppearance">@style/myCustomMenuTextAppearance</item>
-    </style>-->
+   <!-- <style name="SlidingDialogAnimation">
+        <item name="android:windowEnterAnimation">@android:anim/slide_in_left</item>
+        <item name="android:windowExitAnimation">@android:anim/slide_out_right</item>
+    </style>
+
+    <style name="FadeDialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/dialog_enter</item>
+        <item name="android:windowExitAnimation">@anim/dialog_exit</item>
+    </style>
+-->
+
+    <!--   <style name="AppThemeTilePref" parent="Theme.MaterialComponents.DayNight">
+           <item name="android:alertDialogTheme">@style/AlertDialogTheme</item>
+           <item name="android:colorControlActivated">@color/design_default_color_primary</item>
+           <item name="android:itemTextAppearance">@style/myCustomMenuTextAppearance</item>
+       </style>-->
   </resources>

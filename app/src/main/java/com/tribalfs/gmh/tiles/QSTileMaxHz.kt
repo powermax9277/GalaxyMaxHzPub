@@ -1,17 +1,15 @@
 package com.tribalfs.gmh.tiles
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager.PERMISSION_GRANTED
-import android.graphics.drawable.Icon
 import android.net.Uri
+import android.os.Build
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
 import android.widget.Toast
-import androidx.databinding.Observable
-import androidx.databinding.Observable.OnPropertyChangedCallback
+import androidx.annotation.RequiresApi
 import com.tribalfs.gmh.BuildConfig
 import com.tribalfs.gmh.MyApplication.Companion.applicationScope
 import com.tribalfs.gmh.R
@@ -19,7 +17,6 @@ import com.tribalfs.gmh.dialogs.ADB_SETUP_LINK
 import com.tribalfs.gmh.helpers.*
 import com.tribalfs.gmh.helpers.CacheSettings.currentRefreshRateMode
 import com.tribalfs.gmh.helpers.CacheSettings.hasWriteSecureSetPerm
-import com.tribalfs.gmh.helpers.CacheSettings.prrActive
 import com.tribalfs.gmh.helpers.CacheSettings.supportedHzIntCurMod
 import com.tribalfs.gmh.helpers.UtilsChangeMaxHz.Companion.CHANGE_MODE
 import com.tribalfs.gmh.helpers.UtilsChangeMaxHz.Companion.CHANGE_RES
@@ -35,32 +32,17 @@ import com.tribalfs.gmh.helpers.UtilsSettingsIntents.motionSmoothnessSettingsInt
 import com.tribalfs.gmh.helpers.UtilsSettingsIntents.powerSavingModeSettingsIntent
 import com.tribalfs.gmh.profiles.ProfilesObj.loadComplete
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 
 
-@ExperimentalCoroutinesApi
-@SuppressLint("NewApi")
+@RequiresApi(Build.VERSION_CODES.N)
 class QSTileMaxHz : TileService() {
 
     companion object{
         //private const val TAG = "QSTileMaxHz"
     }
 
-    private var prevPrr: Int? = null
-    private var prevMode: String? = null
-
     private val mUtilsRefreshRate: UtilsRefreshRateSt by lazy { UtilsRefreshRateSt.instance(applicationContext) }
-
-    @ExperimentalCoroutinesApi
-    private val propertyCallback: OnPropertyChangedCallback by lazy {
-        object: OnPropertyChangedCallback() {
-            override fun onPropertyChanged(sender: Observable, propertyId: Int) {
-                updateTile()
-            }
-        }
-    }
-
 
     override fun onTileAdded() {
         super.onTileAdded()
@@ -71,76 +53,37 @@ class QSTileMaxHz : TileService() {
     override fun onStartListening() {
         super.onStartListening()
         updateTile()
-        currentRefreshRateMode.addOnPropertyChangedCallback(propertyCallback)
-        prrActive.addOnPropertyChangedCallback(propertyCallback)
-    }
-
-
-    override fun onStopListening() {
-        super.onStopListening()
-        currentRefreshRateMode.removeOnPropertyChangedCallback(propertyCallback)
-        prrActive.removeOnPropertyChangedCallback(propertyCallback)
     }
 
 
     @Synchronized
     private fun updateTile() {
-        when (val refreshRateMode = currentRefreshRateMode.get()){//mUtilsDeviceInfo.getSamRefreshRateMode()){
+        when (currentRefreshRateMode.get()){//mUtilsDeviceInfo.getSamRefreshRateMode()){
             REFRESH_RATE_MODE_STANDARD-> {
-                if (prevMode != REFRESH_RATE_MODE_STANDARD){
-                    prevMode = REFRESH_RATE_MODE_STANDARD
-                    qsTile.icon = Icon.createWithResource(this, R.drawable.ic_baseline_std_24)
+                    qsTile.icon =  TileIcons.getIcon("STD","")//Icon.createWithResource(this, R.drawable.ic_baseline_std_24)
                     qsTile.label = getString(R.string.std)
                     qsTile.state = Tile.STATE_INACTIVE
-                }
             }
 
             REFRESH_RATE_MODE_SEAMLESS -> {
                 val prr = mUtilsRefreshRate.getPeakRefreshRate()
-                if (prevPrr != prr || prevMode == REFRESH_RATE_MODE_STANDARD){
-                    prevMode = REFRESH_RATE_MODE_SEAMLESS
-                    prevPrr = prr
-                    if (HzIcons.get(prr) != null) {
-                        qsTile.icon = Icon.createWithResource(this, HzIcons.get(prr)!!)
-                        qsTile.label = "${getString(R.string.max_hz)} ${getString(R.string.adaptive)}"
-                    } else {
-                        qsTile.label = "${getString(R.string.max_hz_holder, prr.toString())} ${getString(R.string.adaptive)}"
-                    }
+                    qsTile.icon = TileIcons.getIcon("$prr","Adp")
+                    qsTile.label = "${getString(R.string.adaptive)} ${getString(R.string.max_hz)}: $prr"
                     qsTile.state = Tile.STATE_ACTIVE
-                }
             }
 
             REFRESH_RATE_MODE_ALWAYS -> {
                 val prr = mUtilsRefreshRate.getPeakRefreshRate()
-                if (prevPrr != prr || prevMode == REFRESH_RATE_MODE_STANDARD) {
-                    prevPrr = prr
-                    prevMode = REFRESH_RATE_MODE_ALWAYS
                     qsTile.state = Tile.STATE_ACTIVE
-                    if (HzIcons.get(prr) != null) {
-                        qsTile.icon =
-                            Icon.createWithResource(this, HzIcons.get(prr)!!)
-                        qsTile.label =
-                            "${getString(R.string.max_hz)} ${getString(R.string.high)}"
-                    } else {
-                        qsTile.label = "${
-                            getString(
-                                R.string.max_hz_holder,
-                                prr.toString()
-                            )
-                        } ${getString(R.string.high)}"
-                    }
-                }
+                    qsTile.icon =  TileIcons.getIcon(prr.toString(),getString(R.string.high))
+                    qsTile.label = "${getString(R.string.max_hz)} ${getString(R.string.high)}: $prr "
             }
 
             else ->  {
                 val prr = mUtilsRefreshRate.getPeakRefreshRate()
-                if (prevPrr != prr || prevMode != refreshRateMode) {
-                    qsTile.icon = Icon.createWithResource(this, R.drawable.ic_max_hz)
-                    qsTile.label = "${getString(R.string.unknown_mode)}($refreshRateMode)"
+                    qsTile.icon = TileIcons.getIcon(prr.toString(),"?")
+                    qsTile.label = "${getString(R.string.max_hz)}:${prr} ?"
                     qsTile.state = Tile.STATE_INACTIVE
-                    prevPrr = prr
-                    prevMode = refreshRateMode
-                }
             }
         }
         qsTile.updateTile()
@@ -159,11 +102,12 @@ class QSTileMaxHz : TileService() {
                 startActivityAndCollapse(i)
             } else {*/
 
+
         applicationScope.launch(Dispatchers.Main) {
 
             when (UtilsChangeMaxHz(applicationContext).changeMaxHz(null)) {
                 PERMISSION_GRANTED -> {
-                    updateTile()
+                    //updateTile()
                 }
 
                 CHANGE_MODE -> {
@@ -245,7 +189,7 @@ class QSTileMaxHz : TileService() {
             ) { _, _ ->
                 if (hasWriteSecureSetPerm) {
                     //getResolutionChoiceDialog(context).show()
-                    NotificationBarSt.instance(applicationContext).expandNotificationBar()
+                    UtilNotificationBarSt.instance(applicationContext).expandNotificationBar()
                 } else {
                     val i = displaySettingsIntent
                     if (context !is Activity) {

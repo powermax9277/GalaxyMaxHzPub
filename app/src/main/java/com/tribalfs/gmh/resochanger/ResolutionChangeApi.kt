@@ -3,6 +3,7 @@ package com.tribalfs.gmh.resochanger
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.IBinder
+import android.util.Size
 import com.tribalfs.gmh.helpers.CheckBlacklistApiSt
 import java.lang.reflect.Method
 
@@ -11,66 +12,64 @@ import java.lang.reflect.Method
 class ResolutionChangeApi (val context: Context) {
 
     companion object{// : Singleton<ResolutionChangeApiSt, Context>(::ResolutionChangeApiSt) {
-        private const val USER_ID = -3
+    private const val USER_ID = -3
     }
 
 
-    fun setDisplaySizeDensity(displayId: Int, res: String, density: Int?): Boolean {
-
+    @SuppressLint("PrivateApi")
+    fun setDisplaySizeDensity(displayId: Int, reso: Size, d: Int?): Boolean {
         if (!CheckBlacklistApiSt.instance(context).isAllowed()
             && !CheckBlacklistApiSt.instance(context).setAllowed()) return false
 
-        var arrRes = res.split("x")
-        if (arrRes.size != 2) arrRes = res.split(",")
-        if (arrRes.size != 2) return false
-        return setDisplaySizeDensity(displayId, arrRes[1].toInt(), arrRes[0].toInt(), density)
-    }
+        if (d != null) {
+            try {
+                val serviceManager = Class.forName("android.os.ServiceManager")
+                val service: Method =
+                    serviceManager.getDeclaredMethod("getService", String::class.java)
+                val binder = service.invoke(null, "window") as IBinder
+                val windowManagerStub = Class.forName("android.view.IWindowManager").classes[0]
+                val serviceObj = windowManagerStub.getMethod("asInterface", IBinder::class.java)
+                    .invoke(null, binder)
+                windowManagerStub.methods.first { it.name == "setForcedDisplaySizeDensity" }
+                    .invoke(serviceObj, displayId, reso.width, reso.height, d, true, -1)
+                // windowManagerStub.methods.first { it.name == "setOverscan" }.invoke(serviceObj, displayId, left, top, right, bottom)
 
-    @SuppressLint("PrivateApi")
-    private fun setDisplaySizeDensity(displayId: Int, w: Int, h: Int, d: Int?): Boolean {
-        try {
-            val serviceManager  = Class.forName("android.os.ServiceManager")
-            val service : Method = serviceManager.getDeclaredMethod("getService", String::class.java)
-            val binder = service.invoke(null, "window") as IBinder
-            val windowManagerStub = Class.forName("android.view.IWindowManager").classes[0]
-            val serviceObj = windowManagerStub.getMethod("asInterface", IBinder::class.java).invoke(null, binder)
-            windowManagerStub.methods.first { it.name == "setForcedDisplaySizeDensity" }
-                .invoke(serviceObj, displayId, w, h, d, true, -1)
-           // windowManagerStub.methods.first { it.name == "setOverscan" }.invoke(serviceObj, displayId, left, top, right, bottom)
+                return true
+            } catch (_: Exception) {
+            }
+        }
 
-            return true
-        } catch (_: Exception) {
-            try{
-                val wmService = Class.forName("android.view.WindowManagerGlobal")
-                    .getDeclaredMethod("getWindowManagerService")
-                    .invoke(null) ?: return false
+        try{
+            val wmService = Class.forName("android.view.WindowManagerGlobal")
+                .getDeclaredMethod("getWindowManagerService")
+                .invoke(null) ?: return false
 
 
-                with(Class.forName("android.view.IWindowManager")) {
-                    d?.let {d->
-                        getDeclaredMethod(
-                            "setForcedDisplayDensityForUser",
-                            Int::class.javaPrimitiveType,
-                            Int::class.javaPrimitiveType,
-                            Int::class.javaPrimitiveType
-                        )
-                            .invoke(wmService, displayId, d, USER_ID)
-                    }
-
+            with(Class.forName("android.view.IWindowManager")) {
+                d?.let {d->
                     getDeclaredMethod(
-                        "setForcedDisplaySize",
+                        "setForcedDisplayDensityForUser",
                         Int::class.javaPrimitiveType,
                         Int::class.javaPrimitiveType,
                         Int::class.javaPrimitiveType
                     )
-                        .invoke(wmService, displayId, w, h)
-
+                        .invoke(wmService, displayId, d, USER_ID)
                 }
-                return true
-            }catch(_:Exception) {
-                return false
+
+                getDeclaredMethod(
+                    "setForcedDisplaySize",
+                    Int::class.javaPrimitiveType,
+                    Int::class.javaPrimitiveType,
+                    Int::class.javaPrimitiveType
+                )
+                    .invoke(wmService, displayId, reso.width, reso.height)
+
             }
-         }
+            return true
+        }catch(_:Exception) {
+            return false
+        }
+
     }
 
 

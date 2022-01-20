@@ -3,19 +3,32 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Louie Pamisa.LOUPAMS/.gradle/caches/transforms-3/fb3270031bd107031c21c5dc13d9e5ef/transformed/core-1.7.0/res/layout/custom_dialog.xml" value="0.3625" />
         <entry key="..\:/Users/Louie Pamisa.LOUPAMS/AndroidStudioProjects/GalaxyMaxHz/app/src/main/res/drawable-anydpi/ic_baseline_100hz_24.xml" value="0.3728205128205128" />
         <entry key="..\:/Users/Louie Pamisa.LOUPAMS/AndroidStudioProjects/GalaxyMaxHz/app/src/main/res/drawable-anydpi/ic_baseline_105hz_24.xml" value="0.3728205128205128" />
         <entry key="..\:/Users/Louie Pamisa.LOUPAMS/AndroidStudioProjects/GalaxyMaxHz/app/src/main/res/drawable-anydpi/ic_baseline_10hz_24.xml" value="0.3728205128205128" />
         <entry key="..\:/Users/Louie Pamisa.LOUPAMS/AndroidStudioProjects/GalaxyMaxHz/app/src/main/res/drawable-anydpi/ic_baseline_30hz_24.xml" value="0.3728205128205128" />
         <entry key="..\:/Users/Louie Pamisa.LOUPAMS/AndroidStudioProjects/GalaxyMaxHz/app/src/main/res/drawable-anydpi/ic_hz_24.xml" value="0.37864583333333335" />
         <entry key="..\:/Users/Louie Pamisa.LOUPAMS/AndroidStudioProjects/GalaxyMaxHz/app/src/main/res/drawable-anydpi/ic_max_hz_12.xml" value="0.3728205128205128" />
+        <entry key="..\:/Users/Louie Pamisa.LOUPAMS/AndroidStudioProjects/GalaxyMaxHz/app/src/main/res/drawable/ic_baseline_std_24.xml" value="0.1" />
         <entry key="..\:/Users/Louie Pamisa.LOUPAMS/AndroidStudioProjects/GalaxyMaxHz/app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.37864583333333335" />
         <entry key="..\:/Users/Louie Pamisa.LOUPAMS/AndroidStudioProjects/GalaxyMaxHz/app/src/main/res/drawable/ic_max_hz.xml" value="0.3728205128205128" />
+        <entry key="..\:/Users/Louie Pamisa.LOUPAMS/AndroidStudioProjects/GalaxyMaxHz/app/src/main/res/drawable/rounded_edge.xml" value="0.325" />
+        <entry key="..\:/Users/Louie Pamisa.LOUPAMS/AndroidStudioProjects/GalaxyMaxHz/app/src/main/res/font-v26/fonts.xml" value="0.14635416666666667" />
+        <entry key="..\:/Users/Louie Pamisa.LOUPAMS/AndroidStudioProjects/GalaxyMaxHz/app/src/main/res/font-v26/force_square.xml" value="0.31574074074074077" />
+        <entry key="..\:/Users/Louie Pamisa.LOUPAMS/AndroidStudioProjects/GalaxyMaxHz/app/src/main/res/font-v26/hz_font.xml" value="0.31574074074074077" />
+        <entry key="..\:/Users/Louie Pamisa.LOUPAMS/AndroidStudioProjects/GalaxyMaxHz/app/src/main/res/font/font.xml" value="0.32037037037037036" />
+        <entry key="..\:/Users/Louie Pamisa.LOUPAMS/AndroidStudioProjects/GalaxyMaxHz/app/src/main/res/font/fonts.xml" value="0.14635416666666667" />
+        <entry key="..\:/Users/Louie Pamisa.LOUPAMS/AndroidStudioProjects/GalaxyMaxHz/app/src/main/res/font/force_square.xml" value="0.31574074074074077" />
         <entry key="..\:/Users/Louie Pamisa.LOUPAMS/AndroidStudioProjects/GalaxyMaxHz/app/src/main/res/layout/activity_main.xml" value="0.39280575539568346" />
         <entry key="..\:/Users/Louie Pamisa.LOUPAMS/AndroidStudioProjects/GalaxyMaxHz/app/src/main/res/layout/activity_reso.xml" value="0.23020833333333332" />
         <entry key="..\:/Users/Louie Pamisa.LOUPAMS/AndroidStudioProjects/GalaxyMaxHz/app/src/main/res/layout/activity_resolution_change.xml" value="0.3578125" />
         <entry key="..\:/Users/Louie Pamisa.LOUPAMS/AndroidStudioProjects/GalaxyMaxHz/app/src/main/res/layout/chip_layout.xml" value="0.23020833333333332" />
         <entry key="..\:/Users/Louie Pamisa.LOUPAMS/AndroidStudioProjects/GalaxyMaxHz/app/src/main/res/layout/com_seekbar_thumb.xml" value="0.3625" />
+        <entry key="..\:/Users/Louie Pamisa.LOUPAMS/AndroidStudioProjects/GalaxyMaxHz/app/src/main/res/layout/dialog_rounded.xml" value="0.3625" />
+        <entry key="..\:/Users/Louie Pamisa.LOUPAMS/AndroidStudioProjects/GalaxyMaxHz/app/src/main/res/layout/hz_fps.xml" value="0.75" />
+        <entry key="..\:/Users/Louie Pamisa.LOUPAMS/AndroidStudioProjects/GalaxyMaxHz/app/src/main/res/layout/qs_dialog.xml" value="0.3625" />
+        <entry key="..\:/Users/Louie Pamisa.LOUPAMS/AndroidStudioProjects/GalaxyMaxHz/app/src/main/res/layout/refresh_rate_layout.xml" value="0.3578125" />
         <entry key="..\:/Users/Louie Pamisa.LOUPAMS/AndroidStudioProjects/GalaxyMaxHz/app/src/main/res/layout/reso_cell.xml" value="0.23020833333333332" />
         <entry key="..\:/Users/Louie Pamisa.LOUPAMS/AndroidStudioProjects/GalaxyMaxHz/app/src/main/res/menu/appbar_menu.xml" value="0.3625" />
         <entry key="..\:/Users/Louie Pamisa.LOUPAMS/AndroidStudioProjects/GalaxyMaxHz/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.3728205128205128" />

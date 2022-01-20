@@ -6,9 +6,7 @@
     <string name="resolution">分辨率和运动平滑度切换</string>
     <string name="act">激活溢价|试用</string>
     <string name="max_hz">最大Hz</string>
-    <string name="max_hz_holder">最大%sHz</string>
     <string name="feat_n_a" tools:keep="@string/feat_n_a">不支持更改解决方案</string>
-    <string name="unknown_mode">不明刷新率模式</string>
     <string name="min_hz_for_toggle">最小Hz限制可以在最大刷新率按钮中选择</string>
     <string name="high">High</string>
     <string name="refresh_rate_mon">刷新率监视器</string>
@@ -130,4 +128,6 @@
     <string name="prevent_high">避免切换到高模式</string>
     <string name="auto_sensors_off_exp">自动传感器关闭</string>
     <string name="data_usage"><u>Data Usage</u></string>
+    <string name="acces_req">Enable Accessibility Service</string>
+    <string name="max_hz_for_psm">Max Hz for Power Saving Mode</string>
 </resources>

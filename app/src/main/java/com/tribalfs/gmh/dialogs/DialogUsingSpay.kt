@@ -10,7 +10,7 @@ import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt.Companion.USING
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @ExperimentalCoroutinesApi
-class DialogUsingSpay: RoundedDialogFragment(){
+class DialogUsingSpay: MyDialogFragment(){
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val appCtx = requireActivity().applicationContext
         isCancelable = false

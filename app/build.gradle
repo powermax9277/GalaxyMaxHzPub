@@ -16,11 +16,12 @@ android {
     compileSdkVersion 31
 
     defaultConfig {
+
         applicationId "com.tribalfs.gmh"
         minSdkVersion 22
         //noinspection ExpiredTargetSdkVersion
         targetSdkVersion 22
-        versionCode 114
+        versionCode 117
         versionName "7.14.18"
         setProperty("archivesBaseName", "galaxy_max_hz_v${versionName}")
     }
@@ -61,6 +62,8 @@ android {
 
     kotlinOptions {
         jvmTarget = "1.8"
+  /*      freeCompilerArgs += [
+                "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi"]*/
     }
 
 
@@ -93,6 +96,7 @@ android {
           }
       }*/
 }
+
 
 /*configurations {
     all*.exclude group: 'com.google.firebase', module: 'firebase-core'

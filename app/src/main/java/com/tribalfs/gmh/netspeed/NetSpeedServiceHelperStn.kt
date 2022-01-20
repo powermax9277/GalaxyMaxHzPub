@@ -5,7 +5,6 @@ import android.content.Intent
 import com.tribalfs.gmh.helpers.CacheSettings.isNetSpeedRunning
 import com.tribalfs.gmh.helpers.SingletonMaker
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 
 class NetSpeedServiceHelperStn private constructor(context: Context)  {
@@ -17,14 +16,12 @@ class NetSpeedServiceHelperStn private constructor(context: Context)  {
     private val appCtx =  context.applicationContext
     private val mUtilsPrefGmh by lazy  {UtilsPrefsGmhSt.instance(appCtx)}
 
-    @ExperimentalCoroutinesApi
     private val serviceIntent: Intent
         get() {
             return Intent(appCtx, NetSpeedService::class.java)
         }
 
 
-    @ExperimentalCoroutinesApi
     fun runNetSpeed(enable: Boolean?){
         enable?.let{
             mUtilsPrefGmh.gmhPrefNetSpeedIsOn = it
@@ -44,14 +41,13 @@ class NetSpeedServiceHelperStn private constructor(context: Context)  {
     }
 
 
-    @ExperimentalCoroutinesApi
     fun startService() {
         isNetSpeedRunning.set(true)
         appCtx.startService(serviceIntent)
     }
 
 
-    @ExperimentalCoroutinesApi
+    
     fun stopService(isTemp: Boolean?) {
         isNetSpeedRunning.set(isTemp?:false)
         try {

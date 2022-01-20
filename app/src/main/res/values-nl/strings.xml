@@ -5,9 +5,7 @@
     <string name="resolution">Schakelen tussen resolutie en vloeiende beweging</string>
     <string name="act">Activeer Premium|Trial</string>
     <string name="max_hz">Max Hz</string>
-    <string name="max_hz_holder">Max %s Hz</string>
     <string name="feat_n_a" tools:keep="@string/feat_n_a">Wijzigingsresolutie niet ondersteund</string>
-    <string name="unknown_mode">Niet-geïdentificeerde vernieuwingsfrequentiemodus</string>
 
     <string name="min_hz_for_toggle">Min. Hz voor de Toggle</string>
     <string name="adaptive">Adaptieve</string>
@@ -146,6 +144,8 @@
     <string name="prevent_high">Eviteu canviar al mode alt</string>
     <string name="auto_sensors_off_exp">Auto SENSORS OFF</string>
     <string name="data_usage"><u>Data Usage</u></string>
+    <string name="acces_req">Enable Accessibility Service</string>
+    <string name="max_hz_for_psm">Max Hz voor energiebesparende modus</string>
 </resources>
 
     <!--    <string name="failed_show_ad">Videoadvertentie kan niet worden weergegeven. Probeer het a.u.b. opnieuw.</string>-->

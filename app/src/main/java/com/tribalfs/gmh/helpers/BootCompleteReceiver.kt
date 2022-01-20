@@ -9,9 +9,12 @@ import com.tribalfs.gmh.hertz.HzServiceHelperStn
 import com.tribalfs.gmh.netspeed.NetSpeedServiceHelperStn
 import com.tribalfs.gmh.profiles.ProfilesObj.refreshRateModeMap
 import com.tribalfs.gmh.resochanger.ResolutionChangeUtil
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
-@ExperimentalCoroutinesApi
+
 class BootCompleteReceiver : BroadcastReceiver() {
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onReceive(context: Context, intent: Intent) {
@@ -26,17 +29,21 @@ class BootCompleteReceiver : BroadcastReceiver() {
     }
 
 
-    @RequiresApi(Build.VERSION_CODES.M)
     private fun bootCompleteChecker(appCtx: Context) {
         CoroutineScope(Dispatchers.IO).launch {
             while(refreshRateModeMap.isEmpty()) {
                 delay(250)
             }
-            val res = UtilsDeviceInfoSt.instance(appCtx).getDisplayResStr("x")
-            val resName = ResolutionChangeUtil(appCtx).getResName(null)
+            val resoChangeUtil = ResolutionChangeUtil(appCtx)
+            val reso = resoChangeUtil.mUtilsRefreshRate.mUtilsDeviceInfo.getDisplayResolution()
+            val resName = resoChangeUtil.getResName(null)
             if (resName == "CQHD+"/* && currentRefreshRateMode.get() == UtilsDeviceInfo.REFRESH_RATE_MODE_STANDARD*/) {
-                ResolutionChangeUtil(appCtx).changeRes(res)
+                resoChangeUtil.changeRes(reso)
+                delay(500)
             }
+            resoChangeUtil.mUtilsRefreshRate.requestListeningAllTiles()
         }
     }
+
+
 }

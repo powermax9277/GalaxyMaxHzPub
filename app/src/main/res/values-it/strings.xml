@@ -5,9 +5,7 @@
     <string name="resolution">Pulsante Risoluzione e Uniformità Di Movimento</string>
     <string name="act">Attiva Premium|Prova</string>
     <string name="max_hz">Hz Mass.</string>
-    <string name="max_hz_holder">%s Hz Mass.</string>
     <string name="feat_n_a" tools:keep="@string/feat_n_a">Modifica Della Risoluzione Non Supportata</string>
-    <string name="unknown_mode">Modalità Frequenza Di Aggiornamento Non Identificata</string>
     <string name="min_hz_for_toggle">Min. Hz per il Pulsante</string>
     <string name="adaptive">Adattiva</string>
     <string name="high">Alta</string>
@@ -146,6 +144,8 @@
     <string name="enable">Attivazione</string>
     <string name="premium_features">प्रीमियम सुविधाएँ</string>
     <string name="prevent_high">Prevent switching to High Mode</string>
+    <string name="acces_req">Enable Accessibility Service</string>
+    <string name="max_hz_for_psm">Hz massimi per la modalità di risparmio energetico</string>
     <plurals name="aha">
         <item quantity="other">Periodo di prova premium attivo: %d giorni rimanenti</item>
         <item quantity="one">Periodo di prova premium attivo: %d giorno rimanente</item>

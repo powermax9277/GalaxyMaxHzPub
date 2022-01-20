@@ -2,6 +2,8 @@ package com.tribalfs.gmh.helpers
 
 import android.content.Context
 import android.content.pm.PackageManager.PERMISSION_GRANTED
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.tribalfs.gmh.helpers.CacheSettings.currentRefreshRateMode
 import com.tribalfs.gmh.helpers.CacheSettings.hasWriteSecureSetPerm
 import com.tribalfs.gmh.helpers.CacheSettings.isPowerSaveModeOn
@@ -32,7 +34,7 @@ class UtilsChangeMaxHz (private val appCtx: Context) {
     private var isModeUpdated = false
     private val mUtilsRefreshRate by lazy { UtilsRefreshRateSt.instance(appCtx) }
 
-    @ExperimentalCoroutinesApi
+    @RequiresApi(Build.VERSION_CODES.M)
     suspend fun changeMaxHz(maxHzToApply: Int?): Int = withContext(Dispatchers.IO){
 
         val per = if (UtilsPermSt.instance(appCtx).hasWriteSystemPerm()) PERMISSION_GRANTED else CHANGE_SETTINGS
@@ -153,9 +155,6 @@ class UtilsChangeMaxHz (private val appCtx: Context) {
             }else{
                 mUtilsRefreshRate.mUtilsPrefsGmh.hzPrefMaxRefreshRate = maxHzToApplyFinal
             }
-
-            delay(200)
-
             return@withContext per
 
         }else{

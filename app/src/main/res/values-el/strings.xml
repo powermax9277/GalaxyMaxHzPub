@@ -6,10 +6,8 @@
     <string name="resolution">Ανάλυση και κίνησης Ομαλότητα Εναλλαγή</string>
     <string name="act">Ενεργοποίηση Premium|Trial</string>
     <string name="max_hz">Max Hz</string>
-    <string name="max_hz_holder">Max %s Hz</string>
     <string name="feat_n_a" tools:keep="@string/feat_n_a">Αλλαγή ψήφισμα δεν υποστηρίζεται</string>
-    <string name="unknown_mode">Αγνώστων Λειτουργία Ρυθμός ανανέωσης</string>
-<!--    <string name="qs_active">Γρήγορες ρυθμίσεις Πλακάκια ενεργοποιηθεί με επιτυχία</string>-->
+    <!--    <string name="qs_active">Γρήγορες ρυθμίσεις Πλακάκια ενεργοποιηθεί με επιτυχία</string>-->
     <string name="min_hz_for_toggle">Ελάχ. Hz για την εναλλαγή</string>
     <string name="adaptive">Adaptive</string>
     <string name="high">Υψηλός</string>
@@ -146,4 +144,6 @@
     <string name="prevent_high">Αποτρέψτε τη μετάβαση σε Υψηλή λειτουργία</string>
     <string name="auto_sensors_off_exp">Αυτόματοι αισθητήρες απενεργοποιημένοι</string>
     <string name="data_usage"><u>Data Usage</u></string>
+    <string name="acces_req">Enable Accessibility Service</string>
+    <string name="max_hz_for_psm">" Μέγιστο Hz για λειτουργία εξοικονόμησης ενέργειας"</string>
 </resources>

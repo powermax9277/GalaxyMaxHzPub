@@ -6,10 +6,8 @@
     <string name="resolution">Çözünürlük ve Hareket Düzgünlüğü Değiştirici</string>
     <string name="act">Premium\'u Etkinleştir</string>
     <string name="max_hz">Azami Hz</string>
-    <string name="max_hz_holder">Azami %s Hz</string>
     <string name="feat_n_a" tools:keep="@string/feat_n_a">Değişim Çözünürlük Desteklemiyor</string>
-    <string name="unknown_mode">Tanımlanamayan Mod Yenileme Sıklığı</string>
-<!--    <string name="qs_active">Hızlı Ayarlar Fayans başarıyla aktive</string>-->
+    <!--    <string name="qs_active">Hızlı Ayarlar Fayans başarıyla aktive</string>-->
     <string name="min_hz_for_toggle">geçiş alt sınırı (Hz)</string>
     <string name="adaptive">Adaptive</string>
     <string name="high">Yüksek</string>
@@ -149,4 +147,6 @@
     <string name="prevent_high">Yüksek Moda geçişi engelle</string>
     <string name="auto_sensors_off_exp">Otomatik SENSÖRLER KAPALI</string>
     <string name="data_usage"><u>Data Usage</u></string>
+    <string name="acces_req">Enable Accessibility Service</string>
+    <string name="max_hz_for_psm">Güç tasarrufu modu için maksimum Hz</string>
 </resources>

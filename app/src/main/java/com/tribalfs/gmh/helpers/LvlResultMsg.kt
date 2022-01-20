@@ -16,7 +16,8 @@ internal class LvlResultMsg(
 
     //val mUtilsPrefsAct by lazy { UtilsPrefsAct(appCompatActivity) }
 
-    @ExperimentalCoroutinesApi
+    
+   @ExperimentalCoroutinesApi
    fun showMsg(lvlSbMsgCallback: LvlSbMsgCallback, licType: Int?){
 
         when (licType?:mUtilsPrefsAct.gmhPrefLicType){

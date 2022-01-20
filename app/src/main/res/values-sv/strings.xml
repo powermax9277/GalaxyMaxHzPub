@@ -6,10 +6,8 @@
     <string name="resolution">Upplösning och Motion Jämnhet Toggle</string>
     <string name="act">Aktivera Premium</string>
     <string name="max_hz">Max Hz</string>
-    <string name="max_hz_holder">Max %s Hz</string>
     <string name="feat_n_a" tools:keep="@string/feat_n_a">Ändra upplösning stöds inte</string>
-    <string name="unknown_mode">Oidentifierat uppdateringsfrekvensläge</string>
-<!--    <string name="qs_active">Snabbinställningar tiles aktiverats</string>-->
+    <!--    <string name="qs_active">Snabbinställningar tiles aktiverats</string>-->
     <string name="min_hz_for_toggle">Lägre gränsen för toggle (Hz)</string>
     <string name="adaptive">Adaptiv</string>
     <string name="high">Hög</string>
@@ -146,4 +144,6 @@
     <string name="prevent_high">Förhindra byte till hög</string>
     <string name="auto_sensors_off_exp">Automatiska SENSORER AV</string>
     <string name="data_usage"><u>Data Usage</u></string>
+    <string name="acces_req">Enable Accessibility Service</string>
+    <string name="max_hz_for_psm">Max Hz för energisparläge</string>
 </resources>

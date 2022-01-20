@@ -70,7 +70,7 @@ internal class Syncer(context: Context) {
         Settings.Secure.getString(appCtx.contentResolver, ANDROID_ID)
     }
     
-    @ExperimentalCoroutinesApi
+    
     suspend fun fetchProfileFromBackEnd(): JSONObject? = withContext(Dispatchers.IO) {
         val jsonBody = JSONObject().apply {
             put(KEY_JSON_MODEL_NUMBER, mUtilsDeviceInfo.deviceModelVariant)
@@ -89,7 +89,7 @@ internal class Syncer(context: Context) {
     }
 
 
-    @ExperimentalCoroutinesApi
+    
     suspend fun postProfileToBackEnd(): JSONObject? = withContext(Dispatchers.IO) {
         // Log.d(TAG, "Starting sync POST...")
         val jsonBody = JSONObject().apply {
@@ -107,7 +107,7 @@ internal class Syncer(context: Context) {
         }
     }
 
-    @ExperimentalCoroutinesApi
+    
     suspend fun syncLicense(activationCode: String, trial: Boolean): JSONObject? = withContext(Dispatchers.IO) {
         val jsonObject = JSONObject().apply {
             put(KEY_JSON_DEVICE_ID, deviceId)
@@ -126,7 +126,7 @@ internal class Syncer(context: Context) {
         }
     }
 
-    @ExperimentalCoroutinesApi
+    
     suspend fun getBuyAdFreeLink(): JSONObject? = withContext(Dispatchers.IO) {
         val jsonBody = JSONObject().apply {
             put(KEY_JSON_DEVICE_ID, deviceId)
@@ -141,7 +141,7 @@ internal class Syncer(context: Context) {
         }
     }
 
-    @ExperimentalCoroutinesApi
+    
     suspend fun getHelpUrl(): JSONObject? = withContext(Dispatchers.IO) {
         val jsonBody = JSONObject().apply {
             put(KEY_JSON_MODEL_NUMBER, mUtilsDeviceInfo.deviceModelVariant)
@@ -174,6 +174,7 @@ internal class Syncer(context: Context) {
             null
         }
     }*/
+
 
     @ExperimentalCoroutinesApi
     @RequiresApi(VERSION_CODES.M)
