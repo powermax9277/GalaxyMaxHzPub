@@ -269,8 +269,13 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                 //Only max refresh rate changes
                 mUtilsPrefsGmh.gmhPrefMinHzAdapt.let{mnrr ->
                     if (mBinding.sbMinHzAdapt.progress != mnrr) {
-                        mBinding.sbMinHzAdapt.progress = mnrr
-                        mBinding.minHzAdaptive = mnrr
+                        if (mnrr <  STANDARD_REFRESH_RATE_HZ && isPremium.get() != true){
+                            mBinding.sbMinHzAdapt.progress = STANDARD_REFRESH_RATE_HZ
+                            mBinding.minHzAdaptive = STANDARD_REFRESH_RATE_HZ
+                        }else {
+                            mBinding.sbMinHzAdapt.progress = mnrr
+                            mBinding.minHzAdaptive = mnrr
+                        }
                     }
                 }
                 /*mUtilsPrefsGmh.hzPrefMaxRefreshRate.let{mnrr ->
@@ -921,6 +926,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                     findItem(R.id.menuNs).isVisible = it >= LIC_TYPE_ADFREE/ 2
                     findItem(R.id.menuPrem).isVisible = it < LIC_TYPE_ADFREE/ 2
                     findItem(R.id.menuNs).isChecked = mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefShowNetSpeedTool
+
                 }
             }
         }
@@ -1589,8 +1595,20 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                         }
                     }
 
+                    mBinding.sbMinHzAdapt.progress.let{
+                        if (it <  STANDARD_REFRESH_RATE_HZ && isPremium.get() != true){
+                            Toast.makeText(applicationContext, "$it Hz is a premium feature.", Toast.LENGTH_SHORT).show()
+                            mBinding.sbMinHzAdapt.progress = STANDARD_REFRESH_RATE_HZ
+                            return
+                        }
+                    }
+
+
                     mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefMinHzAdapt = seekBar.progress
+
                     mBinding.minHzAdaptive = seekBar.progress
+
+
 
                     mUtilsRefreshRate.applyMinHz()
 
