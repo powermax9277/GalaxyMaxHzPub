@@ -182,11 +182,9 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
 
     private val mReceiver = object: BroadcastReceiver() {
         @SuppressLint("InlinedApi")
-        // @RequiresApi(VERSION_CODES.M)
         override fun onReceive(context: Context, intent: Intent) {
             when (intent.action){
                 ACTION_NOTIFICATION_CHANNEL_BLOCK_STATE_CHANGED -> {
-                    //Log.d(TAG, "onReceive called ACTION_NOTIFICATION_CHANNEL_BLOCK_STATE_CHANGED")
                     when (intent.getStringExtra(EXTRA_NOTIFICATION_CHANNEL_ID)) {
                         CHANNEL_ID_HZ -> {
                             if (intent.getBooleanExtra(EXTRA_BLOCKED_STATE, false)) {
@@ -224,7 +222,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
     }
 
 
-    //Force app to go background on Change Resolution to prevent crash
+    //Force app to go background on Change Resolution to prevent crash (pre-api 23 issue)
     private fun pauseMe(){
         val startMain = Intent(Intent.ACTION_MAIN)
         startMain.addCategory(Intent.CATEGORY_HOME)
@@ -342,7 +340,6 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
 
 
     private val rrmChangeCallback: OnPropertyChangedCallback = object : OnPropertyChangedCallback() {
-        // @RequiresApi(VERSION_CODES.M)
         override fun onPropertyChanged(sender: Observable, propertyId: Int) {
             when (sender) {
                 currentRefreshRateMode -> { //triggered by MyContentObserver -> updateCacheSettings()
@@ -389,7 +386,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
         }
     }
 
-    //@RequiresApi(VERSION_CODES.M)
+
     private fun showAppearOnTopRequest(){
         if (SDK_INT >= VERSION_CODES.M) {
             startForResult.launch(getOverlaySettingIntent(this@MainActivity))
@@ -508,7 +505,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                                 return
                             }
 
-                            //already in qs but not in place
+                            //already put in qs but not in place
                             false -> {
                                 mBinding.swAutoSensorsOff.isChecked = false
                                 showSbMsg(
@@ -567,11 +564,6 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                 } else {
                     mBinding.swSoPsm.isChecked.let {isChecked ->
                         mUtilsPrefsGmh.gmhPrefPsmOnSo = isChecked
-                        /*UtilsSettingsSt.get(applicationContext).setConfig(
-                            GLOBAL,
-                            "lower_power_sticky",
-                            if (isChecked) "1" else "0"
-                        )*/
                     }
                 }
             }
@@ -610,7 +602,6 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                         ) {
                             showAppearOnTopRequest()
                         }
-                        // DialogsPermissionsQs.getAppearOnTopDialog(this).show()
                     }
                 }
                 return
@@ -635,18 +626,6 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                 return
             }
 
-            /*  mBinding.swPeakHz.id -> {
-                  // toggleMaxHz()
-                  if ((v as Switch).isChecked) {
-                      if (!mUtilsRefreshRate.setPrefOrAdaptOrHighRefreshRateMode(null)){
-                          v.isChecked = false
-                          InfoDialog.newInstance(CHANGE_RES_INFO).show(supportFragmentManager, null)
-                      }
-                  } else {
-                      mUtilsRefreshRate.setRefreshRateMode(REFRESH_RATE_MODE_STANDARD)
-                  }
-                  return
-              }*/
 
             mBinding.chStandard.id ->{
                 mUtilsRefreshRate.setRefreshRateMode(REFRESH_RATE_MODE_STANDARD)
@@ -709,9 +688,6 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                         }
                     }
                     return
-                    /*showSbMsg(
-                        getString(R.string.adp_mod_inf), null, null, null
-                    )*/
                 }
 
                 if (!mUtilsRefreshRate.tryThisRrm(REFRESH_RATE_MODE_SEAMLESS, null)){
@@ -748,7 +724,6 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                 if (hasWriteSecureSetPerm) {
                     if (v.id == mBinding.screenOffDozeInfo.id) {
                         InfoDialog.newInstance(QDM_INFO).show(supportFragmentManager, null)
-                        //InfoDialog(R.string.quick_doz_mod, R.string.quick_doz_mod_inf2).show(supportFragmentManager, null)
                     } else{
                         if (mBinding.hasWssPerm == false) mBinding.hasWssPerm = true
                     }
@@ -765,7 +740,6 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                         ).show()
 
                     }
-                    // }
                 }
             }
 
@@ -774,7 +748,6 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                     if (!checkAccessibilityPerm(true)){
                         mUtilsPrefsGmh.gmhPrefDisableSyncIsOn = false
                         v.isChecked = false
-                        // showEnableAccessibilityIns()
                         return
                     }
                     mUtilsPrefsGmh.gmhPrefDisableSyncIsOn = checked
@@ -827,7 +800,6 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
         updateWssPerm()
         setupActionBar()
         showLoading(true)
-        //  setupVolley()
         registerSharedPrefListener()
 
 
@@ -847,7 +819,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
             updateNetSpeed(adFree)
             //setupMenuVisibility()
             mBinding.premium = adFree
-            //  checkTileIsExpired()
+            // checkTileIsExpired()
             //loadBannerAd(adFree)
             initDozeMod(adFree)
             initDisableAutoSync(adFree)
@@ -929,13 +901,6 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                             Uri.fromParts("package", packageName, null)
                         )
                     )
-
-                    /*startActivity(
-                        Intent(
-                            ACTION_APPLICATION_DETAILS_SETTINGS,
-                            Uri.fromParts("package", packageName, null)
-                        )
-                    )*/
                 }
             }
         }

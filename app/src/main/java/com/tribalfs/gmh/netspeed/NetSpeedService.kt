@@ -81,8 +81,8 @@ class NetSpeedService : Service(), CoroutineScope {
                 if (usedRxdHBytes > 10 || usedRxdHBytes > 10) {
                     SpeedCalculator.instance(applicationContext).apply {
                         updateNotification(
-                            getSpeed(usedTime,usedTxdHBytes)/*down*/,
-                            getSpeed(usedTime,usedRxdHBytes)/*up*/,
+                            getSpeed(usedTime,usedTxdHBytes)/*up*/,
+                            getSpeed(usedTime,usedRxdHBytes)/*down*/,
                             getSpeed(usedTime,usedRxdHBytes + usedTxdHBytes)
                         )
                     }
