@@ -68,7 +68,9 @@ class QSTileResSw : TileService() {
             delay(200)
 
             val result = ResolutionChangeUtil(applicationContext).changeRes(null)
+
             launch(Dispatchers.Main) {
+
                 when (result) {
                     PERMISSION_GRANTED -> {
                         // Log.d(TAG, "ChangeRes permitted")
@@ -82,14 +84,19 @@ class QSTileResSw : TileService() {
                         }
                     }
                     PERMISSION_DENIED -> {
-                        showDialog(
-                            QSDialogs.getPermissionDialog(
-                                applicationContext)
-                        )
-                        /*launch(Dispatchers.Main) {
-                            showDialog(mDialog)
-                        }*/
-
+                        try {
+                            showDialog(
+                                QSDialogs.getPermissionDialog(
+                                    applicationContext
+                                )
+                            )
+                        }catch(_:Exception){
+                            /*Investigate why it causing
+                            "android.view.WindowManager$BadTokenException: Unable to add window --
+                            token android.os.BinderProxy@c53e3e1 is not valid; is your activity running?"
+                             on few devices
+                             */
+                        }
                     }
                     else ->{
                         hasWriteSecureSetPerm = mUtilsPermSt.hasWriteSecurePerm()}
