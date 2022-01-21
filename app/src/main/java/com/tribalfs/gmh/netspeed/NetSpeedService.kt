@@ -199,8 +199,8 @@ class NetSpeedService : Service(), CoroutineScope {
             setSmallIcon(R.drawable.ic_baseline_speed_12)
             setOngoing(true)
             setOnlyAlertOnce(true)
-            setCategory(Notification.CATEGORY_SERVICE)
-            setVisibility(Notification.VISIBILITY_PUBLIC)
+            setCategory(Notification.CATEGORY_STATUS)
+            setVisibility(Notification.VISIBILITY_PRIVATE)
             setLocalOnly(true)
             if (!isOnePlus) {setContentIntent(pendingIntent)}
             setAutoCancel(false)

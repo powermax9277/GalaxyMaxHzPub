@@ -187,7 +187,7 @@ internal class HzService : Service(), CoroutineScope{
             .setSmallIcon(R.drawable.ic_max_hz_12)
             .setOngoing(true)
             .setOnlyAlertOnce(true)
-            .setCategory(Notification.CATEGORY_SERVICE)
+            .setCategory(Notification.CATEGORY_STATUS)
             .setVisibility(Notification.VISIBILITY_PRIVATE)
             .setLocalOnly(true)
             .setCustomContentView(mNotificationContentView)
