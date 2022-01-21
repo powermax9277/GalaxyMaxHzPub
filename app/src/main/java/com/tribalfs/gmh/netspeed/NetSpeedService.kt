@@ -78,7 +78,7 @@ class NetSpeedService : Service(), CoroutineScope {
                 val usedTxdHBytes = currentTxBytes - mLastTxBytes
                 val usedTime = currentTime - mLastTime
 
-                if (usedRxdHBytes > 10 || usedRxdHBytes > 10) {
+                if ((usedRxdHBytes > 10 || usedRxdHBytes > 10) && usedTime > 0) {
                     SpeedCalculator.instance(applicationContext).apply {
                         updateNotification(
                             getSpeed(usedTime,usedTxdHBytes)/*up*/,
@@ -86,11 +86,10 @@ class NetSpeedService : Service(), CoroutineScope {
                             getSpeed(usedTime,usedRxdHBytes + usedTxdHBytes)
                         )
                     }
+                    mLastRxBytes = currentRxBytes
+                    mLastTxBytes = currentTxBytes
+                    mLastTime = currentTime
                 }
-
-                mLastRxBytes = currentRxBytes
-                mLastTxBytes = currentTxBytes
-                mLastTime = currentTime
 
                 delay(UPDATE_INTERVAL)
             }
