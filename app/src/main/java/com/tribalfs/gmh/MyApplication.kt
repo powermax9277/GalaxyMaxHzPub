@@ -105,12 +105,15 @@ class MyApplication : Application() {
     private val accessibilityServiceUri =  Settings.Secure.getUriFor(ENABLED_ACCESSIBILITY_SERVICES)
     private lateinit var mContentResolver: ContentResolver
     private lateinit var myBrightnessObserver: MyBrightnessObserver
+    private var dozeConfCtr = 0
 
     @RequiresApi(Build.VERSION_CODES.M)
     @ExperimentalCoroutinesApi
     inner class MyRequiredObservers(h: Handler?) : ContentObserver(h) {
 
-        override fun onChange(selfChange: Boolean, uri: Uri?) {
+        private var dozeConflictChecker: Job? = null
+
+            override fun onChange(selfChange: Boolean, uri: Uri?) {
             when (uri) {
                 refreshRateModeUri -> {
                     if (!ignoreRrmChange) {
@@ -142,10 +145,25 @@ class MyApplication : Application() {
                         if (mUtilsRefreshRateSt.mUtilsPrefsGmh.gmhPrefQuickDozeIsOn && DozeUpdater.getDozeVal(mUtilsRefreshRateSt.mUtilsPrefsGmh.gmhPrefGDozeModOpt)
                             != Settings.Global.getString(mContentResolver, DEVICE_IDLE_CONSTANTS)
                         ) {
+                            dozeConfCtr += 1
                             applicationContext.updateDozValues(
                                 true,
                                 mUtilsRefreshRateSt.mUtilsPrefsGmh.gmhPrefGDozeModOpt
                             )
+
+                            dozeConflictChecker?.cancel()
+                            dozeConflictChecker = null
+                            dozeConflictChecker = applicationScope.launch(Dispatchers.IO) {
+                                delay(4000)
+                                if (dozeConfCtr > 5){
+                                    launch(Dispatchers.Main) {
+                                        Toast.makeText(applicationContext,"Another app is clashing $applicationName ${getString(R.string.quick_doz_mod)}. Disable it now.", Toast.LENGTH_LONG).show()
+                                    }
+                                }else{
+                                    dozeConfCtr = 0
+                                }
+                            }
+                            dozeConflictChecker?.start()
                         }
                     }
                 }
@@ -207,6 +225,7 @@ class MyApplication : Application() {
             }
         }
 
+
         fun startRequiredObservers(){
             listOf(
                 refreshRateModeUri,
@@ -223,6 +242,7 @@ class MyApplication : Application() {
                 )
             }
         }
+
 
     }
 
