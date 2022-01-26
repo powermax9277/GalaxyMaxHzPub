@@ -45,9 +45,12 @@ class UtilsDeviceInfoSt private constructor(val context: Context) {
         internal const val SCREEN_BRIGHTNESS_FLOAT = "screen_brightness_float"
         internal const val DISPLAY_SIZE_FORCED = "display_size_forced"
         internal const val POWER_SAVING_MODE = "low_power"
+        internal const val POWER_SAVING_ON = "1"
+        internal const val POWER_SAVING_OFF = "0"
         internal const val SYSTEM = "system"
         internal const val SECURE = "secure"
         internal const val GLOBAL = "global"
+
     }
 
     internal val appCtx: Context = context.applicationContext

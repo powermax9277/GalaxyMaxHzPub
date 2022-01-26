@@ -46,8 +46,7 @@ import com.tribalfs.gmh.AccessibilityPermission.allowAccessibility
 import com.tribalfs.gmh.AccessibilityPermission.isAccessibilityEnabled
 import com.tribalfs.gmh.BuildConfig.APPLICATION_ID
 import com.tribalfs.gmh.BuildConfig.VERSION_NAME
-import com.tribalfs.gmh.GalaxyMaxHzAccess.Companion.SETUP_ADAPTIVE
-import com.tribalfs.gmh.GalaxyMaxHzAccess.Companion.SETUP_NETWORK_CALLBACK
+import com.tribalfs.gmh.GalaxyMaxHzAccess.Companion.gmhAccessInstance
 import com.tribalfs.gmh.MyApplication.Companion.applicationName
 import com.tribalfs.gmh.callbacks.LvlSbMsgCallback
 import com.tribalfs.gmh.databinding.ActivityMainBinding
@@ -104,7 +103,7 @@ import com.tribalfs.gmh.helpers.UtilsSettingsIntents.dataUsageSettingsIntentOP
 import com.tribalfs.gmh.helpers.UtilsSettingsIntents.deviceInfoActivity
 import com.tribalfs.gmh.helpers.UtilsSettingsIntents.powerSavingModeSettingsIntent
 import com.tribalfs.gmh.hertz.*
-import com.tribalfs.gmh.hertz.HzService.Companion.CHANNEL_ID_HZ
+import com.tribalfs.gmh.hertz.HzNotifGlobal.CHANNEL_ID_HZ
 import com.tribalfs.gmh.netspeed.*
 import com.tribalfs.gmh.netspeed.NetSpeedService.Companion.CHANNEL_ID_NET_SPEED
 import com.tribalfs.gmh.profiles.ProfilesObj
@@ -157,17 +156,17 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
         private const val KEY_JSON_LIC_TYPE = "0x11"
         private const val KEY_JSON_PAYPAL_BUY_URL = "0x12"
         private const val KEY_JSON_HELP_URL = "0x24"
-        /*private const val SYNCMODE_POST = "1"
-        private const val SYNCMODE_GET = "0"*/
+        /*
+        private const val SYNCMODE_POST = "1"
+        private const val SYNCMODE_GET = "0"
+        */
     }
 
     private val viewModel: MyViewModel by viewModels()
-
     private lateinit var mBinding: ActivityMainBinding
-
     private val mUtilsPrefsAct by lazy{ UtilsPrefsAct(this)}
     private val mUtilsRefreshRate by lazy{UtilsRefreshRateSt.instance(applicationContext)}
-
+    private val mNetspeedService by lazy {NetSpeedServiceHelperStn.instance(applicationContext)}
     private val hzOverlaySizes = listOf(10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40)
     private val hzAdaptiveDelays = listOf(2, 3, 4, 5, 6, 7, 8, 9, 10)
     private var mList: Menu? = null
@@ -187,14 +186,26 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                 ACTION_NOTIFICATION_CHANNEL_BLOCK_STATE_CHANGED -> {
                     when (intent.getStringExtra(EXTRA_NOTIFICATION_CHANNEL_ID)) {
                         CHANNEL_ID_HZ -> {
-                            if (intent.getBooleanExtra(EXTRA_BLOCKED_STATE, false)) {
-                                mBinding.chNotifHz.isChecked = false
-                                showHertz(mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefHzIsOn, null, false)
-                            } else {
-                                if (!ignoreUnblockHzNotifState) {
-                                    mBinding.chNotifHz.isChecked = true
-                                    showHertz(mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefHzIsOn, null, true)
-                                    ignoreUnblockHzNotifState = true
+                            if (SDK_INT >= VERSION_CODES.M) {
+                                if (intent.getBooleanExtra(EXTRA_BLOCKED_STATE, false)) {
+                                    mBinding.chNotifHz.isChecked = false
+
+                                    showHertz(
+                                        mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefHzIsOn,
+                                        null,
+                                        false
+                                    )
+
+                                } else {
+                                    if (!ignoreUnblockHzNotifState) {
+                                        mBinding.chNotifHz.isChecked = true
+                                        showHertz(
+                                            mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefHzIsOn,
+                                            null,
+                                            true
+                                        )
+                                        ignoreUnblockHzNotifState = true
+                                    }
                                 }
                             }
                         }
@@ -202,11 +213,11 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                         CHANNEL_ID_NET_SPEED -> {
                             if (intent.getBooleanExtra(EXTRA_BLOCKED_STATE, false)) {
                                 mBinding.swEnableNetspeed.isChecked = false
-                                NetSpeedServiceHelperStn.instance(applicationContext).runNetSpeed(false)
+                                mNetspeedService.runNetSpeed(false)
                             } else {
                                 if (!ignoreUnblockNetSpeedNotifState) {
                                     mBinding.swEnableNetspeed.isChecked = true
-                                    NetSpeedServiceHelperStn.instance(applicationContext).runNetSpeed(
+                                    mNetspeedService.runNetSpeed(
                                         true
                                     )
                                     ignoreUnblockNetSpeedNotifState = true
@@ -376,6 +387,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
         }
     }
 
+    @RequiresApi(VERSION_CODES.M)
     private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult())
     { result: ActivityResult ->
         if (result.resultCode == Activity.RESULT_OK) {
@@ -411,35 +423,35 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
             mBinding.chBytes.id -> {
                 if (mUtilsPrefsGmh.gmhPrefSpeedUnit != BYTE_PER_SEC) {
                     mUtilsPrefsGmh.gmhPrefSpeedUnit = BYTE_PER_SEC
-                    NetSpeedServiceHelperStn.instance(applicationContext).runNetSpeed(null)
+                    mNetspeedService.runNetSpeed(null)
                 }
             }
 
             mBinding.chBits.id -> {
                 if (mUtilsPrefsGmh.gmhPrefSpeedUnit != BIT_PER_SEC) {
                     mUtilsPrefsGmh.gmhPrefSpeedUnit = BIT_PER_SEC
-                    NetSpeedServiceHelperStn.instance(applicationContext).runNetSpeed(null)
+                    mNetspeedService.runNetSpeed(null)
                 }
             }
 
             mBinding.chDownStream.id -> {
                 if (mUtilsPrefsGmh.gmhPrefSpeedToShow != DOWNLOAD_SPEED) {
                     mUtilsPrefsGmh.gmhPrefSpeedToShow = DOWNLOAD_SPEED
-                    NetSpeedServiceHelperStn.instance(applicationContext).runNetSpeed(null)
+                    mNetspeedService.runNetSpeed(null)
                 }
             }
 
             mBinding.chUpStream.id -> {
                 if (mUtilsPrefsGmh.gmhPrefSpeedToShow != UPLOAD_SPEED) {
                     mUtilsPrefsGmh.gmhPrefSpeedToShow = UPLOAD_SPEED
-                    NetSpeedServiceHelperStn.instance(applicationContext).runNetSpeed(null)
+                    mNetspeedService.runNetSpeed(null)
                 }
             }
 
             mBinding.chCombinedStream.id -> {
                 if (mUtilsPrefsGmh.gmhPrefSpeedToShow != TOTAL_SPEED) {
                     mUtilsPrefsGmh.gmhPrefSpeedToShow = TOTAL_SPEED
-                    NetSpeedServiceHelperStn.instance(applicationContext).runNetSpeed(null)
+                    mNetspeedService.runNetSpeed(null)
                 }
             }
 
@@ -593,9 +605,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
             mBinding.chOverlayHz.id -> {
                 (v as Chip)
                 if (UtilsPermSt.instance(applicationContext).hasOverlayPerm()) {
-                    HzServiceHelperStn.instance(applicationContext).switchOverlay(
-                        v.isChecked
-                    )
+                    HzServiceHelperStn.instance(applicationContext).switchOverlay(v.isChecked)
                     mBinding.hideHzOverlaySettings = !v.isChecked
                 } else {
                     if (v.isChecked) {
@@ -739,7 +749,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                         hasWriteSecureSetPerm = true
                         if (mBinding.hasWssPerm == false) mBinding.hasWssPerm = true
                         Toast.makeText(
-                            this,
+                            this@MainActivity,
                             "WRITE_SECURE_SETTINGS permission already granted.",
                             Toast.LENGTH_SHORT
                         ).show()
@@ -1012,7 +1022,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
 
         if (bool) {
             if (isNetSpeedNotificationEnabled()) {
-                NetSpeedServiceHelperStn.instance(applicationContext).runNetSpeed(bool)
+                mNetspeedService.runNetSpeed(bool)
             } else {
                 ignoreUnblockNetSpeedNotifState = false
                 mBinding.swEnableNetspeed.isChecked = false
@@ -1030,15 +1040,16 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                 startActivity(settingsIntent)
             }
         } else {
-            NetSpeedServiceHelperStn.instance(applicationContext).runNetSpeed(bool)
+            mNetspeedService.runNetSpeed(bool)
         }
 
         if (SDK_INT >= VERSION_CODES.M) {
-            applicationContext.startService(
+            gmhAccessInstance?.checkAutoSensorsOff(true, true)
+            /*applicationContext.startService(
                 Intent(applicationContext, GalaxyMaxHzAccess::class.java).apply {
                     putExtra(SETUP_NETWORK_CALLBACK, true)
                 }
-            )
+            )*/
         }
     }
 
@@ -1221,6 +1232,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
     }
 
 
+    @RequiresApi(VERSION_CODES.M)
     fun showHertz(isSwOn: Boolean, showOverlayHz: Boolean?, showNotifHz: Boolean?) {
 
         fun openNotifSettings() {
@@ -1246,7 +1258,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
             }
         }
 
-        if (isSwOn && showOverlayHz == true) {
+        if (isSwOn && showOverlayHz == true && gmhAccessInstance == null) {
             if (!UtilsPermSt.instance(applicationContext).hasOverlayPerm()) {
                 showSbMsg(
                     getString(R.string.aot_perm_inf),
@@ -1260,7 +1272,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
             }
         }
 
-        HzServiceHelperStn.instance(applicationContext).startHertz(
+        HzServiceHelperStn.instance(applicationContext).switchHz(
             isSwOn,
             showOverlayHz,
             showNotifHz
@@ -1588,21 +1600,21 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                 }
                 override fun onStopTrackingTouch(seekBar: SeekBar) {
                     seekBar.thumb = getThumb(seekBar.progress)
+
+                    mBinding.sbMinHzAdapt.progress.let{
+                        if (it <  STANDARD_REFRESH_RATE_HZ && isPremium.get() != true){
+                            Toast.makeText(this@MainActivity, "$it Hz is a premium feature.", Toast.LENGTH_SHORT).show()
+                            mBinding.sbMinHzAdapt.progress = STANDARD_REFRESH_RATE_HZ
+                            return
+                        }
+                    }
+
                     if (isOfficialAdaptive && seekBar.progress < STANDARD_REFRESH_RATE_HZ) {
                         if (!checkAccessibilityPerm(true)) {
                             seekBar.progress = STANDARD_REFRESH_RATE_HZ
                             return
                         }
                     }
-
-                    mBinding.sbMinHzAdapt.progress.let{
-                        if (it <  STANDARD_REFRESH_RATE_HZ && isPremium.get() != true){
-                            Toast.makeText(applicationContext, "$it Hz is a premium feature.", Toast.LENGTH_SHORT).show()
-                            mBinding.sbMinHzAdapt.progress = STANDARD_REFRESH_RATE_HZ
-                            return
-                        }
-                    }
-
 
                     mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefMinHzAdapt = seekBar.progress
 
@@ -1627,11 +1639,12 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                             }
                     }
 
-                    applicationContext.startService(
+                    gmhAccessInstance?.setupAdaptiveEnhancer()
+                   /* applicationContext.startService(
                         Intent(applicationContext,GalaxyMaxHzAccess::class.java).apply {
                             putExtra(SETUP_ADAPTIVE, true)
                         }
-                    )
+                    )*/
                 }
             })
     }
@@ -1874,20 +1887,9 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
 
                     try {
                         //Needed
-                        if (SDK_INT >= VERSION_CODES.M) {
-                            applicationContext.startService(
-                                Intent(
-                                    applicationContext,
-                                    GalaxyMaxHzAccess::class.java
-                                ).apply {
-                                    putExtra(SETUP_ADAPTIVE, true)
-                                    putExtra(SETUP_NETWORK_CALLBACK, true)
-                                    /*putExtra(
-                                    SWITCH_AUTO_SENSORS,
-                                    mUtilsPrefsGmh.gmhPrefSensorsOff
-                                )*/
-                                }
-                            )
+                        if (SDK_INT >= VERSION_CODES.N) {
+                            gmhAccessInstance?.setupAdaptiveEnhancer()
+                            gmhAccessInstance?.setupNetworkCallback()
                         }
                     } catch (_: Exception) {
                     }
@@ -1917,7 +1919,6 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
 
 
 
-    // @RequiresApi(VERSION_CODES.M)
     private fun setupResoSwitcherFilter() {
         if (mBinding.cgResSwFilter.childCount > 0) {
             mBinding.cgResSwFilter.removeAllViews()
@@ -1928,6 +1929,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
             val res = "$key(${it[key]?.resName})"
 
             (layoutInflater.inflate(R.layout.chip_layout, null, false) as Chip).apply {
+
                 text = res
                 isCheckable = true
                 isCheckedIconVisible = true
@@ -1936,15 +1938,17 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                     18f,
                     resources.displayMetrics
                 )
-                isChecked = mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefGetSkippedRes?.let{ skips ->
-                    !skips.contains(res)
-                }?:true
+
+                isChecked = mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefGetSkippedRes?.let{ skips -> !skips.contains(res) }?:true
+
                 setOnClickListener { view ->
                     (view as Chip).let { ch ->
                         updateSkipRes(ch.text.toString(), !ch.isChecked)
                     }
                 }
-                isEnabled = hasWriteSecureSetPerm
+
+                //isEnabled = hasWriteSecureSetPerm
+
                 mBinding.cgResSwFilter.addView(this)
             }
         }

@@ -3,10 +3,11 @@ package com.tribalfs.gmh.netspeed
 import android.annotation.SuppressLint
 import android.app.*
 import android.app.PendingIntent.FLAG_IMMUTABLE
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.graphics.*
-import android.graphics.drawable.Icon
+import android.graphics.Color
 import android.net.TrafficStats
 import android.os.Build
 import android.os.Handler
@@ -17,12 +18,11 @@ import android.widget.RemoteViews
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationManagerCompat
 import com.tribalfs.gmh.R
-import com.tribalfs.gmh.callbacks.ChangedStatusCallback
 import com.tribalfs.gmh.helpers.CacheSettings.isOnePlus
 import com.tribalfs.gmh.helpers.CacheSettings.isScreenOn
+import com.tribalfs.gmh.helpers.UtilNotifIcon
 import com.tribalfs.gmh.helpers.UtilsSettingsIntents.dataUsageSettingsIntent
 import com.tribalfs.gmh.netspeed.SpeedCalculator.Companion.mCalcInBits
-import com.tribalfs.gmh.receivers.ScreenStatusReceiverBasic
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt.Companion.BIT_PER_SEC
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt.Companion.DOWNLOAD_SPEED
@@ -32,7 +32,6 @@ import kotlinx.coroutines.*
 import java.lang.String.format
 import java.util.*
 import kotlin.coroutines.CoroutineContext
-import kotlin.math.min
 
 
 
@@ -49,11 +48,9 @@ class NetSpeedService : Service(), CoroutineScope {
     private val mNotificationContentView: RemoteViews by lazy {RemoteViews(applicationContext.packageName, R.layout.view_indicator_notification) }
     private val notificationManagerCompat by lazy{NotificationManagerCompat.from(applicationContext)}
     private val mUtilsPrefsGmh by lazy{ UtilsPrefsGmhSt.instance(applicationContext) }
+    private val mNotifIcon by lazy{ UtilNotifIcon() }
     private lateinit var notificationBuilderInstance: Notification.Builder
-    private lateinit var mIconSpeedPaint: Paint
-    private lateinit var mIconUnitPaint:Paint
-    private lateinit var mIconBitmap: Bitmap
-    private lateinit var mIconCanvas: Canvas
+
     private var mSpeedToShow = TOTAL_SPEED
     private var mLastRxBytes: Long = 0
     private var mLastTxBytes: Long = 0
@@ -106,21 +103,20 @@ class NetSpeedService : Service(), CoroutineScope {
         updateNetstat.cancel()
     }
 
-    private val mScreenStatusReceiver by lazy{
-        ScreenStatusReceiverBasic(
-            object : ChangedStatusCallback {
-                @RequiresApi(Build.VERSION_CODES.M)
-                override fun onChange(result: Any) {
-                    //Log.d(TAG, "mScreenStatusReceiver called: $isOn")
-                    //isScreenOn = result as Boolean
-                    if (result as Boolean) {
+    private val mScreenStatusReceiver by lazy {
+        object : BroadcastReceiver() {
+            @RequiresApi(Build.VERSION_CODES.M)
+            override fun onReceive(context: Context?, intent: Intent?) {
+                when (intent?.action) {
+                    Intent.ACTION_SCREEN_ON -> {
                         startNetStatInternal()
                         notificationBuilderInstance.setVisibility(Notification.VISIBILITY_PRIVATE)
                         notificationManagerCompat.notify(
                             NOTIFICATION_ID_NET_SPEED,
                             notificationBuilderInstance.build()
                         )
-                    } else {
+                    }
+                    Intent.ACTION_SCREEN_OFF -> {
                         Handler(Looper.getMainLooper()).postDelayed({
                             if (!isScreenOn) {
                                 stopNetStatInternal()
@@ -129,45 +125,28 @@ class NetSpeedService : Service(), CoroutineScope {
                                     NOTIFICATION_ID_NET_SPEED,
                                     notificationBuilderInstance.build()
                                 )
-                            }}, 8000)
+                            }
+                        }, 8000)
                     }
-
                 }
-            })
-    }
 
-
-    private fun setupIndicatorIconGenerator() {
-        mIconSpeedPaint = Paint()
-        mIconSpeedPaint.color = Color.WHITE
-        mIconSpeedPaint.isAntiAlias = true
-        mIconSpeedPaint.textAlign = Paint.Align.CENTER
-        mIconSpeedPaint.typeface = Typeface.create("sans-serif-condensed", Typeface.BOLD)
-        mIconUnitPaint = Paint()
-        mIconUnitPaint.color = Color.WHITE
-        mIconUnitPaint.isAntiAlias = true
-        mIconUnitPaint.textAlign = Paint.Align.CENTER
-        mIconUnitPaint.typeface = Typeface.create("sans-serif-condensed", Typeface.BOLD)
-        mIconBitmap = Bitmap.createBitmap(96, 96, Bitmap.Config.ARGB_8888)
-        mIconCanvas = Canvas(mIconBitmap)
+            }
+        }
     }
 
     
     private fun setupScreenStatusReceiver(){
-        //if (!AccessibilityPermission.isAccessibilityEnabled(applicationContext,GalaxyMaxHzAccess::class.java)) {
-        IntentFilter().let {
+         IntentFilter().let {
             it.addAction(Intent.ACTION_SCREEN_OFF)
             it.addAction(Intent.ACTION_SCREEN_ON)
             it.priority = 999
             registerReceiver(mScreenStatusReceiver, it)
         }
-        //}
     }
 
 
     @RequiresApi(Build.VERSION_CODES.M)
     private fun setupNotification() {
-        //create notification channel
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             (NotificationChannel(
                 CHANNEL_ID_NET_SPEED,
@@ -215,8 +194,6 @@ class NetSpeedService : Service(), CoroutineScope {
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate() {
         super.onCreate()
-        Log.d(TAG, "onCreate() called")
-        setupIndicatorIconGenerator()
         setupNotification()
         setupScreenStatusReceiver()
     }
@@ -257,7 +234,7 @@ class NetSpeedService : Service(), CoroutineScope {
             when (mSpeedToShow) {
                 TOTAL_SPEED ->{
                     setSmallIcon(
-                        getIndicatorIcon(
+                        mNotifIcon.getIcon(
                             total.speedValue!!,
                             total.speedUnit!!
                         )
@@ -265,7 +242,7 @@ class NetSpeedService : Service(), CoroutineScope {
                 }
                 DOWNLOAD_SPEED ->{
                     setSmallIcon(
-                        getIndicatorIcon(
+                        mNotifIcon.getIcon(
                             down.speedValue!!,
                             down.speedUnit!!
                         )
@@ -273,7 +250,7 @@ class NetSpeedService : Service(), CoroutineScope {
                 }
                 UPLOAD_SPEED ->{
                     setSmallIcon(
-                        getIndicatorIcon(
+                        mNotifIcon.getIcon(
                             up.speedValue!!,
                             up.speedUnit!!
                         )
@@ -316,20 +293,6 @@ class NetSpeedService : Service(), CoroutineScope {
                 NOTIFICATION_ID_NET_SPEED, build())
         }
     }
-
-
-    @RequiresApi(Build.VERSION_CODES.M)
-    private fun getIndicatorIcon(speedValue: String, speedUnit: String): Icon? {
-        mIconSpeedPaint.textSize = 72f
-        mIconUnitPaint.textSize = 50f
-        mIconSpeedPaint.textSize = min(72*96/mIconSpeedPaint.measureText(speedValue),72f)
-        mIconUnitPaint.textSize = min(50*96/mIconUnitPaint.measureText(speedUnit),50f)
-        mIconCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR)
-        mIconCanvas.drawText(speedValue, 48f, 50f, mIconSpeedPaint)
-        mIconCanvas.drawText(speedUnit, 48f, 92f, mIconUnitPaint)
-        return Icon.createWithBitmap(mIconBitmap)
-    }
-
 
 
     private fun handleConfigChange() {

@@ -10,6 +10,7 @@ import com.tribalfs.gmh.helpers.CacheSettings.isPremium
 import com.tribalfs.gmh.helpers.CacheSettings.keepModeOnPowerSaving
 import com.tribalfs.gmh.helpers.CacheSettings.prrActive
 import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.REFRESH_RATE_MODE_STANDARD
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 internal class PsmChangeHandler(context: Context) {
 
@@ -21,6 +22,7 @@ internal class PsmChangeHandler(context: Context) {
     private val appCtx: Context = context.applicationContext
     private val mUtilsRefreshRate by lazy {UtilsRefreshRateSt.instance(appCtx)}
 
+    @ExperimentalCoroutinesApi
     @Synchronized
     @RequiresApi(Build.VERSION_CODES.M)
     fun handle() {

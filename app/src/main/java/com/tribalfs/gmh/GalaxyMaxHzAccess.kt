@@ -3,6 +3,10 @@ package com.tribalfs.gmh
 import android.accessibilityservice.AccessibilityService
 import android.annotation.SuppressLint
 import android.app.KeyguardManager
+import android.app.Notification
+import android.app.Notification.VISIBILITY_PRIVATE
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -13,40 +17,55 @@ import android.content.pm.ApplicationInfo
 import android.content.pm.ApplicationInfo.CATEGORY_SOCIAL
 import android.content.pm.ApplicationInfo.CATEGORY_VIDEO
 import android.content.pm.PackageManager
-import android.graphics.PixelFormat
+import android.graphics.*
 import android.hardware.camera2.CameraManager
+import android.hardware.display.DisplayManager
 import android.net.ConnectivityManager
 import android.net.Network
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.os.PowerManager.ACTION_POWER_SAVE_MODE_CHANGED
-import android.view.View
-import android.view.WindowManager
+import android.view.*
+import android.view.WindowManager.LayoutParams.WRAP_CONTENT
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityEvent.*
 import android.view.accessibility.AccessibilityNodeInfo
 import android.view.accessibility.AccessibilityNodeInfo.ACTION_CLICK
+import android.widget.FrameLayout
+import android.widget.RemoteViews
+import android.widget.TextView
 import androidx.annotation.RequiresApi
-import com.tribalfs.gmh.AccessibilityPermission.allowAccessibility
-import com.tribalfs.gmh.callbacks.AccessibilityCallback
+import androidx.core.app.NotificationManagerCompat
+import com.tribalfs.gmh.callbacks.DisplayChangedCallback
+import com.tribalfs.gmh.callbacks.GmhBroadcastCallback
 import com.tribalfs.gmh.helpers.*
 import com.tribalfs.gmh.helpers.CacheSettings.adaptiveAccessTimeout
 import com.tribalfs.gmh.helpers.CacheSettings.adaptiveDelayMillis
 import com.tribalfs.gmh.helpers.CacheSettings.applyAdaptiveMod
-import com.tribalfs.gmh.helpers.CacheSettings.hasWriteSecureSetPerm
+import com.tribalfs.gmh.helpers.CacheSettings.displayId
+import com.tribalfs.gmh.helpers.CacheSettings.hzNotifOn
+import com.tribalfs.gmh.helpers.CacheSettings.hzStatus
 import com.tribalfs.gmh.helpers.CacheSettings.isFakeAdaptiveValid
 import com.tribalfs.gmh.helpers.CacheSettings.isNetSpeedRunning
 import com.tribalfs.gmh.helpers.CacheSettings.isOfficialAdaptive
 import com.tribalfs.gmh.helpers.CacheSettings.isScreenOn
-import com.tribalfs.gmh.helpers.CacheSettings.isSpayInstalled
 import com.tribalfs.gmh.helpers.CacheSettings.lowestHzCurMode
+import com.tribalfs.gmh.helpers.CacheSettings.lowestHzForAllMode
 import com.tribalfs.gmh.helpers.CacheSettings.lrrPref
 import com.tribalfs.gmh.helpers.CacheSettings.prrActive
 import com.tribalfs.gmh.helpers.CacheSettings.sensorOnKey
+import com.tribalfs.gmh.hertz.*
+import com.tribalfs.gmh.hertz.HzNotifGlobal.CHANNEL_ID_HZ
+import com.tribalfs.gmh.hertz.HzNotifGlobal.NOTIFICATION_ID_HZ
+import com.tribalfs.gmh.hertz.HzNotifGlobal.hznotificationBuilder
+import com.tribalfs.gmh.hertz.HzService.Companion.PAUSE
+import com.tribalfs.gmh.hertz.HzService.Companion.PLAYING
+import com.tribalfs.gmh.hertz.HzService.Companion.STOPPED
 import com.tribalfs.gmh.netspeed.NetSpeedServiceHelperStn
 import com.tribalfs.gmh.profiles.ProfilesObj.isProfilesLoaded
 import com.tribalfs.gmh.receivers.GmhBroadcastReceivers
+import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt
 import kotlinx.coroutines.*
 import java.lang.Integer.max
 import java.lang.Runnable
@@ -54,6 +73,7 @@ import java.util.*
 import kotlin.coroutines.CoroutineContext
 
 
+@ExperimentalCoroutinesApi
 @RequiresApi(Build.VERSION_CODES.M)
 class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
@@ -66,65 +86,147 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         internal const val SETUP_NETWORK_CALLBACK = "snc"
         internal const val SWITCH_AUTO_SENSORS = "cas"
         internal const val SCREEN_OFF_ONLY = "soo"
+        internal const val SWITCH_HZ = "hsw"
+        internal var gmhAccessInstance: GalaxyMaxHzAccess? = null
     }
 
 
     private val job = SupervisorJob()
     override val coroutineContext: CoroutineContext
         get() = job + Dispatchers.IO
+
     private val mConnectivityManager by lazy {applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager}
-    private val mKeyguardManager by lazy {getSystemService(KEYGUARD_SERVICE) as KeyguardManager}
+    private val mKeyguardManager by lazy {applicationContext.getSystemService(KEYGUARD_SERVICE) as KeyguardManager}
     private val handler by lazy {Handler(Looper.getMainLooper())}
     private val mCameraManager by lazy {getSystemService(CAMERA_SERVICE) as CameraManager}
     private val mUtilsRefreshRate by lazy {UtilsRefreshRateSt.instance(applicationContext)}
-    private val mWindowsManager by lazy {applicationContext.getSystemService(Context.WINDOW_SERVICE) as WindowManager}
     private val mNotifBar by lazy {UtilNotificationBarSt.instance(applicationContext)}
     private var triesA: Int = 0
     private var triesB: Int = 0
-    private var isGameOpen = false //: AtomicBoolean = AtomicBoolean(false)
-    private var isVideoApp = false //: AtomicBoolean = AtomicBoolean(false)
-    private var useMin60 = false //: AtomicBoolean = AtomicBoolean(false)
+    private var isGameOpen = false
+    private var isVideoApp = false
+    private var useMin60 = false
     private var cameraOpen: Boolean = false
+    private val mHzSharePref by lazy { UtilsPrefsGmhSt.instance(applicationContext) }
+    private val notificationManagerCompat by lazy { NotificationManagerCompat.from(applicationContext)}
+    private val mNotificationContentView by lazy { RemoteViews(applicationContext.packageName, R.layout.view_hz_notification) }
+    private val mNotifIcon by lazy{ UtilNotifIcon() }
+    private var mTransfyHzJob: Job? = null
+    private var mPauseHzJob: Job? = null
 
-
-    private val paramsAdaptive by lazy {
-        WindowManager.LayoutParams(
-            0, 0, 0, 0,
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
-            }else{
-                @Suppress("DEPRECATION")
-                WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY
-            },
-            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-                    or WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
-                    or WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
-            PixelFormat.TRANSLUCENT
-        )
-
+    private val autoSensorsOffRunnable: Runnable by lazy {
+        Runnable {
+            if (mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefSensorsOff) {
+                if (!isScreenOn) {
+                    switchSensorsOff(true)
+                }
+            }
+        }
     }
 
 
-    private val mScreenStatusReceiver by lazy{
-        GmhBroadcastReceivers(applicationContext,
-            object : AccessibilityCallback {
-                override fun onChange(userPresent: Boolean, turnOffSensors: Boolean) {
-                    if (userPresent) {
-                        if (isFakeAdaptiveValid.get()!!) makeAdaptive()
-                        if (turnOffSensors) {
-                            switchSensorsOff(false)
-                        }
+    private val mGmhBroadcastCallback = object: GmhBroadcastCallback {
+        override fun onIntentReceived(intent: String) {
+            when (intent) {
+                ACTION_SCREEN_OFF -> {
+                    handler.postDelayed(autoSensorsOffRunnable, 20000)
+                    mPauseHzJob?.cancel()
+                    mPauseHzJob = null
+                    mPauseHzJob = launch(Dispatchers.Main){
+                        delay(10000)
+                        stopHz()
+                        hzStatus.set(PAUSE)
+                    }
+                    mPauseHzJob?.start()
+                }
 
-                    }else{
-                        if (turnOffSensors && !isScreenOn) {
-                            switchSensorsOff(true)
-                        }
+                ACTION_SCREEN_ON ->{
+                    handler.removeCallbacks { autoSensorsOffRunnable }
+                    mPauseHzJob?.cancel()
+                    if(hzStatus.get() == PAUSE) {
+                        startHz()
+                    }
+
+                }
+
+                ACTION_USER_PRESENT -> {
+                    if (isFakeAdaptiveValid.get()!!) makeAdaptive()
+                    if (mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefSensorsOff || CacheSettings.turnOffAutoSensorsOff) {
+                        switchSensorsOff(false)
+                    }
+                    if (CacheSettings.turnOffAutoSensorsOff){
+                        mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefSensorsOff = false
+                        CacheSettings.turnOffAutoSensorsOff = false
                     }
                 }
-            },
-            this
-        )
+
+                ACTION_LOCALE_CHANGED -> {
+                    mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefSensorOnKey = ""
+                    sensorOnKey = null
+                }
+            }
+
+        }
+
     }
+
+    private val mScreenStatusReceiver by lazy{
+        GmhBroadcastReceivers(applicationContext, mGmhBroadcastCallback, this)
+    }
+
+    private var mWindowsManager: WindowManager? = null
+    private var params: WindowManager.LayoutParams? = null
+    private var mLayout: FrameLayout? = null
+    private var stageView: View? = null
+    private val dm by lazy { applicationContext.getSystemService(DISPLAY_SERVICE) as DisplayManager}
+    private val mDisplay by lazy { dm.getDisplay(displayId) }
+    private var hzText: TextView? = null
+    private var hzOverlayOn: Boolean? = null
+    //private val displayListener by lazy { MyDisplayListener(mDisplay)}
+
+    private val mDisplayChangeCallback by lazy{ object: DisplayChangedCallback {
+        override fun onDisplayChanged() {
+            launch(Dispatchers.Main) {
+                val newHz = mDisplay.refreshRate.toInt()
+                updateRefreshRateViews(newHz)
+            }
+        }
+
+    }}
+
+    private val displayListener by lazy { MyDisplayListener(mDisplayChangeCallback) }
+
+    private val networkCallback by lazy {
+        object : ConnectivityManager.NetworkCallback() {
+            override fun onLost(network: Network) {
+                if (isNetSpeedRunning.get()!!) {
+                    launch { NetSpeedServiceHelperStn.instance(applicationContext).stopService(true) }
+                }
+            }
+            override fun onAvailable(network: Network) {
+                if (isNetSpeedRunning.get()!!) {
+                    launch { NetSpeedServiceHelperStn.instance(applicationContext).startService() }
+                }
+            }
+        }
+    }
+
+
+    private val cameraCallback by lazy{
+        object : CameraManager.AvailabilityCallback() {
+            override fun onCameraAvailable(cameraId: String) {
+                super.onCameraAvailable(cameraId)
+                cameraOpen = false
+            }
+
+            override fun onCameraUnavailable(cameraId: String) {
+                super.onCameraUnavailable(cameraId)
+                cameraOpen = true
+            }
+        }
+    }
+
+    private val defaultLauncherName by lazy{DefaultApps.getLauncher(applicationContext)}
 
 
     private fun switchSensorsOff(on: Boolean) {
@@ -236,51 +338,6 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     }
 
 
-
-    private val networkCallback by lazy {
-        object : ConnectivityManager.NetworkCallback() {
-            override fun onLost(network: Network) {
-                if (isNetSpeedRunning.get()!!) {
-                    launch { NetSpeedServiceHelperStn.instance(applicationContext).stopService(true) }
-                }
-            }
-            override fun onAvailable(network: Network) {
-                if (isNetSpeedRunning.get()!!) {
-                    launch { NetSpeedServiceHelperStn.instance(applicationContext).startService() }
-                }
-            }
-        }
-    }
-
-
-    private val cameraCallback by lazy{
-        object : CameraManager.AvailabilityCallback() {
-            override fun onCameraAvailable(cameraId: String) {
-                super.onCameraAvailable(cameraId)
-                cameraOpen = false
-            }
-
-            override fun onCameraUnavailable(cameraId: String) {
-                super.onCameraUnavailable(cameraId)
-                cameraOpen = true
-            }
-        }
-    }
-
-    /*   private val adaptiveRunnable: Runnable by lazy {
-           Runnable {
-               if (applyAdaptiveMod.get()!! && isScreenOn && !isGameOpen){
-                   mUtilsRefreshRate.setPeakRefreshRate(
-                       if (useMin60 || cameraOpen) 60 else lrrPref.get()!!)
-               }
-           }
-       }*/
-
-    //private val defaultKeyboard by lazy{DefaultApps.getKeyboard(applicationContext)}
-    private val defaultLauncherName by lazy{DefaultApps.getLauncher(applicationContext)}
-    private var adaptiveView: View? = null
-
-
     private fun setupScreenStatusReceiver(){
         IntentFilter().apply {
             addAction(ACTION_SCREEN_OFF)
@@ -301,12 +358,15 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
 
     @RequiresApi(Build.VERSION_CODES.N)
-    private fun setupNetworkCallback(){
-        disableNetworkCallback()
-        if (isNetSpeedRunning.get()!!) {
-            try {
-                mConnectivityManager.registerDefaultNetworkCallback(networkCallback)
-            }catch(_:Exception){}
+    internal fun setupNetworkCallback(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            disableNetworkCallback()
+            if (isNetSpeedRunning.get()!!) {
+                try {
+                    mConnectivityManager.registerDefaultNetworkCallback(networkCallback)
+                } catch (_: Exception) {
+                }
+            }
         }
     }
 
@@ -321,38 +381,80 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         mCameraManager.unregisterAvailabilityCallback(cameraCallback)
     }
 
-/*    private fun restartOtherServices(){
-        *//*if (isNsNotifOn.get()!!) {
-            launch {
-                NetSpeedServiceHelperStn.instance(applicationContext).stopService(null)
-                delay(1000)
-                NetSpeedServiceHelperStn.instance(applicationContext).runNetSpeed(null)
-            }
-        }*//*
-        *//*if (CacheSettings.hzStatus.get() == HzService.PLAYING) {
-            launch {
-                HzServiceHelperStn.instance(applicationContext).stopHertz()
-                HzServiceHelperStn.instance(applicationContext).startHertz(null, null, null)
-            }
-        }*//*
-    }*/
-
     // @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate() {
+        //Log.d("TESTEST","onCreate() called")
         setupScreenStatusReceiver()
+        setupNotification()
         /* if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
              setupNetworkCallback()
          }*/
+
+    }
+
+    @SuppressLint("NewApi")
+    private fun setupNotification() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && HzNotifGlobal.hznotificationChannel == null) {
+            HzNotifGlobal.hznotificationChannel = NotificationChannel(
+                CHANNEL_ID_HZ,
+                getString(R.string.refresh_rate_mon),
+                NotificationManager.IMPORTANCE_LOW
+            ).apply {
+                lightColor = Color.BLUE
+                setShowBadge(false)
+                vibrationPattern = longArrayOf(0)
+                enableVibration(true)
+                notificationManagerCompat.createNotificationChannel(this)
+            }
+        }
+
+        if (hznotificationBuilder == null) {
+            hznotificationBuilder =
+                (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    Notification.Builder(applicationContext, CHANNEL_ID_HZ)
+                } else {
+                    @Suppress("DEPRECATION")
+                    Notification.Builder(applicationContext)
+                })
+                    .setSmallIcon(R.drawable.ic_max_hz_12)
+                    .setOngoing(true)
+                    .setOnlyAlertOnce(true)
+                    .setCategory(Notification.CATEGORY_STATUS)
+                    .setVisibility(VISIBILITY_PRIVATE)
+                    .setLocalOnly(true)
+                    .setCustomContentView(mNotificationContentView)
+        }
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.M)
+    override fun onServiceConnected() {
+        gmhAccessInstance = this
+        HzServiceHelperStn.instance(applicationContext).stopHzService()
+        setupOverlay()
+        setupAdaptiveEnhancer()
+        this.serviceInfo.apply {
+            notificationTimeout = adaptiveAccessTimeout
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                /*Set the recommended time that interactive controls
+                need to remain on the screen to support the user.*/
+                interactiveUiTimeoutMillis = 0
+                nonInteractiveUiTimeoutMillis = 0
+            }
+        }
+
+        if(mHzSharePref.gmhPrefHzIsOn){
+            startHz()
+        }
+    }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        // Log.d(TAG, "onStartCommand() called")
+       // Log.d("TESTEST","onStartCommand called")
         val extras = intent?.extras
         val setupAdaptive = extras?.get(SETUP_ADAPTIVE)
         val setupNetworkCallback = extras?.get(SETUP_NETWORK_CALLBACK)
         val switchAutoSensors = extras?.get(SWITCH_AUTO_SENSORS)
+        val switchHzOverlay = extras?.get(SWITCH_HZ)
         val onScreenOffOnly = extras?.get(SCREEN_OFF_ONLY)?: true
 
         if (setupAdaptive == true) {
@@ -366,27 +468,128 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         if (switchAutoSensors != null) {
             checkAutoSensorsOff(switchAutoSensors as Boolean, onScreenOffOnly as Boolean)
         }
+
+        if (switchHzOverlay != null){
+            if (switchHzOverlay == true){
+                startHz()
+            }else{
+                stopHz()
+            }
+        }
+
         return START_STICKY
     }
 
-    @RequiresApi(Build.VERSION_CODES.M)
-    override fun onServiceConnected() {
-        super.onServiceConnected()
-        setupAdaptiveEnhancer()
-        this.serviceInfo.apply {
-            notificationTimeout = adaptiveAccessTimeout
+    private fun setupOverlay(){
+        mWindowsManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        mLayout =  FrameLayout(this)
+        params =    WindowManager.LayoutParams()
+        params!!.type = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            WindowManager.LayoutParams.TYPE_ACCESSIBILITY_OVERLAY
+        }else{
+            @Suppress("DEPRECATION")
+            WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY
+        }
+        params!!.format = PixelFormat.TRANSLUCENT
+        params!!.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
+        params!!.width = WRAP_CONTENT
+        params!!.height = WRAP_CONTENT
+        params!!.x = 0
+        params!!.y = 0
+        params!!.gravity = HzGravity.TOP_LEFT
+        stageView = LayoutInflater.from(this).inflate(R.layout.hz_fps, mLayout)
+        hzText = stageView!!.findViewById(R.id.tvHzBeatMain)
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                /*Set the recommended time that interactive controls
-                need to remain on the screen to support the user.*/
-                interactiveUiTimeoutMillis = 0
-                nonInteractiveUiTimeoutMillis = 0
+        try {
+            mWindowsManager!!.removeView(mLayout)
+        }catch(e:Exception){
+            e.printStackTrace()
+        }
+
+        try {
+            mWindowsManager!!.addView(mLayout, params)
+        }catch(e:Exception){
+            e.printStackTrace()
+        }
+    }
+
+
+    internal fun startHz() {
+        hzStatus.set(PLAYING)
+        //Log.d("TESTEST","startHz called")
+        hzNotifOn.set(mHzSharePref.gmhPrefHzNotifIsOn)
+        if (hzNotifOn.get() == true) {
+            hznotificationBuilder?.setVisibility(VISIBILITY_PRIVATE)
+            notificationManagerCompat.notify(
+                NOTIFICATION_ID_HZ,
+                hznotificationBuilder!!.build()
+            )
+        }
+
+        hzOverlayOn = mHzSharePref.gmhPrefHzOverlayIsOn
+        if (hzOverlayOn == true) {
+            if (params?.gravity != mHzSharePref.gmhPrefHzPosition) {
+                params?.gravity = mHzSharePref.gmhPrefHzPosition
+                try {
+                    mWindowsManager?.updateViewLayout(mLayout, params)
+                } catch (_: Exception) {
+                }
+            }
+            hzText?.visibility = View.VISIBLE
+            hzText?.textSize  = mHzSharePref.gmhPrefHzOverlaySize
+        }else{
+            hzText?.visibility = View.GONE
+        }
+
+        updateRefreshRateViews(mDisplay.refreshRate.toInt())
+        //updateOverlay(mDisplay.refreshRate.toInt())
+        dm.registerDisplayListener(displayListener, Handler(Looper.getMainLooper()))
+    }
+
+    internal fun stopHz() {
+        //Log.d("TESTEST","stopHz called")
+        hznotificationBuilder!!.setVisibility(Notification.VISIBILITY_SECRET)
+        notificationManagerCompat.notify(
+            NOTIFICATION_ID_HZ,
+            hznotificationBuilder!!.build()
+        )
+        mTransfyHzJob?.cancel()
+        hzText?.visibility = View.GONE
+        notificationManagerCompat.cancel(NOTIFICATION_ID_HZ)
+        dm.unregisterDisplayListener(displayListener)
+        hzStatus.set(STOPPED)
+    }
+
+
+    private fun updateRefreshRateViews(newHz: Int){
+        updateNotif(newHz.toString())
+        updateOverlay(newHz)
+    }
+
+
+
+    private fun updateNotif(hzStr: String) = launch(Dispatchers.Main) {
+        //Log.d(TAG, "updateNotifContent called")
+        if (CacheSettings.hzNotifOn.get()!!) {
+            hznotificationBuilder?.apply {
+                setSmallIcon(mNotifIcon.getIcon(hzStr, "Hz"))
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                    setCustomContentView(
+                        RemoteViews(mNotificationContentView).apply {
+                            setTextViewText(R.id.tvHz, getString(R.string.cur_rr_h, hzStr))
+                        }
+                    )
+                }
+                notificationManagerCompat.notify(
+                    NOTIFICATION_ID_HZ,
+                    build()
+                )
             }
         }
     }
 
     //if triggered by tasker
-    private fun checkAutoSensorsOff(switchOn:Boolean, screenOffOnly: Boolean){
+    internal fun checkAutoSensorsOff(switchOn:Boolean, screenOffOnly: Boolean){
         if (switchOn){
             if ((screenOffOnly && !isScreenOn) || !screenOffOnly) {
                 //turnOnAutoSensorsOff = false
@@ -399,10 +602,12 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         }
     }
 
+
+
     override fun onUnbind(intent: Intent?): Boolean {
-        if (hasWriteSecureSetPerm && isSpayInstalled == false) {
-            allowAccessibility(applicationContext, GalaxyMaxHzAccess::class.java, true)
-        }
+        //Log.d("TESTEST","OnUnbind called")
+        gmhAccessInstance = null
+        HzServiceHelperStn.instance(applicationContext).switchHz()
         return super.onUnbind(intent)
     }
 
@@ -596,17 +801,14 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
 
     override fun onDestroy() {
-        // Log.d(TAG, "onDestroy() called")
-
+        stopHz()
+        hzStatus.set(STOPPED)
         try {
-            mWindowsManager.removeView(adaptiveView)
+            mWindowsManager!!.removeView(mLayout)
         } catch (_: java.lang.Exception) {
-        }finally{
-            adaptiveView = null
         }
         unregisterReceiver(mScreenStatusReceiver)
         disableNetworkCallback()
-        //restartOtherServices()
         makeAdaptiveJob?.cancel()
         job.cancel()
         super.onDestroy()
@@ -617,8 +819,14 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     }
 
     @SuppressLint("ClickableViewAccessibility")
+    private val adaptiveEnhancer = View.OnTouchListener { _, _ ->
+        makeAdaptive()
+        true
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
     @RequiresApi(Build.VERSION_CODES.M)
-    private fun setupAdaptiveEnhancer(){
+    internal fun setupAdaptiveEnhancer(){
         launch {
             while (!isProfilesLoaded){
                 delay(150)
@@ -626,20 +834,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
             delay(300)
             launch(Dispatchers.Main){
                 if (isFakeAdaptiveValid.get()!!) {
-                    if (adaptiveView == null) {
-                        adaptiveView = View(applicationContext)
-                        adaptiveView!!.setOnTouchListener { _, _ ->
-                            //  Log.d(TAG, "Touch")
-                            makeAdaptive()
-                            true
-                        }
-                    }
-                    try {
-                        mWindowsManager.removeView(adaptiveView)
-                    } catch (_: Exception) {
-                    } finally {
-                        mWindowsManager.addView(adaptiveView, paramsAdaptive)
-                    }
+                    mLayout?.setOnTouchListener(adaptiveEnhancer)
                     if (isScreenOn) {
                         initialAdaptive()//initial trigger
                     }else{
@@ -650,20 +845,34 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                     registerCameraCallback()
                 } else {
                     if (UtilsPermSt.instance(applicationContext).hasWriteSystemPerm()) {
-                        mUtilsRefreshRate.setRefreshRate(prrActive.get()!!,mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefMinHzAdapt)
+                        if (mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefMinHzAdapt > UtilsDeviceInfoSt.STANDARD_REFRESH_RATE_HZ) {
+                            mUtilsRefreshRate.setRefreshRate(prrActive.get()!!,mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefMinHzAdapt)
+                        }else{
+                            mUtilsRefreshRate.setRefreshRate(prrActive.get()!!,lowestHzForAllMode)
+                        }
                     }
-                    try {
-                        mWindowsManager.removeView(adaptiveView)
-                        adaptiveView = null
-                    } catch (_: java.lang.Exception) {
-                    }
+                    mLayout?.setOnTouchListener(null)
                     unregisterCameraCallback()
                 }
             }
         }
     }
 
+    private fun updateOverlay(newHz: Int){
+        launch(Dispatchers.Main) {
+            mTransfyHzJob?.cancel()
+            hzText?.setTextColor(if (newHz <= 60.05) Color.RED else Color.rgb(44,255,29))
+            hzText?.alpha = 0.85f
+            hzText?.text = newHz.toString()
 
+            mTransfyHzJob = null
+            mTransfyHzJob = launch{
+                delay(4000)
+                hzText?.alpha = 0.25f
+            }
+            mTransfyHzJob?.start()
+        }
+    }
 
 
     /*   private val ignoredPackages by lazy {

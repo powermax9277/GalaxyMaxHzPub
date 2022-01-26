@@ -1,12 +1,12 @@
 package com.tribalfs.gmh.tiles
 
-import android.content.Intent
 import android.os.Build
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
 import androidx.annotation.RequiresApi
 import com.tribalfs.gmh.AccessibilityPermission
 import com.tribalfs.gmh.GalaxyMaxHzAccess
+import com.tribalfs.gmh.GalaxyMaxHzAccess.Companion.gmhAccessInstance
 import com.tribalfs.gmh.MyApplication.Companion.applicationScope
 import com.tribalfs.gmh.R
 import com.tribalfs.gmh.dialogs.QSDialogs
@@ -18,19 +18,23 @@ import com.tribalfs.gmh.helpers.CacheSettings.isSpayInstalled
 import com.tribalfs.gmh.helpers.CacheSettings.lrrPref
 import com.tribalfs.gmh.helpers.CacheSettings.minHzListForAdp
 import com.tribalfs.gmh.helpers.CacheSettings.prrActive
+import com.tribalfs.gmh.helpers.UtilTileIcon
 import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.REFRESH_RATE_MODE_SEAMLESS
 import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.STANDARD_REFRESH_RATE_HZ
 import com.tribalfs.gmh.helpers.UtilsRefreshRateSt
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 
 
+@ExperimentalCoroutinesApi
 @RequiresApi(Build.VERSION_CODES.N)
 class QSTileMinHz : TileService() {
 
     private val mUtilsRefreshRate by lazy{UtilsRefreshRateSt.instance(applicationContext)}
+    private val mUtilTileIcon = UtilTileIcon()
 
     override fun onTileAdded() {
         super.onTileAdded()
@@ -58,7 +62,7 @@ class QSTileMinHz : TileService() {
 
     @Synchronized
     private fun updateTileInner() {
-        qsTile.icon = TileIcons.getIcon(lrrPref.get().toString(),"Min")
+        qsTile.icon = mUtilTileIcon.getIcon(lrrPref.get().toString(),"Min")
         qsTile.label = "${getString(R.string.adp_min_hz)}:${lrrPref.get()}"
 
         if ((isOfficialAdaptive ||isPremium.get() == true) && currentRefreshRateMode.get() == REFRESH_RATE_MODE_SEAMLESS){
@@ -71,10 +75,11 @@ class QSTileMinHz : TileService() {
     }
 
 
+
     override fun onClick() {
         super.onClick()
 
-        applicationScope.launch {
+        applicationScope.launch(Dispatchers.Main) {
             var idx = minHzListForAdp?.indexOf(lrrPref.get())
             var nexMinHzTemp = 500
             while (nexMinHzTemp >= prrActive.get()!!
@@ -114,11 +119,7 @@ class QSTileMinHz : TileService() {
 
             mUtilsRefreshRate.applyMinHz()
 
-            applicationContext.startService(
-                Intent(applicationContext,GalaxyMaxHzAccess::class.java).apply {
-                    putExtra(GalaxyMaxHzAccess.SETUP_ADAPTIVE, true)
-                }
-            )
+            gmhAccessInstance?.setupAdaptiveEnhancer()
 
         }
     }

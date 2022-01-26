@@ -2,7 +2,7 @@ package com.tribalfs.gmh.helpers
 
 import android.view.Display.DEFAULT_DISPLAY
 import androidx.databinding.ObservableField
-import com.tribalfs.gmh.hertz.HzService.Companion.DESTROYED
+import com.tribalfs.gmh.hertz.HzService.Companion.STOPPED
 import java.lang.Long.max
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -59,9 +59,9 @@ object CacheSettings {
     internal var keepModeOnPowerSaving: Boolean = false
 
     /***Updated by MyApplication,HzService***/
-    internal val isHzNotifOn = ObservableField(false)
+    internal val hzNotifOn = ObservableField(false)
 
-    internal var hzStatus = ObservableField(DESTROYED)
+    internal var hzStatus = ObservableField(STOPPED)
 
     /***Updated by MyApplication,NetSpeedService***/
     internal val isNetSpeedRunning = ObservableField(false)

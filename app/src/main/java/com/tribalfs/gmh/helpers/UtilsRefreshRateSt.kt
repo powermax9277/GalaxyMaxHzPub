@@ -81,10 +81,6 @@ class UtilsRefreshRateSt private constructor (val context: Context)  {
     internal val mUtilsPrefsGmh by lazy {UtilsPrefsGmhSt.instance(appCtx)}
     internal val mUtilsDeviceInfo by lazy { UtilsDeviceInfoSt.instance(appCtx)}
     internal val mSyncer by lazy { Syncer(appCtx) }
-    private val qsMinHzTileComponent = ComponentName(appCtx, QSTileMinHz::class.java)
-    private val qsMaxHzTileComponent = ComponentName(appCtx, QSTileMaxHz::class.java)
-    @ExperimentalCoroutinesApi
-    private val qsResoTileComponent = ComponentName(appCtx, QSTileResSw::class.java)
 
     //var adaptiveHzListLimiter = highestHzForAllMode //STANDARD_REFRESH_RATE_HZ
 
@@ -166,17 +162,18 @@ class UtilsRefreshRateSt private constructor (val context: Context)  {
 
     @ExperimentalCoroutinesApi
     internal fun requestListeningAllTiles(){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            TileService.requestListeningState(appCtx, qsMinHzTileComponent)
-            TileService.requestListeningState(appCtx, qsMaxHzTileComponent)
-            TileService.requestListeningState(appCtx, qsResoTileComponent)
+         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            TileService.requestListeningState(appCtx, ComponentName(appCtx, QSTileMinHz::class.java))
+            TileService.requestListeningState(appCtx, ComponentName(appCtx, QSTileMaxHz::class.java))
+            TileService.requestListeningState(appCtx, ComponentName(appCtx, QSTileResSw::class.java))
         }
     }
 
+    @ExperimentalCoroutinesApi
     private fun requestListeningHzTiles(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            TileService.requestListeningState(appCtx, qsMinHzTileComponent)
-            TileService.requestListeningState(appCtx, qsMaxHzTileComponent)
+            TileService.requestListeningState(appCtx, ComponentName(appCtx, QSTileMinHz::class.java))
+            TileService.requestListeningState(appCtx, ComponentName(appCtx, QSTileMaxHz::class.java))
         }
     }
 
@@ -234,6 +231,7 @@ class UtilsRefreshRateSt private constructor (val context: Context)  {
     }
 
 
+    @ExperimentalCoroutinesApi
     private suspend fun readAndLoadProfileFromPhone(): Boolean = withContext(Dispatchers.IO) {
 
 
@@ -608,6 +606,7 @@ class UtilsRefreshRateSt private constructor (val context: Context)  {
 
 
     
+    @ExperimentalCoroutinesApi
     fun getResoHighestHzForAllMode(resStrLxw: String?): Float{
 
         var highestResult = _listedHighestHz
@@ -689,6 +688,7 @@ class UtilsRefreshRateSt private constructor (val context: Context)  {
     }
 
 
+    @ExperimentalCoroutinesApi
     internal fun setRefreshRate(refreshRate: Int, minHz: Int?): Boolean {
         if (refreshRate > 0) {
             setPeakRefreshRate(refreshRate)
@@ -797,12 +797,13 @@ class UtilsRefreshRateSt private constructor (val context: Context)  {
     }
 
 
+    @ExperimentalCoroutinesApi
     @RequiresApi(Build.VERSION_CODES.M)
     internal fun setPrefOrAdaptOrHighRefreshRateMode(resStrLxw: String?): Boolean{
         try {
             val rrm =
                 if (mUtilsPrefsGmh.gmhPrefRefreshRateModePref != null
-                    && mUtilsPrefsGmh.gmhPrefRefreshRateModePref != REFRESH_RATE_MODE_STANDARD) {
+                   /* && mUtilsPrefsGmh.gmhPrefRefreshRateModePref != REFRESH_RATE_MODE_STANDARD*/) {
                     mUtilsPrefsGmh.gmhPrefRefreshRateModePref
                 } else {
                     if (isOfficialAdaptive) {
@@ -818,6 +819,7 @@ class UtilsRefreshRateSt private constructor (val context: Context)  {
     }
 
 
+    @ExperimentalCoroutinesApi
     @RequiresApi(Build.VERSION_CODES.M)
     internal fun tryThisRrm(rrm: String, resStrLxw: String?) : Boolean {
         if (hasWriteSecureSetPerm) {
@@ -836,16 +838,22 @@ class UtilsRefreshRateSt private constructor (val context: Context)  {
     }
 
 
+    @ExperimentalCoroutinesApi
     internal fun applyMinHz(){
-        setMinRefreshRate(mUtilsPrefsGmh.gmhPrefMinHzAdapt)
+        if (mUtilsPrefsGmh.gmhPrefMinHzAdapt > STANDARD_REFRESH_RATE_HZ) {
+            setMinRefreshRate(mUtilsPrefsGmh.gmhPrefMinHzAdapt)
+        }else{
+            setMinRefreshRate(lowestHzForAllMode)
+        }
         lrrPref.set(mUtilsPrefsGmh.gmhPrefMinHzAdapt)
         isFakeAdaptive.set(isFakeAdaptive())//don't interchange
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            TileService.requestListeningState(appCtx, qsMinHzTileComponent)
+            TileService.requestListeningState(appCtx, ComponentName(appCtx, QSTileMinHz::class.java))
         }
     }
 
 
+    @ExperimentalCoroutinesApi
     internal fun updateRefreshRateParams() {
         canApplyFakeAdaptive = canApplyFakeAdaptiveInt()//don't interchange
         isFakeAdaptive.set(isFakeAdaptive())//don't interchange
@@ -860,6 +868,7 @@ class UtilsRefreshRateSt private constructor (val context: Context)  {
     }
 
 
+    @ExperimentalCoroutinesApi
     private fun canApplyFakeAdaptiveInt(): Boolean {
 
         return isOfficialAdaptive && (currentRefreshRateMode.get() == REFRESH_RATE_MODE_SEAMLESS)
@@ -869,6 +878,7 @@ class UtilsRefreshRateSt private constructor (val context: Context)  {
     }
 
 
+    @ExperimentalCoroutinesApi
     private fun isFakeAdaptive(): Boolean {
         return (currentRefreshRateMode.get() == REFRESH_RATE_MODE_SEAMLESS)
                 && (hasWriteSecureSetPerm || isAccessibilityEnabled(

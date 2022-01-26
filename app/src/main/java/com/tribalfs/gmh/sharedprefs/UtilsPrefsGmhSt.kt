@@ -11,7 +11,7 @@ import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.STANDARD_REFRESH_RAT
 import com.tribalfs.gmh.hertz.HzGravity
 import org.json.JSONObject
 
-internal class UtilsPrefsGmhSt(val context: Context) {
+internal class UtilsPrefsGmhSt private constructor(val context: Context) {
 
     companion object : SingletonMaker<UtilsPrefsGmhSt, Context>(::UtilsPrefsGmhSt){
        // private const val TAG = "UtilsSharedPrefsHz"

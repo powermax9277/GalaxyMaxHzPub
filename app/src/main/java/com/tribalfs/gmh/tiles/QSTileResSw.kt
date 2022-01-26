@@ -13,6 +13,7 @@ import com.tribalfs.gmh.dialogs.QSDialogs
 import com.tribalfs.gmh.helpers.CacheSettings.currentRefreshRateMode
 import com.tribalfs.gmh.helpers.CacheSettings.hasWriteSecureSetPerm
 import com.tribalfs.gmh.helpers.CacheSettings.isMultiResolution
+import com.tribalfs.gmh.helpers.UtilTileIcon
 import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.REFRESH_RATE_MODE_ALWAYS
 import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.REFRESH_RATE_MODE_SEAMLESS
 import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.REFRESH_RATE_MODE_STANDARD
@@ -33,7 +34,8 @@ import kotlinx.coroutines.launch
 class QSTileResSw : TileService() {
 
     private val mUtilsPermSt by lazy {UtilsPermSt.instance(applicationContext)}
-
+    private val mUtilsRefreshRate by lazy {UtilsRefreshRateSt.instance(applicationContext)}
+    private val mUtilTileIcon = UtilTileIcon()
 
     override fun onTileAdded() {
         super.onTileAdded()
@@ -120,7 +122,7 @@ class QSTileResSw : TileService() {
     }
 
     private fun updateTileInner() {
-        val reso = UtilsRefreshRateSt.instance(applicationContext).mUtilsDeviceInfo.getDisplayResolution()//  getResoAndRefRateModeArr(currentRefreshRateMode.get())
+        val reso = mUtilsRefreshRate.mUtilsDeviceInfo.getDisplayResolution()//  getResoAndRefRateModeArr(currentRefreshRateMode.get())
         val resoCat = UtilsResoName.getName(
             reso.height,
             reso.width
@@ -142,7 +144,7 @@ class QSTileResSw : TileService() {
         }
 
         qsTile.label = "$resoCat $mode"
-        qsTile.icon = TileIcons.getIcon(topStr, bottomStr)
+        qsTile.icon = mUtilTileIcon.getIcon(topStr, bottomStr)
 
 
         if (mode == applicationContext.getString(R.string.std_mode)) {

@@ -94,7 +94,7 @@
         Doze mode may cause notification delays on some apps. It will not affect SMS, High Priority FCM and apps which battery optimizations are disabled.
         Doze mode will deactivate once the device is unlocked.
     </string>
-    <string name="adp_min_hz">Min Hz for Adaptive</string>
+    <string name="adp_min_hz">Adaptive Min Hz</string>
     <string name="enable_as_inf">Click \'Installed services\' on the window that will appear, then enable Galaxy Max Hz service</string>
     <string name="kBps" translatable="false">kB/s</string>
     <string name="MBps" translatable="false">MB/s</string>

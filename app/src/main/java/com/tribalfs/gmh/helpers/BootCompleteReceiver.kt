@@ -18,30 +18,21 @@ class BootCompleteReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         when (intent.action) {
             Intent.ACTION_BOOT_COMPLETED -> {
-                val appCtx = context.applicationContext
-                bootCompleteChecker(appCtx)
-                HzServiceHelperStn.instance(appCtx).startHertz(null, null, null)
-                NetSpeedServiceHelperStn.instance(appCtx).runNetSpeed(null)
+                CoroutineScope(Dispatchers.Main).launch {
+                    while (refreshRateModeMap.isEmpty()) {
+                        delay(250)
+                    }
+                    val appCtx = context.applicationContext
+                    val resoChangeUtil = ResolutionChangeUtil(appCtx)
+                    val reso = resoChangeUtil.mUtilsRefreshRate.mUtilsDeviceInfo.getDisplayResolution()
+                    val resName = resoChangeUtil.getResName(null)
+                    if (resName == "CQHD+") resoChangeUtil.changeRes(reso)
+                    HzServiceHelperStn.instance(appCtx).switchHz()
+                    NetSpeedServiceHelperStn.instance(appCtx).runNetSpeed(null)
+                    resoChangeUtil.mUtilsRefreshRate.requestListeningAllTiles()
+                }
             }
         }
     }
-
-
-    private fun bootCompleteChecker(appCtx: Context) {
-        CoroutineScope(Dispatchers.IO).launch {
-            while(refreshRateModeMap.isEmpty()) {
-                delay(250)
-            }
-            val resoChangeUtil = ResolutionChangeUtil(appCtx)
-            val reso = resoChangeUtil.mUtilsRefreshRate.mUtilsDeviceInfo.getDisplayResolution()
-            val resName = resoChangeUtil.getResName(null)
-            if (resName == "CQHD+"/* && currentRefreshRateMode.get() == UtilsDeviceInfo.REFRESH_RATE_MODE_STANDARD*/) {
-                resoChangeUtil.changeRes(reso)
-                delay(500)
-            }
-            resoChangeUtil.mUtilsRefreshRate.requestListeningAllTiles()
-        }
-    }
-
 
 }

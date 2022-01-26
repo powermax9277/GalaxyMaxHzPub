@@ -32,8 +32,9 @@ class UtilsChangeMaxHz (private val appCtx: Context) {
 
     //  private val appCtx = context.applicationContext
     private var isModeUpdated = false
-    private val mUtilsRefreshRate by lazy { UtilsRefreshRateSt.instance(appCtx) }
+    internal val mUtilsRefreshRate by lazy { UtilsRefreshRateSt.instance(appCtx) }
 
+    @ExperimentalCoroutinesApi
     @RequiresApi(Build.VERSION_CODES.M)
     suspend fun changeMaxHz(maxHzToApply: Int?): Int = withContext(Dispatchers.IO){
 

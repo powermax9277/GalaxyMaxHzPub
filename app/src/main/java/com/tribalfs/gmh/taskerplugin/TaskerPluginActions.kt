@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.hardware.display.DisplayManager
 import android.os.Build
+import android.provider.Settings
 import android.util.Size
 import android.view.Display.STATE_ON
 import android.widget.Toast
@@ -20,13 +21,12 @@ import com.joaomgcd.taskerpluginlibrary.runner.TaskerPluginResult
 import com.joaomgcd.taskerpluginlibrary.runner.TaskerPluginResultSucess
 import com.tribalfs.gmh.AccessibilityPermission.isAccessibilityEnabled
 import com.tribalfs.gmh.GalaxyMaxHzAccess
-import com.tribalfs.gmh.GalaxyMaxHzAccess.Companion.SCREEN_OFF_ONLY
-import com.tribalfs.gmh.GalaxyMaxHzAccess.Companion.SETUP_ADAPTIVE
-import com.tribalfs.gmh.GalaxyMaxHzAccess.Companion.SWITCH_AUTO_SENSORS
+import com.tribalfs.gmh.GalaxyMaxHzAccess.Companion.gmhAccessInstance
 import com.tribalfs.gmh.MainActivity
 import com.tribalfs.gmh.MyApplication.Companion.applicationName
 import com.tribalfs.gmh.helpers.*
 import com.tribalfs.gmh.helpers.CacheSettings.displayId
+import com.tribalfs.gmh.helpers.CacheSettings.hasWriteSecureSetPerm
 import com.tribalfs.gmh.helpers.CacheSettings.highestHzForAllMode
 import com.tribalfs.gmh.helpers.CacheSettings.isOfficialAdaptive
 import com.tribalfs.gmh.helpers.CacheSettings.isPowerSaveModeOn
@@ -53,6 +53,7 @@ import com.tribalfs.gmh.taskerplugin.TaskerKeys.keep_motion_smoothness_on_psm
 import com.tribalfs.gmh.taskerplugin.TaskerKeys.max_hertz
 import com.tribalfs.gmh.taskerplugin.TaskerKeys.min_hertz
 import com.tribalfs.gmh.taskerplugin.TaskerKeys.motion_smoothness_mode
+import com.tribalfs.gmh.taskerplugin.TaskerKeys.protect_battery
 import com.tribalfs.gmh.taskerplugin.TaskerKeys.quick_doze_mod
 import kotlinx.coroutines.*
 
@@ -82,30 +83,28 @@ class DynamicInputActivity : ActivityConfigTaskerNoOutputOrInput<DynamicInputRun
 }
 
 data class InfoFromMainApp(val name: String, val key: String, val desc: String)
+
 class InfosFromMainApp : ArrayList<InfoFromMainApp>()
 
-private var resoList:List<String>? = null
 
 private val infosForTasker = InfosFromMainApp().apply {
+    val resoList:MutableList<String> = mutableListOf<String>()
 
     fun <T> List<T>.joinToStringWithOr(delimiter: String): String{
         return "${dropLast(1).joinToString(delimiter)} or ${last()}"
     }
 
-    if (resoList == null) {
-        val tempList = mutableListOf<String>()
         ProfilesObj.refreshRateModeMap["$displayId-0"]?.forEach {
-            tempList.add(it.keys.first())
+            resoList.add(it.keys.first())
         }
-        resoList = tempList
-    }
 
-    if (resoList?.size?:0 > 1) {
+
+    if (resoList.size  > 1) {
         add(
             InfoFromMainApp(
                 "Change Screen Resolution",
                 change_res,
-                "Valid value: Any of the following: ${resoList?.joinToStringWithOr(", ")}"
+                "Valid value: Any of the following: ${resoList.joinToStringWithOr(", ")}"
             )
         )
     }
@@ -160,7 +159,13 @@ private val infosForTasker = InfosFromMainApp().apply {
                     auto_sensors_off,
                     "Valid value: 0, 1, 2 or 3" +
                             "\n[for disable auto sensors off, enable auto sensors off, turn on tile only or turn off tile only, respectively]"
-                )
+                ),
+                InfoFromMainApp(
+                        "Protect Battery",
+                    protect_battery,
+                "Valid value: true or false" +
+                        "\n[limits charging to 85% on Samsung device with OneUI4.0 to prolong battery life]"
+            )
             )
         )
     }
@@ -241,15 +246,18 @@ class DynamicInputRunner : TaskerPluginRunnerActionNoOutputOrInput() {
 
                     keep_motion_smoothness_on_psm -> {
                         try {
-                            ((info.value as String).toBoolean()).let {isKeep ->
-                                if (isPremium.get()!! || !isKeep) {
-                                    keepModeOnPowerSaving = isKeep
-                                    CoroutineScope(Dispatchers.Default).launch {
-                                        PsmChangeHandler.instance(appCtx).handle()
-                                        mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefKmsOnPsm = isKeep
-                                        appCtx.startService(Intent(appCtx, GalaxyMaxHzAccess::class.java).apply{
-                                            putExtra(SETUP_ADAPTIVE, true)
-                                        })
+                            ((info.value as String).toBoolean()).let { isKeep ->
+                                CoroutineScope(Dispatchers.Default).launch {
+                                    if (hasWriteSecureSetPerm) {
+                                        if (isPremium.get()!! || !isKeep) {
+                                            keepModeOnPowerSaving = isKeep
+
+                                            PsmChangeHandler.instance(appCtx).handle()
+                                            mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefKmsOnPsm =
+                                                isKeep
+                                            gmhAccessInstance?.setupAdaptiveEnhancer()
+                                        }
+
                                     }
                                 }
                             }
@@ -278,10 +286,7 @@ class DynamicInputRunner : TaskerPluginRunnerActionNoOutputOrInput() {
                                             }
                                         }
                                     }
-                                } catch (_: java.lang.Exception) {
-
-                                    //   success = false
-                                }
+                                } catch (_: java.lang.Exception) {}
                             }
                         }
                     }
@@ -296,11 +301,7 @@ class DynamicInputRunner : TaskerPluginRunnerActionNoOutputOrInput() {
                                         1 -> {//turn On
                                             mUtilsPrefsGmh.gmhPrefSensorsOff = true
                                             if (dm.getDisplay(displayId).state != STATE_ON && mUtilsPrefsGmh.gmhPrefSensorsOff){
-                                                appCtx.startService(
-                                                    Intent(appCtx, GalaxyMaxHzAccess::class.java).apply {
-                                                        putExtra(SWITCH_AUTO_SENSORS, true)
-                                                    }
-                                                )
+                                                gmhAccessInstance?.checkAutoSensorsOff(true, screenOffOnly = true)
                                             }
                                         }
 
@@ -308,23 +309,14 @@ class DynamicInputRunner : TaskerPluginRunnerActionNoOutputOrInput() {
                                             if (km.isKeyguardLocked){
                                                 turnOffAutoSensorsOff = true
                                             }else{
-                                                appCtx.startService(
-                                                    Intent(appCtx, GalaxyMaxHzAccess::class.java).apply {
-                                                        putExtra(SWITCH_AUTO_SENSORS, false)
-                                                    }
-                                                )
+                                                gmhAccessInstance?.checkAutoSensorsOff(false, screenOffOnly = true)
                                                 mUtilsPrefsGmh.gmhPrefSensorsOff = false
                                             }
 
                                         }
 
                                         2 -> {//turn On Tile only
-                                            appCtx.startService(
-                                                Intent(appCtx, GalaxyMaxHzAccess::class.java).apply {
-                                                    putExtra(SWITCH_AUTO_SENSORS, true)
-                                                    putExtra(SCREEN_OFF_ONLY, false)
-                                                }
-                                            )
+                                            gmhAccessInstance?.checkAutoSensorsOff(true, screenOffOnly = false)
 
                                         }
 
@@ -336,11 +328,8 @@ class DynamicInputRunner : TaskerPluginRunnerActionNoOutputOrInput() {
                                                     turnOffAutoSensorsOff = true//this will switch off mUtilsPrefsGmh.gmhPrefSensorsOff automatically
                                                 }//else don't need to touch settings
                                             }else{
-                                                appCtx.startService(
-                                                    Intent(appCtx, GalaxyMaxHzAccess::class.java).apply {
-                                                        putExtra(SWITCH_AUTO_SENSORS, false)
-                                                    }
-                                                )
+                                                gmhAccessInstance?.checkAutoSensorsOff(false, screenOffOnly = true)
+
                                             }
                                         }
                                         else -> {
@@ -375,11 +364,13 @@ class DynamicInputRunner : TaskerPluginRunnerActionNoOutputOrInput() {
 
                                     mUtilsRefreshRate.applyMinHz()
 
-                                    appCtx.startService(
+                                    gmhAccessInstance?.setupAdaptiveEnhancer()
+
+                                    /*appCtx.startService(
                                         Intent(appCtx,GalaxyMaxHzAccess::class.java).apply {
                                             putExtra(SETUP_ADAPTIVE, true)
                                         }
-                                    )
+                                    )*/
                                 }else{
                                     launch(Dispatchers.Main) {
                                         Toast.makeText(
@@ -392,6 +383,16 @@ class DynamicInputRunner : TaskerPluginRunnerActionNoOutputOrInput() {
                             }
                         }
 
+                    }
+
+                    protect_battery ->{
+                        if (hasWriteSecureSetPerm) {
+                            try {
+                                Settings.Global.putString(appCtx.contentResolver,
+                                    "protect_battery",
+                                    if (info.value as Boolean) "1" else "0")
+                            }catch (_:Exception){}
+                        }
                     }
 
                     else -> {

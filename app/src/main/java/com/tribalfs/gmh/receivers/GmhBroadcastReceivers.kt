@@ -9,12 +9,11 @@ import android.os.Handler
 import android.os.Looper
 import android.os.PowerManager.ACTION_POWER_SAVE_MODE_CHANGED
 import android.provider.Settings
-import com.tribalfs.gmh.callbacks.AccessibilityCallback
+import com.tribalfs.gmh.callbacks.GmhBroadcastCallback
 import com.tribalfs.gmh.helpers.CacheSettings.currentBrightness
 import com.tribalfs.gmh.helpers.CacheSettings.currentRefreshRateMode
 import com.tribalfs.gmh.helpers.CacheSettings.disablePsm
 import com.tribalfs.gmh.helpers.CacheSettings.hasWriteSecureSetPerm
-import com.tribalfs.gmh.helpers.CacheSettings.hzStatus
 import com.tribalfs.gmh.helpers.CacheSettings.ignorePowerModeChange
 import com.tribalfs.gmh.helpers.CacheSettings.ignoreRrmChange
 import com.tribalfs.gmh.helpers.CacheSettings.isNetSpeedRunning
@@ -26,22 +25,19 @@ import com.tribalfs.gmh.helpers.CacheSettings.offScreenRefreshRate
 import com.tribalfs.gmh.helpers.CacheSettings.prrActive
 import com.tribalfs.gmh.helpers.CacheSettings.restoreSync
 import com.tribalfs.gmh.helpers.CacheSettings.screenOffRefreshRateMode
-import com.tribalfs.gmh.helpers.CacheSettings.sensorOnKey
 import com.tribalfs.gmh.helpers.CacheSettings.turnOff5GOnPsm
-import com.tribalfs.gmh.helpers.CacheSettings.turnOffAutoSensorsOff
 import com.tribalfs.gmh.helpers.PsmChangeHandler
+import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.POWER_SAVING_MODE
+import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.POWER_SAVING_OFF
+import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.POWER_SAVING_ON
 import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.PREFERRED_NETWORK_MODE
 import com.tribalfs.gmh.helpers.UtilsRefreshRateSt
-import com.tribalfs.gmh.hertz.HzService.Companion.DESTROYED
-import com.tribalfs.gmh.hertz.HzServiceHelperStn
 import com.tribalfs.gmh.netspeed.NetSpeedServiceHelperStn
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Runnable
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 
-class GmhBroadcastReceivers(context: Context, private val accessibilityCallback: AccessibilityCallback, private val scope: CoroutineScope): BroadcastReceiver() {
+@ExperimentalCoroutinesApi
+open class GmhBroadcastReceivers(context: Context, private val gmhBroadcastCallback: GmhBroadcastCallback, private val scope: CoroutineScope): BroadcastReceiver() {
     private val appCtx = context.applicationContext
     private val mContentResolver = appCtx.contentResolver
 
@@ -50,9 +46,7 @@ class GmhBroadcastReceivers(context: Context, private val accessibilityCallback:
     companion object{
         private const val PREF_NET_TYPE_LTE_GSM_WCDMA    = 9 /* LTE, GSM/WCDMA */
         private const val PREF_NET_TYPE_5G_LTE_GSM_WCDMA = 26
-        private const val LOW_POWER_MODE = "low_power"
-        private const val LOW_POWER_ON = "1"
-        private const val LOW_POWER_OFF = "0"
+
         //  private const val TAG = "GmhBroadcastReceivers"
     }
 
@@ -90,8 +84,8 @@ class GmhBroadcastReceivers(context: Context, private val accessibilityCallback:
                             if (hasWriteSecureSetPerm) {
                                 Settings.Global.putString(
                                     context.applicationContext.contentResolver,
-                                    LOW_POWER_MODE,
-                                    LOW_POWER_OFF
+                                    POWER_SAVING_MODE,
+                                    POWER_SAVING_OFF
                                 )
                             }
                     }
@@ -151,18 +145,12 @@ class GmhBroadcastReceivers(context: Context, private val accessibilityCallback:
         }
     }
 
-    private val autoSensorsOffRunnable: Runnable by lazy {
-        Runnable {
-            if (mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefSensorsOff) {
-                accessibilityCallback.onChange(userPresent = false, turnOffSensors = true)
-            }
-        }
-    }
-
 
     override fun onReceive(p0: Context, p1: Intent) {
-        when (p1.action) {
 
+        p1.action?.let{gmhBroadcastCallback.onIntentReceived(it)}
+
+        when (p1.action) {
             ACTION_POWER_SAVE_MODE_CHANGED -> {
                 isPowerSaveModeOn.set(mUtilsRefreshRate.mUtilsDeviceInfo.isPowerSavingsModeOn)
                 if (ignorePowerModeChange.getAndSet(false) || !hasWriteSecureSetPerm) return
@@ -188,7 +176,6 @@ class GmhBroadcastReceivers(context: Context, private val accessibilityCallback:
 
                 if (mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefDisableSyncIsOn) { handler.postDelayed(autosyncDisablerRunnable,12000) }
 
-                handler.postDelayed(autoSensorsOffRunnable,20000)
             }
 
 
@@ -214,10 +201,6 @@ class GmhBroadcastReceivers(context: Context, private val accessibilityCallback:
                     if (mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefNetSpeedIsOn && !isNetSpeedRunning.get()!!) {
                         NetSpeedServiceHelperStn.instance(appCtx).runNetSpeed(null)
                     }
-
-                    if (mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefHzIsOn && hzStatus.get() == DESTROYED) {
-                        HzServiceHelperStn.instance(appCtx).startHertz(null, null, null)
-                    }
                 }
 
                 scope.launch {
@@ -225,40 +208,6 @@ class GmhBroadcastReceivers(context: Context, private val accessibilityCallback:
                 }
 
             }
-
-            Intent.ACTION_USER_PRESENT -> {
-                accessibilityCallback.onChange(true, mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefSensorsOff || turnOffAutoSensorsOff)
-                if (turnOffAutoSensorsOff){
-                    mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefSensorsOff = false
-                    turnOffAutoSensorsOff = false
-                }
-            }
-
-            Intent.ACTION_LOCALE_CHANGED -> {
-                mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefSensorOnKey = ""
-                sensorOnKey = null
-            }
-
-            /* ACTION_PHONE_STATE ->{
-                        when (val stateStr = p1.extras?.getString(TelephonyManager.EXTRA_STATE)){
-                            TelephonyManager.EXTRA_STATE_RINGING ->{
-                                if (!keyguardManager.isDeviceLocked) {
-                                    // launch {
-                                    accessibilityCallback.onChange(
-                                        true,
-                                        mUtilsPrefsGmh.gmhPrefSensorsOff
-                                    )
-                                    // }
-                                }
-                            }
-                            TelephonyManager.EXTRA_STATE_OFFHOOK ->{
-                                if (keyguardManager.isDeviceLocked) {
-                                    Toast.makeText(appCtx, "You microphone might be disabled during this call. Long-press the SensorsOff  tile to unlock and turn it off", Toast.LENGTH_LONG).show()
-                                }
-                            }
-                        }
-
-                    }*/
         }
     }
 
@@ -272,8 +221,8 @@ class GmhBroadcastReceivers(context: Context, private val accessibilityCallback:
         if (hasWriteSecureSetPerm) {
             Settings.Global.putString(
                 mContentResolver,
-                LOW_POWER_MODE,
-                if (psmOn) LOW_POWER_ON else LOW_POWER_OFF
+                POWER_SAVING_MODE,
+                if (psmOn) POWER_SAVING_ON else POWER_SAVING_OFF
             )
         }
 

@@ -37,6 +37,7 @@ android {
             initWith debug
             minifyEnabled true
             signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug{
             ext.enableCrashlytics = false
@@ -141,5 +142,7 @@ dependencies {
     implementation "ch.acra:acra-http:$acraVersion"
 
     implementation 'com.joaomgcd:taskerpluginlibrary:0.4.1'
+
+    //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.8.1'
 
 }
