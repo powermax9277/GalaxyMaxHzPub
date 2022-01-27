@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.provider.Settings
 import com.tribalfs.gmh.helpers.CacheSettings.hasWriteSecureSetPerm
-import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.DEVICE_IDLE_CONSTANTS
 import java.lang.Integer.max
 import java.lang.Integer.min
 

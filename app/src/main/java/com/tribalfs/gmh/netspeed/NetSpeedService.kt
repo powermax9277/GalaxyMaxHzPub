@@ -21,29 +21,21 @@ import com.tribalfs.gmh.R
 import com.tribalfs.gmh.helpers.CacheSettings.isOnePlus
 import com.tribalfs.gmh.helpers.CacheSettings.isScreenOn
 import com.tribalfs.gmh.helpers.UtilNotifIcon
-import com.tribalfs.gmh.helpers.UtilsSettingsIntents.dataUsageSettingsIntent
+import com.tribalfs.gmh.helpers.UtilSettingsIntents.dataUsageSettingsIntent
 import com.tribalfs.gmh.netspeed.SpeedCalculator.Companion.mCalcInBits
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt.Companion.BIT_PER_SEC
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt.Companion.DOWNLOAD_SPEED
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt.Companion.TOTAL_SPEED
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt.Companion.UPLOAD_SPEED
+import com.tribalfs.gmh.sharedprefs.*
 import kotlinx.coroutines.*
 import java.lang.String.format
 import java.util.*
 import kotlin.coroutines.CoroutineContext
 
-
+internal const val CHANNEL_ID_NET_SPEED = "NSI"
+private const val TAG = "NetSpeedService"
+private const val NOTIFICATION_ID_NET_SPEED = 7
+private const val CHANNEL_NAME_NET_SPEED = "Net Speed Indicator"
+private const val UPDATE_INTERVAL = 1000L
 
 class NetSpeedService : Service(), CoroutineScope {
-
-    companion object {
-        const val CHANNEL_ID_NET_SPEED = "NSI"
-        private const val TAG = "NetSpeedService"
-        private const val NOTIFICATION_ID_NET_SPEED = 7
-        private const val CHANNEL_NAME_NET_SPEED = "Net Speed Indicator"
-        private const val UPDATE_INTERVAL = 1000L
-    }
 
     private val mNotificationContentView: RemoteViews by lazy {RemoteViews(applicationContext.packageName, R.layout.view_indicator_notification) }
     private val notificationManagerCompat by lazy{NotificationManagerCompat.from(applicationContext)}

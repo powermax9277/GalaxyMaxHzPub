@@ -18,18 +18,15 @@ import com.tribalfs.gmh.helpers.*
 import com.tribalfs.gmh.helpers.CacheSettings.currentRefreshRateMode
 import com.tribalfs.gmh.helpers.CacheSettings.hasWriteSecureSetPerm
 import com.tribalfs.gmh.helpers.CacheSettings.supportedHzIntCurMod
-import com.tribalfs.gmh.helpers.UtilsChangeMaxHz.Companion.CHANGE_MODE
-import com.tribalfs.gmh.helpers.UtilsChangeMaxHz.Companion.CHANGE_RES
-import com.tribalfs.gmh.helpers.UtilsChangeMaxHz.Companion.NO_CONFIG_LOADED
-import com.tribalfs.gmh.helpers.UtilsChangeMaxHz.Companion.POWER_SAVINGS
-import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.REFRESH_RATE_MODE_ALWAYS
-import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.REFRESH_RATE_MODE_SEAMLESS
-import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.REFRESH_RATE_MODE_STANDARD
-import com.tribalfs.gmh.helpers.UtilsPermSt.Companion.CHANGE_SETTINGS
-import com.tribalfs.gmh.helpers.UtilsSettingsIntents.changeSystemSettingsIntent
-import com.tribalfs.gmh.helpers.UtilsSettingsIntents.displaySettingsIntent
-import com.tribalfs.gmh.helpers.UtilsSettingsIntents.motionSmoothnessSettingsIntent
-import com.tribalfs.gmh.helpers.UtilsSettingsIntents.powerSavingModeSettingsIntent
+import com.tribalfs.gmh.helpers.UtilChangeMaxHz.Companion.CHANGE_MODE
+import com.tribalfs.gmh.helpers.UtilChangeMaxHz.Companion.CHANGE_RES
+import com.tribalfs.gmh.helpers.UtilChangeMaxHz.Companion.NO_CONFIG_LOADED
+import com.tribalfs.gmh.helpers.UtilChangeMaxHz.Companion.POWER_SAVINGS
+import com.tribalfs.gmh.helpers.UtilPermSt.Companion.CHANGE_SETTINGS
+import com.tribalfs.gmh.helpers.UtilSettingsIntents.changeSystemSettingsIntent
+import com.tribalfs.gmh.helpers.UtilSettingsIntents.displaySettingsIntent
+import com.tribalfs.gmh.helpers.UtilSettingsIntents.motionSmoothnessSettingsIntent
+import com.tribalfs.gmh.helpers.UtilSettingsIntents.powerSavingModeSettingsIntent
 import com.tribalfs.gmh.profiles.ProfilesObj.loadComplete
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -39,7 +36,7 @@ import kotlinx.coroutines.launch
 @RequiresApi(Build.VERSION_CODES.N)
 class QSTileMaxHz : TileService() {
 
-    private val mUtilsChangeMaxHz by lazy {UtilsChangeMaxHz(applicationContext)}
+    private val mUtilsChangeMaxHz by lazy {UtilChangeMaxHz(applicationContext)}
     private val mUtilTileIcon = UtilTileIcon()
 
     override fun onTileAdded() {
@@ -193,7 +190,7 @@ class QSTileMaxHz : TileService() {
             ) { _, _ ->
                 if (hasWriteSecureSetPerm) {
                     //getResolutionChoiceDialog(context).show()
-                    UtilNotificationBarSt.instance(applicationContext).expandNotificationBar()
+                    UtilNotifBarSt.instance(applicationContext).expandNotificationBar()
                 } else {
                     val i = displaySettingsIntent
                     if (context !is Activity) {

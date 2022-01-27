@@ -21,8 +21,8 @@ android {
         minSdkVersion 22
         //noinspection ExpiredTargetSdkVersion
         targetSdkVersion 22
-        versionCode 119
-        versionName "7.14.18"
+        versionCode 121
+        versionName "7.14.19"
         setProperty("archivesBaseName", "galaxy_max_hz_v${versionName}")
     }
 
@@ -132,7 +132,7 @@ dependencies {
     implementation "com.google.android.material:material:$material_version"
     implementation "com.android.volley:volley:$volley_version"
     implementation "androidx.constraintlayout:constraintlayout:$constraint_layout_version"
-    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'com.google.code.gson:gson:2.8.9'
     implementation 'androidx.security:security-crypto:1.1.0-alpha03'
 
     //TODO{reason: comment out below}
@@ -143,6 +143,7 @@ dependencies {
 
     implementation 'com.joaomgcd:taskerpluginlibrary:0.4.1'
 
+   // implementation files('C:/Android-Sdk/sources/android-31/com/android/server/display')
     //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.8.1'
 
 }

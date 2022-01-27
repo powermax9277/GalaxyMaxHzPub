@@ -18,11 +18,11 @@ import com.tribalfs.gmh.helpers.CacheSettings.isSpayInstalled
 import com.tribalfs.gmh.helpers.CacheSettings.lrrPref
 import com.tribalfs.gmh.helpers.CacheSettings.minHzListForAdp
 import com.tribalfs.gmh.helpers.CacheSettings.prrActive
+import com.tribalfs.gmh.helpers.REFRESH_RATE_MODE_SEAMLESS
+import com.tribalfs.gmh.helpers.STANDARD_REFRESH_RATE_HZ
+import com.tribalfs.gmh.helpers.UtilRefreshRateSt
 import com.tribalfs.gmh.helpers.UtilTileIcon
-import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.REFRESH_RATE_MODE_SEAMLESS
-import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.STANDARD_REFRESH_RATE_HZ
-import com.tribalfs.gmh.helpers.UtilsRefreshRateSt
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt
+import com.tribalfs.gmh.sharedprefs.NOT_USING
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -33,7 +33,7 @@ import kotlinx.coroutines.launch
 @RequiresApi(Build.VERSION_CODES.N)
 class QSTileMinHz : TileService() {
 
-    private val mUtilsRefreshRate by lazy{UtilsRefreshRateSt.instance(applicationContext)}
+    private val mUtilsRefreshRate by lazy{UtilRefreshRateSt.instance(applicationContext)}
     private val mUtilTileIcon = UtilTileIcon()
 
     override fun onTileAdded() {
@@ -131,7 +131,7 @@ class QSTileMinHz : TileService() {
                 GalaxyMaxHzAccess::class.java
             )
         ){
-            if (hasWriteSecureSetPerm && (isSpayInstalled == false ||  mUtilsRefreshRate.mUtilsPrefsGmh.hzPrefUsingSPay == UtilsPrefsGmhSt.NOT_USING)) {
+            if (hasWriteSecureSetPerm && (isSpayInstalled == false ||  mUtilsRefreshRate.mUtilsPrefsGmh.hzPrefUsingSPay == NOT_USING)) {
                 AccessibilityPermission.allowAccessibility(
                     applicationContext,
                     GalaxyMaxHzAccess::class.java,

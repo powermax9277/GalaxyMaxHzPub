@@ -117,9 +117,14 @@
     <string name="autosync_settings"><u>自動同期設定</u></string>
     <string name="apps_bat_opt_settings"><u>アプリのバッテリー最適化設定</u></string>
     <string name="brightness_threshold">アダプティブModの明るさのしきい値</string>
-    <string name="sensor_off_info">画面がオフの間、デバイスのロックが解除されるまで、デバイスセンサーは自動的にオフになります。これにより、デバイスがスタンバイ状態のときに、バッテリーを消耗するモーショントリガーのウェイクロックを最小限に抑えることができます。
+    <string name="sensor_off_info">
+        画面がオフの間、デバイスのロックが解除されるまで、デバイスセンサーは自動的にオフになります。これにより、デバイスがスタンバイ状態のときに、バッテリーを消耗するモーショントリガーのウェイクロックを最小限に抑えることができます。
     </string>
-    <string name="sensors_off_note">重要な注意：SensorsOffタイルがオンになっている間は、デバイスのカメラ、マイク、またはその他のセンサーにアクセスできません。通話中に相手にあなたの声が聞こえるかどうかを確認します。聞こえない場合は、通話中にデバイスのロックを解除する必要があります（SensorsOffタイルを押したままにしてロックを解除します）。</string>
+    <string name="sensors_off_note">重要な注意：SensorsOffタイルがオンになっている間は、デバイスのカメラとマイク、およびその他のセンサーにアクセスできません。
+        影響を受ける機能には、顔認証、音声通話の可聴性（一部）、ヒンジ角度検出などがあります。
+        これは、センサーをオフにすることの効果を明確に理解している場合にのみ使用してください。
+        \n\nAndroid12以降は安全なロック画面が必要です。または、以前のAndroidバージョンでWRITE_SECURE_SETTINGS権限を付与することもできます。
+    </string>
     <string name="auto_sensors_off_exp">自動無効化センサー</string>
     <string name="sensor_off_setup_info">最初にこれを行います。[設定]> [開発者向けオプション]> [クイック設定] [開発者向けタイル]で[センサーオフ]タイルを有効にします。</string>
     <string name="dev_opt_setup_info">開発者向けオプションを有効にするには、[設定]> [端末情報]> [ソフトウェア情報]に移動し、[ビルド番号]を7回タップします。</string>
@@ -127,7 +132,7 @@
     <string name="as_desc">このサービスは、galaxy max hz modsが機能する</string>
     <string name="enable">オンにする</string>
     <string name="premium_features">プレミアム機能</string>
-    <string name="prevent_high">Prevent switching to High Mode</string>
-    <string name="acces_req">Enable Accessibility Service</string>
+    <string name="prevent_high">ハイモードへの切り替えを防止する</string>
+    <string name="acces_req">アクセシビリティサービスを有効にする</string>
     <string name="max_hz_for_psm">省電力モードの最大Hz</string>
 </resources>

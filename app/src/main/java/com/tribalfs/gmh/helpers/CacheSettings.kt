@@ -2,7 +2,7 @@ package com.tribalfs.gmh.helpers
 
 import android.view.Display.DEFAULT_DISPLAY
 import androidx.databinding.ObservableField
-import com.tribalfs.gmh.hertz.HzService.Companion.STOPPED
+import com.tribalfs.gmh.STOPPED
 import java.lang.Long.max
 import java.util.concurrent.atomic.AtomicBoolean
 

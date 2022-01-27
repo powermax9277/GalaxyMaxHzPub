@@ -26,7 +26,10 @@ import android.widget.RemoteViews
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationManagerCompat
+import com.tribalfs.gmh.PAUSE
+import com.tribalfs.gmh.PLAYING
 import com.tribalfs.gmh.R
+import com.tribalfs.gmh.STOPPED
 import com.tribalfs.gmh.callbacks.DisplayChangedCallback
 import com.tribalfs.gmh.helpers.CacheSettings.displayId
 import com.tribalfs.gmh.helpers.CacheSettings.hzNotifOn
@@ -48,10 +51,6 @@ internal class HzService : Service(), CoroutineScope{
     companion object {
         // private const val TAG = "HzService"
         private const val ANIMATION_DURATION = 700L
-        internal const val PLAYING = "playing"
-        internal const val STOPPED = "stop"
-        internal const val PAUSE = "pause"
-        internal const val CREATED = "created"
     }
 
     private val job = SupervisorJob()
@@ -60,7 +59,6 @@ internal class HzService : Service(), CoroutineScope{
 
     private val notificationManagerCompat by lazy {NotificationManagerCompat.from(applicationContext)}
     private val mHzSharePref by lazy { UtilsPrefsGmhSt.instance(applicationContext) }
-    //private val mUtilsDeviceInfo by lazy { UtilsDeviceInfo(applicationContext) }
     private var mPauseHzJob: Job? = null
     private var mTransfyHzJob: Job? = null
     private val mNotificationContentView by lazy {RemoteViews(
@@ -134,6 +132,7 @@ internal class HzService : Service(), CoroutineScope{
     private var overlayOn: Boolean? = null
 
 
+    @RequiresApi(Build.VERSION_CODES.M)
     private fun pauseHz(){
         dm.unregisterDisplayListener(displayListener)
         hznotificationBuilder!!.setVisibility(Notification.VISIBILITY_SECRET)
@@ -204,7 +203,6 @@ internal class HzService : Service(), CoroutineScope{
         super.onCreate()
         setupNotification()
         registerScreenStatusReceiver()
-        hzStatus.set(CREATED)
     }
 
 
@@ -224,7 +222,6 @@ internal class HzService : Service(), CoroutineScope{
         hzOn = mHzSharePref.gmhPrefHzIsOn
         if (hzOn == true) {
             hzNotifOn.set(mHzSharePref.gmhPrefHzNotifIsOn)
-            //handleConfigChange()
             startHz()
         } else {
             stopForeground(true)
@@ -233,6 +230,7 @@ internal class HzService : Service(), CoroutineScope{
         return START_STICKY
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onDestroy() {
         hzStatus.set(STOPPED)
         showHzOverlayInt(false)

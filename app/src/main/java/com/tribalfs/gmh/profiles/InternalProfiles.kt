@@ -6,10 +6,10 @@ import com.google.gson.Gson
 import com.tribalfs.gmh.helpers.CacheSettings.displayId
 import com.tribalfs.gmh.helpers.CacheSettings.hasWriteSecureSetPerm
 import com.tribalfs.gmh.helpers.CacheSettings.ignoreRrmChange
-import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.REFRESH_RATE_MODE
-import com.tribalfs.gmh.helpers.UtilsRefreshRateSt
-import com.tribalfs.gmh.helpers.UtilsRefreshRateSt.Companion.refreshRateModes
-import com.tribalfs.gmh.helpers.UtilsResoName.getName
+import com.tribalfs.gmh.helpers.REFRESH_RATE_MODE
+import com.tribalfs.gmh.helpers.UtilRefreshRateSt
+import com.tribalfs.gmh.helpers.UtilRefreshRateSt.Companion.refreshRateModes
+import com.tribalfs.gmh.helpers.UtilResoName.getName
 import com.tribalfs.gmh.profiles.ProfilesObj.refreshRateModeMap
 import kotlinx.coroutines.*
 import org.json.JSONObject
@@ -38,13 +38,13 @@ object InternalProfiles {
 
     
 
-    suspend fun loadToProfilesObj(currentModeOnly: Boolean, overwriteExisting: Boolean, mUtilsRefreshRateSt: UtilsRefreshRateSt): JSONObject = withContext(Dispatchers.IO) {
+    suspend fun loadToProfilesObj(currentModeOnly: Boolean, overwriteExisting: Boolean, mUtilRefreshRateSt: UtilRefreshRateSt): JSONObject = withContext(Dispatchers.IO) {
 
         if (!currentModeOnly && hasWriteSecureSetPerm
             //Ensure that device is not resolution with no high refresh rate support
             /*&& (!isSamsung || mUtilsDeviceInfo.samRefreshRateMode != REFRESH_RATE_MODE_STANDARD)*/){
 
-            val originalRefreshRateMode = mUtilsRefreshRateSt.samRefreshRateMode
+            val originalRefreshRateMode = mUtilRefreshRateSt.samRefreshRateMode
             delay(100)
             var endingRefreshRateMode = originalRefreshRateMode
             //loadComplete = withContext(Dispatchers.IO) {
@@ -52,13 +52,13 @@ object InternalProfiles {
             try {
                 refreshRateModes.forEach { rrm ->
                     val key = "$displayId-$rrm"
-                    if (overwriteExisting || !isModeProfilesAdded(key, mUtilsRefreshRateSt.mContentResolver)) {
+                    if (overwriteExisting || !isModeProfilesAdded(key, mUtilRefreshRateSt.mContentResolver)) {
                         ignoreRrmChange = true
                         delay(200)
-                        mUtilsRefreshRateSt.samRefreshRateMode = rrm
+                        mUtilRefreshRateSt.samRefreshRateMode = rrm
                         endingRefreshRateMode = rrm
                         delay(400)
-                        if (addModeToProfileObj(mUtilsRefreshRateSt, key)) {
+                        if (addModeToProfileObj(mUtilRefreshRateSt, key)) {
                             modeAddedCnt += 0
                         }
                     }
@@ -70,15 +70,15 @@ object InternalProfiles {
             //restore user refresh rate mode
             if (originalRefreshRateMode != endingRefreshRateMode) {
                 //assert(hasWriteSecureSetPerm)
-                mUtilsRefreshRateSt.samRefreshRateMode = originalRefreshRateMode
+                mUtilRefreshRateSt.samRefreshRateMode = originalRefreshRateMode
             }
 
         } else {
             //add current DisplayMode only in case syncs results below is empty or failed
-            if (overwriteExisting ||  !isModeProfilesAdded(null, mUtilsRefreshRateSt.mContentResolver)) {
+            if (overwriteExisting ||  !isModeProfilesAdded(null, mUtilRefreshRateSt.mContentResolver)) {
 
-                val key = getKey(mUtilsRefreshRateSt.mContentResolver)
-                addModeToProfileObj(mUtilsRefreshRateSt, key)
+                val key = getKey(mUtilRefreshRateSt.mContentResolver)
+                addModeToProfileObj(mUtilRefreshRateSt, key)
             }
         }
 
@@ -105,20 +105,20 @@ object InternalProfiles {
     }
 
 
-    private suspend fun addModeToProfileObj(mUtilsRefreshRateSt: UtilsRefreshRateSt, key: String?): Boolean = withContext(Dispatchers.IO) {
+    private suspend fun addModeToProfileObj(mUtilRefreshRateSt: UtilRefreshRateSt, key: String?): Boolean = withContext(Dispatchers.IO) {
         try {
 
             //Workaround for inconsistent read
             var modesSet: Map<String, List<Float>>? = null
             var pass = false
             while (!pass){
-                modesSet = mUtilsRefreshRateSt.mUtilsDeviceInfo.getDisplayModesSet()
-                while (modesSet != mUtilsRefreshRateSt.mUtilsDeviceInfo.getDisplayModesSet()) {
+                modesSet = mUtilRefreshRateSt.mUtilsDeviceInfo.getDisplayModesSet()
+                while (modesSet != mUtilRefreshRateSt.mUtilsDeviceInfo.getDisplayModesSet()) {
                     delay(1000)
-                    modesSet = mUtilsRefreshRateSt.mUtilsDeviceInfo.getDisplayModesSet()
+                    modesSet = mUtilRefreshRateSt.mUtilsDeviceInfo.getDisplayModesSet()
                 }
                 delay(1000)
-                pass = modesSet == mUtilsRefreshRateSt.mUtilsDeviceInfo.getDisplayModesSet()
+                pass = modesSet == mUtilRefreshRateSt.mUtilsDeviceInfo.getDisplayModesSet()
             }
 
             val resMapList = mutableListOf<Map<String, ResolutionDetails>>()
@@ -140,7 +140,7 @@ object InternalProfiles {
 
                 resMapList.add(resMap)
             }
-            refreshRateModeMap[key ?: getKey(mUtilsRefreshRateSt.mContentResolver)] = resMapList
+            refreshRateModeMap[key ?: getKey(mUtilRefreshRateSt.mContentResolver)] = resMapList
 
             return@withContext true
         } catch (_: Exception) {

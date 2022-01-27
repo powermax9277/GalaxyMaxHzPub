@@ -49,21 +49,12 @@ import com.tribalfs.gmh.helpers.CacheSettings.lrrPref
 import com.tribalfs.gmh.helpers.CacheSettings.preventHigh
 import com.tribalfs.gmh.helpers.CacheSettings.turnOff5GOnPsm
 import com.tribalfs.gmh.helpers.DozeUpdater.updateDozValues
-import com.tribalfs.gmh.helpers.UtilNotificationBarSt.Companion.SYSUI_QS_TILES
-import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.BATTERY_SAVER_CONSTANTS
-import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.DEVICE_IDLE_CONSTANTS
-import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.DISPLAY_SIZE_FORCED
-import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.PSM_5G_MODE
-import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.REFRESH_RATE_MODE
-import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.REFRESH_RATE_MODE_STANDARD
-import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.SCREEN_BRIGHTNESS_FLOAT
-import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.STANDARD_REFRESH_RATE_HZ
 import com.tribalfs.gmh.hertz.HzServiceHelperStn
 import com.tribalfs.gmh.profiles.ProfilesObj.isProfilesLoaded
+import com.tribalfs.gmh.sharedprefs.LIC_TYPE_ADFREE
+import com.tribalfs.gmh.sharedprefs.LIC_TYPE_TRIAL_ACTIVE
+import com.tribalfs.gmh.sharedprefs.NOT_USING
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsAct
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsAct.Companion.LIC_TYPE_ADFREE
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsAct.Companion.LIC_TYPE_TRIAL_ACTIVE
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt.Companion.NOT_USING
 import com.tribalfs.gmh.tiles.QSTileResSw
 import kotlinx.coroutines.*
 import org.acra.ACRA
@@ -89,7 +80,7 @@ class MyApplication : Application() {
         internal val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     }
 
-    private val mUtilsRefreshRateSt by lazy {UtilsRefreshRateSt.instance(applicationContext)}
+    private val mUtilsRefreshRateSt by lazy {UtilRefreshRateSt.instance(applicationContext)}
     private val mUtilsPrefsAct by lazy { UtilsPrefsAct(applicationContext) }
 
     private val brightnessFloatUri = Settings.System.getUriFor(SCREEN_BRIGHTNESS_FLOAT)
@@ -188,7 +179,7 @@ class MyApplication : Application() {
                 sysuiQsTilesUri, devSettingsUri -> {
                     if (mUtilsRefreshRateSt.mUtilsPrefsGmh.gmhPrefSensorsOff) {
                         applicationScope.launch {
-                            if (UtilNotificationBarSt.instance(applicationContext).checkQsTileInPlace() != true) {
+                            if (UtilNotifBarSt.instance(applicationContext).checkQsTileInPlace() != true) {
                                 mUtilsRefreshRateSt.mUtilsPrefsGmh.gmhPrefSensorsOff = false
                             }
                         }
@@ -293,11 +284,7 @@ class MyApplication : Application() {
             }
         }
 
-        /* fun unObserve(){
-             mContentResolver.unregisterContentObserver(this)
-         }*/
     }
-
 
 
     //TODO{reason: Comment out method below}
@@ -384,7 +371,7 @@ class MyApplication : Application() {
                 mUtilsRefreshRateSt.mUtilsDeviceInfo.isPowerSavingsModeOn
         )
         turnOff5GOnPsm = isTurnOff5GOnPsm()
-        hasWriteSecureSetPerm = UtilsPermSt.instance(applicationContext).hasWriteSecurePerm()
+        hasWriteSecureSetPerm = UtilPermSt.instance(applicationContext).hasWriteSecurePerm()
         isSpayInstalled = isSpayInstalled()
         keepModeOnPowerSaving = mUtilsPrefsGmh.gmhPrefKmsOnPsm
         brightnessThreshold.set(

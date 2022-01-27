@@ -10,18 +10,12 @@ import androidx.annotation.RequiresApi
 import com.tribalfs.gmh.MyApplication.Companion.applicationScope
 import com.tribalfs.gmh.R
 import com.tribalfs.gmh.dialogs.QSDialogs
+import com.tribalfs.gmh.helpers.*
 import com.tribalfs.gmh.helpers.CacheSettings.currentRefreshRateMode
 import com.tribalfs.gmh.helpers.CacheSettings.hasWriteSecureSetPerm
 import com.tribalfs.gmh.helpers.CacheSettings.isMultiResolution
-import com.tribalfs.gmh.helpers.UtilTileIcon
-import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.REFRESH_RATE_MODE_ALWAYS
-import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.REFRESH_RATE_MODE_SEAMLESS
-import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.REFRESH_RATE_MODE_STANDARD
-import com.tribalfs.gmh.helpers.UtilsPermSt
-import com.tribalfs.gmh.helpers.UtilsPermSt.Companion.CHANGE_SETTINGS
-import com.tribalfs.gmh.helpers.UtilsRefreshRateSt
-import com.tribalfs.gmh.helpers.UtilsResoName
-import com.tribalfs.gmh.helpers.UtilsSettingsIntents.changeSystemSettingsIntent
+import com.tribalfs.gmh.helpers.UtilPermSt.Companion.CHANGE_SETTINGS
+import com.tribalfs.gmh.helpers.UtilSettingsIntents.changeSystemSettingsIntent
 import com.tribalfs.gmh.hertz.HzServiceHelperStn
 import com.tribalfs.gmh.resochanger.ResolutionChangeUtil
 import kotlinx.coroutines.Dispatchers
@@ -33,8 +27,8 @@ import kotlinx.coroutines.launch
 @RequiresApi(Build.VERSION_CODES.N)
 class QSTileResSw : TileService() {
 
-    private val mUtilsPermSt by lazy {UtilsPermSt.instance(applicationContext)}
-    private val mUtilsRefreshRate by lazy {UtilsRefreshRateSt.instance(applicationContext)}
+    private val mUtilsPermSt by lazy {UtilPermSt.instance(applicationContext)}
+    private val mUtilsRefreshRate by lazy {UtilRefreshRateSt.instance(applicationContext)}
     private val mUtilTileIcon = UtilTileIcon()
 
     override fun onTileAdded() {
@@ -123,7 +117,7 @@ class QSTileResSw : TileService() {
 
     private fun updateTileInner() {
         val reso = mUtilsRefreshRate.mUtilsDeviceInfo.getDisplayResolution()//  getResoAndRefRateModeArr(currentRefreshRateMode.get())
-        val resoCat = UtilsResoName.getName(
+        val resoCat = UtilResoName.getName(
             reso.height,
             reso.width
         )

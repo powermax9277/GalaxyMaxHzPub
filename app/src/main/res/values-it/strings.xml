@@ -77,9 +77,6 @@
     <string name="allow_bg_act">
         Affinché quest\'app funzioni in maniera stabile, attiva \'Consenti attività in background\' o disattiva \'Ottimizzazione utilizzo batteria\'.
     </string>
-    <!--<string name="aot_perm_inf">
-        Quest\'app necessita di un\'autorizzazione per essere mostrata in alto e funzionare correttamente.
-        Puoi disattivare questa notifica eseguendo una pressione prolungata e disattivando l\'interruttore che apparirà a schermo.</string>-->
     <string name="apply">Applica</string>
     <string name="apps_bat_opt_settings"><u>Impostazioni Ottimizzazione Batteria App</u></string>
     <string name="as_desc">Questo servizio è necessario per far funzionare le mod di Galaxy Max Hz.</string>
@@ -143,22 +140,11 @@
     <string name="std_mode">Modalità Standard</string>
     <string name="enable">Attivazione</string>
     <string name="premium_features">प्रीमियम सुविधाएँ</string>
-    <string name="prevent_high">Prevent switching to High Mode</string>
-    <string name="acces_req">Enable Accessibility Service</string>
+    <string name="prevent_high">Impedisci il passaggio alla modalità alta</string>
+    <string name="acces_req">Abilita il servizio di accessibilità</string>
     <string name="max_hz_for_psm">Hz massimi per la modalità di risparmio energetico</string>
     <plurals name="aha">
         <item quantity="other">Periodo di prova premium attivo: %d giorni rimanenti</item>
         <item quantity="one">Periodo di prova premium attivo: %d giorno rimanente</item>
     </plurals>
 </resources>
-
-    <!--    <string name="qst_exp">I Pulsanti Di Impostazione Rapida Sono Scaduti</string>-->
-    <!--    <string name="ad_starting_in">"Il Video inizierà tra"</string>-->
-    <!--    <string name="no_thanks">No, grazie!</string>-->
-    <!-- <string name="error_opening_settings">Errore nell\'apertura delle impostazioni.</string>-->
-    <!-- <string name="eta">Errore di attivazione della rimozione pubblicitaria!</string>-->
-
-    <!--    <string name="qs_active">Pulsanti Di Impostazione Rapida attivati correttamente</string>-->
-    <!--    <string name="failed_show_ad">Impossibile visualizzare l\'annuncio video. Si prega di riprovare.</string>-->
-    <!--    <string name="failed_load_ad">Impossibile caricare l\'annuncio video. Si prega di verificare la connessione ad internet e riprovare.</string>-->
-    <!--    <string name="info_expired" tools:ignore="PluralsCandidate">Guarda questo video e ottieni altri %d giorni di attivazione dei pulsanti di impostazione rapida.</string>-->

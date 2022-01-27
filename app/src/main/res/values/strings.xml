@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name" translatable="false">Galaxy Max Hz</string>
-    <!-- <string name="ad_closed" translatable="false">Video ad closed early.</string>-->
     <string name="lbl_enable_msm">Enable Motion Smoothness</string>
     <string name="buy_adfree">Buy Premium|Coffee</string>
-    <!--<string name="info_expired" tools:ignore="PluralsCandidate">Watch this video and get activated quick setting tiles for another %d days.</string>-->
     <string name="resolution">Resolution &amp; Motion Smoothness Toggle</string>
     <string name="act">Activate Premium|Trial</string>
     <string name="max_hz">Max Hz</string>
     <string name="max_hz_for_psm">Max Hz for Power Saving Mode</string>
     <string name="feat_n_a" tools:keep="@string/feat_n_a">Feature Not Supported</string>
-    <!--   <string name="qs_active">Quick Settings Tiles successfully activated</string>-->
     <string name="min_hz_for_toggle">Lowest Hz for Toggle</string>
     <string name="adaptive">Adaptive</string>
     <string name="high">High</string>
@@ -40,8 +37,6 @@
         \n\nThis app can easily change the Motion Smoothness Mode to Adaptive/High once ADB setup is performed. This works even on Power Savings Mode.
     </string>
     <string name="input_ac_inf">If you lost premium because of resetting this device, enter activation code that was sent to your email to reactivate premium.</string>
-    <!--   <string name="failed_show_ad">Failed to show video ad. Please try again.</string>
-    <string name="failed_load_ad">Failed to load video ad. Please check internet and try again.</string>-->
     <string name="show_ns">Show Net Speed Indicator</string>
     <string name="bit" translatable="false">Bits/sec(b/s)</string>
     <string name="byt" translatable="false">Bytes/sec(B/s)</string>
@@ -66,14 +61,10 @@
     <string name="psm_on">Power Saving Mode is On</string>
     <string name="chng_res">Change Resolution</string>
     <string name="open_settings">Open Settings</string>
-    <!--    <string name="qst_exp">Quick Settings Tiles Expired</string>-->
-    <!--    <string name="ad_starting_in">"Video starting in "</string>-->
-    <!--    <string name="no_thanks">No, thanks!</string>-->
     <string name="chng_res_failed">Failed to change screen resolution</string>
     <string name="one_res_def">Only one resolution defined in the system.</string>
     <string name="rrp_not_loaded">Refresh rates profile not yet loaded. Try again.</string>
     <string name="sot_no_perm">Show on top permission is not granted!</string>
-    <!-- <string name="error_opening_settings">Error opening settings.</string>-->
     <string name="cie">Error! Please check internet connection and try again.</string>
     <string name="aca">Invalid activation code.</string>
     <string name="afa">Premium successfully activated!</string>
@@ -110,20 +101,12 @@
     <string name="TBps" translatable="false">TB/s</string>
     <string name="adp_delay">Adaptive min Hz delay(seconds)</string>
     <string name="cur_rr_h">Current Refresh Rate: %s Hz</string>
-    <!--<string name="base" translatable="false">Base</string>
-    <string name="plus" translatable="false">Plus</string>
-    <string name="ultra" translatable="false">Max</string>
-    <string name="dz_ultr_inf" translatable="false">This quick-doze mod option disables any maintenance window.</string>
-    <string name="dz_bp_inf_h" translatable="false">
-        This quick-doze mod option allows regular maintenance windows, initially %s after screen-off (initial interval).
-        Each succeeding interval will be twice of its previous. Intervals will reset once the device is unlocked.</string>-->
     <string name="show_ns_card">Show Netspeed Indicator Card</string>
     <string name="lbl_rrm">Refresh Rate Mods</string>
     <string name="prr_psm">Keep Smoothness on Power Saving Mode</string>
     <string name="actvt_trial">Activate free trial</string>
     <string name="auto_psm">Power Saving Mode on Screen-off</string>
     <string name="reso_opts">Enabled Options</string>
-
     <string name="requires_ws_perm_h">
         %1$s needs a special permission to execute this feature.
         Click the ADB setup link below to learn how.
@@ -141,7 +124,6 @@
     <string name="dismiss">Dismiss</string>
     <string name="allow">Allow</string>
     <string name="allow_aot">Allow Appear on Top</string>
-    <!--<string name="adp_mod_inf" translatable="false">Note: This is an experimental feature which is continually being improved.</string>-->
     <string name="allow_bg_act">For the stable background operation of this app, enable \'Allow background activity\' or disable \'Optimize battery usage\'.</string>
     <string name="help">Help</string>
     <string name="reload_profiles">Reload Profiles</string>

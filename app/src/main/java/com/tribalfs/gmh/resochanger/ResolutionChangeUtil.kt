@@ -11,8 +11,6 @@ import com.tribalfs.gmh.helpers.CacheSettings.displayId
 import com.tribalfs.gmh.helpers.CacheSettings.hasWriteSecureSetPerm
 import com.tribalfs.gmh.helpers.CacheSettings.isMultiResolution
 import com.tribalfs.gmh.helpers.CacheSettings.isSamsung
-import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.REFRESH_RATE_MODE_STANDARD
-import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.SECURE
 import com.tribalfs.gmh.profiles.ResolutionDetails
 import kotlinx.coroutines.*
 
@@ -21,11 +19,11 @@ class ResolutionChangeUtil (context: Context) {
 
 
     private val appCtx = context.applicationContext
-    internal val mUtilsRefreshRate by lazy { UtilsRefreshRateSt.instance(appCtx) }
+    internal val mUtilsRefreshRate by lazy { UtilRefreshRateSt.instance(appCtx) }
 
     @ExperimentalCoroutinesApi
     suspend fun changeRes(reso: Size?): Int? {
-        return if (hasWriteSecureSetPerm || UtilsPermSt.instance(appCtx).hasWriteSecurePerm()) {
+        return if (hasWriteSecureSetPerm || UtilPermSt.instance(appCtx).hasWriteSecurePerm()) {
             if (changeResInternal(reso)) {
                 PackageManager.PERMISSION_GRANTED
             } else {
@@ -39,7 +37,7 @@ class ResolutionChangeUtil (context: Context) {
                 null
             }
         } else {
-            UtilsPermSt.instance(appCtx).getPerm(SECURE)
+            UtilPermSt.instance(appCtx).getPerm(SECURE)
         }
     }
 
@@ -60,7 +58,7 @@ class ResolutionChangeUtil (context: Context) {
         }
 
         reso.split("x").let {
-            return UtilsResoName.getName(it[0].toInt(),it[1].toInt())
+            return UtilResoName.getName(it[0].toInt(),it[1].toInt())
         }
     }
 

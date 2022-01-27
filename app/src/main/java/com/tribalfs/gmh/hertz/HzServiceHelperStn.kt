@@ -7,11 +7,11 @@ import android.os.Build
 import android.service.quicksettings.TileService
 import androidx.annotation.RequiresApi
 import com.tribalfs.gmh.GalaxyMaxHzAccess.Companion.gmhAccessInstance
+import com.tribalfs.gmh.STOPPED
 import com.tribalfs.gmh.helpers.CacheSettings.hzNotifOn
 import com.tribalfs.gmh.helpers.CacheSettings.hzStatus
 import com.tribalfs.gmh.helpers.CacheSettings.isScreenOn
 import com.tribalfs.gmh.helpers.SingletonMaker
-import com.tribalfs.gmh.hertz.HzService.Companion.STOPPED
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt
 import com.tribalfs.gmh.tiles.QSTileHzMon
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -110,7 +110,7 @@ class HzServiceHelperStn private constructor(context: Context) {
         }
     }
 
-    internal fun startHzService(){
+    private fun startHzService(){
         //Log.d(TAG, "HzServiceHelper/stopHertz")
         try {
             appCtx.startService(Intent(appCtx, HzService::class.java))

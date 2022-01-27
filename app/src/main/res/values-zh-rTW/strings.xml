@@ -2,12 +2,10 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="lbl_enable_msm">啟用動作平滑度</string>
     <string name="buy_adfree">購買高級版</string>
-<!--    <string name="info_expired">觀看此視頻，並得到激活快速設置瓷磚另一個%d天。</string>-->
     <string name="resolution">分辨率和運動平滑切換</string>
     <string name="act">激活高級|試用</string>
     <string name="max_hz">最大Hz</string>
     <string name="feat_n_a" tools:keep="@string/feat_n_a">更改分辨率不支持</string>
-    <!--    <string name="qs_active">快速設置磁貼已成功激活</string>-->
     <string name="min_hz_for_toggle">最小Hz限制可以在最大刷新率按鈕中選擇</string>
     <string name="adaptive">Adaptive</string>
     <string name="high">High</string>
@@ -39,8 +37,6 @@
         \n\n此應用程序可以很容易地改變運動平滑度自適應模式/高11 ADB設置的設置更改。這個工程即使在省電模式。
     </string>
     <string name="input_ac_inf">如果您因重置此設備而失去保費，請輸入發送到您的電子郵件的激活碼以重新激活保費。</string>
-<!--    <string name="failed_show_ad">無法顯示視頻廣告。請再試一遍。</string>-->
-<!--    <string name="failed_load_ad">無法加載視頻廣告。請檢查網絡連接，然後再試一次。</string>-->
     <string name="show_ns">顯示上網速度指示器</string>
     <string name="combined">結合</string>
     <string name="upload">上傳</string>
@@ -64,14 +60,10 @@
     <string name="psm_on">省電模式設置為開</string>
     <string name="chng_res">更改分辨率</string>
     <string name="open_settings">打開設置</string>
-<!--    <string name="qst_exp">快速設置過期瓷磚</string>-->
-<!--    <string name="ad_starting_in">“視頻開始於 ”</string>-->
-<!--    <string name="no_thanks">不用了，謝謝！</string>-->
     <string name="chng_res_failed">無法更改分辨率。</string>
     <string name="one_res_def">在系統中定義只有一個解決方案。</string>
     <string name="rrp_not_loaded">可用的刷新率尚未加載。再試一次。</string>
     <string name="sot_no_perm">顯示在上面不被許可！</string>
-<!--    <string name="error_opening_settings">錯誤打開設置。</string>-->
     <string name="cie">錯誤！請檢查互聯網連接，然後再試一次。</string>
     <string name="aca">無效的激活碼。</string>
     <string name="afa">高級版成功激活！</string>
@@ -79,7 +71,6 @@
     <plurals name="aha">
         <item quantity="other">高級試用版已激活：%d天離開</item>
     </plurals>
-<!--    <string name="eta">錯誤無廣告激活試用！</string>-->
     <string name="nlh">找不到此設備的高級許可證：%s</string>
     <string name="edit">編輯</string>
     <string name="quick_doz_mod">快速的 Doze Mod</string>
@@ -94,7 +85,6 @@
     <string name="actvt_trial">激活免費試用</string>
     <string name="auto_psm">關閉屏幕時的省電模式</string>
     <string name="reso_opts">啟用選項</string>
-
     <string name="requires_ws_perm_h">
         %1$s 需要特殊權限才能執行此功能。點擊下面的設置ADB鏈接以了解操作方法。
         \n\nTLDR: Run \'adb shell pm grant %2$s android.permission.WRITE_SECURE_SETTINGS\'\n\n
@@ -134,8 +124,7 @@
     <string name="premium_features">高級功能</string>
     <string name="prevent_high">防止切換到高模式</string>
     <string name="auto_sensors_off_exp">自動傳感器關閉</string>
-    <string name="data_usage"><u>Data Usage</u></string>
-    <string name="acces_req">Enable Accessibility Service</string>
-    <string name="max_hz_for_psm">Max Hz for Power Saving Mode</string>
-
+    <string name="data_usage"><u>數據使用</u></string>
+    <string name="acces_req">啟用無障礙服務</string>
+    <string name="max_hz_for_psm">省電模式的最大赫茲</string>
 </resources>

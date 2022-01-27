@@ -6,64 +6,65 @@ import androidx.annotation.Keep
 import com.tribalfs.gmh.R
 import com.tribalfs.gmh.helpers.CacheSettings.highestHzForAllMode
 import com.tribalfs.gmh.helpers.CacheSettings.lowestHzCurMode
+import com.tribalfs.gmh.helpers.STANDARD_REFRESH_RATE_HZ
 import com.tribalfs.gmh.helpers.SingletonMaker
-import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.STANDARD_REFRESH_RATE_HZ
 import com.tribalfs.gmh.hertz.HzGravity
 import org.json.JSONObject
+
+internal const val IS_HZ_ON = "hz_on"
+internal const val HZ_OVERLAY_ON = "hz_ol_on"
+internal const val HZ_NOTIF_ON = "hz_ntf_on"
+internal const val FORCE_LOWEST_HZ_SO = "fc_lwst_hz"
+internal const val APPLY_SENSORS_OFF = "ss_off"
+internal const val DEEP_DOZ_OPT = "dp_dz_opt"
+private const val GMH_PREFS = "gmh_prefs"
+private const val HZ_OVERLAY_LOC = "hz_ol_gr"
+private const val HZ_OVERLAY_SIZE = "hz_ol_sz"
+private const val BRIGHTNESS_THRESHOLD = "brightness_threshold"
+internal const val QUICK_DOZE = "qk_dz"
+internal const val DISABLE_SYNC = "dis_syn"
+internal const val RESTORE_SYNC = "res_syn"
+private const val PSM_SO = "psm_so"
+internal const val REFRESH_RATE_MODE_PREF = "rrm_pref"
+private const val DISPLAY_MODES = "display_modes"
+private const val ADAPTIVES = "adaptives"
+private const val HZ_CONFIG_SYNCED = "hz_conf_sncd"
+private const val HZ_CONFIG_FETCHED = "hz_conf_ftcd"
+// private const val INS_DATE_SYNC = "id_sncd"
+private const val HZ_CONFIG_FETCH_MON = "hz_conf_ftcd_mon"
+internal const val MIN_HZ_ADAPT = "min_hz_adp"
+internal const val PREF_MAX_REFRESH_RATE = "pref_ref_rate"
+internal const val PREF_MAX_REFRESH_RATE_PSM = "pref_ref_rate_psm"
+internal const val KEEP_RRM = "keep_rrm"
+private const val PSM_CACHE = "psm_cache"
+internal const val ADAPTIVE_DELAY = "adp_delay"
+private const val SHOW_NS_TOOL = "show_ns"
+private const val TOP_BOT_CHIP_ID = "tb_chip"
+private const val LCR_CHIP_ID = "lcr_chip"
+private const val TOGGLE_MINIMUM_HZ = "tg_min_hz"
+//private const val OPEN_EXPIRE_DIALOG = "op_exp_dlg"
+private const val SKIP_RES = "sk_rs"
+internal const val NS_STARTED = "kis"
+private const val KEY_INDICATOR_SPEED_UNIT = "kisu"
+private const val SPEED_TO_SHOW = "ists"
+internal const val BYTE_PER_SEC = "Bps"
+internal const val BIT_PER_SEC = "bps"
+internal const val TOTAL_SPEED = "total"
+internal const val UPLOAD_SPEED = "up"
+internal const val DOWNLOAD_SPEED = "down"
+private const val USING_SPAY = "usg_spay"
+private const val SETTINGS_LIST_DONE = "list_done"
+internal const val NOT_USING = 0
+internal const val USING = 1
+internal const val NOT_ASKED = 2
+private const val HELP_URL = "help_url"
+private const val PREVENT_HIGH = "prev_hi"
+private const val SENSOR_ON_KEY = "s_on"
 
 internal class UtilsPrefsGmhSt private constructor(val context: Context) {
 
     companion object : SingletonMaker<UtilsPrefsGmhSt, Context>(::UtilsPrefsGmhSt){
        // private const val TAG = "UtilsSharedPrefsHz"
-        private const val GMH_PREFS = "gmh_prefs"
-        internal const val IS_HZ_ON = "hz_on"
-        internal const val HZ_OVERLAY_ON = "hz_ol_on"
-        internal const val HZ_NOTIF_ON = "hz_ntf_on"
-        private const val HZ_OVERLAY_LOC = "hz_ol_gr"
-        private const val HZ_OVERLAY_SIZE = "hz_ol_sz"
-        internal const val FORCE_LOWEST_HZ_SO = "fc_lwst_hz"
-        const val APPLY_SENSORS_OFF = "ss_off"
-        internal const val DEEP_DOZ_OPT = "dp_dz_opt"
-        private const val BRIGHTNESS_THRESHOLD = "brightness_threshold"
-        internal const val QUICK_DOZE = "qk_dz"
-        internal const val DISABLE_SYNC = "dis_syn"
-        internal const val RESTORE_SYNC = "res_syn"
-        private const val PSM_SO = "psm_so"
-        internal const val REFRESH_RATE_MODE_PREF = "rrm_pref"
-        private const val DISPLAY_MODES = "display_modes"
-        private const val ADAPTIVES = "adaptives"
-        private const val HZ_CONFIG_SYNCED = "hz_conf_sncd"
-        private const val HZ_CONFIG_FETCHED = "hz_conf_ftcd"
-       // private const val INS_DATE_SYNC = "id_sncd"
-        private const val HZ_CONFIG_FETCH_MON = "hz_conf_ftcd_mon"
-        internal const val MIN_HZ_ADAPT = "min_hz_adp"
-        internal const val PREF_MAX_REFRESH_RATE = "pref_ref_rate"
-        internal const val PREF_MAX_REFRESH_RATE_PSM = "pref_ref_rate_psm"
-        internal const val KEEP_RRM = "keep_rrm"
-        private const val PSM_CACHE = "psm_cache"
-        internal const val ADAPTIVE_DELAY = "adp_delay"
-        private const val SHOW_NS_TOOL = "show_ns"
-        private const val TOP_BOT_CHIP_ID = "tb_chip"
-        private const val LCR_CHIP_ID = "lcr_chip"
-        private const val TOGGLE_MINIMUM_HZ = "tg_min_hz"
-        //private const val OPEN_EXPIRE_DIALOG = "op_exp_dlg"
-        private const val SKIP_RES = "sk_rs"
-        internal const val NS_STARTED = "kis"
-        private const val KEY_INDICATOR_SPEED_UNIT = "kisu"
-        private const val SPEED_TO_SHOW = "ists"
-        internal const val BYTE_PER_SEC = "Bps"
-        internal const val BIT_PER_SEC = "bps"
-        internal const val TOTAL_SPEED = "total"
-        internal const val UPLOAD_SPEED = "up"
-        internal const val DOWNLOAD_SPEED = "down"
-        private const val USING_SPAY = "usg_spay"
-        private const val SETTINGS_LIST_DONE = "list_done"
-        internal const val NOT_USING = 0
-        internal const val USING = 1
-        internal const val NOT_ASKED = 2
-        private const val HELP_URL = "help_url"
-        private const val PREVENT_HIGH = "prev_hi"
-        private const val SENSOR_ON_KEY = "s_on"
     }
 
     val hzSharedPref: SharedPreferences by lazy {context.applicationContext.getSharedPreferences(

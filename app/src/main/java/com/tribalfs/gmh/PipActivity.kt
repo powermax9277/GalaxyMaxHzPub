@@ -17,7 +17,7 @@ class PipActivity : AppCompatActivity() {
         val mBuilder = PictureInPictureParams.Builder()
         mBuilder.setAspectRatio(ratio).build()
         enterPictureInPictureMode(mBuilder.build())
-        Handler(Looper.getMainLooper()).postDelayed(Exit(), 350)
+        Handler(Looper.getMainLooper()).postDelayed(Exit(), 400)
     }
 
     internal inner class Exit : Runnable {

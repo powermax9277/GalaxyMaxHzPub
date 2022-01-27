@@ -19,10 +19,10 @@ import com.joaomgcd.taskerpluginlibrary.input.TaskerInputInfo
 import com.joaomgcd.taskerpluginlibrary.input.TaskerInputInfos
 import com.joaomgcd.taskerpluginlibrary.runner.TaskerPluginResult
 import com.joaomgcd.taskerpluginlibrary.runner.TaskerPluginResultSucess
+import com.tribalfs.gmh.ACTION_CHANGED_RES
 import com.tribalfs.gmh.AccessibilityPermission.isAccessibilityEnabled
 import com.tribalfs.gmh.GalaxyMaxHzAccess
 import com.tribalfs.gmh.GalaxyMaxHzAccess.Companion.gmhAccessInstance
-import com.tribalfs.gmh.MainActivity
 import com.tribalfs.gmh.MyApplication.Companion.applicationName
 import com.tribalfs.gmh.helpers.*
 import com.tribalfs.gmh.helpers.CacheSettings.displayId
@@ -40,11 +40,7 @@ import com.tribalfs.gmh.helpers.CacheSettings.supportedHzIntCurMod
 import com.tribalfs.gmh.helpers.CacheSettings.turnOffAutoSensorsOff
 import com.tribalfs.gmh.helpers.DozeUpdater.mwInterval
 import com.tribalfs.gmh.helpers.DozeUpdater.updateDozValues
-import com.tribalfs.gmh.helpers.UtilsCommon.closestValue
-import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.REFRESH_RATE_MODE_ALWAYS
-import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.REFRESH_RATE_MODE_SEAMLESS
-import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.REFRESH_RATE_MODE_STANDARD
-import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.STANDARD_REFRESH_RATE_HZ
+import com.tribalfs.gmh.helpers.UtilCommon.closestValue
 import com.tribalfs.gmh.profiles.ProfilesObj
 import com.tribalfs.gmh.resochanger.ResolutionChangeUtil
 import com.tribalfs.gmh.taskerplugin.TaskerKeys.auto_sensors_off
@@ -88,7 +84,7 @@ class InfosFromMainApp : ArrayList<InfoFromMainApp>()
 
 
 private val infosForTasker = InfosFromMainApp().apply {
-    val resoList:MutableList<String> = mutableListOf<String>()
+    val resoList:MutableList<String> = mutableListOf()
 
     fun <T> List<T>.joinToStringWithOr(delimiter: String): String{
         return "${dropLast(1).joinToString(delimiter)} or ${last()}"
@@ -152,7 +148,7 @@ private val infosForTasker = InfosFromMainApp().apply {
                 InfoFromMainApp(
                     "Quick-doze Mod - Initial Maintenance Window Interval (minutes)",
                     quick_doze_mod,
-                    "Valid value: 1-120, 0 [no maintenance window] or -1 [to disable quick-doze]"
+                    "Valid value: 1-120, 0 [doze all the way] or -1 [disable quick-doze]"
                 ),
                 InfoFromMainApp(
                     "Switch auto SENSORS OFF",
@@ -164,7 +160,7 @@ private val infosForTasker = InfosFromMainApp().apply {
                         "Protect Battery",
                     protect_battery,
                 "Valid value: true or false" +
-                        "\n[limits charging to 85% on Samsung device with OneUI4.0 to prolong battery life]"
+                        "\n[limits charging to 85% on Samsung device with OneUI4.0+ to extend its battery lifespan]"
             )
             )
         )
@@ -178,7 +174,7 @@ class DynamicInputRunner : TaskerPluginRunnerActionNoOutputOrInput() {
     @RequiresApi(Build.VERSION_CODES.M)
     override fun run(context: Context, input: TaskerInput<Unit>): TaskerPluginResult<Unit> {
         val appCtx = context.applicationContext
-        val mUtilsRefreshRate by lazy { UtilsRefreshRateSt.instance(appCtx) }
+        val mUtilsRefreshRate by lazy { UtilRefreshRateSt.instance(appCtx) }
         val dm by lazy {appCtx.getSystemService(Context.DISPLAY_SERVICE) as DisplayManager}
         val km by lazy {appCtx.getSystemService(KEYGUARD_SERVICE) as KeyguardManager}
 
@@ -192,7 +188,7 @@ class DynamicInputRunner : TaskerPluginRunnerActionNoOutputOrInput() {
                     change_res -> {
                         CoroutineScope(Dispatchers.IO).launch {
                             try {
-                                appCtx.sendBroadcast(Intent(MainActivity.ACTION_CHANGED_RES))
+                                appCtx.sendBroadcast(Intent(ACTION_CHANGED_RES))
                                 delay(550)
                                 val resStrSplit = (info.value as String).split("x")
                                 val reso = Size(resStrSplit[1].toInt(),resStrSplit[0].toInt())
@@ -224,7 +220,7 @@ class DynamicInputRunner : TaskerPluginRunnerActionNoOutputOrInput() {
                                 val mUtilsPrefsGmh = mUtilsRefreshRate.mUtilsPrefsGmh
                                 val mHz = (info.value as String).toInt()
                                 if (dm.getDisplay(displayId).state == STATE_ON) {
-                                    UtilsChangeMaxHz(appCtx).changeMaxHz(mHz)
+                                    UtilChangeMaxHz(appCtx).changeMaxHz(mHz)
                                 } else {
                                     if (supportedHzIntCurMod?.indexOfFirst { hz -> hz == mHz } != -1) {
                                         prrActive.set(mHz.coerceAtLeast(lowestHzCurMode))

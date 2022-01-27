@@ -9,9 +9,7 @@ import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt
 
 class NetSpeedServiceHelperStn private constructor(context: Context)  {
 
-    companion object : SingletonMaker<NetSpeedServiceHelperStn, Context>(::NetSpeedServiceHelperStn){
-       // private const val TAG = "NetSpeedServiceHelper"
-    }
+    companion object : SingletonMaker<NetSpeedServiceHelperStn, Context>(::NetSpeedServiceHelperStn)
 
     private val appCtx =  context.applicationContext
     private val mUtilsPrefGmh by lazy  {UtilsPrefsGmhSt.instance(appCtx)}

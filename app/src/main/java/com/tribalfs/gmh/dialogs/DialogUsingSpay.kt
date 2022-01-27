@@ -4,9 +4,9 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
 import com.tribalfs.gmh.MyApplication.Companion.applicationName
+import com.tribalfs.gmh.sharedprefs.NOT_USING
+import com.tribalfs.gmh.sharedprefs.USING
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt.Companion.NOT_USING
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt.Companion.USING
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @ExperimentalCoroutinesApi

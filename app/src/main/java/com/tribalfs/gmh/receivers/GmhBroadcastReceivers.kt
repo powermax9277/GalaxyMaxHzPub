@@ -10,6 +10,7 @@ import android.os.Looper
 import android.os.PowerManager.ACTION_POWER_SAVE_MODE_CHANGED
 import android.provider.Settings
 import com.tribalfs.gmh.callbacks.GmhBroadcastCallback
+import com.tribalfs.gmh.helpers.*
 import com.tribalfs.gmh.helpers.CacheSettings.currentBrightness
 import com.tribalfs.gmh.helpers.CacheSettings.currentRefreshRateMode
 import com.tribalfs.gmh.helpers.CacheSettings.disablePsm
@@ -26,29 +27,19 @@ import com.tribalfs.gmh.helpers.CacheSettings.prrActive
 import com.tribalfs.gmh.helpers.CacheSettings.restoreSync
 import com.tribalfs.gmh.helpers.CacheSettings.screenOffRefreshRateMode
 import com.tribalfs.gmh.helpers.CacheSettings.turnOff5GOnPsm
-import com.tribalfs.gmh.helpers.PsmChangeHandler
-import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.POWER_SAVING_MODE
-import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.POWER_SAVING_OFF
-import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.POWER_SAVING_ON
-import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.PREFERRED_NETWORK_MODE
-import com.tribalfs.gmh.helpers.UtilsRefreshRateSt
 import com.tribalfs.gmh.netspeed.NetSpeedServiceHelperStn
 import kotlinx.coroutines.*
 
+private const val PREF_NET_TYPE_LTE_GSM_WCDMA    = 9 /* LTE, GSM/WCDMA */
+private const val PREF_NET_TYPE_5G_LTE_GSM_WCDMA = 26
 
 @ExperimentalCoroutinesApi
 open class GmhBroadcastReceivers(context: Context, private val gmhBroadcastCallback: GmhBroadcastCallback, private val scope: CoroutineScope): BroadcastReceiver() {
     private val appCtx = context.applicationContext
     private val mContentResolver = appCtx.contentResolver
 
-    private val mUtilsRefreshRate by lazy { UtilsRefreshRateSt.instance(appCtx)}
+    private val mUtilsRefreshRate by lazy { UtilRefreshRateSt.instance(appCtx)}
     private val handler by lazy { Handler(Looper.getMainLooper()) }
-    companion object{
-        private const val PREF_NET_TYPE_LTE_GSM_WCDMA    = 9 /* LTE, GSM/WCDMA */
-        private const val PREF_NET_TYPE_5G_LTE_GSM_WCDMA = 26
-
-        //  private const val TAG = "GmhBroadcastReceivers"
-    }
 
     init{
         mUtilsRefreshRate.mUtilsDeviceInfo.isDisplayOn().let {

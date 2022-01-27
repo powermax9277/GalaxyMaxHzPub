@@ -50,8 +50,6 @@
     </string>
     <string name="input_ac_inf">Se você perder o prêmio como resultado da redefinição deste dispositivo, poderá reativá-lo digitando o código de ativação enviado para o seu e-mail.
     </string>
-<!--    <string name="failed_show_ad">Falha ao mostrar anúncios em vídeo. Por favor, tente novamente.</string>-->
-<!--    <string name="failed_load_ad">Falha ao anúncio de vídeo de carga. Verifique internet e tente novamente.</string>-->
     <string name="show_ns">Mostrar Indicador de velocidade gratuita</string>
     <string name="combined">Combinado</string>
     <string name="upload">Envio</string>
@@ -75,14 +73,10 @@
     <string name="psm_on">Modo de economia de energia está ligada</string>
     <string name="chng_res">resolução mudança</string>
     <string name="open_settings">Abrir configurações</string>
-<!--    <string name="qst_exp">Configurações rápida Tiles Expired</string>-->
-<!--    <string name="ad_starting_in">"Vídeo a partir de "</string>-->
-<!--    <string name="no_thanks">Não, obrigado!</string>-->
     <string name="chng_res_failed">Falha ao alterar a resolução.</string>
     <string name="one_res_def">Apenas uma resolução definida no sistema.</string>
     <string name="rrp_not_loaded">taxas de atualização disponíveis ainda não carregado. Tente novamente.</string>
     <string name="sot_no_perm">Mostrar no permissão topo não é concedido!</string>
-<!--    <string name="error_opening_settings">configurações de abertura de erro.</string>-->
     <string name="cie">Erro! Por favor, verifique a conexão de internet e tente novamente.</string>
     <string name="aca">Código de ativação inválido.</string>
     <string name="afa">Premium foi ativado com sucesso!</string>
@@ -91,7 +85,6 @@
         <item quantity="one">Avaliação premium ativada: %d dia restante</item>
         <item quantity="other">Avaliação premium ativada: %d dias deixou</item>
     </plurals>
-    <!--<string name="eta">Erro de teste de ativação ad-free!</string>-->
     <string name="nlh">Nenhuma licença premium encontrada para este dispositivo: %s</string>
     <string name="edit">Editar</string>
     <string name="quick_doz_mod">Rápido doze mod</string>
@@ -106,7 +99,6 @@
     <string name="actvt_trial">Ativar avaliação gratuita?</string>
     <string name="auto_psm">Modo de economia de energia quando a tela está desligada</string>
     <string name="reso_opts">Opções de Mudança de Resolução</string>
-
     <string name="requires_ws_perm_h">
         %1$s necesita un permiso especial para ejecutar esta función.
         Haga clic en el enlace a continuación para saber cómo configurar ADB.
@@ -139,18 +131,18 @@
     <string name="brightness_threshold">Brilho mínimo para adaptável</string>
     <string name="sensor_off_info">Os sensores do dispositivo são desligados automaticamente quando a tela é desligada até que o dispositivo seja desbloqueado. Isso ajuda a minimizar wake locks induzidos por movimento que drenam a bateria.</string>
     <string name="sensors_off_note">Observação importante: enquanto o bloco SensorsOff está ativado, a câmera e o microfone do dispositivo, entre outros sensores, ficam inacessíveis. Verifique se sua voz é audível durante a chamada. Se não for audível, você precisará desbloquear o dispositivo ao receber chamadas (você pode manter pressionado o ícone SensorsOff para desbloquear).</string>
-    <string name="sensor_off_setup_info">Do this first: Enable \'Sensors Off\' tile in Settings > Developer options > Quick settings developer tiles. ></string>
-    <string name="dev_opt_setup_info">To enable Developer options, go to Settings > About phone > Software info and tap \'Build number\' 7x.</string>
-    <string name="enable_write_settings">Enable Galaxy Max Hz change/write system settings permission.</string>
-    <string name="as_desc">This service is required for galaxy max hz mods to work.</string>
+    <string name="sensor_off_setup_info">Faça isso primeiro: Habilite o bloco \'Sensores desativados\' em Configurações > Opções do desenvolvedor > Blocos de desenvolvedor de configurações rápidas.</string>
+    <string name="dev_opt_setup_info">Para ativar as opções do desenvolvedor, vá para Configurações > Sobre o telefone > Informações do software e toque em \'Número da compilação\' 7x.</string>
+    <string name="enable_write_settings">Ative a permissão Galaxy Max Hz Alterar configurações do sistema.</string>
+    <string name="as_desc">Este serviço é necessário para que os mods galaxy max hz funcionem.</string>
     <string name="enable">Ligar</string>
-    <string name="allow">Allow</string>
-    <string name="allow_aot">Allow Appear on Top</string>
-    <string name="allow_bg_act">For the stable running of this app, enable \'Allow background activity\' or disable \'Optimize battery usage\'.</string>
+    <string name="allow">Permitir</string>
+    <string name="allow_aot">Permitir que apareça no topo</string>
+    <string name="allow_bg_act">Para a execução estável deste aplicativo, ative \'Permitir atividade em segundo plano\' ou desative \'Otimizar o uso da bateria\'.</string>
     <string name="premium_features">Recursos premium</string>
     <string name="prevent_high">Impedir a mudança para o modo alto</string>
     <string name="auto_sensors_off_exp">Sensores automáticos desligados</string>
-    <string name="data_usage"><u>Data Usage</u></string>
-    <string name="acces_req">Enable Accessibility Service</string>
+    <string name="data_usage"><u>Uso de dados</u></string>
+    <string name="acces_req">Ativar serviço de acessibilidade</string>
     <string name="max_hz_for_psm">Hz máx para o modo de economia de energia</string>
 </resources>

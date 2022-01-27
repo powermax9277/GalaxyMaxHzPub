@@ -2,9 +2,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="lbl_enable_msm">मोशन स्मूथनेस इनेबल करें</string>
     <string name="buy_adfree">प्रीमियम खरीदें</string>
-<!--
-    <string name="info_expired">यह वीडियो देखें और एक अन्य %d दिनों के लिए सक्रिय त्वरित सेटिंग टाइल मिलता है।</string>
--->
     <string name="resolution">संकल्प और मोशन चिकनाई टॉगल</string>
     <string name="act">प्रीमियम सक्षम गर्नुहोस्|परीक्षण</string>
     <string name="max_hz">मैक्स हर्ट्ज</string>
@@ -133,7 +130,11 @@
     <string name="quick_doz_mod_mwi">मिनटों में प्रारंभिक रखरखाव विंडो अंतराल (0 = कोई रखरखाव विंडो नहीं)</string>
     <string name="brightness_threshold">अनुकूली के लिए न्यूनतम चमक</string>
     <string name="sensor_off_info">डिवाइस के अनलॉक होने तक स्क्रीन बंद होने पर डिवाइस सेंसर स्वचालित रूप से बंद हो जाते हैं। यह गति-प्रेरित वेक लॉक को कम करने में मदद करता है जो बैटरी को खत्म करते हैं।</string>
-    <string name="sensors_off_note">महत्वपूर्ण नोट: जबकि "SensorsOff" टाइल चालू है, डिवाइस के कैमरे और माइक्रोफ़ोन, अन्य सेंसरों के बीच, पहुंच योग्य नहीं हो जाते हैं। जांचें कि कॉल के दौरान आपकी आवाज सुनी जा सकती है या नहीं। यदि इसे नहीं सुना जा सकता है और डिवाइस लॉक होने पर आपको कॉल प्राप्त होती है, तो आप डिवाइस को अनलॉक करने के लिए "SensorsOff" टाइल को देर तक दबा सकते हैं और "SensorsOff" टाइल को बंद कर सकते हैं - रिसीव कॉल बटन दबाने के बाद।
+    <string name="sensors_off_note">
+        महत्वपूर्ण नोट: जबकि सेंसरऑफ़ टाइल चालू है, डिवाइस का कैमरा और माइक्रोफ़ोन और अन्य सेंसर पहुंच योग्य नहीं हैं।
+        प्रभावित कार्यों में फेस अनलॉक, वॉयस कॉल पर श्रव्यता (कुछ पर) और हिंज एंगल डिटेक्शन, अन्य शामिल हैं।
+        इसका उपयोग केवल तभी करें जब आप सेंसर को बंद करने के प्रभावों को स्पष्ट रूप से समझते हों।
+        \n\nAndroid 12 शुरू करने के लिए सुरक्षित लॉक स्क्रीन की आवश्यकता है; वैकल्पिक रूप से WRITE_SECURE_SETTINGS अनुमति पिछले Android संस्करण पर दी जा सकती है।
     </string>
     <string name="sensor_off_setup_info">यह पहले करें: सेटिंग > डेवलपर विकल्प > त्वरित सेटिंग डेवलपर टाइल में \'सेंसर बंद\' टाइल सक्षम करें।</string>
     <string name="dev_opt_setup_info">डेवलपर विकल्पों को सक्षम करने के लिए, सेटिंग > फ़ोन के बारे में > सॉफ़्टवेयर जानकारी पर जाएं और \'बिल्ड नंबर\' 7x पर टैप करें।</string>
@@ -146,7 +147,7 @@
     <string name="premium_features">प्रीमियम सुविधाएँ</string>
     <string name="prevent_high">उच्च मोड में स्विच करने से रोकें</string>
     <string name="auto_sensors_off_exp">ऑटो सेंसर बंद</string>
-    <string name="data_usage"><u>Data Usage</u></string>
-    <string name="acces_req">Enable Accessibility Service</string>
+    <string name="data_usage"><u>डेटा उपयोग में लाया गया</u></string>
+    <string name="acces_req">अभिगम्यता सेवा सक्षम करें</string>
     <string name="max_hz_for_psm">पावर सेविंग मोड के लिए अधिकतम हर्ट्ज</string>
 </resources>

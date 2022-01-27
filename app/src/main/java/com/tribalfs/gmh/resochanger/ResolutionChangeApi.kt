@@ -11,10 +11,7 @@ import java.lang.reflect.Method
 @SuppressLint("PrivateApi")
 class ResolutionChangeApi (val context: Context) {
 
-    companion object{// : Singleton<ResolutionChangeApiSt, Context>(::ResolutionChangeApiSt) {
-    private const val USER_ID = -3
-    }
-
+    private val userId = -3
 
     @SuppressLint("PrivateApi")
     fun setDisplaySizeDensity(displayId: Int, reso: Size, d: Int?): Boolean {
@@ -53,7 +50,7 @@ class ResolutionChangeApi (val context: Context) {
                         Int::class.javaPrimitiveType,
                         Int::class.javaPrimitiveType
                     )
-                        .invoke(wmService, displayId, d, USER_ID)
+                        .invoke(wmService, displayId, d, userId)
                 }
 
                 getDeclaredMethod(

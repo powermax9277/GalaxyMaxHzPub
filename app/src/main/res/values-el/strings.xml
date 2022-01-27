@@ -91,7 +91,7 @@
     <string name="edit">Επεξεργασία</string>
     <string name="quick_doz_mod">Γρήγορο Doze Mod</string>
     <string name="quick_mod_inf">Αυτή η λειτουργία θα θέσει γρήγορα τη συσκευή σε κατάσταση αναμονής γρηγορότερα όταν απενεργοποιήσετε την οθόνη για να βελτιώσετε τη χρήση της μπαταρίας σε κατάσταση αναμονής.</string>
-    <string name="adp_min_hz">Ελάχιστο Hz για Adaptive</string>
+    <string name="adp_min_hz">Adaptive Ελάχιστο Hz</string>
     <string name="enable_as_inf">Στο παράθυρο που εμφανίζεται, κάντε κλικ στο \"Εγκατεστημένες υπηρεσίες\" και, στη συνέχεια, ενεργοποιήστε την υπηρεσία \"Galaxy Max Hz\"</string>
     <string name="adp_delay">Προσαρμοστική καθυστέρηση ελάχιστου hz (δευτερόλεπτα)</string>
     <string name="cur_rr_h">Τρέχων Refresh Rate: %s Hz</string>
@@ -132,8 +132,8 @@
     <string name="brightness_threshold">Ελάχιστη φωτεινότητα για προσαρμοστική</string>
     <string name="sensor_off_info">જ્યારે ઉપકરણ અનલockedક ન થાય ત્યાં સુધી સ્ક્રીન બંધ હોય ત્યારે ઉપકરણ સેન્સર આપમેળે બંધ થાય છે. આ ગતિ-પ્રેરિત વેક તાળાઓને ઘટાડવામાં મદદ કરે છે જે બેટરીને ડ્રેઇન કરે છે.</string>
     <string name="sensors_off_note">Σημαντική σημείωση: Εάν ο πίνακας SensorsOff είναι ενεργοποιημένος, οι κάμερες και το μικρόφωνο της συσκευής δεν είναι προσβάσιμα, όπως και άλλοι αισθητήρες. Αυτό επηρεάζει το ξεκλείδωμα προσώπου και, σε ορισμένες συσκευές, την ένταση ήχου κλήσης. Ελέγξτε αν μπορείτε να ακουστείτε κατά τη διάρκεια της κλήσης ή όχι. Εάν είναι το τελευταίο και λαμβάνετε μια κλήση ενώ η συσκευή είναι κλειδωμένη, μπορείτε να πατήσετε παρατεταμένα τον πίνακα SensorsOff για να ξεκλειδώσετε τη συσκευή και να απενεργοποιήσετε τον πίνακα SensorsOff - αφού πατήσετε το κουμπί κλήσης.</string>
-    <string name="sensor_off_setup_info">Do this first: Enable \'Sensors Off\' tile in Settings > Developer options > Quick settings developer tiles. ></string>
-    <string name="dev_opt_setup_info">To enable Developer options, go to Settings > About phone > Software info and tap \'Build number\' 7x.</string>
+    <string name="sensor_off_setup_info">Κάντε αυτό πρώτα: Ενεργοποιήστε το πλακίδιο \'Sensors Off\' στις Ρυθμίσεις > Επιλογές προγραμματιστή > Γρήγορες ρυθμίσεις πλακίδια προγραμματιστή.</string>
+    <string name="dev_opt_setup_info">Για να ενεργοποιήσετε τις επιλογές προγραμματιστή, μεταβείτε στις Ρυθμίσεις > Σχετικά με το τηλέφωνο > Πληροφορίες λογισμικού και πατήστε \'Αριθμός κατασκευής\' 7x.</string>
     <string name="enable_write_settings">Ενεργοποιήστε την αλλαγή/εγγραφή δικαιωμάτων ρυθμίσεων συστήματος για το Galaxy Max Hz</string>
     <string name="as_desc">Αυτή η υπηρεσία απαιτείται για να λειτουργούν τα mods Galaxy Max Hz.</string>
     <string name="enable">Διακόπτης</string>
@@ -143,7 +143,7 @@
     <string name="allow_bg_act">Για τη σταθερή εκτέλεση αυτής της εφαρμογής, ενεργοποιήστε το \"Να επιτρέπεται η δραστηριότητα στο παρασκήνιο\" ή απενεργοποιήστε το \"Βελτιστοποίηση χρήσης μπαταρίας\".</string>
     <string name="prevent_high">Αποτρέψτε τη μετάβαση σε Υψηλή λειτουργία</string>
     <string name="auto_sensors_off_exp">Αυτόματοι αισθητήρες απενεργοποιημένοι</string>
-    <string name="data_usage"><u>Data Usage</u></string>
-    <string name="acces_req">Enable Accessibility Service</string>
+    <string name="data_usage"><u>Χρήση δεδομένων</u></string>
+    <string name="acces_req">Ενεργοποιήστε την υπηρεσία προσβασιμότητας</string>
     <string name="max_hz_for_psm">" Μέγιστο Hz για λειτουργία εξοικονόμησης ενέργειας"</string>
 </resources>

@@ -90,52 +90,18 @@ import com.tribalfs.gmh.helpers.CacheSettings.turnOffAutoSensorsOff
 import com.tribalfs.gmh.helpers.DozeUpdater.getDozeVal
 import com.tribalfs.gmh.helpers.DozeUpdater.mwInterval
 import com.tribalfs.gmh.helpers.DozeUpdater.updateDozValues
-import com.tribalfs.gmh.helpers.UtilsCommon.closestValue
-import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.BRIGHTNESS_RESOLUTION
-import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.DEVICE_IDLE_CONSTANTS
-import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.REFRESH_RATE_MODE_ALWAYS
-import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.REFRESH_RATE_MODE_SEAMLESS
-import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.REFRESH_RATE_MODE_STANDARD
-import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.STANDARD_REFRESH_RATE_HZ
-import com.tribalfs.gmh.helpers.UtilsSettingsIntents.autoSyncSettingsIntent
-import com.tribalfs.gmh.helpers.UtilsSettingsIntents.dataUsageSettingsIntent
-import com.tribalfs.gmh.helpers.UtilsSettingsIntents.dataUsageSettingsIntentOP
-import com.tribalfs.gmh.helpers.UtilsSettingsIntents.deviceInfoActivity
-import com.tribalfs.gmh.helpers.UtilsSettingsIntents.powerSavingModeSettingsIntent
+import com.tribalfs.gmh.helpers.UtilCommon.closestValue
+import com.tribalfs.gmh.helpers.UtilSettingsIntents.autoSyncSettingsIntent
+import com.tribalfs.gmh.helpers.UtilSettingsIntents.dataUsageSettingsIntent
+import com.tribalfs.gmh.helpers.UtilSettingsIntents.dataUsageSettingsIntentOP
+import com.tribalfs.gmh.helpers.UtilSettingsIntents.deviceInfoActivity
+import com.tribalfs.gmh.helpers.UtilSettingsIntents.powerSavingModeSettingsIntent
 import com.tribalfs.gmh.hertz.*
 import com.tribalfs.gmh.hertz.HzNotifGlobal.CHANNEL_ID_HZ
 import com.tribalfs.gmh.netspeed.*
-import com.tribalfs.gmh.netspeed.NetSpeedService.Companion.CHANNEL_ID_NET_SPEED
-import com.tribalfs.gmh.profiles.ProfilesObj
+import com.tribalfs.gmh.profiles.*
 import com.tribalfs.gmh.profiles.ProfilesObj.isProfilesLoaded
-import com.tribalfs.gmh.profiles.Syncer.Companion.JSON_RESPONSE_OK
-import com.tribalfs.gmh.profiles.Syncer.Companion.KEY_JSON_ACTIVATION_CODE
-import com.tribalfs.gmh.profiles.Syncer.Companion.KEY_JSON_RESULT
-import com.tribalfs.gmh.profiles.Syncer.Companion.KEY_JSON_SIGNATURE
-import com.tribalfs.gmh.profiles.Syncer.Companion.KEY_JSON_TRIAL_DAYS
-import com.tribalfs.gmh.profiles.Syncer.Companion.KEY_JSON_TRIAL_START_DATE
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsAct
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsAct.Companion.LIC_TYPE_ADFREE
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsAct.Companion.LIC_TYPE_INVALID_CODE
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsAct.Companion.LIC_TYPE_TRIAL_ACTIVE
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt.Companion.APPLY_SENSORS_OFF
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt.Companion.BIT_PER_SEC
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt.Companion.BYTE_PER_SEC
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt.Companion.DEEP_DOZ_OPT
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt.Companion.DISABLE_SYNC
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt.Companion.DOWNLOAD_SPEED
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt.Companion.FORCE_LOWEST_HZ_SO
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt.Companion.HZ_OVERLAY_ON
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt.Companion.IS_HZ_ON
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt.Companion.KEEP_RRM
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt.Companion.MIN_HZ_ADAPT
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt.Companion.NOT_ASKED
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt.Companion.NOT_USING
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt.Companion.PREF_MAX_REFRESH_RATE
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt.Companion.PREF_MAX_REFRESH_RATE_PSM
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt.Companion.QUICK_DOZE
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt.Companion.TOTAL_SPEED
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt.Companion.UPLOAD_SPEED
+import com.tribalfs.gmh.sharedprefs.*
 import com.tribalfs.gmh.viewmodels.MyViewModel
 import kotlinx.coroutines.*
 import java.lang.Integer.min
@@ -143,29 +109,22 @@ import java.util.*
 import kotlin.collections.HashSet
 import kotlin.coroutines.CoroutineContext
 
-//TODO(UI improvements)
+//private const val TAG = "MainActivity"
+internal const val GMH_WEB_APP ="https://script.google.com/macros/s/AKfycbzlRKh4-YXyXLufXZfDqAs1xJEJK7BF8zmhEDGDpbP1luu97trI/exec"
+//private const val REWARDED_INTERSTITIAL_ID = "ca-app-pub-3239920037413959/1863514308"
+internal const val ACTION_CHANGED_RES = "$APPLICATION_ID.ACTION_CHANGED_RES"
+private const val REQUEST_LATEST_UPDATE = 0x5
+private const val KEY_JSON_LIC_TYPE = "0x11"
+private const val KEY_JSON_PAYPAL_BUY_URL = "0x12"
+private const val KEY_JSON_HELP_URL = "0x24"
+
 @ExperimentalCoroutinesApi
 class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickHandler*/, CoroutineScope {
-
-    companion object {
-        //private const val TAG = "MainActivity"
-        internal const val GMH_WEB_APP ="https://script.google.com/macros/s/AKfycbzlRKh4-YXyXLufXZfDqAs1xJEJK7BF8zmhEDGDpbP1luu97trI/exec"
-        //private const val REWARDED_INTERSTITIAL_ID = "ca-app-pub-3239920037413959/1863514308"
-        internal const val ACTION_CHANGED_RES = "$APPLICATION_ID.ACTION_CHANGED_RES"
-        private const val REQUEST_LATEST_UPDATE = 0x5
-        private const val KEY_JSON_LIC_TYPE = "0x11"
-        private const val KEY_JSON_PAYPAL_BUY_URL = "0x12"
-        private const val KEY_JSON_HELP_URL = "0x24"
-        /*
-        private const val SYNCMODE_POST = "1"
-        private const val SYNCMODE_GET = "0"
-        */
-    }
 
     private val viewModel: MyViewModel by viewModels()
     private lateinit var mBinding: ActivityMainBinding
     private val mUtilsPrefsAct by lazy{ UtilsPrefsAct(this)}
-    private val mUtilsRefreshRate by lazy{UtilsRefreshRateSt.instance(applicationContext)}
+    private val mUtilsRefreshRate by lazy{UtilRefreshRateSt.instance(applicationContext)}
     private val mNetspeedService by lazy {NetSpeedServiceHelperStn.instance(applicationContext)}
     private val hzOverlaySizes = listOf(10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40)
     private val hzAdaptiveDelays = listOf(2, 3, 4, 5, 6, 7, 8, 9, 10)
@@ -391,7 +350,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
     private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult())
     { result: ActivityResult ->
         if (result.resultCode == Activity.RESULT_OK) {
-            if (UtilsPermSt.instance(applicationContext).hasOverlayPerm()) {
+            if (UtilPermSt.instance(applicationContext).hasOverlayPerm()) {
                 HzServiceHelperStn.instance(applicationContext).switchOverlay(true)
                 mBinding.hideHzOverlaySettings = false
                 mBinding.chOverlayHz.isChecked = true
@@ -516,7 +475,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                             return
                         }
 
-                        when (UtilNotificationBarSt.instance(applicationContext).checkQsTileInPlace()){
+                        when (UtilNotifBarSt.instance(applicationContext).checkQsTileInPlace()){
                             true -> {
                                 mUtilsPrefsGmh.gmhPrefSensorsOff = checked
                                 return
@@ -529,7 +488,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                                     R.string.so_location_info,
                                     Snackbar.LENGTH_INDEFINITE,
                                     android.R.string.ok
-                                ) {UtilNotificationBarSt.instance(applicationContext).expandNotificationBar()}
+                                ) {UtilNotifBarSt.instance(applicationContext).expandNotificationBar()}
                                 return
                             }
 
@@ -604,7 +563,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
 
             mBinding.chOverlayHz.id -> {
                 (v as Chip)
-                if (UtilsPermSt.instance(applicationContext).hasOverlayPerm()) {
+                if (UtilPermSt.instance(applicationContext).hasOverlayPerm()) {
                     HzServiceHelperStn.instance(applicationContext).switchOverlay(v.isChecked)
                     mBinding.hideHzOverlaySettings = !v.isChecked
                 } else {
@@ -743,7 +702,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                         if (mBinding.hasWssPerm == false) mBinding.hasWssPerm = true
                     }
                 } else {
-                    if (!UtilsPermSt.instance(applicationContext).hasWriteSecurePerm()) {
+                    if (!UtilPermSt.instance(applicationContext).hasWriteSecurePerm()) {
                         InfoDialog.newInstance(ADB_PERM_INFO).show(supportFragmentManager, null)
                     } else {
                         hasWriteSecureSetPerm = true
@@ -853,7 +812,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
 
         if (savedInstanceState == null){
             oneTimeAutoChecks()
-            if (isFakeAdaptive.get()!! && !UtilsPermSt.instance(applicationContext).hasOverlayPerm()) {
+            if (isFakeAdaptive.get()!! && !UtilPermSt.instance(applicationContext).hasOverlayPerm()) {
                 showSbMsg(
                     getString(R.string.aot_perm_inf),
                     Snackbar.LENGTH_INDEFINITE,
@@ -1044,7 +1003,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
         }
 
         if (SDK_INT >= VERSION_CODES.M) {
-            gmhAccessInstance?.checkAutoSensorsOff(true, true)
+            gmhAccessInstance?.checkAutoSensorsOff(switchOn = true, screenOffOnly = true)
             /*applicationContext.startService(
                 Intent(applicationContext, GalaxyMaxHzAccess::class.java).apply {
                     putExtra(SETUP_NETWORK_CALLBACK, true)
@@ -1259,7 +1218,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
         }
 
         if (isSwOn && showOverlayHz == true && gmhAccessInstance == null) {
-            if (!UtilsPermSt.instance(applicationContext).hasOverlayPerm()) {
+            if (!UtilPermSt.instance(applicationContext).hasOverlayPerm()) {
                 showSbMsg(
                     getString(R.string.aot_perm_inf),
                     Snackbar.LENGTH_INDEFINITE,
@@ -1523,9 +1482,9 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
             override fun onStopTrackingTouch(seekBar: SeekBar) {
                 seekBar.progress.let {prog ->
                     seekBar.thumb = getThumb(prog)
-                    if (!UtilsPermSt.instance(applicationContext).hasWriteSystemPerm()) {
+                    if (!UtilPermSt.instance(applicationContext).hasWriteSystemPerm()) {
                         seekBar.progress = oldProg
-                        UtilsPermSt.instance(applicationContext).requestWriteSettings()
+                        UtilPermSt.instance(applicationContext).requestWriteSettings()
                         return
                     }
                     mUtilsRefreshRate.mUtilsPrefsGmh.hzPrefMaxRefreshRate = prog
@@ -1593,8 +1552,8 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                 }
 
                 override fun onStartTrackingTouch(seekBar: SeekBar) {
-                    if (!UtilsPermSt.instance(applicationContext).hasWriteSystemPerm()) {
-                        UtilsPermSt.instance(applicationContext).requestWriteSettings()
+                    if (!UtilPermSt.instance(applicationContext).hasWriteSystemPerm()) {
+                        UtilPermSt.instance(applicationContext).requestWriteSettings()
                         return
                     }
                 }
@@ -1625,7 +1584,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                     mUtilsRefreshRate.applyMinHz()
 
                     if (isFakeAdaptive.get() == true) {
-                        (UtilsPermSt.instance(applicationContext)
+                        (UtilPermSt.instance(applicationContext)
                             .hasOverlayPerm()).let { hasPerm ->
                                 if (!hasPerm) {
                                     showSbMsg(
@@ -1689,9 +1648,9 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
             override fun onStopTrackingTouch(seekBar: SeekBar) {
                 seekBar.progress.let {prog ->
                     seekBar.thumb = getThumb(prog)
-                    if (!UtilsPermSt.instance(applicationContext).hasWriteSystemPerm()) {
+                    if (!UtilPermSt.instance(applicationContext).hasWriteSystemPerm()) {
                         seekBar.progress = oldProg
-                        UtilsPermSt.instance(applicationContext).requestWriteSettings()
+                        UtilPermSt.instance(applicationContext).requestWriteSettings()
                         return
                     }
                     mUtilsRefreshRate.mUtilsPrefsGmh.hzPrefMaxRefreshRatePsm = prog
@@ -2038,11 +1997,11 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
 
     private fun updateWssPerm() {
         //Updater
-        UtilsPermSt.instance(applicationContext).hasWriteSecurePerm().let {
+        UtilPermSt.instance(applicationContext).hasWriteSecurePerm().let {
             mBinding.hasWssPerm = it
             hasWriteSecureSetPerm = it
         }
-        hasWriteSystemSetPerm = UtilsPermSt.instance(applicationContext).hasWriteSystemPerm()
+        hasWriteSystemSetPerm = UtilPermSt.instance(applicationContext).hasWriteSystemPerm()
     }
 
 

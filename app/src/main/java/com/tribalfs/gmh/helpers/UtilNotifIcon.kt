@@ -7,16 +7,14 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import kotlin.math.min
 
+private const val ICON_SIZE = 96f
+private const val TOP_TEXT_SIZE = ICON_SIZE * 0.75f
+private const val TOP_TEXT_BASE = ICON_SIZE * 0.52f
+private const val BOTTOM_TEXT_SIZE = ICON_SIZE * 0.52f
+private const val BOTTOM_TEXT_BASE = ICON_SIZE * 0.9375f
+
 
 class UtilNotifIcon{
-
-    companion object {
-        private const val ICON_SIZE = 96f
-        private const val TOP_TEXT_SIZE = ICON_SIZE * 0.75f
-        private const val TOP_TEXT_BASE = ICON_SIZE * 0.52f
-        private const val BOTTOM_TEXT_SIZE = ICON_SIZE * 0.52f
-        private const val BOTTOM_TEXT_BASE = ICON_SIZE * 0.9375f
-    }
 
     private val mIconTopText = Paint().apply{
         color = Color.WHITE

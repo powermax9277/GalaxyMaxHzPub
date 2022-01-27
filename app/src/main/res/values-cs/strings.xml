@@ -96,7 +96,7 @@
     <string name="edit">Upravit</string>
     <string name="quick_doz_mod">Rychlé Doze Mod</string>
     <string name="quick_mod_inf">Tato funkce přepne zařízení do režimu úspory energie a vstoupí do doze režim rychleji při vypnutí obrazovky, aby se zlepšilo využití pohotovostní baterie.</string>
-    <string name="adp_min_hz">Min Hz pro Adaptivní</string>
+    <string name="adp_min_hz">Adaptivní Min Hz</string>
     <string name="enable_as_inf">V okně, které se zobrazí, klikněte na „Instalované služby“ a poté aktivujte službu „Galaxy Max Hz“</string>
     <string name="adp_delay">Adaptivní zpoždění nízké Hz (sekundy)</string>
     <string name="cur_rr_h">Aktuální obnovovací frekvence: %s Hz</string>

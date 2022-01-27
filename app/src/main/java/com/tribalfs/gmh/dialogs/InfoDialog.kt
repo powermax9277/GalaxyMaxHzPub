@@ -11,9 +11,9 @@ import com.tribalfs.gmh.BuildConfig.APPLICATION_ID
 import com.tribalfs.gmh.MyApplication.Companion.applicationName
 import com.tribalfs.gmh.R
 import com.tribalfs.gmh.helpers.CacheSettings.hasWriteSecureSetPerm
-import com.tribalfs.gmh.helpers.UtilNotificationBarSt
-import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt
-import com.tribalfs.gmh.helpers.UtilsSettingsIntents
+import com.tribalfs.gmh.helpers.UtilNotifBarSt
+import com.tribalfs.gmh.helpers.UtilDeviceInfoSt
+import com.tribalfs.gmh.helpers.UtilSettingsIntents
 
 const val ADB_SETUP_LINK = "https://github.com/tribalfs/GalaxyMaxHzPub/blob/main/README.md"
 
@@ -78,9 +78,9 @@ class InfoDialog : MyDialogFragment(){
             }
             CHANGE_RES_INFO ->{
                 listOf(getString(R.string.chng_res), if (hasWriteSecureSetPerm) {
-                    getString(R.string.chng_res_qs, UtilsDeviceInfoSt.instance(requireContext().applicationContext).getDisplayResoStr("x"))
+                    getString(R.string.chng_res_qs, UtilDeviceInfoSt.instance(requireContext().applicationContext).getDisplayResoStr("x"))
                 } else {
-                    getString(R.string.chng_res_stng, UtilsDeviceInfoSt.instance(requireContext().applicationContext).getDisplayResoStr("x"))
+                    getString(R.string.chng_res_stng, UtilDeviceInfoSt.instance(requireContext().applicationContext).getDisplayResoStr("x"))
                 },getString(android.R.string.ok), null)
             }
             ADB_PERM_INFO ->{
@@ -107,9 +107,9 @@ class InfoDialog : MyDialogFragment(){
             CHANGE_RES_INFO -> {
                 if (hasWriteSecureSetPerm) {
                     //getResolutionChoiceDialog(context).show()
-                    UtilNotificationBarSt.instance(requireContext().applicationContext).expandNotificationBar()
+                    UtilNotifBarSt.instance(requireContext().applicationContext).expandNotificationBar()
                 } else {
-                    val i = UtilsSettingsIntents.displaySettingsIntent
+                    val i = UtilSettingsIntents.displaySettingsIntent
                     if (context !is Activity) {
                         i.flags = Intent.FLAG_ACTIVITY_NEW_TASK
                     }

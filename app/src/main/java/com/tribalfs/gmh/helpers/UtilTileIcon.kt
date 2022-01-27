@@ -7,17 +7,15 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import kotlin.math.min
 
+private const val ICON_SIZE = 100f
+private const val TOP_TEXT_SIZE_LIMIT = ICON_SIZE * 0.55f//.60f
+private const val TOP_TEXT_BASE = ICON_SIZE * 0.80f
+private const val BOTTOM_TEXT_SIZE = ICON_SIZE * 0.25f
+private const val BOTTOM_TEXT_BASE = ICON_SIZE * 0.95f//92f
+
 
 @RequiresApi(Build.VERSION_CODES.M)
 class UtilTileIcon{
-
-    companion object {
-        private const val ICON_SIZE = 100f
-        private const val TOP_TEXT_SIZE_LIMIT = ICON_SIZE * 0.55f//.60f
-        private const val TOP_TEXT_BASE = ICON_SIZE * 0.80f
-        private const val BOTTOM_TEXT_SIZE = ICON_SIZE * 0.25f
-        private const val BOTTOM_TEXT_BASE = ICON_SIZE * 0.95f//92f
-    }
 
     private val mIconTopText = Paint().apply {
         color = Color.WHITE

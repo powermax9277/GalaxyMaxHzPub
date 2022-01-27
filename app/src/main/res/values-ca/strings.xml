@@ -98,7 +98,7 @@
     <string name="edit">Edita</string>
     <string name="quick_doz_mod">Ràpid Doze Mod</string>
     <string name="quick_mod_inf">Accediu ràpidament al mode de doze quan la pantalla està apagada per millorar el consum de bateria en espera.</string>
-    <string name="adp_min_hz">Hz mín per a Adaptive</string>
+    <string name="adp_min_hz">Adaptive Hz mín</string>
     <string name="enable_as_inf">Feu clic a \"Serveis instal·lats\" a la finestra que apareix i, a continuació, activeu el servei \"Galaxy Max Hz\"</string>
     <string name="adp_delay">Adaptive min Hz delay(seconds)</string>
     <string name="cur_rr_h">Current Refresh Rate: %s Hz</string>

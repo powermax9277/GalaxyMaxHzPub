@@ -9,7 +9,6 @@ import android.content.IntentFilter
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
-import android.util.Log
 import androidx.core.content.FileProvider
 import com.tribalfs.appupdater.interfaces.DownloadCompleteCallback
 import java.io.File
@@ -25,7 +24,7 @@ class UpdateDownloader(
 ) {
 
     companion object {
-        private const val TAG = "UpdateDownloader"
+       // private const val TAG = "UpdateDownloader"
         private const val FILE_NAME = "update.apk"
         private const val FILE_BASE_PATH = "file://"
         private const val MIME_TYPE = "application/vnd.android.package-archive"
@@ -44,13 +43,13 @@ class UpdateDownloader(
         if (file.isFile) {
             //check the version code of the file
             val fileVersionCode = context.packageManager.getPackageArchiveInfo(destination, 0)?.longVersionCode?.toInt()
-            Log.d(TAG, "Apk exists - version: $fileVersionCode Server version: $versionCode")
+            //Log.d(TAG, "Apk exists - version: $fileVersionCode Server version: $versionCode")
             if (versionCode == fileVersionCode){
                 downloadCompleteCallback.complete(getInstallIntent(destination, uri))
                 return
             } else {
                 file.delete()
-                Log.d(TAG, "Apk from old version deleted")
+                //Log.d(TAG, "Apk from old version deleted")
             }
         }
 

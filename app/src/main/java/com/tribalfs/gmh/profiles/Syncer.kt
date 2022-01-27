@@ -11,12 +11,8 @@ import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.tribalfs.gmh.BuildConfig
-import com.tribalfs.gmh.MainActivity.Companion.GMH_WEB_APP
-import com.tribalfs.gmh.helpers.PackageInfo
-import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt
-import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.GLOBAL
-import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.SECURE
-import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt.Companion.SYSTEM
+import com.tribalfs.gmh.GMH_WEB_APP
+import com.tribalfs.gmh.helpers.*
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt
 import kotlinx.coroutines.*
 import org.json.JSONObject
@@ -24,47 +20,43 @@ import java.util.*
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
+private const val TAG = "ProfilesSync"
+private const val REQUEST_DISPLAY_MODES_FETCH = 0x3
+private const val REQUEST_DISPLAY_MODES_POST = 0x4
+internal const val KEY_JSON_REFRESH_RATES_PROFILE = "0x13"
+internal const val KEY_JSON_ADAPTIVES = "0x14"
+private const val KEY_JSON_ONEUI_VERSION = "0x15"
+private const val KEY_JSON_APP_VERSION_CODE = "0x17"
+
+internal const val REQUEST_BUY_LINK = 0x0
+//internal const val REQUEST_SYNC_INS_DATE = 0x1
+internal const val REQUEST_VERIFY_LICENSE = 0x2
+internal const val JSON_RESPONSE_OK = 0x10
+internal const val KEY_JSON_RESULT = "0x0"
+internal const val KEY_JSON_DEVICE_ID = "0x2"
+internal const val KEY_JSON_MODEL_NUMBER = "0x3"
+internal const val KEY_JSON_ACTIVATION_CODE = "0x4"
+internal const val KEY_JSON_SIGNATURE = "0x5"
+internal const val KEY_JSON_TRIAL = "0x16"
+// internal const val KEY_JSON_INS_DATE_SYNCMODE = "0x6"
+//internal const val KEY_JSON_INS_DATE = "0x7"
+//internal const val KEY_JSON_EXPIRY_DAYS = "0x8"
+internal const val KEY_JSON_TRIAL_START_DATE = "0x9"
+internal const val KEY_JSON_TRIAL_DAYS = "0x10"
+private const val REQUEST_SETTINGS_LIST_POST = 0x12
+private const val KEY_JSON_SECURE_LIST = "0x6"
+private const val KEY_JSON_SYSTEM_LIST = "0x15"
+private const val KEY_JSON_GLOBAL_LIST = "0x17"
+private const val REQUEST_HELP_URL = 0x15
 
 @SuppressLint("HardwareIds")
 internal class Syncer(context: Context) {
 
     //private val mUtilsPrefsAct by lazy { UtilsPrefsAct(context) }
     private val appCtx = context.applicationContext
-    private val mUtilsDeviceInfo by lazy { UtilsDeviceInfoSt.instance(appCtx) }
+    private val mUtilsDeviceInfo by lazy { UtilDeviceInfoSt.instance(appCtx) }
     private val mUtilsPrefsGmh by lazy { UtilsPrefsGmhSt.instance(appCtx) }
 
-
-    companion object{
-        private const val TAG = "ProfilesSync"
-        private const val REQUEST_DISPLAY_MODES_FETCH = 0x3
-        private const val REQUEST_DISPLAY_MODES_POST = 0x4
-        internal const val KEY_JSON_REFRESH_RATES_PROFILE = "0x13"
-        internal const val KEY_JSON_ADAPTIVES = "0x14"
-        private const val KEY_JSON_ONEUI_VERSION = "0x15"
-        private const val KEY_JSON_APP_VERSION_CODE = "0x17"
-
-        internal const val REQUEST_BUY_LINK = 0x0
-        //internal const val REQUEST_SYNC_INS_DATE = 0x1
-        internal const val REQUEST_VERIFY_LICENSE = 0x2
-        internal const val JSON_RESPONSE_OK = 0x10
-        internal const val KEY_JSON_RESULT = "0x0"
-        internal const val KEY_JSON_DEVICE_ID = "0x2"
-        internal const val KEY_JSON_MODEL_NUMBER = "0x3"
-        internal const val KEY_JSON_ACTIVATION_CODE = "0x4"
-        internal const val KEY_JSON_SIGNATURE = "0x5"
-        internal const val KEY_JSON_TRIAL = "0x16"
-       // internal const val KEY_JSON_INS_DATE_SYNCMODE = "0x6"
-        //internal const val KEY_JSON_INS_DATE = "0x7"
-        //internal const val KEY_JSON_EXPIRY_DAYS = "0x8"
-        internal const val KEY_JSON_TRIAL_START_DATE = "0x9"
-        internal const val KEY_JSON_TRIAL_DAYS = "0x10"
-
-        private const val REQUEST_SETTINGS_LIST_POST = 0x12
-        private const val KEY_JSON_SECURE_LIST = "0x6"
-        private const val KEY_JSON_SYSTEM_LIST = "0x15"
-        private const val KEY_JSON_GLOBAL_LIST = "0x17"
-        private const val REQUEST_HELP_URL = 0x15
-    }
 
     private val deviceId by lazy {
         Settings.Secure.getString(appCtx.contentResolver, ANDROID_ID)

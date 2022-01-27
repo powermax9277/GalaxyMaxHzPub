@@ -93,9 +93,9 @@
     <string name="edit">Editar</string>
     <string name="quick_doz_mod">Rápido Doze Mod</string>
     <string name="quick_mod_inf">Esta función pondrá rápidamente el dispositivo en modo dormido al apagar la pantalla para mejorar el uso de la batería en el modo de espera.</string>
-    <string name="adp_min_hz">Hz mínimo para Adaptativo</string>
+    <string name="adp_min_hz">Adaptativo Hz mínimo</string>
     <string name="enable_as_inf">En la ventana que aparece, haga clic en \"Servicios instalados\" y luego habilite el servicio \"Galaxy Max Hz\"</string>
-    <string name="adp_delay">Retraso adaptativo min Hz (segundos)</string>
+    <string name="adp_delay">Adaptativo Retardo mínimo de Hz (segundos)</string>
     <string name="cur_rr_h">Frecuencia de actualización actual: %s Hz</string>
     <string name="show_ns_card">Mostrar herramienta Netspeed</string>
     <string name="lbl_rrm">Refresh Rate Mods</string>
@@ -147,7 +147,7 @@
     <string name="allow_bg_act">Para el funcionamiento estable de esta aplicación, habilite \'Permitir actividad en segundo plano\' o deshabilite \'Optimizar el uso de la batería\'.</string>
     <string name="prevent_high">Evitar el cambio al modo alto</string>
     <string name="auto_sensors_off_exp">Sensores automáticos desactivados</string>
-    <string name="data_usage"><u>Data Usage</u></string>
-    <string name="acces_req">Enable Accessibility Service</string>
+    <string name="data_usage"><u>Uso de datos</u></string>
+    <string name="acces_req">Habilitar servicio de accesibilidad</string>
     <string name="max_hz_for_psm">Hz máximo para el modo de ahorro de energía</string>
 </resources>

@@ -2,13 +2,10 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="lbl_enable_msm">Activer la fluidité du mouvement</string>
     <string name="buy_adfree">Acheter Premium</string>
-    <!--<string name="info_expired">Regardez cette vidéo et obtenez des vignettes de réglage rapide
-        activées pour une autre %d days.</string>-->
     <string name="resolution">Bascule résolution et fluidité</string>
     <string name="act">Activer Premium|Trial</string>
-    <string name="max_hz">Max Hz</string>
+    <string name="max_hz">Hz Max.</string>
     <string name="feat_n_a" tools:keep="@string/feat_n_a">Modifier la résolution non prise en charge</string>
-    <!--    <string name="qs_active">Les vignettes de réglages rapides ont bien été activées</string>-->
     <string name="min_hz_for_toggle">Min. Hz pour le toggle</string>
     <string name="adaptive">Adaptatif</string>
     <string name="high">Haut</string>
@@ -50,10 +47,6 @@
     </string>
     <string name="input_ac_inf">Si vous perdez votre prime suite à la réinitialisation de cet appareil, vous pouvez le réactiver en saisissant le code d\'activation envoyé à votre adresse e-mail.
     </string>
-<!--    <string name="failed_show_ad">Échec de la diffusion de l\'annonce vidéo. Veuillez réessayer.</string>-->
-<!--    <string name="failed_load_ad">-->
-<!--        Échec du chargement de l\'annonce vidéo. Veuillez vérifier Internet et réessayer.-->
-<!--    </string>-->
     <string name="show_ns">Afficher l\'indicateur de vitesse Internet</string>
     <string name="combined">Combiné</string>
     <string name="upload">En amont</string>
@@ -77,14 +70,10 @@
     <string name="psm_on">Le mode d\'économie d\'énergie est activé</string>
     <string name="chng_res">Changer la résolution</string>
     <string name="open_settings">Ouvrir les paramètres</string>
-<!--    <string name="qst_exp">Vignettes de paramètres rapides expirées</string>-->
-<!--    <string name="ad_starting_in">"Vidéo commençant dans "</string>-->
-<!--    <string name="no_thanks">Non merci!</string>-->
     <string name="chng_res_failed">Échec de la modification de la résolution.</string>
     <string name="one_res_def">Une seule résolution définie dans le système.</string>
     <string name="rrp_not_loaded">Les taux de rafraîchissement disponibles ne sont pas encore chargés. Réessayer.</string>
     <string name="sot_no_perm">La permission d’afficher en haut n’est pas accordée!</string>
-<!--    <string name="error_opening_settings">Erreur lors de l’ouverture des paramètres.</string>-->
     <string name="cie">Erreur! Veuillez vérifier la connexion Internet et réessayer.</string>
     <string name="aca">Code d’activation invalide.</string>
     <string name="afa">Premium activé avec succès!</string>
@@ -93,14 +82,13 @@
         <item quantity="one">Essai Premium activé: %d jour restant</item>
         <item quantity="other">Essai Premium activé: %d jours restants</item>
     </plurals>
-    <!--<string name="eta">Erreur lors de l\'activation de l\'essai sans publicité!</string>-->
     <string name="nlh">Aucune licence premium trouvée pour cet appareil: %s</string>
     <string name="edit">Éditer</string>
     <string name="quick_doz_mod">Rapide doze mod</string>
     <string name="quick_mod_inf">Cette fonction mettra rapidement l\'appareil en mode veille lors de la mise hors tension de l\'écran pour améliorer l\'utilisation de la batterie en veille.</string>
-    <string name="adp_min_hz">Hz min. pour Adaptatif</string>
+    <string name="adp_min_hz">Hz min. adaptatif</string>
     <string name="enable_as_inf">Dans la fenêtre qui apparaît, cliquez sur «Services installés» puis activez le service «Galaxy Max Hz»</string>
-    <string name="adp_delay">Retard adaptatif de min Hz (secondes)</string>
+    <string name="adp_delay">Retard de min. Hz (secondes)</string>
     <string name="cur_rr_h">Taux de rafraîchissement actuel: %s Hz</string>
     <string name="show_ns_card">Afficher l\'outil netspeed</string>
     <string name="lbl_rrm">Mods de taux de rafraîchissement</string>
@@ -143,12 +131,17 @@
     <string name="quick_doz_mod_mwi">Intervalle de la fenêtre de maintenance initiale en minutes (0 = aucune fenêtre de maintenance)</string>
     <string name="brightness_threshold">Luminosité minimale pour adaptatif</string>
     <string name="sensor_off_info">Les capteurs de l\'appareil sont automatiquement désactivés lorsque l\'écran est éteint jusqu\'à ce que l\'appareil soit déverrouillé. Cela aide à minimiser les wakelocks induits par le mouvement qui épuisent la batterie.</string>
-    <string name="sensors_off_note">Remarque importante: lorsque la vignette SensorsOff est activée, la ou les caméras et le microphone de l\'appareil, entre autres capteurs, deviennent inaccessibles. Cela affecte le déverrouillage du visage et, sur certains appareils, l\'audibilité pendant les appels. Vérifiez si vous êtes audible pendant l\'appel ou non. Si ce n\'est pas audible et que vous recevez un appel alors que l\'appareil est verrouillé, vous pouvez appuyer longuement sur la vignette SensorsOff pour déverrouiller l\'appareil et désactiver la vignette SensorsOff - après avoir appuyé sur le bouton de réception d\'appel</string>
-
-    <string name="sensor_off_setup_info">Do this first: Enable \'Sensors Off\' tile in Settings > Developer options > Quick settings developer tiles. ></string>
-    <string name="dev_opt_setup_info">To enable Developer options, go to Settings > About phone > Software info and tap \'Build number\' 7x.</string>
-    <string name="enable_write_settings">Enable Galaxy Max Hz change/write system settings permission.</string>
-    <string name="as_desc">This service is required for galaxy max hz mods to work.</string>
+    <string name="sensors_off_note">
+        Remarque importante: lorsque la vignette SensorsOff est activée, la caméra, le microphone et les autres capteurs de l\'appareil sont inaccessibles.
+        Les fonctionnalités concernées incluent le déverrouillage du visage, l\'audibilité des appels vocaux (sur certains) et la détection de l\'angle de la charnière, entre autres.
+        Utilisez-le uniquement si vous comprenez clairement les effets de la désactivation des capteurs.
+        \n\nUn écran de verrouillage sécurisé est requis à partir d\'Android 12; alternativement,
+        l\'autorisation WRITE_SECURE_SETTINGS peut être accordée sur la version précédente d\'Android.
+    </string>
+    <string name="sensor_off_setup_info">Commencez par ceci: activez la vignette \'Capteurs désactivés\' dans Paramètres > Options pour les développeurs > Vignettes de développeur de paramètres rapides.</string>
+    <string name="dev_opt_setup_info">Pour activer les options du développeur, accédez à Paramètres > À propos du téléphone > Informations sur le logiciel et appuyez sur \'Numéro de build\' 7x.</string>
+    <string name="enable_write_settings">Activez l\'autorisation de modification des paramètres système du Galaxy Max Hz.</string>
+    <string name="as_desc">Ce service est requis pour que les mods galaxy max hz fonctionnent.</string>
     <string name="enable">Changer</string>
     <string name="premium_features">Des fonctionnalités premium</string>
     <string name="allow">Permettre</string>
@@ -156,7 +149,7 @@
     <string name="allow_bg_act">Pour un fonctionnement stable de cette application, activez \'Autoriser l\'activité en arrière-plan\' ou désactivez \'Optimiser l\'utilisation de la batterie\'.</string>
     <string name="prevent_high">Empêcher le passage en mode haut</string>
     <string name="auto_sensors_off_exp">Auto SENSORS OFF</string>
-    <string name="data_usage"><u>Data Usage</u></string>
-    <string name="acces_req">Enable Accessibility Service</string>
-    <string name="max_hz_for_psm">" Hz max pour le mode d'économie d'énergie"</string>
+    <string name="data_usage"><u>L\'utilisation de données</u></string>
+    <string name="acces_req">Activer le service d\'accessibilité</string>
+    <string name="max_hz_for_psm">Hz max pour le mode d\'économie d\'énergie</string>
 </resources>

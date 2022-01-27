@@ -15,6 +15,7 @@ import com.tribalfs.appupdater.utils.AppUtils.getAppInstalledVersion
 import com.tribalfs.appupdater.utils.AppUtils.getAppInstalledVersionCode
 import com.tribalfs.appupdater.utils.AppUtils.getAppName
 import com.tribalfs.appupdater.utils.AppUtils.isUpdateAvailable
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 private const val TAG = "AppUpdaterLite"
 
@@ -42,6 +43,7 @@ class AppUpdaterLite(private val context: Context) {
     }
 
 
+    @ExperimentalCoroutinesApi
     fun start() {
         Log.d(TAG, "Start check update called")
         if (!isForce && !updaterPrefs.checkAllowUpdater()) {

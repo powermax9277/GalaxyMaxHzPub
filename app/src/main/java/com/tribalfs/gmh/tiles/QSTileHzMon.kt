@@ -8,7 +8,7 @@ import android.service.quicksettings.TileService
 import androidx.annotation.RequiresApi
 import com.tribalfs.gmh.GalaxyMaxHzAccess.Companion.gmhAccessInstance
 import com.tribalfs.gmh.dialogs.QSDialogs
-import com.tribalfs.gmh.helpers.UtilsPermSt
+import com.tribalfs.gmh.helpers.UtilPermSt
 import com.tribalfs.gmh.hertz.HzServiceHelperStn
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -39,9 +39,9 @@ class QSTileHzMon : TileService() {
              startActivityAndCollapse(i)
 
          }else {*/
-        if (gmhAccessInstance == null && !UtilsPermSt.instance(applicationContext).hasOverlayPerm()
-            && UtilsPrefsGmhSt.instance(applicationContext).gmhPrefHzOverlayIsOn)
-        {
+        if (gmhAccessInstance == null && !UtilPermSt.instance(applicationContext).hasOverlayPerm()
+            && UtilsPrefsGmhSt.instance(applicationContext).gmhPrefHzOverlayIsOn
+        ) {
             val mDialog = QSDialogs.getAppearOnTopDialog(this.applicationContext)
             showDialog(mDialog)
             return

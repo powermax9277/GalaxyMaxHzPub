@@ -59,9 +59,6 @@ import com.tribalfs.gmh.hertz.*
 import com.tribalfs.gmh.hertz.HzNotifGlobal.CHANNEL_ID_HZ
 import com.tribalfs.gmh.hertz.HzNotifGlobal.NOTIFICATION_ID_HZ
 import com.tribalfs.gmh.hertz.HzNotifGlobal.hznotificationBuilder
-import com.tribalfs.gmh.hertz.HzService.Companion.PAUSE
-import com.tribalfs.gmh.hertz.HzService.Companion.PLAYING
-import com.tribalfs.gmh.hertz.HzService.Companion.STOPPED
 import com.tribalfs.gmh.netspeed.NetSpeedServiceHelperStn
 import com.tribalfs.gmh.profiles.ProfilesObj.isProfilesLoaded
 import com.tribalfs.gmh.receivers.GmhBroadcastReceivers
@@ -72,24 +69,21 @@ import java.lang.Runnable
 import java.util.*
 import kotlin.coroutines.CoroutineContext
 
+internal const val PLAYING = 1
+internal const val STOPPED = -1
+internal const val PAUSE = 0
+private const val MAX_TRY = 8
+//private const val TAG = "GalaxyMaxHzAccess"
+// var isGMHBroadcastReceiverRegistered = false
+// private val SENSORS_OFF_DELAY = if (BuildConfig.DEBUG) 5000L else 15000L
 
 @ExperimentalCoroutinesApi
 @RequiresApi(Build.VERSION_CODES.M)
 class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
     companion object{
-        //private const val TAG = "GalaxyMaxHzAccess"
-        // var isGMHBroadcastReceiverRegistered = false
-        // private val SENSORS_OFF_DELAY = if (BuildConfig.DEBUG) 5000L else 15000L
-        private const val MAX_TRY = 8
-        internal const val SETUP_ADAPTIVE = "sa"
-        internal const val SETUP_NETWORK_CALLBACK = "snc"
-        internal const val SWITCH_AUTO_SENSORS = "cas"
-        internal const val SCREEN_OFF_ONLY = "soo"
-        internal const val SWITCH_HZ = "hsw"
         internal var gmhAccessInstance: GalaxyMaxHzAccess? = null
     }
-
 
     private val job = SupervisorJob()
     override val coroutineContext: CoroutineContext
@@ -99,8 +93,8 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     private val mKeyguardManager by lazy {applicationContext.getSystemService(KEYGUARD_SERVICE) as KeyguardManager}
     private val handler by lazy {Handler(Looper.getMainLooper())}
     private val mCameraManager by lazy {getSystemService(CAMERA_SERVICE) as CameraManager}
-    private val mUtilsRefreshRate by lazy {UtilsRefreshRateSt.instance(applicationContext)}
-    private val mNotifBar by lazy {UtilNotificationBarSt.instance(applicationContext)}
+    private val mUtilsRefreshRate by lazy {UtilRefreshRateSt.instance(applicationContext)}
+    private val mNotifBar by lazy {UtilNotifBarSt.instance(applicationContext)}
     private var triesA: Int = 0
     private var triesB: Int = 0
     private var isGameOpen = false
@@ -260,7 +254,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                             if (contDesc != null && it.isClickable) {
                                 try {
                                     it.performAction(ACTION_CLICK)
-                                    UtilNotificationBarSt.instance(applicationContext)
+                                    UtilNotifBarSt.instance(applicationContext)
                                         .collapseNotificationBar()
                                     return@launch
                                 } catch (_: java.lang.Exception) { }
@@ -304,7 +298,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                                 if ((sensorOnKey == initDesc) != targetState) {
                                     it.performAction(ACTION_CLICK)
                                 }
-                                if (UtilNotificationBarSt.instance(applicationContext).collapseNotificationBar()) {
+                                if (UtilNotifBarSt.instance(applicationContext).collapseNotificationBar()) {
                                     return@launch
                                 }
                             }else{
@@ -314,7 +308,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                                     }
 
                                     else ->{
-                                        UtilNotificationBarSt.instance(applicationContext)
+                                        UtilNotifBarSt.instance(applicationContext)
                                             .collapseNotificationBar()
                                         return@launch
                                     }
@@ -331,7 +325,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                 }
             }
         }else {
-            UtilNotificationBarSt.instance(applicationContext)
+            UtilNotifBarSt.instance(applicationContext)
                 .collapseNotificationBar()
             return
         }
@@ -450,33 +444,6 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
        // Log.d("TESTEST","onStartCommand called")
-        val extras = intent?.extras
-        val setupAdaptive = extras?.get(SETUP_ADAPTIVE)
-        val setupNetworkCallback = extras?.get(SETUP_NETWORK_CALLBACK)
-        val switchAutoSensors = extras?.get(SWITCH_AUTO_SENSORS)
-        val switchHzOverlay = extras?.get(SWITCH_HZ)
-        val onScreenOffOnly = extras?.get(SCREEN_OFF_ONLY)?: true
-
-        if (setupAdaptive == true) {
-            setupAdaptiveEnhancer()
-        }
-        if (setupNetworkCallback == true) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                setupNetworkCallback()
-            }
-        }
-        if (switchAutoSensors != null) {
-            checkAutoSensorsOff(switchAutoSensors as Boolean, onScreenOffOnly as Boolean)
-        }
-
-        if (switchHzOverlay != null){
-            if (switchHzOverlay == true){
-                startHz()
-            }else{
-                stopHz()
-            }
-        }
-
         return START_STICKY
     }
 
@@ -502,15 +469,11 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
         try {
             mWindowsManager!!.removeView(mLayout)
-        }catch(e:Exception){
-            e.printStackTrace()
-        }
+        }catch(_:Exception){ }
 
         try {
             mWindowsManager!!.addView(mLayout, params)
-        }catch(e:Exception){
-            e.printStackTrace()
-        }
+        }catch(_:Exception){ }
     }
 
 
@@ -570,7 +533,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
     private fun updateNotif(hzStr: String) = launch(Dispatchers.Main) {
         //Log.d(TAG, "updateNotifContent called")
-        if (CacheSettings.hzNotifOn.get()!!) {
+        if (hzNotifOn.get()!!) {
             hznotificationBuilder?.apply {
                 setSmallIcon(mNotifIcon.getIcon(hzStr, "Hz"))
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
@@ -651,7 +614,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     private fun tryGetActivity(componentName: ComponentName): ActivityInfo? {
         return try {
             packageManager.getActivityInfo(componentName, 0)
-        } catch (e: PackageManager.NameNotFoundException) {
+        } catch (_: PackageManager.NameNotFoundException) {
             null
         }
     }
@@ -838,14 +801,14 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                     if (isScreenOn) {
                         initialAdaptive()//initial trigger
                     }else{
-                        if (UtilsPermSt.instance(applicationContext).hasWriteSystemPerm()) {
+                        if (UtilPermSt.instance(applicationContext).hasWriteSystemPerm()) {
                             mUtilsRefreshRate.setMinRefreshRate(lowestHzCurMode)
                         }
                     }
                     registerCameraCallback()
                 } else {
-                    if (UtilsPermSt.instance(applicationContext).hasWriteSystemPerm()) {
-                        if (mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefMinHzAdapt > UtilsDeviceInfoSt.STANDARD_REFRESH_RATE_HZ) {
+                    if (UtilPermSt.instance(applicationContext).hasWriteSystemPerm()) {
+                        if (mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefMinHzAdapt > STANDARD_REFRESH_RATE_HZ) {
                             mUtilsRefreshRate.setRefreshRate(prrActive.get()!!,mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefMinHzAdapt)
                         }else{
                             mUtilsRefreshRate.setRefreshRate(prrActive.get()!!,lowestHzForAllMode)

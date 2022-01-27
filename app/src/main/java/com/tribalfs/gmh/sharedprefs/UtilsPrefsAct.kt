@@ -7,26 +7,24 @@ import androidx.security.crypto.MasterKey
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
+private const val GMH_INFO = "gmh_info"
+//private const val TILE_EXPIRY_DAYS = "0x201"
+private const val TRIAL_DAYS = "0x301"
+private const val AD_FREE_AUTO_CHECKED = "0x401"
+private const val ACTIVATION_CODE = "0x501"
+//private const val INS_DATE = "0x601"
+private const val TRIAL_DATE = "0x701"
+private const val SIGNATURE = "0x801"
+internal const val ACT_STATUS = "0x901"
+internal const val LIC_TYPE_INVALID_CODE = 0x201//513
+internal const val LIC_TYPE_TRIAL_EXPIRED = 0x301//769
+internal const val LIC_TYPE_NONE = 0x401//1025
+internal const val LIC_TYPE_NONE_EXP = 0x501//1281
+internal const val LIC_TYPE_ADFREE = 0x601//1537
+internal const val LIC_TYPE_TRIAL_ACTIVE = 0x701//1793
+
+
 class UtilsPrefsAct(val context: Context) {
-
-    companion object{
-        private const val GMH_INFO = "gmh_info"
-        //private const val TILE_EXPIRY_DAYS = "0x201"
-        private const val TRIAL_DAYS = "0x301"
-        private const val AD_FREE_AUTO_CHECKED = "0x401"
-        private const val ACTIVATION_CODE = "0x501"
-        //private const val INS_DATE = "0x601"
-        private const val TRIAL_DATE = "0x701"
-        private const val SIGNATURE = "0x801"
-        internal const val ACT_STATUS = "0x901"
-        internal const val LIC_TYPE_INVALID_CODE = 0x201//513
-        internal const val LIC_TYPE_TRIAL_EXPIRED = 0x301//769
-        internal const val LIC_TYPE_NONE = 0x401//1025
-        internal const val LIC_TYPE_NONE_EXP = 0x501//1281
-        internal const val LIC_TYPE_ADFREE = 0x601//1537
-        internal const val LIC_TYPE_TRIAL_ACTIVE = 0x701//1793
-    }
-
 
     private lateinit var actSharedPref: SharedPreferences
 

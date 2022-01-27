@@ -6,8 +6,8 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.distinctUntilChanged
 import com.tribalfs.gmh.helpers.PackageInfo
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsAct
-import com.tribalfs.gmh.sharedprefs.UtilsPrefsAct.Companion.LIC_TYPE_TRIAL_ACTIVE
+import com.tribalfs.gmh.sharedprefs.LIC_TYPE_ADFREE
+import com.tribalfs.gmh.sharedprefs.LIC_TYPE_TRIAL_ACTIVE
 
 
 class MyViewModel(val app: Application) : AndroidViewModel(app) {
@@ -22,7 +22,7 @@ class MyViewModel(val app: Application) : AndroidViewModel(app) {
     }
 
     fun setAdFreeCode(adFreeCode: Int){
-        isAdFree.value = (adFreeCode == UtilsPrefsAct.LIC_TYPE_ADFREE || adFreeCode == LIC_TYPE_TRIAL_ACTIVE)
+        isAdFree.value = (adFreeCode == LIC_TYPE_ADFREE || adFreeCode == LIC_TYPE_TRIAL_ACTIVE)
         hideBuyActMenu.value = adFreeCode/0x2
     }
 

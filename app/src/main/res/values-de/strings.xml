@@ -102,7 +102,7 @@
     <string name="edit">Bearbeiten</string>
     <string name="quick_doz_mod">Schnell in den Doze-Modus</string>
     <string name="quick_mod_inf">Diese Funktion versetzt das Gerät schnell in den Doze-Modus, wenn der Bildschirm ausgeschaltet wird, um den Akkuverbrauch bei ausgeschaltetem Display zu minimieren.</string>
-        <string name="adp_min_hz">Geringste Bildwiederholrate im adaptiven Modus</string>
+    <string name="adp_min_hz">Adaptiven Modus Geringste Bildwiederholrate</string>
     <string name="enable_as_inf">Klicken Sie im angezeigten Fenster auf \"Dienste installieren\" und aktivieren Sie den Dienst \"Galaxy Max Hz\"</string>
     <string name="brightness_threshold">Mindesthelligkeit für adaptive Bildwiederholrate</string>
     <string name="adp_delay">Wartezeit bis geringste Bildwiederholrate aktiviert wird (in Sekunden)</string>
@@ -113,7 +113,6 @@
     <string name="actvt_trial">Kostenlose Testversion aktivieren</string>
     <string name="auto_psm">Energiesparmodus bei ausgeschaltetem Bildschirm</string>
     <string name="reso_opts">Aktivierte Optionen</string>
-
     <string name="requires_ws_perm_h">
         %1$s benötigt eine spezielle Berechtigung, um diese Funktion auszuführen.
         Klicken Sie unten auf den unten angegebenen Link um zu erfahren wie Sie die Berechtigung erteilen können.
