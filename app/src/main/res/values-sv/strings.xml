@@ -3,11 +3,11 @@
 
     <!-- <string name="ad_closed" translatable="false">Video ad closed early.</string> -->
     <string name="lbl_enable_msm">"Aktivera rörelsejämnhet"</string>
-    <string name="buy_adfree">"Köp Premium|Kaffe"</string>
+    <string name="buy_adfree">"Köp premium | kaffe"</string>
 
     <!-- <string name="info_expired" tools:ignore="PluralsCandidate">Watch this video and get activated quick setting tiles for another %d days.</string> -->
     <string name="resolution">"Växla mellan upplösning och rörelsejämnhet"</string>
-    <string name="act">"Aktivera Premium|Prova"</string>
+    <string name="act">"Aktivera premium | testperiod"</string>
     <string name="max_hz">"Max Hz"</string>
     <string name="max_hz_for_psm">"Max Hz för energisparläge"</string>
     <string name="feat_n_a">"Funktionen stöds inte"</string>
@@ -22,20 +22,20 @@
     <string name="top">"Topp"</string>
     <string name="bottom">"Botten"</string>
     <string name="use_qstile_reso_switch">"Använd den medföljande rutan för snabbinställningar (qs) för att snabbt växla skärmupplösning."</string>
-    <string name="center">"Centrum"</string>
+    <string name="center">"Centrerad"</string>
     <string name="info_qs_max_hz">"Inkluderar en snabbinställningsplatta för att ändra max hz"</string>
     <string name="info_qs_rtrr">"Inkluderar en snabbinställningsplatta för att slå på uppdateringsfrekvensmonitorn."</string>
     <string name="s_off_mod">"Skärmavstängningsmods"</string>
     <string name="force_hz_mod">"Tvinga lägsta Hz"</string>
     <string name="s_off_hz_inf">"Detta kommer att ställa in skärmavstängningen/AOD-uppdateringsfrekvensen till lägsta hz.
-Skärmavstängningsuppdateringsfrekvens: %s"</string>
+Uppdateringsfrekvens vid avstängd skärm: %s"</string>
     <string name="chng_res_stng">"%s upplösningsinställning stöder inte hög/anpassad uppdateringsfrekvens. Ändra läget för upplösning och rörelsejämnhet först i inställningarna.
 
 Den här appen kan enkelt växla upplösning och rörelsejämnhetsläge med hjälp av snabbinställningarna när WRITE_SECURE_SETTINGS behörighetsinställningar har utförts med ADB."</string>
     <string name="chng_res_qs">"%s upplösningsinställning stöder inte hög/anpassad uppdateringsfrekvens. Du kan snabbt ändra upplösningen med hjälp av snabbinställningspanelen som ingår i den här appen."</string>
-    <string name="psm_on_inf">"I energisparläge är uppdateringsfrekvensen begränsad till standard (60hz). Stäng av den i inställningarna först och ställ in uppdateringsfrekvensläget på Adaptive/High.
+    <string name="psm_on_inf">"I energisparläge är uppdateringsfrekvensen begränsad till standard (60Hz). Stäng av den i inställningarna först och ställ in uppdateringsfrekvensläget på Adaptive/High.
 
-Den här appen kan kringgå denna begränsning när WRITE_SECURE_SETTINGS behörighetsinställningen har utförts med ADB."</string>
+Den här appen kan kringgå denna begränsning när WRITE_SECURE_SETTINGS behörighetsinställningen har utförts via ADB."</string>
     <string name="rrm_std_inf">"Läget för rörelsejämnhet är för närvarande inställt på Standard. Ändra det först i inställningarna.
 
 Den här appen kan enkelt ändra Motion Smoothness Mode till Adaptive/High när ADB-installationen har utförts. Detta fungerar även i energisparläge."</string>
@@ -108,7 +108,7 @@ När adb-installation utförs kan du göra följande med den här appen:
     <string name="lbl_rrm">"Refresh Rate Mods"</string>
     <string name="prr_psm">"Håll jämnheten i energisparläge"</string>
     <string name="actvt_trial">"Aktivera gratis provperiod"</string>
-    <string name="auto_psm">"Energisparläge på Skärm av"</string>
+    <string name="auto_psm">"Energisparläge vid skärm av"</string>
     <string name="reso_opts">"Aktiverade alternativ"</string>
     <string name="requires_ws_perm_h">"%1$s behöver en speciell behörighet för att köra den här funktionen. Klicka på länken ADB-installation nedan för att lära dig hur.
 
