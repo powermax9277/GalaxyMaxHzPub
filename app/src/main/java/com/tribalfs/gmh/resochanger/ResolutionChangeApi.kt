@@ -2,10 +2,8 @@ package com.tribalfs.gmh.resochanger
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.os.IBinder
 import android.util.Size
 import com.tribalfs.gmh.helpers.CheckBlacklistApiSt
-import java.lang.reflect.Method
 
 
 @SuppressLint("PrivateApi")
@@ -18,7 +16,7 @@ class ResolutionChangeApi (val context: Context) {
         if (!CheckBlacklistApiSt.instance(context).isAllowed()
             && !CheckBlacklistApiSt.instance(context).setAllowed()) return false
 
-        if (d != null) {
+       /* if (d != null) {
             try {
                 val serviceManager = Class.forName("android.os.ServiceManager")
                 val service: Method =
@@ -34,7 +32,7 @@ class ResolutionChangeApi (val context: Context) {
                 return true
             } catch (_: Exception) {
             }
-        }
+        }*/
 
         try{
             val wmService = Class.forName("android.view.WindowManagerGlobal")
@@ -60,6 +58,7 @@ class ResolutionChangeApi (val context: Context) {
                     Int::class.javaPrimitiveType
                 )
                     .invoke(wmService, displayId, reso.width, reso.height)
+
 
             }
             return true

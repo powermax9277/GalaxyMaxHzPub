@@ -13,10 +13,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 internal class PsmChangeHandler(context: Context) {
 
-    companion object: SingletonMaker<PsmChangeHandler, Context>(::PsmChangeHandler){
-        // private const val TAG = "PSMChangeHandler"
-        // private const val SEM_POWER_MODE_REFRESH_RATE = "sem_power_mode_refresh_rate"
-    }
+    companion object: SingletonMaker<PsmChangeHandler, Context>(::PsmChangeHandler)
 
     private val appCtx: Context = context.applicationContext
     private val mUtilsRefreshRate by lazy {UtilRefreshRateSt.instance(appCtx)}
