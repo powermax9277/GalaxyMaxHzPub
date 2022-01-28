@@ -55,6 +55,7 @@ import com.tribalfs.gmh.helpers.CacheSettings.lowestHzForAllMode
 import com.tribalfs.gmh.helpers.CacheSettings.lrrPref
 import com.tribalfs.gmh.helpers.CacheSettings.prrActive
 import com.tribalfs.gmh.helpers.CacheSettings.sensorOnKey
+import com.tribalfs.gmh.helpers.CacheSettings.turnOffAutoSensorsOff
 import com.tribalfs.gmh.hertz.*
 import com.tribalfs.gmh.hertz.HzNotifGlobal.CHANNEL_ID_HZ
 import com.tribalfs.gmh.hertz.HzNotifGlobal.NOTIFICATION_ID_HZ
@@ -124,14 +125,17 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
             when (intent) {
                 ACTION_SCREEN_OFF -> {
                     handler.postDelayed(autoSensorsOffRunnable, 20000)
-                    mPauseHzJob?.cancel()
-                    mPauseHzJob = null
-                    mPauseHzJob = launch(Dispatchers.Main){
-                        delay(10000)
-                        stopHz()
-                        hzStatus.set(PAUSE)
+
+                    if (hzStatus.get() == PLAYING) {
+                        mPauseHzJob?.cancel()
+                        mPauseHzJob = null
+                        mPauseHzJob = launch(Dispatchers.Main) {
+                            delay(10000)
+                            stopHz()
+                            hzStatus.set(PAUSE)
+                        }
+                        mPauseHzJob?.start()
                     }
-                    mPauseHzJob?.start()
                 }
 
                 ACTION_SCREEN_ON ->{
@@ -145,12 +149,12 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
                 ACTION_USER_PRESENT -> {
                     if (isFakeAdaptiveValid.get()!!) makeAdaptive()
-                    if (mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefSensorsOff || CacheSettings.turnOffAutoSensorsOff) {
+                    if (mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefSensorsOff || turnOffAutoSensorsOff) {
                         switchSensorsOff(false)
                     }
-                    if (CacheSettings.turnOffAutoSensorsOff){
+                    if (turnOffAutoSensorsOff){
                         mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefSensorsOff = false
-                        CacheSettings.turnOffAutoSensorsOff = false
+                        turnOffAutoSensorsOff = false
                     }
                 }
 
@@ -511,6 +515,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
     internal fun stopHz() {
         //Log.d("TESTEST","stopHz called")
+        hzStatus.set(STOPPED)
         hznotificationBuilder!!.setVisibility(Notification.VISIBILITY_SECRET)
         notificationManagerCompat.notify(
             NOTIFICATION_ID_HZ,
@@ -520,7 +525,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         hzText?.visibility = View.GONE
         notificationManagerCompat.cancel(NOTIFICATION_ID_HZ)
         dm.unregisterDisplayListener(displayListener)
-        hzStatus.set(STOPPED)
+
     }
 
 
