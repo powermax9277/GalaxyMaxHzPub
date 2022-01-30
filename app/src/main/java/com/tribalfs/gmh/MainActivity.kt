@@ -23,6 +23,8 @@ import android.text.method.LinkMovementMethod
 import android.util.TypedValue
 import android.view.*
 import android.view.View.MeasureSpec
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils.loadAnimation
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import android.widget.Switch
@@ -109,12 +111,16 @@ import java.util.*
 import kotlin.collections.HashSet
 import kotlin.coroutines.CoroutineContext
 
+
 //private const val TAG = "MainActivity"
-internal const val GMH_WEB_APP ="https://script.google.com/macros/s/AKfycbzlRKh4-YXyXLufXZfDqAs1xJEJK7BF8zmhEDGDpbP1luu97trI/exec"
 //private const val REWARDED_INTERSTITIAL_ID = "ca-app-pub-3239920037413959/1863514308"
-internal const val ACTION_CHANGED_RES = "$APPLICATION_ID.ACTION_CHANGED_RES"
+
+internal const val GMH_WEB_APP ="https://script.google.com/macros/s/AKfycbzlRKh4-YXyXLufXZfDqAs1xJEJK7BF8zmhEDGDpbP1luu97trI/exec"
+internal const val ACTION_HIDE_MAIN_ACTIVITY = "$APPLICATION_ID.ACTION_HIDE"
+internal const val ACTION_CLOSE_MAIN_ACTIVITY = "$APPLICATION_ID.ACTION_CLOSE"
+internal const val KEY_JSON_LIC_TYPE = "0x11"
+
 private const val REQUEST_LATEST_UPDATE = 0x5
-private const val KEY_JSON_LIC_TYPE = "0x11"
 private const val KEY_JSON_PAYPAL_BUY_URL = "0x12"
 private const val KEY_JSON_HELP_URL = "0x24"
 
@@ -186,7 +192,9 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                     }
                 }
 
-                ACTION_CHANGED_RES -> pauseMe()
+                ACTION_HIDE_MAIN_ACTIVITY -> pauseMe()
+
+                ACTION_CLOSE_MAIN_ACTIVITY -> finish()
             }
         }
     }
@@ -563,10 +571,13 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
 
             mBinding.chOverlayHz.id -> {
                 (v as Chip)
-                if (UtilPermSt.instance(applicationContext).hasOverlayPerm()) {
+                if (gmhAccessInstance != null || UtilPermSt.instance(applicationContext).hasOverlayPerm()) {
+
                     HzServiceHelperStn.instance(applicationContext).switchOverlay(v.isChecked)
                     mBinding.hideHzOverlaySettings = !v.isChecked
+
                 } else {
+
                     if (v.isChecked) {
                         mBinding.chOverlayHz.isChecked = false
                         showSbMsg(
@@ -799,6 +810,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
             initDisableAutoSync(adFree)
             setupScreenOffSensorsOff(adFree) //New
         })
+
         viewModel.setAdFreeCode(mUtilsPrefsAct.gmhPrefLicType)
 
         updateDynamicViews()
@@ -812,7 +824,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
 
         if (savedInstanceState == null){
             oneTimeAutoChecks()
-            if (isFakeAdaptive.get()!! && !UtilPermSt.instance(applicationContext).hasOverlayPerm()) {
+            /*if (isFakeAdaptive.get()!! && gmhAccessInstance == null && !UtilPermSt.instance(applicationContext).hasOverlayPerm()) {
                 showSbMsg(
                     getString(R.string.aot_perm_inf),
                     Snackbar.LENGTH_INDEFINITE,
@@ -820,7 +832,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                 ) {
                     showAppearOnTopRequest()
                 }
-            }
+            }*/
         }
 
 
@@ -1068,7 +1080,8 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
 
     private fun setupBroadcastReceiver(){
         IntentFilter().let{
-            it.addAction(ACTION_CHANGED_RES)
+            it.addAction(ACTION_HIDE_MAIN_ACTIVITY)
+            it.addAction(ACTION_CLOSE_MAIN_ACTIVITY)
             it.addAction(ACTION_POWER_SAVE_MODE_CHANGED)
             if (SDK_INT >= VERSION_CODES.P) {
                 it.addAction(ACTION_NOTIFICATION_CHANNEL_BLOCK_STATE_CHANGED)
@@ -1217,18 +1230,18 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
             }
         }
 
-        if (isSwOn && showOverlayHz == true && gmhAccessInstance == null) {
-            if (!UtilPermSt.instance(applicationContext).hasOverlayPerm()) {
+        if (isSwOn && gmhAccessInstance == null
+            && showOverlayHz == true
+            && !UtilPermSt.instance(applicationContext).hasOverlayPerm()
+        ) {
                 showSbMsg(
                     getString(R.string.aot_perm_inf),
                     Snackbar.LENGTH_INDEFINITE,
                     android.R.string.ok
                 ) {
-                    if (SDK_INT >= VERSION_CODES.M) {
                         showAppearOnTopRequest()
-                    }
+
                 }
-            }
         }
 
         HzServiceHelperStn.instance(applicationContext).switchHz(
@@ -1562,7 +1575,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
 
                     mBinding.sbMinHzAdapt.progress.let{
                         if (it <  STANDARD_REFRESH_RATE_HZ && isPremium.get() != true){
-                            Toast.makeText(this@MainActivity, "$it Hz is a premium feature.", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this@MainActivity, getString(R.string.is_prem_ft, "$it Hz"), Toast.LENGTH_SHORT).show()
                             mBinding.sbMinHzAdapt.progress = STANDARD_REFRESH_RATE_HZ
                             return
                         }
@@ -1583,7 +1596,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
 
                     mUtilsRefreshRate.applyMinHz()
 
-                    if (isFakeAdaptive.get() == true) {
+                    /*if (isFakeAdaptive.get() == true) {
                         (UtilPermSt.instance(applicationContext)
                             .hasOverlayPerm()).let { hasPerm ->
                                 if (!hasPerm) {
@@ -1596,7 +1609,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                                     }
                                 }
                             }
-                    }
+                    }*/
 
                     gmhAccessInstance?.setupAdaptiveEnhancer()
                    /* applicationContext.startService(
@@ -1785,6 +1798,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
         if (!silent) showLoading(true)
 
         val resultJson = mUtilsRefreshRate.mSyncer.syncLicense(mUtilsPrefsAct.gmhPrefActivationCode?:"", trial)
+
         if (resultJson != null ){
             //  Log.d(TAG, "License check server response OK")
 
@@ -2110,9 +2124,15 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
 
 
     private fun showLoading(bool: Boolean) {
-//Log.d(TAG, "showLoading called: $bool")
         launch(Dispatchers.Main) {
-            mBinding.pBar.visibility = if (bool) View.VISIBLE else View.GONE
+            val pulse: Animation = loadAnimation(this@MainActivity, R.anim.pulse)
+             if (bool) {
+                 mBinding.pBar.visibility = View.VISIBLE
+                 mBinding.updateProgressBar.startAnimation(pulse)
+            } else {
+                 mBinding.updateProgressBar.clearAnimation()
+                 mBinding.pBar.visibility = View.GONE
+             }
         }
     }
 

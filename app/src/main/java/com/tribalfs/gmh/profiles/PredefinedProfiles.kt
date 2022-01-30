@@ -100,6 +100,7 @@ internal object PredefinedProfiles {
                             "\"0-0\":{\"2208x1768\":\"{\\\"highestHz\\\":60.0,\\\"lowestHz\\\":48.0,\\\"refreshRates\\\":[60.0,48.0],\\\"resHeight\\\":2208,\\\"resName\\\":\\\"WQXGA+\\\",\\\"resStrLxw\\\":\\\"2208x1768\\\",\\\"resWidth\\\":1768}\"}}"
                 )
             }
+
             else -> return null
         }
     }

@@ -2,14 +2,10 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="lbl_enable_msm">Bildwiederholrate ändern</string>
     <string name="buy_adfree">Premium kaufen</string>
-    <!--  <string name="info_expired">
-          Sehen Sie sich dieses Video an um die Schnelleinstellungskacheln für weitere %d Tage zu aktivieren.
-      </string>-->
     <string name="resolution">Auflösung und Bildwiederholrate umschalten</string>
     <string name="act">Werbefrei aktivieren</string>
     <string name="max_hz">Bildwiederholrate</string>
     <string name="feat_n_a" tools:keep="@string/feat_n_a">Diese Auflösung wird nicht unterstützt</string>
-    <!--    <string name="qs_active">Schnelleinstellungskacheln erfolgreich aktiviert</string>-->
     <string name="min_hz_for_toggle">Min Hz für das Umschalten</string>
     <string name="adaptive">Adaptiv</string>
     <string name="high">Hoch</string>
@@ -79,16 +75,12 @@
     <string name="psm_on">Der Energiesparmodus ist eingeschaltet</string>
     <string name="chng_res">Auflösung ändern</string>
     <string name="open_settings">Einstellungen öffnen</string>
-    <!--    <string name="qst_exp">Schnelleinstellungskacheln abgelaufen</string>-->
-    <!--    <string name="ad_starting_in">"Video startet in "</string>-->
-    <!--    <string name="no_thanks">Nein danke</string>-->
     <string name="chng_res_failed">Die Auflösung konnte nicht geändert werden.</string>
     <string name="one_res_def">Es ist nur eine Auflösung im System definiert.</string>
     <string name="rrp_not_loaded">
         Verfügbare Bildwiederholrate noch nicht geladen. Versuchen Sie es noch einmal.
     </string>
     <string name="sot_no_perm">Die Erlaubnis zum Anzeigen oben wird nicht erteilt!</string>
-    <!--    <string name="error_opening_settings">Fehler beim Öffnen der Einstellungen.</string>-->
     <string name="cie">Fehler! Bitte überprüfen sie die Internetverbindung und versuchen Sie es dann erneut.</string>
     <string name="aca">Ungültiger Aktivierungscode.</string>
     <string name="afa">Premium erfolgreich aktiviert!</string>
@@ -97,7 +89,6 @@
         <item quantity="one">Premium-Testversion aktiviert: %d verbleibende Tag.</item>
         <item quantity="other">Premium-Testversion aktiviert: %d verbleibende Tage.</item>
     </plurals>
-    <!--    <string name="eta">Fehler beim Aktivieren der werbefreien Testversion!</string>-->
     <string name="nlh">Keine Premium-Lizenz für dieses Gerät gefunden: %s</string>
     <string name="edit">Bearbeiten</string>
     <string name="quick_doz_mod">Schnell in den Doze-Modus</string>
@@ -160,4 +151,5 @@
     <string name="data_usage"><u>Data Usage</u></string>
     <string name="acces_req">Enable Accessibility Service</string>
     <string name="max_hz_for_psm">Max Hz für den Energiesparmodus</string>
+    <string name="is_prem_ft">%s is premium feature</string>
 </resources>

@@ -139,4 +139,5 @@
     <string name="premium_features">"Premiumfunktioner"</string>
     <string name="prevent_high">"Förhindra byte till högt läge"</string>
     <string name="acces_req">"Aktivera tillgänglighetstjänst"</string>
+    <string name="is_prem_ft">%s is premium feature</string>
 </resources>

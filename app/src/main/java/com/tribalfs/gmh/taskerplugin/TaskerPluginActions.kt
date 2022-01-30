@@ -19,7 +19,7 @@ import com.joaomgcd.taskerpluginlibrary.input.TaskerInputInfo
 import com.joaomgcd.taskerpluginlibrary.input.TaskerInputInfos
 import com.joaomgcd.taskerpluginlibrary.runner.TaskerPluginResult
 import com.joaomgcd.taskerpluginlibrary.runner.TaskerPluginResultSucess
-import com.tribalfs.gmh.ACTION_CHANGED_RES
+import com.tribalfs.gmh.ACTION_HIDE_MAIN_ACTIVITY
 import com.tribalfs.gmh.AccessibilityPermission.isAccessibilityEnabled
 import com.tribalfs.gmh.GalaxyMaxHzAccess
 import com.tribalfs.gmh.GalaxyMaxHzAccess.Companion.gmhAccessInstance
@@ -188,7 +188,7 @@ class DynamicInputRunner : TaskerPluginRunnerActionNoOutputOrInput() {
                     change_res -> {
                         CoroutineScope(Dispatchers.IO).launch {
                             try {
-                                appCtx.sendBroadcast(Intent(ACTION_CHANGED_RES))
+                                appCtx.sendBroadcast(Intent(ACTION_HIDE_MAIN_ACTIVITY))
                                 delay(550)
                                 val resStrSplit = (info.value as String).split("x")
                                 val reso = Size(resStrSplit[1].toInt(),resStrSplit[0].toInt())

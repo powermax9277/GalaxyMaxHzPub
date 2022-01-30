@@ -17,16 +17,16 @@ class MyViewModel(val app: Application) : AndroidViewModel(app) {
     private val currentSig = PackageInfo.getSignatureString(app.applicationContext)!!
     private val isValidSig = MutableLiveData<Boolean>()
 
-    fun setServerSign(serverSign: String){
+    internal fun setServerSign(serverSign: String){
         isValidSig.value = serverSign == currentSig
     }
 
-    fun setAdFreeCode(adFreeCode: Int){
+    internal fun setAdFreeCode(adFreeCode: Int){
         isAdFree.value = (adFreeCode == LIC_TYPE_ADFREE || adFreeCode == LIC_TYPE_TRIAL_ACTIVE)
         hideBuyActMenu.value = adFreeCode/0x2
     }
 
-    val isValidAdFree = MediatorLiveData<Boolean>().apply {
+    internal val isValidAdFree = MediatorLiveData<Boolean>().apply {
         addSource(isAdFree) { value = (it == true && isValidSig.value == true) }
         addSource(isValidSig) { value = (it == true && isAdFree.value == true) }
     }.distinctUntilChanged()

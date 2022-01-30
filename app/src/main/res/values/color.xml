@@ -3,4 +3,5 @@
     <color name="primary_color">@color/design_default_color_primary</color>
     <color name="card_view_background">#FFFFFF</color>
     <color name="ic_launcher_background">@color/primary_color</color>
+    <color name="launcher_foreground_color">#FF5722</color>
 </resources>

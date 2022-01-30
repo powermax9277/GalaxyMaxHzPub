@@ -146,4 +146,5 @@
     <string name="data_usage"><u>Χρήση δεδομένων</u></string>
     <string name="acces_req">Ενεργοποιήστε την υπηρεσία προσβασιμότητας</string>
     <string name="max_hz_for_psm">" Μέγιστο Hz για λειτουργία εξοικονόμησης ενέργειας"</string>
+    <string name="is_prem_ft">%s is premium feature</string>
 </resources>

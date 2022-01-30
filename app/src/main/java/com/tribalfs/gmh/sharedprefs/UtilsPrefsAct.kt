@@ -34,7 +34,7 @@ class UtilsPrefsAct(val context: Context) {
 
     @Synchronized
     fun createSharedPreferences() {
-        val masterKey =MasterKey.Builder(context).setKeyScheme(MasterKey.KeyScheme.AES256_GCM).build()
+        val masterKey = MasterKey.Builder(context).setKeyScheme(MasterKey.KeyScheme.AES256_GCM).build()
         actSharedPref = EncryptedSharedPreferences.create(
             context,
         GMH_INFO,

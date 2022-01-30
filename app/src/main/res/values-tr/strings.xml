@@ -143,4 +143,5 @@
     <string name="data_usage"><u>Veri kullanımı</u></string>
     <string name="acces_req">Erişilebilirlik Hizmetini Etkinleştir</string>
     <string name="max_hz_for_psm">Güç tasarrufu modu için maksimum Hz</string>
+    <string name="is_prem_ft">%s is premium feature</string>
 </resources>

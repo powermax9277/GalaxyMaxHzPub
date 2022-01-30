@@ -1116,16 +1116,34 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:animateLayoutChanges="true"
-            android:background="#0F000000"
+            android:background="#37000000"
             android:visibility="visible"
+            android:clickable="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             app:layout_anchorGravity="center">
 
-            <ProgressBar
-                style="@android:style/Widget.Material.ProgressBar"
+            <ImageView
+                android:id="@+id/updateProgressBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:indeterminate="true" />
+                android:src="@drawable/ic_launcher_foreground"
+                tools:ignore="ContentDescription" />
+            <!--<ProgressBar
+                android:id="@+id/updateProgressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawingCacheQuality="high"
+                android:layout_gravity="center"
+                android:indeterminateBehavior="repeat"
+                android:indeterminateDrawable="@drawable/loading"
+                android:indeterminateDuration="700"/>-->
+                <!--style="@android:style/Widget.Material.ProgressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:indeterminate="true" />-->
         </FrameLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

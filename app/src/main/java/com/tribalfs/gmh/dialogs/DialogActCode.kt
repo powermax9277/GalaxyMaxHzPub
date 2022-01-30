@@ -68,39 +68,41 @@ class DialogActCode : MyDialogFragment()  {
             setPositiveButton(getString(R.string.apply)) { _, _ -> }
             setNegativeButton(getString(android.R.string.cancel)) { dialogInterface, _ -> dialogInterface.dismiss() }
             if (showTrial == true) setNeutralButton(getString(R.string.actvt_trial)) { _, _ -> }
-        }.create().apply {
-            setOnShowListener { dialogInterface ->
-                (dialogInterface as AlertDialog).getButton(AlertDialog.BUTTON_POSITIVE).apply {
-                    setOnClickListener {
-                        input.text.toString().let {
-                            if (it.isNotEmpty()) {
-                                (requireActivity() as MainActivity).applyActivationCode(it.trim())
-                                dialogInterface.dismiss()
-                            } else {
-                                Toast.makeText(
-                                    context,
-                                    getString(R.string.ac_none),
-                                    Toast.LENGTH_SHORT
-                                ).show()
+        }
+            .create()
+            .apply {
+                setOnShowListener { dialogInterface ->
+                    (dialogInterface as AlertDialog).getButton(AlertDialog.BUTTON_POSITIVE).apply {
+                        setOnClickListener {
+                            input.text.toString().let {
+                                if (it.isNotEmpty()) {
+                                    (requireActivity() as MainActivity).applyActivationCode(it.trim())
+                                    dialogInterface.dismiss()
+                                } else {
+                                    Toast.makeText(
+                                        context,
+                                        getString(R.string.ac_none),
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
                             }
                         }
                     }
-                }
 
-                if (showTrial == true) {
-                    (dialogInterface).getButton(AlertDialog.BUTTON_NEUTRAL).apply {
-                        setOnClickListener {
-                            (requireActivity() as MainActivity).syncLicense(
-                                silent = false,
-                                trial = true
-                            )
-                            dialogInterface.dismiss()
+                    if (showTrial == true) {
+                        (dialogInterface).getButton(AlertDialog.BUTTON_NEUTRAL).apply {
+                            setOnClickListener {
+                                (requireActivity() as MainActivity).syncLicense(
+                                    silent = false,
+                                    trial = true
+                                )
+                                dialogInterface.dismiss()
+                            }
                         }
                     }
-                }
 
+                }
             }
-        }
     }
 
 }

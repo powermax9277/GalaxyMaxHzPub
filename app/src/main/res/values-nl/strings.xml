@@ -146,4 +146,5 @@
     <string name="data_usage"><u>Data gebruik</u></string>
     <string name="acces_req">Toegankelijkheidsservice inschakelen</string>
     <string name="max_hz_for_psm">Max Hz voor energiebesparende modus</string>
+    <string name="is_prem_ft">%s is premium feature</string>
 </resources>

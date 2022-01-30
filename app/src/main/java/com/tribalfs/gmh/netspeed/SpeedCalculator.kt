@@ -7,7 +7,7 @@ import com.tribalfs.gmh.helpers.SingletonMaker
 internal class SpeedCalculator(mContext: Context) {
 
     companion object : SingletonMaker<SpeedCalculator, Context>(::SpeedCalculator){
-        var mCalcInBits = true
+        internal var mCalcInBits = true
     }
 
     private val mSpeed = Speed(mContext)

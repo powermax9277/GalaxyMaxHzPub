@@ -130,4 +130,5 @@
     <string name="data_usage"><u>數據使用</u></string>
     <string name="acces_req">啟用無障礙服務</string>
     <string name="max_hz_for_psm">省電模式的最大赫茲</string>
+    <string name="is_prem_ft">%s is premium feature</string>
 </resources>

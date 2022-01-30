@@ -54,6 +54,7 @@ class AppUpdaterLite(private val context: Context) {
             context,
             jsonUrl,
             object : VersionCheckListener {
+
                 @Suppress("PARAMETER_NAME_CHANGED_ON_OVERRIDE")
                 override fun onSuccess(serverAppDetails: AppDetails) {
                     if (context is Activity && context.isFinishing) return

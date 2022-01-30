@@ -47,7 +47,8 @@
     <string name="overlay_pos">Overlay Position</string>
     <string name="overlay">Overlay</string>
     <string name="statusbar">Statusbar</string>
-    <string name="perm_appx">\n\nWhen adb setup is performed, you can do the following with this app:
+    <string name="perm_appx">
+        \n\nWhen adb setup is performed, you can do the following with this app:
         \n- Quickly switch screen resolutions
         \n- (Auto)activate/keep Adaptive or High motion smoothness on Power Saving Mode
         \n- Auto activate power saving mode on screen-off
@@ -156,5 +157,6 @@
     </plurals>
     <string name="no_access_notif" translatable="false">Disabling accessibility service will cause unexpected behavior for the following enabled feature(s): %s</string>
     <string name="acces_req">Enable Accessibility Service</string>
+    <string name="is_prem_ft">%s is premium feature</string>
 
 </resources>

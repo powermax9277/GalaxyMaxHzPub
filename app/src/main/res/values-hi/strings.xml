@@ -150,4 +150,5 @@
     <string name="data_usage"><u>डेटा उपयोग में लाया गया</u></string>
     <string name="acces_req">अभिगम्यता सेवा सक्षम करें</string>
     <string name="max_hz_for_psm">पावर सेविंग मोड के लिए अधिकतम हर्ट्ज</string>
+    <string name="is_prem_ft">%s is premium feature</string>
 </resources>

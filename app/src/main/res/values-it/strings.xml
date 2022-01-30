@@ -147,4 +147,5 @@
         <item quantity="other">Periodo di prova premium attivo: %d giorni rimanenti</item>
         <item quantity="one">Periodo di prova premium attivo: %d giorno rimanente</item>
     </plurals>
+    <string name="is_prem_ft">%s is premium feature</string>
 </resources>

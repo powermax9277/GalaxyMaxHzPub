@@ -152,4 +152,5 @@
     <string name="data_usage"><u>L\'utilisation de données</u></string>
     <string name="acces_req">Activer le service d\'accessibilité</string>
     <string name="max_hz_for_psm">Hz max pour le mode d\'économie d\'énergie</string>
+    <string name="is_prem_ft">%s is premium feature</string>
 </resources>

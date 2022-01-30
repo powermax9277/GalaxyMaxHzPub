@@ -8,7 +8,6 @@
     <string name="max_hz">Max Hz</string>
     <string name="max_hz_for_psm">Hz màxim per al mode d\'estalvi d\'energia</string>
     <string name="feat_n_a" tools:keep="@string/feat_n_a">No s\'admet</string>
-    <!--    <string name="qs_active">Configuració ràpida Rajoles activades correctament.</string>-->
     <string name="min_hz_for_toggle">Límit inferior del commutador(Hz)</string>
     <string name="adaptive">Adaptive</string>
     <string name="high">High</string>
@@ -50,8 +49,6 @@
         Això funciona fins i tot en mode d\'estalvi d\'energia.</string>
     <string name="input_ac_inf">Si perdeu la prima per restablir aquest dispositiu, introduïu el codi d\'activació que s\'envia al vostre correu electrònic per reactivar la prima.
     </string>
-<!--    <string name="failed_show_ad">No s\'ha pogut mostrar l\'anunci de vídeo. Siusplau torna-ho a provar.</string>-->
-<!--    <string name="failed_load_ad">No s\'ha pogut carregar l\'anunci de vídeo. Comproveu Internet i torneu-ho a provar.</string>-->
     <string name="show_ns">Mostra l\'indicador de velocitat d\'Internet</string>
     <string name="combined">Combinat</string>
     <string name="upload">Pujar</string>
@@ -75,16 +72,12 @@
     <string name="psm_on">El mode d\'estalvi d\'energia està activat</string>
     <string name="chng_res">Resolució de canvis</string>
     <string name="open_settings">Obre Configuració</string>
-<!--    <string name="qst_exp">Els botons de configuració ràpida han caducat.</string>-->
-<!--    <string name="ad_starting_in">"Vídeo que comença a "</string>-->
-<!--    <string name="no_thanks">No gràcies!</string>-->
     <string name="chng_res_failed">No s\'ha pogut canviar la resolució.</string>
     <string name="one_res_def">Només es defineix una resolució al sistema.</string>
     <string name="rrp_not_loaded">
         Les taxes d\'actualització disponibles encara no s\'han carregat.
         Siusplau torna-ho a provar.</string>
     <string name="sot_no_perm">No es concedeix el permís Show on top.</string>
-<!--    <string name="error_opening_settings">Error en obrir la configuració.</string>-->
     <string name="cie">Error! Comproveu la connexió a Internet i torneu-ho a provar.</string>
     <string name="aca">Codi d\'activació no vàlid.</string>
     <string name="afa">Premium activat correctament.</string>
@@ -93,7 +86,6 @@
         <item quantity="one">Prova Premium activada: %d dia restant</item>
         <item quantity="other">Prova Premium activada: %d dies restants</item>
     </plurals>
-  <!--  <string name="eta">Error en activar la prova sense anuncis.</string>-->
     <string name="nlh">No s\'ha trobat cap llicència premium per a aquest dispositiu::%s</string>
     <string name="edit">Edita</string>
     <string name="quick_doz_mod">Ràpid Doze Mod</string>
@@ -108,7 +100,6 @@
     <string name="actvt_trial">Voleu activar la prova gratuïta</string>
     <string name="auto_psm">Mode d\'estalvi d\'energia en apagar la pantalla</string>
     <string name="reso_opts">Opcions habilitades</string>
-
     <string name="requires_ws_perm_h">
         %1$s necessita un permís especial per executar aquesta funció.
         Feu clic a l’enllaç de configuració de l’ADB següent per obtenir informació sobre com fer-ho.
@@ -160,5 +151,5 @@
     <string name="auto_sensors_off_exp">Sensors automàtics apagats</string>
     <string name="data_usage"><u>Data Usage</u></string>
     <string name="acces_req">Enable Accessibility Service</string>
-
+    <string name="is_prem_ft">%s is premium feature</string>
 </resources>

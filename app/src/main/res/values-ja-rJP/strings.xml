@@ -135,4 +135,5 @@
     <string name="prevent_high">ハイモードへの切り替えを防止する</string>
     <string name="acces_req">アクセシビリティサービスを有効にする</string>
     <string name="max_hz_for_psm">省電力モードの最大Hz</string>
+    <string name="is_prem_ft">%s is premium feature</string>
 </resources>

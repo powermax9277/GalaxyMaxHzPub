@@ -21,7 +21,6 @@
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-
     <application
         android:name=".MyApplication"
         android:allowBackup="false"
@@ -124,7 +123,7 @@
         <service
             android:name=".tiles.QSTileMinHz"
             android:exported="true"
-            android:icon="@drawable/ic_max_hz"
+            android:icon="@drawable/ic_launcher_foreground"
             android:label="@string/adp_min_hz"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
             <meta-data android:name="android.service.quicksettings.ACTIVE_TILE"
@@ -135,14 +134,13 @@
         </service>
 
         <receiver
-            android:name=".helpers.BootCompleteReceiver"
+            android:name=".receivers.BootCompleteReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter android:priority="999">
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -153,6 +151,16 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_provider_paths" />
         </provider>
+
+
+        <receiver
+            android:name=".receivers.DonationReceiver"
+            android:exported="true"
+            tools:ignore="ExportedReceiver">
+            <intent-filter>
+                <action android:name="com.tribalfs.gmh.action_DONATED" />
+            </intent-filter>
+        </receiver>
 
         <activity
             android:name=".taskerplugin.DynamicInputActivity"

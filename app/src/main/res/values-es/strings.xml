@@ -2,12 +2,10 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="lbl_enable_msm">Activar suavidad de movimiento</string>
     <string name="buy_adfree">Comprar Premium|Cofee</string>
-  <!--  <string name="info_expired">Mire este video y obtenga mosaicos de configuración rápida activados por otros %d días.</string>-->
     <string name="resolution">" Alternar resolución y suavidad de movimiento"</string>
     <string name="act">Activar Premium|Trial</string>
     <string name="max_hz">Hz máx</string>
     <string name="feat_n_a" tools:keep="@string/feat_n_a">No se admite el cambio de resolución</string>
-    <!--    <string name="qs_active">Azulejos de configuración rápida activados correctamente</string>-->
     <string name="min_hz_for_toggle">Min. Hz para alternar</string>
     <string name="adaptive">Adaptativo</string>
     <string name="high">Alto</string>
@@ -47,8 +45,6 @@
     </string>
     <string name="input_ac_inf">Si perdió sin publicidad debido a restablecer este dispositivo, ingrese el código de activación
         enviado a su correo electrónico para reactivar sin publicidad.</string>
-<!--    <string name="failed_show_ad">No se pudo mostrar el anuncio de video. Inténtalo de nuevo.</string>-->
-<!--    <string name="failed_load_ad">Failed to load video ad. Please check internet and try again.</string>-->
     <string name="show_ns">Mostrar indicador de velocidad neta</string>
     <string name="combined">Conjunto</string>
     <string name="upload">Subir</string>
@@ -71,15 +67,11 @@
     <string name="psm_on">El modo de ahorro de energía está activado</string>
     <string name="chng_res">Cambiar resolución</string>
     <string name="open_settings">Configuración abierta</string>
-<!--    <string name="qst_exp">Los mosaicos de configuración rápida expiraron</string>-->
-<!--    <string name="ad_starting_in">"Video que comienza en "</string>-->
-<!--    <string name="no_thanks">¡No, gracias!</string>-->
     <string name="chng_res_failed">No se pudo cambiar la resolución.</string>
     <string name="one_res_def">Solo una resolución definida en el sistema.</string>
     <string name="rrp_not_loaded">Las frecuencias de actualización disponibles aún no se cargan. Inténtalo de nuevo.
     </string>
     <string name="sot_no_perm">¡Mostrar en la parte superior no se concede permiso!</string>
-<!--    <string name="error_opening_settings">Error al abrir la configuración.</string>-->
     <string name="cie">¡Error! Compruebe la conexión a Internet y vuelva a intentarlo.</string>
     <string name="aca">Código de activación inválido.</string>
     <string name="afa">"¡Premium se ha activado con éxito! "</string>
@@ -88,7 +80,6 @@
         <item quantity="one">Prueba premium activada: quedan %d día</item>
         <item quantity="other">Prueba premium activada: quedan %d días</item>
     </plurals>
-    <!--<string name="eta">¡Error al activar la prueba sin anuncios!</string>-->
     <string name="nlh">No se encontró una licencia premium para este dispositivo: %s</string>
     <string name="edit">Editar</string>
     <string name="quick_doz_mod">Rápido Doze Mod</string>
@@ -150,4 +141,5 @@
     <string name="data_usage"><u>Uso de datos</u></string>
     <string name="acces_req">Habilitar servicio de accesibilidad</string>
     <string name="max_hz_for_psm">Hz máximo para el modo de ahorro de energía</string>
+    <string name="is_prem_ft">%s is premium feature</string>
 </resources>
