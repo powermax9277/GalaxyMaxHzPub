@@ -5,9 +5,9 @@
         android:fromYScale="0.9"
         android:pivotX="50%"
         android:pivotY="50%"
-        android:toXScale="0.7"
-        android:toYScale="0.7"
-        android:duration="250"
+        android:toXScale="1.2"
+        android:toYScale="0.4"
+        android:duration="300"
         android:repeatCount="infinite"
         android:interpolator="@android:anim/accelerate_decelerate_interpolator"
         android:repeatMode="reverse"/>

@@ -17,7 +17,7 @@
     <string name="bottom">नीचे की ओर</string>
     <string name="use_qstile_reso_switch">त्वरित रूप से स्विच प्रस्तावों और गति चिकनाई मोड करने के लिए शामिल त्वरित सेटिंग्स टाइल का प्रयोग करें।</string>
     <string name="center">केंद्र</string>
-    <string name="info_qs_max_hz">अधिकतम हर्ट्ज टॉगल करने के लिए एक त्वरित सेटिंग टाइल शामिल</string>
+    <string name="info_qs_max_hz">अधिकतम हर्ट्ज और न्यूनतम हर्ट्ज के लिए एक त्वरित टाइल शामिल है</string>
     <string name="info_qs_rtrr">एक त्वरित सेटिंग टाइल को दिखाने के लिए वास्तविक समय ताज़ा दर भी शामिल है</string>
     <string name="s_off_mod">बंद स्क्रीन ताज़ा दर</string>
     <string name="force_hz_mod">फोर्स को सबसे कम Hz</string>
@@ -150,5 +150,6 @@
     <string name="data_usage"><u>डेटा उपयोग में लाया गया</u></string>
     <string name="acces_req">अभिगम्यता सेवा सक्षम करें</string>
     <string name="max_hz_for_psm">पावर सेविंग मोड के लिए अधिकतम हर्ट्ज</string>
-    <string name="is_prem_ft">%s is premium feature</string>
+    <string name="is_prem_ft">%s एक सशुल्क फ़ंक्शन है</string>
+    <string name="using_spay">एसपी क्रैश हो रहा है</string>
 </resources>

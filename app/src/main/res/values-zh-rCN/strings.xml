@@ -4,9 +4,9 @@
     <string name="buy_adfree">购买高级版</string>
     <string name="resolution">分辨率和运动平滑度切换</string>
     <string name="act">激活溢价|试用</string>
-    <string name="max_hz">最大Hz</string>
+    <string name="max_hz">最大赫兹</string>
     <string name="feat_n_a" tools:keep="@string/feat_n_a">不支持更改解决方案</string>
-    <string name="min_hz_for_toggle">最小Hz限制可以在最大刷新率按钮中选择</string>
+    <string name="min_hz_for_toggle">可选择的最小赫兹限制</string>
     <string name="high">High</string>
     <string name="refresh_rate_mon">刷新率监视器</string>
     <string name="left">剩下</string>
@@ -15,10 +15,10 @@
     <string name="bottom">底部</string>
     <string name="use_qstile_reso_switch">使用随附的快速设置图块可快速切换分辨率和运动平滑度模式。</string>
     <string name="center">中央</string>
-    <string name="info_qs_max_hz">包含快速设置磁贴以切换最大hz</string>
+    <string name="info_qs_max_hz">包括最大赫兹和最小赫兹的快速设置图块</string>
     <string name="info_qs_rtrr">包括用于激活刷新率监视器的快速设置磁贴</string>
     <string name="s_off_mod">屏幕关闭刷新率</string>
-    <string name="force_hz_mod">强制最低Hz</string>
+    <string name="force_hz_mod">强制最小赫兹</string>
     <string name="s_off_hz_inf">这会将屏幕关闭或 AOD 刷新率设置为最低，以提高备用电池的使用率。\n屏幕关闭刷新率: %s</string>
     <string name="chng_res_stng">%s分辨率设置不支持“High/Adaptive Refresh Rate”。首先在设置中更改“Resolution”和“Motion smoothness mode”。
         一旦执行ADB设置，此应用即可使用快速设置图块轻松切换分辨率和运动平滑度模式。
@@ -121,5 +121,6 @@
     <string name="data_usage"><u>数据使用</u></string>
     <string name="acces_req">启用无障碍服务</string>
     <string name="max_hz_for_psm">省电模式的最大赫兹</string>
-    <string name="is_prem_ft">%s is premium feature</string>
+    <string name="is_prem_ft">%s 是付费功能</string>
+    <string name="using_spay">SPay 失败</string>
 </resources>

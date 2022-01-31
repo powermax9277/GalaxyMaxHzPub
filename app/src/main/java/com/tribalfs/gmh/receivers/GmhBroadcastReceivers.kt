@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
+import android.content.Intent.*
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
@@ -17,7 +18,6 @@ import com.tribalfs.gmh.helpers.CacheSettings.disablePsm
 import com.tribalfs.gmh.helpers.CacheSettings.hasWriteSecureSetPerm
 import com.tribalfs.gmh.helpers.CacheSettings.ignorePowerModeChange
 import com.tribalfs.gmh.helpers.CacheSettings.ignoreRrmChange
-import com.tribalfs.gmh.helpers.CacheSettings.isNetSpeedRunning
 import com.tribalfs.gmh.helpers.CacheSettings.isPowerSaveModeOn
 import com.tribalfs.gmh.helpers.CacheSettings.isScreenOn
 import com.tribalfs.gmh.helpers.CacheSettings.lowestHzCurMode
@@ -26,7 +26,9 @@ import com.tribalfs.gmh.helpers.CacheSettings.offScreenRefreshRate
 import com.tribalfs.gmh.helpers.CacheSettings.prrActive
 import com.tribalfs.gmh.helpers.CacheSettings.restoreSync
 import com.tribalfs.gmh.helpers.CacheSettings.screenOffRefreshRateMode
+import com.tribalfs.gmh.helpers.CacheSettings.sensorOnKey
 import com.tribalfs.gmh.helpers.CacheSettings.turnOff5GOnPsm
+import com.tribalfs.gmh.netspeed.NetSpeedService.Companion.netSpeedService
 import com.tribalfs.gmh.netspeed.NetSpeedServiceHelperStn
 import kotlinx.coroutines.*
 
@@ -113,23 +115,6 @@ open class GmhBroadcastReceivers(context: Context, private val gmhBroadcastCallb
     }
 
 
-    private val forceLowestRunnable: Runnable by lazy {
-        Runnable {
-            if (screenOffRefreshRateMode != currentRefreshRateMode.get()) {
-                ignoreRrmChange = true
-                if (mUtilsRefreshRate.setRefreshRateMode(screenOffRefreshRateMode!!)) {
-                    mUtilsRefreshRate.setRefreshRate(lowestHzForAllMode, null)
-                }else{
-                    mUtilsRefreshRate.setRefreshRate(lowestHzCurMode, null)
-                    ignoreRrmChange = false
-                }
-            }else {
-                mUtilsRefreshRate.setRefreshRate(lowestHzCurMode, null)
-            }
-        }
-    }
-
-
     private val captureRrRunnable: Runnable by lazy {
         Runnable {
             offScreenRefreshRate = "${mUtilsRefreshRate.mUtilsDeviceInfo.currentDisplay.refreshRate.toInt()} hz"
@@ -151,15 +136,7 @@ open class GmhBroadcastReceivers(context: Context, private val gmhBroadcastCallb
                 }
             }
 
-            Intent.ACTION_SCREEN_OFF -> {
-                isScreenOn = false
-                restoreSync = false
-                disablePsm = false
-
-                // Workaround for AOD Bug on some device????
-                mUtilsRefreshRate.clearPeakAndMinRefreshRate()
-
-                if (mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefForceLowestSoIsOn) { handler.postDelayed(forceLowestRunnable,3000) }
+            ACTION_SCREEN_OFF -> {
 
                 handler.postDelayed(captureRrRunnable, 5000)
 
@@ -170,18 +147,7 @@ open class GmhBroadcastReceivers(context: Context, private val gmhBroadcastCallb
             }
 
 
-            Intent.ACTION_SCREEN_ON -> {
-                isScreenOn = true
-
-                scope.launch {
-                    mUtilsRefreshRate.setRefreshRate(prrActive.get()!!, mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefMinHzAdapt)
-                    currentRefreshRateMode.get()?.let {
-                        if (screenOffRefreshRateMode != it) {
-                            //ignoreRrmChange = true
-                            mUtilsRefreshRate.setRefreshRateMode(it)
-                        }
-                    }
-                }
+            ACTION_SCREEN_ON -> {
 
                 handler.removeCallbacksAndMessages(null)
 
@@ -189,15 +155,19 @@ open class GmhBroadcastReceivers(context: Context, private val gmhBroadcastCallb
                     if (restoreSync) ContentResolver.setMasterSyncAutomatically(true)
                     if (disablePsm) setPowerSaving(false)
 
-                    if (mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefNetSpeedIsOn && !isNetSpeedRunning.get()!!) {
-                        NetSpeedServiceHelperStn.instance(appCtx).runNetSpeed(null)
+                    if (netSpeedService == null && mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefNetSpeedIsOn) {
+                        NetSpeedServiceHelperStn.instance(appCtx).startNetSpeed()
                     }
                 }
 
                 scope.launch {
                     currentBrightness.set(mUtilsRefreshRate.mUtilsDeviceInfo.getScreenBrightnessPercent())
                 }
+            }
 
+            ACTION_LOCALE_CHANGED -> {
+                mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefSensorOnKey = ""
+                sensorOnKey = null
             }
         }
     }

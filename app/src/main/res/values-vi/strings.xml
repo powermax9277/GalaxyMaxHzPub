@@ -8,7 +8,7 @@
     <string name="max_hz">Max Hz</string>
     <string name="feat_n_a" tools:keep="@string/feat_n_a">Thay đổi độ phân giải không được hỗ trợ</string>
     <!--    <string name="qs_active">Nhanh Cài đặt gạch kích hoạt thành công</string>-->
-    <string name="min_hz_for_toggle">Thấp hơn giới hạn của chuyển đổi (Hz)</string>
+    <string name="min_hz_for_toggle">Thấp hơn giới hạn của chuyển đổi</string>
     <string name="adaptive">Adaptive</string>
     <string name="high">Cao</string>
     <string name="refresh_rate_mon">Tốc độ làm mới theo thời gian thực</string>
@@ -19,7 +19,7 @@
     <string name="use_qstile_reso_switch">Thao tác này sẽ đặt thiết bị của bạn ở chế độ tiết kiệm pin và nhanh chóng vào chế độ doze trong khi tắt màn hình để cải thiện mức tiêu thụ pin ở chế độ chờ.
     </string>
     <string name="center">Trung tâm</string>
-    <string name="info_qs_max_hz">Bao gồm một ngói thiết lập nhanh chóng để chuyển đổi hz max</string>
+    <string name="info_qs_max_hz">Bao gồm các ô cài đặt nhanh cho Hz tối đa và Hz tối thiểu</string>
     <string name="info_qs_rtrr">Bao gồm một ngói thiết lập nhanh chóng để hiển thị tốc độ làm tươi theo thời gian thực</string>
     <string name="s_off_mod">Screen-off Mods</string>
     <string name="force_hz_mod">Buộc Hz thấp nhất</string>
@@ -156,5 +156,6 @@
     <string name="data_usage"><u>Tiêu thụ dữ liệu</u></string>
     <string name="acces_req">Bật dịch vụ trợ năng</string>
     <string name="max_hz_for_psm">Hz tối đa cho chế độ tiết kiệm năng lượng</string>
-    <string name="is_prem_ft">%s is premium feature</string>
+    <string name="is_prem_ft">%s là một tính năng trả phí</string>
+    <string name="using_spay">SPay đang gặp sự cố</string>
 </resources>

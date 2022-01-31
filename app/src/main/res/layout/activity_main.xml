@@ -478,7 +478,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="@string/min_hz_for_toggle"
+                        android:text="@{@string/min_hz_for_toggle + &quot;:&quot; + @string/max_hz}"
                         android:textSize="11sp"
                         app:layout_constraintStart_toStartOf="@+id/sb_min_hz"
                         app:layout_constraintTop_toBottomOf="@+id/toggleMaxHzTileInf"
@@ -948,7 +948,7 @@
                         app:layout_constraintEnd_toEndOf="parent" />
 
                     <Switch
-                        android:id="@+id/sw_enable_netspeed"
+                        android:id="@+id/sw_netspeed"
                         android:layout_width="@dimen/seekbar_width"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
@@ -969,7 +969,7 @@
                         android:textSize="11sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/sw_enable_netspeed"
+                        app:layout_constraintTop_toBottomOf="@+id/sw_netspeed"
                         android:layout_marginTop="12dp"
                         tools:ignore="SmallSp" />
 
@@ -1111,39 +1111,26 @@
         </androidx.core.widget.NestedScrollView>
 
         <FrameLayout
-            android:id="@+id/p_bar"
+            android:id="@+id/loading_frame"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:animateLayoutChanges="true"
             android:background="#37000000"
-            android:visibility="visible"
+            android:visibility="invisible"
             android:clickable="true"
             android:focusable="true"
             android:focusableInTouchMode="true"
             app:layout_anchorGravity="center">
 
             <ImageView
-                android:id="@+id/updateProgressBar"
+                android:id="@+id/hz_pulse"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:src="@drawable/ic_launcher_foreground"
                 tools:ignore="ContentDescription" />
-            <!--<ProgressBar
-                android:id="@+id/updateProgressBar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawingCacheQuality="high"
-                android:layout_gravity="center"
-                android:indeterminateBehavior="repeat"
-                android:indeterminateDrawable="@drawable/loading"
-                android:indeterminateDuration="700"/>-->
-                <!--style="@android:style/Widget.Material.ProgressBar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:indeterminate="true" />-->
+
         </FrameLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

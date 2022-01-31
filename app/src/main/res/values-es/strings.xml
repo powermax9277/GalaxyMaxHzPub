@@ -16,7 +16,7 @@
     <string name="bottom">Abajo</string>
     <string name="use_qstile_reso_switch">Utilice el mosaico de configuración rápida incluido para cambiar rápidamente las resoluciones.</string>
     <string name="center">Centrar</string>
-    <string name="info_qs_max_hz">Incluye un mosaico de configuración rápida para alternar max hz</string>
+    <string name="info_qs_max_hz">Incluye mosaicos de configuración rápida para Max Hz y Min Hz</string>
     <string name="info_qs_rtrr">Incluye un mosaico de configuración rápida para mostrar la frecuencia de actualización en tiempo real</string>
     <string name="s_off_mod">Screen-off mods</string>
     <string name="force_hz_mod">Forzar el Hz más bajo</string>
@@ -141,5 +141,6 @@
     <string name="data_usage"><u>Uso de datos</u></string>
     <string name="acces_req">Habilitar servicio de accesibilidad</string>
     <string name="max_hz_for_psm">Hz máximo para el modo de ahorro de energía</string>
-    <string name="is_prem_ft">%s is premium feature</string>
+    <string name="is_prem_ft">%s es una característica premium</string>
+    <string name="using_spay">SPay está fallando</string>
 </resources>

@@ -4,7 +4,6 @@
         android:accessibilityEventTypes="typeViewScrolled|typeWindowStateChanged|typeWindowContentChanged|typeWindowsChanged"
         android:accessibilityFeedbackType="feedbackGeneric"
         android:canRetrieveWindowContent="true"
-        android:canPerformGestures="true"
         tools:targetApi="n"
         android:accessibilityFlags="flagRetrieveInteractiveWindows|flagIncludeNotImportantViews"
         />

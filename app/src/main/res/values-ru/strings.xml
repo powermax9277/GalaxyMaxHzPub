@@ -15,7 +15,7 @@
     <string name="bottom">Снизу</string>
     <string name="use_qstile_reso_switch">Используйте прилагаемую плитку быстрых настроек (qs) для быстрого переключения разрешения экрана.</string>
     <string name="center">По центру</string>
-    <string name="info_qs_max_hz">Добавляет на панель быстрых настроек кнопку быстрой смены макс. частоты.</string>
+    <string name="info_qs_max_hz">ДДобавляет кнопки быстрого изменения для макс. Гц и мин. Гц</string>
     <string name="info_qs_rtrr">Добавляет на панель быстрых настроек кнопку активации счетчика частоты обновления.</string>
     <string name="s_off_mod">Поведение при выкл. экране</string>
     <string name="force_hz_mod">Принудительно наименьшая Гц</string>
@@ -143,5 +143,6 @@
     <string name="data_usage"><u>Использование данных</u></string>
     <string name="acces_req">Enable Accessibility Service</string>
     <string name="max_hz_for_psm">Максимум Гц для режима энергосбережения</string>
-    <string name="is_prem_ft">%s is premium feature</string>
+    <string name="is_prem_ft">%s — это премиум-функция</string>
+    <string name="using_spay">SPay вылетает</string>
 </resources>

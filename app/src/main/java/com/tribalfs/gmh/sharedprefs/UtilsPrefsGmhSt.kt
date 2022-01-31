@@ -20,23 +20,20 @@ private const val DISPLAY_MODES = "display_modes"
 private const val ADAPTIVES = "adaptives"
 private const val HZ_CONFIG_SYNCED = "hz_conf_sncd"
 private const val HZ_CONFIG_FETCHED = "hz_conf_ftcd"
-// private const val INS_DATE_SYNC = "id_sncd"
 private const val HZ_CONFIG_FETCH_MON = "hz_conf_ftcd_mon"
 private const val PSM_CACHE = "psm_cache"
 private const val SHOW_NS_TOOL = "show_ns"
 private const val TOP_BOT_CHIP_ID = "tb_chip"
 private const val LCR_CHIP_ID = "lcr_chip"
 private const val TOGGLE_MINIMUM_HZ = "tg_min_hz"
-//private const val OPEN_EXPIRE_DIALOG = "op_exp_dlg"
 private const val SKIP_RES = "sk_rs"
-private const val KEY_INDICATOR_SPEED_UNIT = "kisu"
-private const val SPEED_TO_SHOW = "ists"
+private const val KEY_INDICATOR_SPEED_UNIT = "ksu"
+private const val SPEED_TO_SHOW = "its"
 private const val USING_SPAY = "usg_spay"
 private const val SETTINGS_LIST_DONE = "list_done"
 private const val HELP_URL = "help_url"
 private const val PREVENT_HIGH = "prev_hi"
 private const val SENSOR_ON_KEY = "s_on"
-
 internal const val MIN_HZ_ADAPT = "min_hz_adp"
 internal const val PREF_MAX_REFRESH_RATE = "pref_ref_rate"
 internal const val PREF_MAX_REFRESH_RATE_PSM = "pref_ref_rate_psm"
@@ -53,14 +50,13 @@ internal const val RESTORE_SYNC = "res_syn"
 internal const val REFRESH_RATE_MODE_PREF = "rrm_pref"
 internal const val ADAPTIVE_DELAY = "adp_delay"
 internal const val NS_STARTED = "kis"
-internal const val BYTE_PER_SEC = "Bps"
-internal const val BIT_PER_SEC = "bps"
-internal const val TOTAL_SPEED = "total"
-internal const val UPLOAD_SPEED = "up"
-internal const val DOWNLOAD_SPEED = "down"
+internal const val BYTE_PER_SEC = 0
+internal const val BIT_PER_SEC = 1
+internal const val TOTAL_SPEED = 2
+internal const val UPLOAD_SPEED = 0
+internal const val DOWNLOAD_SPEED = 1
 internal const val NOT_USING = 0
 internal const val USING = 1
-internal const val NOT_ASKED = 2
 
 
 internal class UtilsPrefsGmhSt private constructor(val context: Context) {
@@ -76,8 +72,8 @@ internal class UtilsPrefsGmhSt private constructor(val context: Context) {
 
     private val hzSharedPrefEditor by lazy {hzSharedPref.edit()}
 
-    var hzPrefUsingSPay: Int
-        get() = hzSharedPref.getInt(USING_SPAY, NOT_ASKED)
+    var hzPrefSPayUsage: Int
+        get() = hzSharedPref.getInt(USING_SPAY, NOT_USING)
         set(usingSpay) =   hzSharedPrefEditor.putInt(USING_SPAY, usingSpay).apply()
 
     var hzPrefAdaptiveDelay:Long
@@ -113,10 +109,6 @@ internal class UtilsPrefsGmhSt private constructor(val context: Context) {
         get() = hzSharedPref.getBoolean(HZ_CONFIG_FETCHED, false)
         set(fetched) =   hzSharedPrefEditor.putBoolean(HZ_CONFIG_FETCHED, fetched).apply()
 
-    /*var prefInsDateSynced: Boolean
-        get() = hzSharedPref.getBoolean(INS_DATE_SYNC, false)
-        set(fetched) =   hzSharedPrefEditor.putBoolean(INS_DATE_SYNC, fetched).apply()
-*/
 
     var gmhRefetchProfile: Boolean
         get() {
@@ -147,13 +139,6 @@ internal class UtilsPrefsGmhSt private constructor(val context: Context) {
     var gmhPrefMinHzForToggle: Int
         get() { return hzSharedPref.getInt(TOGGLE_MINIMUM_HZ, 1)}
         set(hz) {hzSharedPrefEditor.putInt(TOGGLE_MINIMUM_HZ, hz).apply()}
-
-
-/*
-    var gmhPrefExpireDialogAllowed: Boolean
-        get() { return hzSharedPref.getBoolean(OPEN_EXPIRE_DIALOG, false) }
-        set(allow) {hzSharedPrefEditor.putBoolean(OPEN_EXPIRE_DIALOG, allow).apply()}
-*/
 
     var gmhPrefIsHzSynced: Boolean
         get() {
@@ -280,7 +265,6 @@ internal class UtilsPrefsGmhSt private constructor(val context: Context) {
         }
 
 
-
     var gmhPrefMinHzAdapt: Int
         get() { return hzSharedPref.getInt(MIN_HZ_ADAPT, STANDARD_REFRESH_RATE_HZ).coerceAtLeast(lowestHzCurMode) }
         set(hz) {hzSharedPrefEditor.putInt(MIN_HZ_ADAPT, hz).apply()}
@@ -301,18 +285,18 @@ internal class UtilsPrefsGmhSt private constructor(val context: Context) {
         get() = hzSharedPref.getBoolean(NS_STARTED, false)
         set(value) = hzSharedPrefEditor.putBoolean(NS_STARTED, value).apply()
 
-    var gmhPrefSpeedUnit: String
+    var gmhPrefSpeedUnit: Int
         get() {
-            return hzSharedPref.getString(
+            return hzSharedPref.getInt(
                 KEY_INDICATOR_SPEED_UNIT,
                 BIT_PER_SEC
-            )!!
+            )
         }
-        set(speedUnit) {hzSharedPrefEditor.putString(KEY_INDICATOR_SPEED_UNIT, speedUnit).apply()}
+        set(speedUnit) {hzSharedPrefEditor.putInt(KEY_INDICATOR_SPEED_UNIT, speedUnit).apply()}
 
-    var gmhPrefSpeedToShow: String
-        get() { return hzSharedPref.getString(SPEED_TO_SHOW, TOTAL_SPEED)!! }
-        set(speedType) {hzSharedPrefEditor.putString(SPEED_TO_SHOW, speedType).apply()}
+    var gmhPrefSpeedToShow: Int
+        get() { return hzSharedPref.getInt(SPEED_TO_SHOW, TOTAL_SPEED) }
+        set(speedType) {hzSharedPrefEditor.putInt(SPEED_TO_SHOW, speedType).apply()}
 
     var gmhPrefSettingListDone: Boolean
         get() = hzSharedPref.getBoolean(SETTINGS_LIST_DONE, false)

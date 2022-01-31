@@ -16,7 +16,7 @@
     <string name="bottom">下</string>
     <string name="use_qstile_reso_switch">付属のクイック設定（qs）タイルを使用して、画面の解像度をすばやく切り替えます。</string>
     <string name="center">Center</string>
-    <string name="info_qs_max_hz">付属のクイック設定タイルを使用して最大Hzを変更することもできます</string>
+    <string name="info_qs_max_hz">付属のクイック設定タイルを使用して、最大Hzと最小Hzを変更できます</string>
     <string name="info_qs_rtrr">これを長期間オンにすると、アプリのバッテリー消費量が増える可能性があります。リフレッシュレートモニターをオンにするためのクイック設定タイルが含まれています。</string>
     <string name="s_off_mod">スクリーンオフモッズ</string>
     <string name="force_hz_mod">強制最低Hz</string>
@@ -135,5 +135,6 @@
     <string name="prevent_high">ハイモードへの切り替えを防止する</string>
     <string name="acces_req">アクセシビリティサービスを有効にする</string>
     <string name="max_hz_for_psm">省電力モードの最大Hz</string>
-    <string name="is_prem_ft">%s is premium feature</string>
+    <string name="is_prem_ft">%sはプレミアム機能です</string>
+    <string name="using_spay">SPayがクラッシュしています</string>
 </resources>

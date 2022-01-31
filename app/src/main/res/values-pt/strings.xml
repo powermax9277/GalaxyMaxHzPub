@@ -18,7 +18,7 @@
     <string name="bottom">Inferior</string>
     <string name="use_qstile_reso_switch">Use as configurações rápidas telha incluído para resoluções alternar rapidamente e modos de movimento suavidade.</string>
     <string name="center">Centro</string>
-    <string name="info_qs_max_hz">Inclui uma telha de ajuste rápido para alternar hz max</string>
+    <string name="info_qs_max_hz">Inclui blocos de configuração rápida para max Hz e min Hz</string>
     <string name="info_qs_rtrr">Inclui uma telha de ajuste rápido para mostrar taxa de atualização em tempo real</string>
     <string name="s_off_mod">Taxa de atualização quando a tela está desligada</string>
     <string name="force_hz_mod">Forçar para Hz Mais Baixo</string>
@@ -145,5 +145,6 @@
     <string name="data_usage"><u>Uso de dados</u></string>
     <string name="acces_req">Ativar serviço de acessibilidade</string>
     <string name="max_hz_for_psm">Hz máx para o modo de economia de energia</string>
-    <string name="is_prem_ft">%s is premium feature</string>
+    <string name="is_prem_ft">%s é um recurso pago</string>
+    <string name="using_spay">SPay está travando</string>
 </resources>

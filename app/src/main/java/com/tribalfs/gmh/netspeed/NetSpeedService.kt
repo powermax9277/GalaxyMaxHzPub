@@ -25,6 +25,7 @@ import com.tribalfs.gmh.helpers.UtilSettingsIntents.dataUsageSettingsIntent
 import com.tribalfs.gmh.netspeed.SpeedCalculator.Companion.mCalcInBits
 import com.tribalfs.gmh.sharedprefs.*
 import kotlinx.coroutines.*
+import java.lang.Runnable
 import java.lang.String.format
 import java.util.*
 import kotlin.coroutines.CoroutineContext
@@ -37,10 +38,15 @@ private const val UPDATE_INTERVAL = 1000L
 
 class NetSpeedService : Service(), CoroutineScope {
 
+    companion object{
+        internal var netSpeedService: NetSpeedService? = null
+    }
+
     private val mNotificationContentView: RemoteViews by lazy {RemoteViews(applicationContext.packageName, R.layout.view_indicator_notification) }
     private val notificationManagerCompat by lazy{NotificationManagerCompat.from(applicationContext)}
     private val mUtilsPrefsGmh by lazy{ UtilsPrefsGmhSt.instance(applicationContext) }
     private val mNotifIcon by lazy{ UtilNotifIcon() }
+    private val mHandler by lazy {Handler(Looper.getMainLooper())}
     private lateinit var notificationBuilderInstance: Notification.Builder
 
     private var mSpeedToShow = TOTAL_SPEED
@@ -54,11 +60,11 @@ class NetSpeedService : Service(), CoroutineScope {
         get() = job + Dispatchers.IO
 
 
-    private var continueRrUpdate: Boolean = false
+    private var continueMeasureNetStat: Boolean = false
 
-    private val updateNetstat
+    private val measureNetStat
         get() = launch {
-            while (continueRrUpdate) {
+            while (continueMeasureNetStat) {
                 val currentRxBytes: Long = TrafficStats.getTotalRxBytes()
                 val currentTxBytes: Long = TrafficStats.getTotalTxBytes()
                 val currentTime = System.currentTimeMillis()
@@ -85,14 +91,25 @@ class NetSpeedService : Service(), CoroutineScope {
         }
 
     private fun startNetStatInternal(){
-        continueRrUpdate = true
-        updateNetstat.start()
+        continueMeasureNetStat = true
+        measureNetStat.start()
     }
 
 
     private fun stopNetStatInternal(){
-        continueRrUpdate = false
-        updateNetstat.cancel()
+        continueMeasureNetStat = false
+        measureNetStat.cancel()
+    }
+
+    private val mCallback = Runnable {
+        if (!isScreenOn) {
+            stopNetStatInternal()
+            notificationBuilderInstance.setVisibility(Notification.VISIBILITY_SECRET)
+            notificationManagerCompat.notify(
+                NOTIFICATION_ID_NET_SPEED,
+                notificationBuilderInstance.build()
+            )
+        }
     }
 
     private val mScreenStatusReceiver by lazy {
@@ -101,6 +118,7 @@ class NetSpeedService : Service(), CoroutineScope {
             override fun onReceive(context: Context?, intent: Intent?) {
                 when (intent?.action) {
                     Intent.ACTION_SCREEN_ON -> {
+                        mHandler.removeCallbacks(mCallback)
                         startNetStatInternal()
                         notificationBuilderInstance.setVisibility(Notification.VISIBILITY_PRIVATE)
                         notificationManagerCompat.notify(
@@ -109,16 +127,7 @@ class NetSpeedService : Service(), CoroutineScope {
                         )
                     }
                     Intent.ACTION_SCREEN_OFF -> {
-                        Handler(Looper.getMainLooper()).postDelayed({
-                            if (!isScreenOn) {
-                                stopNetStatInternal()
-                                notificationBuilderInstance.setVisibility(Notification.VISIBILITY_SECRET)
-                                notificationManagerCompat.notify(
-                                    NOTIFICATION_ID_NET_SPEED,
-                                    notificationBuilderInstance.build()
-                                )
-                            }
-                        }, 8000)
+                        mHandler.postDelayed(mCallback, 7000)
                     }
                 }
 
@@ -186,6 +195,7 @@ class NetSpeedService : Service(), CoroutineScope {
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate() {
         super.onCreate()
+        netSpeedService = this
         setupNotification()
         setupScreenStatusReceiver()
     }
@@ -193,7 +203,7 @@ class NetSpeedService : Service(), CoroutineScope {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {//keep intent nullable for system restart
         Log.d(TAG, "onStartCommand() called")
-        handleConfigChange()
+        //handleConfigChange()
         startForeground(NOTIFICATION_ID_NET_SPEED, notificationBuilderInstance.build())
         startNetStatInternal()
         return START_STICKY
@@ -205,6 +215,7 @@ class NetSpeedService : Service(), CoroutineScope {
     }
 
     override fun onDestroy() {
+        netSpeedService = null
         stopNetStatInternal()
         notificationManagerCompat.cancel(NOTIFICATION_ID_NET_SPEED)
         try {
@@ -286,10 +297,21 @@ class NetSpeedService : Service(), CoroutineScope {
         }
     }
 
+   /* private fun handleConfigChange() {
 
-    private fun handleConfigChange() {
-        mCalcInBits = mUtilsPrefsGmh.gmhPrefSpeedUnit == BIT_PER_SEC
-        mSpeedToShow = mUtilsPrefsGmh.gmhPrefSpeedToShow
+        *//*mCalcInBits = mUtilsPrefsGmh.gmhPrefSpeedUnit == BIT_PER_SEC
+        mSpeedToShow = mUtilsPrefsGmh.gmhPrefSpeedToShow*//*
+    }
+    */
+
+    fun setStream(stream: Int){
+        mSpeedToShow = stream
+
+    }
+
+
+    fun setSpeedUnit(speedUnit: Int){
+        mCalcInBits = speedUnit == BIT_PER_SEC
     }
 
 

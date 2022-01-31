@@ -16,7 +16,7 @@
     <string name="bottom">En Bas</string>
     <string name="use_qstile_reso_switch">Utilisez la vignette des paramètres rapides (qs) incluse pour changer rapidement de résolution d\'écran.</string>
     <string name="center">Centre</string>
-    <string name="info_qs_max_hz">Comprend une tuile de réglage rapide pour basculer entre max hz</string>
+    <string name="info_qs_max_hz">Comprend des tuiles à réglage rapide pour max Hz et min Hz</string>
     <string name="info_qs_rtrr">Comprend un tuile de réglage rapide pour afficher le taux de rafraîchissement en temps réel</string>
     <string name="s_off_mod">Taux de rafraîchissement de l\'écran désactivé</string>
     <string name="force_hz_mod">Force au Plus Bas Hz</string>
@@ -152,5 +152,6 @@
     <string name="data_usage"><u>L\'utilisation de données</u></string>
     <string name="acces_req">Activer le service d\'accessibilité</string>
     <string name="max_hz_for_psm">Hz max pour le mode d\'économie d\'énergie</string>
-    <string name="is_prem_ft">%s is premium feature</string>
+    <string name="is_prem_ft">%s est une fonctionnalité premium</string>
+    <string name="using_spay">SPay échoue</string>
 </resources>

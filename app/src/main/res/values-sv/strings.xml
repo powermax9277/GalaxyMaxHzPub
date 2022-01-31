@@ -17,7 +17,7 @@
     <string name="bottom">"Botten"</string>
     <string name="use_qstile_reso_switch">"Använd den medföljande rutan för snabbinställningar (qs) för att snabbt växla skärmupplösning."</string>
     <string name="center">"Centrerad"</string>
-    <string name="info_qs_max_hz">"Inkluderar en snabbinställningsplatta för att ändra max hz"</string>
+    <string name="info_qs_max_hz">"Inkluderar en snabbinställningsplatta för att ändra max Hz och lägsta Hz"</string>
     <string name="info_qs_rtrr">"Inkluderar en snabbinställningsplatta för att slå på uppdateringsfrekvensmonitorn."</string>
     <string name="s_off_mod">"Skärmavstängningsmods"</string>
     <string name="force_hz_mod">"Tvinga lägsta Hz"</string>
@@ -139,5 +139,6 @@
     <string name="premium_features">"Premiumfunktioner"</string>
     <string name="prevent_high">"Förhindra byte till högt läge"</string>
     <string name="acces_req">"Aktivera tillgänglighetstjänst"</string>
-    <string name="is_prem_ft">%s is premium feature</string>
+    <string name="is_prem_ft">%s är en premiumfunktion</string>
+    <string name="using_spay">SPay kraschar</string>
 </resources>

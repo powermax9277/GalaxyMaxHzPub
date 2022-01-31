@@ -35,7 +35,6 @@ import com.tribalfs.gmh.helpers.CacheSettings.hzNotifOn
 import com.tribalfs.gmh.helpers.CacheSettings.ignoreRrmChange
 import com.tribalfs.gmh.helpers.CacheSettings.isFakeAdaptive
 import com.tribalfs.gmh.helpers.CacheSettings.isFakeAdaptiveValid
-import com.tribalfs.gmh.helpers.CacheSettings.isNetSpeedRunning
 import com.tribalfs.gmh.helpers.CacheSettings.isOfficialAdaptive
 import com.tribalfs.gmh.helpers.CacheSettings.isOnePlus
 import com.tribalfs.gmh.helpers.CacheSettings.isPowerSaveModeOn
@@ -113,11 +112,6 @@ class MyApplication : Application() {
                             delay(250)
                             mUtilsRefreshRateSt.updateRefreshRateParams()
                             gmhAccessInstance?.setupAdaptiveEnhancer()
-                            /*applicationContext.startService(
-                                Intent(applicationContext, GalaxyMaxHzAccess::class.java).apply {
-                                    putExtra(SETUP_ADAPTIVE, true)
-                                }
-                            )*/
 
                             currentRefreshRateMode.get().let{
                                 if (it != REFRESH_RATE_MODE_STANDARD) {
@@ -329,8 +323,8 @@ class MyApplication : Application() {
 
         applicationScope.launch {
             withContext(Dispatchers.IO){ cacheSettings()} //suspend function
+
             delay(6500)//DON'T reduce
-            //checkAccessibility()
             gmhAccessInstance?.setupAdaptiveEnhancer()
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -393,13 +387,11 @@ class MyApplication : Application() {
         isProfilesLoaded = withContext(Dispatchers.IO) { mUtilsRefreshRateSt.initProfiles() }
 
         gmhAccessInstance?.setupAdaptiveEnhancer()
-        //applicationContext.startService(Intent(applicationContext, GalaxyMaxHzAccess::class.java).apply{ putExtra(SETUP_ADAPTIVE, true)})
 
         mUtilsRefreshRateSt.updateRefreshRateParams()
 
         preventHigh = mUtilsPrefsGmh.gmhPrefPreventHigh
         hzNotifOn.set (mUtilsPrefsGmh.gmhPrefHzIsOn && mUtilsPrefsGmh.gmhPrefHzNotifIsOn)
-        isNetSpeedRunning.set( mUtilsPrefsGmh.gmhPrefNetSpeedIsOn)
 
     }
 
@@ -436,7 +428,7 @@ class MyApplication : Application() {
 
     private fun checkAccessibility(): Boolean{
         return if (
-            (isSpayInstalled == false || mUtilsRefreshRateSt.mUtilsPrefsGmh.hzPrefUsingSPay == NOT_USING)
+            (isSpayInstalled == false || mUtilsRefreshRateSt.mUtilsPrefsGmh.hzPrefSPayUsage == NOT_USING)
             && hasWriteSecureSetPerm
         ) {
             allowAccessibility(

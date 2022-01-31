@@ -131,7 +131,7 @@ class QSTileMinHz : TileService() {
                 GalaxyMaxHzAccess::class.java
             )
         ){
-            if (hasWriteSecureSetPerm && (isSpayInstalled == false ||  mUtilsRefreshRate.mUtilsPrefsGmh.hzPrefUsingSPay == NOT_USING)) {
+            if (hasWriteSecureSetPerm && (isSpayInstalled == false ||  mUtilsRefreshRate.mUtilsPrefsGmh.hzPrefSPayUsage == NOT_USING)) {
                 AccessibilityPermission.allowAccessibility(
                     applicationContext,
                     GalaxyMaxHzAccess::class.java,

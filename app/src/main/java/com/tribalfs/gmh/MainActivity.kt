@@ -1,5 +1,8 @@
 package com.tribalfs.gmh
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
+import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.ActivityManager
@@ -23,8 +26,8 @@ import android.text.method.LinkMovementMethod
 import android.util.TypedValue
 import android.view.*
 import android.view.View.MeasureSpec
-import android.view.animation.Animation
 import android.view.animation.AnimationUtils.loadAnimation
+import android.view.animation.AnticipateInterpolator
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import android.widget.Switch
@@ -70,7 +73,6 @@ import com.tribalfs.gmh.helpers.CacheSettings.hasWriteSystemSetPerm
 import com.tribalfs.gmh.helpers.CacheSettings.highestHzForAllMode
 import com.tribalfs.gmh.helpers.CacheSettings.isFakeAdaptive
 import com.tribalfs.gmh.helpers.CacheSettings.isMultiResolution
-import com.tribalfs.gmh.helpers.CacheSettings.isNetSpeedRunning
 import com.tribalfs.gmh.helpers.CacheSettings.isOfficialAdaptive
 import com.tribalfs.gmh.helpers.CacheSettings.isOnePlus
 import com.tribalfs.gmh.helpers.CacheSettings.isPowerSaveModeOn
@@ -101,6 +103,7 @@ import com.tribalfs.gmh.helpers.UtilSettingsIntents.powerSavingModeSettingsInten
 import com.tribalfs.gmh.hertz.*
 import com.tribalfs.gmh.hertz.HzNotifGlobal.CHANNEL_ID_HZ
 import com.tribalfs.gmh.netspeed.*
+import com.tribalfs.gmh.netspeed.NetSpeedService.Companion.netSpeedService
 import com.tribalfs.gmh.profiles.*
 import com.tribalfs.gmh.profiles.ProfilesObj.isProfilesLoaded
 import com.tribalfs.gmh.sharedprefs.*
@@ -177,14 +180,12 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
 
                         CHANNEL_ID_NET_SPEED -> {
                             if (intent.getBooleanExtra(EXTRA_BLOCKED_STATE, false)) {
-                                mBinding.swEnableNetspeed.isChecked = false
+                                mBinding.swNetspeed.isChecked = false
                                 mNetspeedService.runNetSpeed(false)
                             } else {
                                 if (!ignoreUnblockNetSpeedNotifState) {
-                                    mBinding.swEnableNetspeed.isChecked = true
-                                    mNetspeedService.runNetSpeed(
-                                        true
-                                    )
+                                    mBinding.swNetspeed.isChecked = true
+                                    mNetspeedService.runNetSpeed(true)
                                     ignoreUnblockNetSpeedNotifState = true
                                 }
                             }
@@ -192,22 +193,18 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                     }
                 }
 
-                ACTION_HIDE_MAIN_ACTIVITY -> pauseMe()
+                ACTION_HIDE_MAIN_ACTIVITY -> {
+                    //Force app to go background on Change Resolution to prevent crash (pre-api 23 issue)
+                    val startMain = Intent(Intent.ACTION_MAIN)
+                    startMain.addCategory(Intent.CATEGORY_HOME)
+                    startMain.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                    startActivity(startMain)
+                }
 
                 ACTION_CLOSE_MAIN_ACTIVITY -> finish()
             }
         }
     }
-
-
-    //Force app to go background on Change Resolution to prevent crash (pre-api 23 issue)
-    private fun pauseMe(){
-        val startMain = Intent(Intent.ACTION_MAIN)
-        startMain.addCategory(Intent.CATEGORY_HOME)
-        startMain.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        startActivity(startMain)
-    }
-
 
 
     private val listener = OnSharedPreferenceChangeListener { _, key ->
@@ -321,7 +318,6 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
     }
 
 
-
     private val rrmChangeCallback: OnPropertyChangedCallback = object : OnPropertyChangedCallback() {
         override fun onPropertyChanged(sender: Observable, propertyId: Int) {
             when (sender) {
@@ -377,10 +373,8 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
         }
     }
 
-
-
     @RequiresApi(VERSION_CODES.M)
-     fun onClickView(v: View) {
+    fun onClickView(v: View) {
         val mUtilsPrefsGmh = mUtilsRefreshRate.mUtilsPrefsGmh
         when(v.id){
             mBinding.tvBattOptimSettings.id -> {
@@ -390,41 +384,40 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
             mBinding.chBytes.id -> {
                 if (mUtilsPrefsGmh.gmhPrefSpeedUnit != BYTE_PER_SEC) {
                     mUtilsPrefsGmh.gmhPrefSpeedUnit = BYTE_PER_SEC
-                    mNetspeedService.runNetSpeed(null)
+                    mNetspeedService.updateSpeedUnit()
                 }
             }
 
             mBinding.chBits.id -> {
                 if (mUtilsPrefsGmh.gmhPrefSpeedUnit != BIT_PER_SEC) {
                     mUtilsPrefsGmh.gmhPrefSpeedUnit = BIT_PER_SEC
-                    mNetspeedService.runNetSpeed(null)
+                    mNetspeedService.updateSpeedUnit()
                 }
             }
 
             mBinding.chDownStream.id -> {
                 if (mUtilsPrefsGmh.gmhPrefSpeedToShow != DOWNLOAD_SPEED) {
                     mUtilsPrefsGmh.gmhPrefSpeedToShow = DOWNLOAD_SPEED
-                    mNetspeedService.runNetSpeed(null)
+                    mNetspeedService.updateStreamType()
                 }
             }
 
             mBinding.chUpStream.id -> {
                 if (mUtilsPrefsGmh.gmhPrefSpeedToShow != UPLOAD_SPEED) {
                     mUtilsPrefsGmh.gmhPrefSpeedToShow = UPLOAD_SPEED
-                    mNetspeedService.runNetSpeed(null)
+                    mNetspeedService.updateStreamType()
                 }
             }
 
             mBinding.chCombinedStream.id -> {
                 if (mUtilsPrefsGmh.gmhPrefSpeedToShow != TOTAL_SPEED) {
                     mUtilsPrefsGmh.gmhPrefSpeedToShow = TOTAL_SPEED
-                    mNetspeedService.runNetSpeed(null)
+                    mNetspeedService.updateStreamType()
                 }
             }
 
-            mBinding.swEnableNetspeed.id -> {
+            mBinding.swNetspeed.id -> {
                 switchNetSpeed((v as Switch).isChecked)
-
             }
 
             mBinding.tvDataUsage.id -> {
@@ -652,7 +645,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                     return
                 }
 
-                startPipAtivity()
+                PsmChangeHandler.instance(applicationContext).startPipActivity()
 
                 return
             }
@@ -689,7 +682,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                     }
                     return
                 }
-                startPipAtivity()
+                PsmChangeHandler.instance(applicationContext).startPipActivity()
                 return
             }
 
@@ -759,20 +752,35 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
         }
     }
 
-    private fun startPipAtivity(){
-        if (isPowerSaveModeOn.get() == true && SDK_INT >= VERSION_CODES.S) {
-            val pipIntent = Intent(applicationContext, PipActivity::class.java)
-            pipIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            applicationContext.startActivity(pipIntent)
-        }
-    }
-
     @RequiresApi(VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         val splashScreen = installSplashScreen()
-        splashScreen.setKeepOnScreenCondition { !isProfilesLoaded }
+
+        splashScreen.setOnExitAnimationListener{splashScreenView ->
+            splashScreenView.view.background.alpha = 15
+            splashScreenView.iconView.startAnimation(loadAnimation(this@MainActivity, R.anim.pulse))
+            val animator: ObjectAnimator = ObjectAnimator.ofFloat(
+                splashScreenView.iconView,
+                View.SCALE_Y,
+                1.0f, 0f
+            ).apply{
+                interpolator = AnticipateInterpolator()
+                duration = 1000
+                addListener(object : AnimatorListenerAdapter() {
+                    override fun onAnimationEnd(animator: Animator) {
+                        splashScreenView.remove()
+                    }
+                })
+            }
+            launch(Dispatchers.Main) {
+                while (!isProfilesLoaded) {
+                    delay(400)
+                }
+                animator.start()
+            }
+        }
 
         launch {
             checkAccessibilityPerm(false)
@@ -780,13 +788,10 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
 
         inflateViews()
         updateDisplayId()
-        // checkTileIsExpired()
         updateViewModelSig()
         updateWssPerm()
         setupActionBar()
-        showLoading(true)
         registerSharedPrefListener()
-
 
         setupKeepMod()
         initNeedSpeed()
@@ -800,12 +805,8 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
 
         viewModel.isValidAdFree.observe(this, { adFree ->
             isPremium.set( adFree)
-            //syncInsDate(SYNCMODE_GET, null, adFree)
             updateNetSpeed(adFree)
-            //setupMenuVisibility()
             mBinding.premium = adFree
-            // checkTileIsExpired()
-            //loadBannerAd(adFree)
             initDozeMod(adFree)
             initDisableAutoSync(adFree)
             setupScreenOffSensorsOff(adFree) //New
@@ -819,20 +820,10 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
         isPowerSaveModeOn.addOnPropertyChangedCallback(rrmChangeCallback)
 
         setupBroadcastReceiver()
-        checkIfUsingSpay()
         checkIfAllowedBackgroundTask()
 
         if (savedInstanceState == null){
             oneTimeAutoChecks()
-            /*if (isFakeAdaptive.get()!! && gmhAccessInstance == null && !UtilPermSt.instance(applicationContext).hasOverlayPerm()) {
-                showSbMsg(
-                    getString(R.string.aot_perm_inf),
-                    Snackbar.LENGTH_INDEFINITE,
-                    android.R.string.ok
-                ) {
-                    showAppearOnTopRequest()
-                }
-            }*/
         }
 
 
@@ -840,7 +831,6 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
             mBinding.swPreventHigh.isChecked = mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefPreventHigh
         }
 
-        showLoading(false)
 
         launch{
             getHelpUrl()
@@ -907,7 +897,8 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                     findItem(R.id.menuNs).isVisible = it >= LIC_TYPE_ADFREE/ 2
                     findItem(R.id.menuPrem).isVisible = it < LIC_TYPE_ADFREE/ 2
                     findItem(R.id.menuNs).isChecked = mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefShowNetSpeedTool
-
+                    findItem(R.id.menuUsingSpay).isVisible = isSpayInstalled == true
+                    findItem(R.id.menuUsingSpay).isChecked = mUtilsRefreshRate.mUtilsPrefsGmh.hzPrefSPayUsage == USING
                 }
             }
         }
@@ -989,14 +980,14 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
 
     private fun switchNetSpeed(bool: Boolean) {
 
-        if (isNetSpeedRunning.get() == bool) return
+        if ((netSpeedService != null) == bool) return
 
         if (bool) {
             if (isNetSpeedNotificationEnabled()) {
                 mNetspeedService.runNetSpeed(bool)
             } else {
                 ignoreUnblockNetSpeedNotifState = false
-                mBinding.swEnableNetspeed.isChecked = false
+                mBinding.swNetspeed.isChecked = false
                 val settingsIntent: Intent =
                     if (SDK_INT >= VERSION_CODES.O) {
                         Intent(ACTION_APP_NOTIFICATION_SETTINGS)
@@ -1016,11 +1007,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
 
         if (SDK_INT >= VERSION_CODES.M) {
             gmhAccessInstance?.checkAutoSensorsOff(switchOn = true, screenOffOnly = true)
-            /*applicationContext.startService(
-                Intent(applicationContext, GalaxyMaxHzAccess::class.java).apply {
-                    putExtra(SETUP_NETWORK_CALLBACK, true)
-                }
-            )*/
+
         }
     }
 
@@ -1155,6 +1142,13 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                 }
                 true
             }
+            R.id.menuUsingSpay ->{
+                item.isChecked.let { checked ->
+                    item.isChecked = !checked
+                    mUtilsRefreshRate.mUtilsPrefsGmh.hzPrefSPayUsage = if (!checked) USING else NOT_USING
+                }
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -1234,14 +1228,14 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
             && showOverlayHz == true
             && !UtilPermSt.instance(applicationContext).hasOverlayPerm()
         ) {
-                showSbMsg(
-                    getString(R.string.aot_perm_inf),
-                    Snackbar.LENGTH_INDEFINITE,
-                    android.R.string.ok
-                ) {
-                        showAppearOnTopRequest()
+            showSbMsg(
+                getString(R.string.aot_perm_inf),
+                Snackbar.LENGTH_INDEFINITE,
+                android.R.string.ok
+            ) {
+                showAppearOnTopRequest()
 
-                }
+            }
         }
 
         HzServiceHelperStn.instance(applicationContext).switchHz(
@@ -1356,18 +1350,18 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
     }
 
 
-  private fun checkIfUsingSpay(){
+/*    private fun checkIfUsingSpay(){
         if (isSpayInstalled == true && mUtilsRefreshRate.mUtilsPrefsGmh.hzPrefUsingSPay == NOT_ASKED) {
             launch(Dispatchers.Main) {
                 DialogUsingSpay().show(supportFragmentManager, null)
             }
         }
-    }
+    }*/
 
     @Synchronized
     private fun checkAccessibilityPerm(showRequest: Boolean): Boolean{
         return if (!isAccessibilityEnabled(applicationContext, GalaxyMaxHzAccess::class.java)){
-            if (hasWriteSecureSetPerm && (isSpayInstalled == false ||  mUtilsRefreshRate.mUtilsPrefsGmh.hzPrefUsingSPay == NOT_USING)) {
+            if (hasWriteSecureSetPerm && (isSpayInstalled == false ||  mUtilsRefreshRate.mUtilsPrefsGmh.hzPrefSPayUsage == NOT_USING)) {
                 allowAccessibility(applicationContext, GalaxyMaxHzAccess::class.java, true)
                 true
             }else{
@@ -1416,12 +1410,12 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
 
     @SuppressLint("NewApi")
     private fun setupMaxHzSeekBar() {
-  /*      var oldProgMax: Float? = null
-        var oldProgMin: Float? = null
-        mBinding.sbPeakHz.addOnSliderTouchListener(object : RangeSlider.OnSliderTouchListener{
+        /*      var oldProgMax: Float? = null
+              var oldProgMin: Float? = null
+              mBinding.sbPeakHz.addOnSliderTouchListener(object : RangeSlider.OnSliderTouchListener{
 
-            override fun onStartTrackingTouch(slider: RangeSlider) {
-                *//*oldProgMax = slider.valueTo
+                  override fun onStartTrackingTouch(slider: RangeSlider) {
+                      *//*oldProgMax = slider.valueTo
                 oldProgMin = slider.valueFrom*//*
             }
             override fun onStopTrackingTouch(slider: RangeSlider) {
@@ -1479,7 +1473,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
         */
 
 
-         var oldProg = 60
+        var oldProg = 60
         mBinding.sbPeakHz.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 val newProgress = supportedHzIntAllMod?.closestValue(
@@ -1515,13 +1509,13 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
 
 
     private fun updateMaxHzSbMinMax() {
-       /* launch {
-            delay(500)
-            //Log.d(TAG,"forceLowestHz $forceLowestHz vs ${mUtilsPrefsGmh.hzPrefMaxRefreshRate}")
+        /* launch {
+             delay(500)
+             //Log.d(TAG,"forceLowestHz $forceLowestHz vs ${mUtilsPrefsGmh.hzPrefMaxRefreshRate}")
 
-            mBinding.sbPeakHz.values =  supportedHzIntAllMod!!.map{i -> i.toFloat()} //lowestHzCurMode highestHzForAllMode
-            //initial value
-            *//*try {
+             mBinding.sbPeakHz.values =  supportedHzIntAllMod!!.map{i -> i.toFloat()} //lowestHzCurMode highestHzForAllMode
+             //initial value
+             *//*try {
                 mBinding.sbPeakHz.valueTo =
                     mUtilsRefreshRate.mUtilsPrefsGmh.hzPrefMaxRefreshRate.toFloat()
                 mBinding.sbPeakHz.valueFrom =
@@ -1612,11 +1606,11 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                     }*/
 
                     gmhAccessInstance?.setupAdaptiveEnhancer()
-                   /* applicationContext.startService(
-                        Intent(applicationContext,GalaxyMaxHzAccess::class.java).apply {
-                            putExtra(SETUP_ADAPTIVE, true)
-                        }
-                    )*/
+                    /* applicationContext.startService(
+                         Intent(applicationContext,GalaxyMaxHzAccess::class.java).apply {
+                             putExtra(SETUP_ADAPTIVE, true)
+                         }
+                     )*/
                 }
             })
     }
@@ -1954,7 +1948,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
             }
         }else{
             mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefNetSpeedIsOn.let{
-                mBinding.swEnableNetspeed.isChecked = it
+                mBinding.swNetspeed.isChecked = it
                 switchNetSpeed(it)
             }
         }
@@ -2094,9 +2088,9 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
         (thumbView.findViewById<View>(R.id.tvProgress) as TextView).text = progress.toString()
         thumbView.measure(MeasureSpec.UNSPECIFIED, MeasureSpec.UNSPECIFIED)
         val bitmap = Bitmap.createBitmap(
-        thumbView.measuredWidth,
-        thumbView.measuredHeight,
-        Bitmap.Config.ARGB_8888
+            thumbView.measuredWidth,
+            thumbView.measuredHeight,
+            Bitmap.Config.ARGB_8888
         )
 
         thumbView.layout(0, 0, thumbView.measuredWidth, thumbView.measuredHeight)
@@ -2125,14 +2119,19 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
 
     private fun showLoading(bool: Boolean) {
         launch(Dispatchers.Main) {
-            val pulse: Animation = loadAnimation(this@MainActivity, R.anim.pulse)
-             if (bool) {
-                 mBinding.pBar.visibility = View.VISIBLE
-                 mBinding.updateProgressBar.startAnimation(pulse)
+            if (bool) {
+                mBinding.loadingFrame.visibility = View.VISIBLE
+                mBinding.hzPulse.startAnimation(
+                    loadAnimation(
+                        this@MainActivity,
+                        R.anim.pulse
+                    )
+                )
             } else {
-                 mBinding.updateProgressBar.clearAnimation()
-                 mBinding.pBar.visibility = View.GONE
-             }
+                mBinding.hzPulse.clearAnimation()
+                mBinding.loadingFrame.visibility = View.GONE
+
+            }
         }
     }
 
@@ -2162,134 +2161,6 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
         mUtilsPrefsAct.gmhPrefActivationCode = actCode
         syncLicense(silent = false, trial = false)
     }
-
-/*private val adRequest: AdRequest by lazy{AdRequest.Builder().build()}
-private var isBannerAdLoaded : Boolean = false
-private var maxRetry = 10
-private var rewardedInterstitialAd: RewardedInterstitialAd? = null*/
-
-
-/* private fun  checkTileIsExpired(){
-     isTileExpired =  mUtilsPrefsAct.getTileIsExpired(false)
-     showDialogIfTileExpired()
- }*/
-
-
-/*    private fun syncInsDate(instDateSyncMode: String, expiryDays: Int?, isAdFree: Boolean) = launch {
-        Log.d(TAG, "syncInsDate() called")
-        if (isAdFree || ( mUtilsPrefsGmh.prefInsDateSynced && instDateSyncMode != SYNCMODE_POST)) return@launch
-        val resultJson = mSyncer.syncInsDate(instDateSyncMode, expiryDays)
-
-        if (resultJson != null) {
-            mUtilsPrefsGmh.prefInsDateSynced = true
-            when (resultJson[KEY_JSON_INS_DATE_SYNCMODE] as String) {
-                SYNCMODE_POST -> {
-                    mUtilsPrefsAct.gmhPrefTileExpiryDays =
-                        (resultJson[KEY_JSON_EXPIRY_DAYS] as String).toInt()
-                }
-                SYNCMODE_GET -> {
-                    mUtilsPrefsAct.gmhPrefTileExpiryDays =
-                        (resultJson[KEY_JSON_EXPIRY_DAYS] as String).toInt()
-                    mUtilsPrefsAct.gmhPrefInstallDateStr =
-                        resultJson[KEY_JSON_INS_DATE].toString()
-                    //isTileExpired = mUtilsPrefsAct.getTileIsExpired(false)
-                }
-            }
-        }
-    }*/
-
-
-/*
-    private fun loadBannerAd(adFree: Boolean) {
-        if (adFree || isBannerAdLoaded) return
-        mBinding.adView.loadAd(adRequest)
-        isBannerAdLoaded = true
-    }
-
-   private fun showDialogIfTileExpired() {
-// Log.d(TAG, "showExpiredTileDialog() is called: ${gmhPrefIsAllowExpireDialog()}")
-        launch {
-            if (isTileExpired) {
-                if (rewardedInterstitialAd == null) {
-                    MobileAds.initialize(this@MainActivity) { loadAd() }
-                    delay(1000)
-                }
-                if (mUtilsPrefsGmh.gmhPrefExpireDialogAllowed) {
-                    mUtilsPrefsGmh.gmhPrefExpireDialogAllowed = false
-                    DialogTilesExpired().show(supportFragmentManager, null)
-                }
-            }
-        }
-    }
-    private fun reloadRewardAd() {
-        launch {
-            MobileAds.initialize(this@MainActivity) { loadAd() }
-            delay(500)
-            showRewardedIntAd()
-        }
-    }
-
-    fun showRewardedIntAd() {
-        rewardedInterstitialAd?.show(this, this)
-    }
-
-    override fun onUserEarnedReward(p0: RewardItem) {
-        mUtilsPrefsAct.gmhPrefInstallDateStr = sdf.format(Calendar.getInstance().time /*time converts it to Date object*/)
-        syncInsDate(SYNCMODE_POST, p0.amount, false)
-        //isTileExpired = false
-        rewardedInterstitialAd = null
-    }
-
-
-    private fun loadAd() {
-        // Use the test ad unit ID to load an ad.
-        RewardedInterstitialAd.load(this, REWARDED_INTERSTITIAL_ID,
-            AdRequest.Builder().build(), object : RewardedInterstitialAdLoadCallback() {
-                override fun onAdLoaded(ad: RewardedInterstitialAd) {
-                    rewardedInterstitialAd = ad
-                    rewardedInterstitialAd!!.fullScreenContentCallback =
-                        object : FullScreenContentCallback() {
-                            override fun onAdFailedToShowFullScreenContent(adError: AdError?) {
-                                if (maxRetry > 0) {
-                                    maxRetry -= 1
-                                    reloadRewardAd()
-                                } else {
-                                    showSbMsg(
-                                        R.string.failed_show_ad,
-                                        Snackbar.LENGTH_SHORT,
-                                        null,
-                                        null
-                                    )
-                                    maxRetry = 10
-                                }
-                            }
-
-                            override fun onAdShowedFullScreenContent() {}
-
-                            override fun onAdDismissedFullScreenContent() {
-                                if (!isTileExpired) {
-                                    showSbMsg(R.string.qs_active, null, null, null)
-                                } else {
-                                    showSbMsg(R.string.ad_closed, null, null, null)
-                                }
-                            }
-                        }
-                }
-
-                override fun onAdFailedToLoad(loadAdError: LoadAdError) {
-                    // Log.d(TAG, "onAdFailedToLoad")
-                    if (maxRetry > 0) {
-                        maxRetry -= 1
-                        reloadRewardAd()
-                    } else {
-                        showSbMsg(R.string.failed_load_ad, Snackbar.LENGTH_SHORT, null, null)
-                        maxRetry = 10
-                    }
-                }
-            })
-    }
-*/
-
 
 }
 

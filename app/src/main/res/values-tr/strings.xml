@@ -1,73 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="lbl_enable_msm">Hareket Düzgünlüğünü Etkinleştir</string>
+<resources>
+    <!-- This can also mean "Enable High or Adaptive Refresh Rate" -->
+    <string name="lbl_enable_msm">Yüksek veya Adaptif Modu Etkinleştir</string>
     <string name="buy_adfree">Premium Satın Al</string>
+
+    <!-- What is actually for? Switch between resolutions or a button enabler on notification bar? -->
     <string name="resolution">Çözünürlük ve Hareket Düzgünlüğü Değiştirici</string>
     <string name="act">Premium\'u Etkinleştir</string>
     <string name="max_hz">Azami Hz</string>
-    <string name="feat_n_a" tools:keep="@string/feat_n_a">Değişim Çözünürlük Desteklemiyor</string>
-    <string name="min_hz_for_toggle">geçiş alt sınırı (Hz)</string>
-    <string name="adaptive">Adaptive</string>
+    <string name="max_hz_for_psm">Güç Tasarrufu Modu İçin Azami Hz</string>
+    <string name="feat_n_a">Bu Özellik Desteklenmiyor</string>
+    <string name="min_hz_for_toggle">Geçiş Sırasında Korunacak Asgari Hz</string>
+    <string name="adaptive">Adaptif</string>
     <string name="high">Yüksek</string>
-    <string name="refresh_rate_mon">Gerçek Zamanlı Yenileme Hızını göster</string>
+    <string name="refresh_rate_mon">Yenileme Hızını Göster</string>
     <string name="left">Sol</string>
     <string name="right">Sağ</string>
     <string name="top">Üst</string>
     <string name="bottom">Alt</string>
-    <string name="use_qstile_reso_switch">Hızla anahtarı çözünürlükleri ve hareket düzgünlük modları dahil Hızlı ayarlar döşemeyi kullanın.</string>
-    <string name="center">merkez</string>
-    <string name="info_qs_max_hz">Hızlı bir ayar kiremit maksimum hz geçiş yapmak için dahil</string>
+    <string name="use_qstile_reso_switch">Çözünürlüğü değiştirmek için bildirim panelindeki çözünürlük değiştirme tuşunu kullanın.</string>
+    <string name="center">Merkez</string>
+
+    <!-- I don't understand anything. Is a configurator for button? -->
+    <string name="info_qs_max_hz">Azami hz\'yi değiştirmek için bildirim paneline </string>
+
+    <!-- I don't understand anything. Is a configurator for button? -->
     <string name="info_qs_rtrr">Gerçek zamanlı yenileme hızını göstermek için hızlı ayar karo içerir</string>
-    <string name="s_off_mod">Ekran Kapalı Mods</string>
-    <string name="force_hz_mod">En Düşük Hz ye Zorla</string>
+    <string name="s_off_mod">Ekran Kapalı Seçenekleri</string>
+    <string name="force_hz_mod">Asgari Hz\'ye Zorla</string>
     <string name="s_off_hz_inf">
-        Bu, bekleme pil kullanımını iyileştirmek için ekran kapalı / AOD yenileme oranını en düşük değere ayarlayacaktır.
-        \nScreen-off yenileme hızı : %s
+        Bu ayar, cihaz boştayken pil kullanımını iyileştirmek için ekran kapalı/AOD sırasındaki yenileme hızını en düşük değere ayarlar.
+        \nScreen-off yenileme hızı: %s
     </string>
-    <string name="chng_res_stng">%s çözünürlük ayarı yüksek / uyarlanabilir yenileme oranını desteklemiyor. Öncelikle ayarlarda çözünürlüğü ve hareket düzgünlüğü modunu değiştirin.
-        \n\nBu uygulama, ADB kurulumu gerçekleştirildikten sonra hızlı ayarlar kutucuğunu kullanarak çözünürlüğü ve hareket düzgünlüğü modunu kolayca değiştirebilir.
-    </string>
-    <string name="chng_res_qs">%s çözünürlük ayarı yüksek / uyarlanabilir yenileme oranını desteklemiyor.
-        Bu uygulamada bulunan hızlı ayar düğmesini kullanarak çözünürlüğü hızlı bir şekilde değiştirebilirsiniz.
-    </string>
-    <string name="psm_on_inf">
-        Güç Tasarrufu Modu şu anda açık. Önce ayarlardan kapatın ve hareket yumuşaklığı modunu Uyarlanabilir / Yüksek olarak ayarlayın.
-        \n\nBu uygulama, ADB kurulumu gerçekleştirildikten sonra Güç Tasarrufu Modunda bile Hareket Düzgünlüğü Modunu Uyarlanabilir / Yüksek olarak ayarlayabilir.
-    </string>
-    <string name="rrm_std_inf">
-        Motion smoothness modu şu anda Standart olarak ayarlanmıştır. Önce ayarlardan değiştirin.
-        \n\nBu uygulama, ADB kurulumu gerçekleştirildikten sonra Hareket Düzgünlüğü Modunu kolayca Uyarlanabilir / Yüksek olarak değiştirebilir. Bu, Güç Tasarrufu Modunda bile çalışır.
+    <string name="chng_res_stng">%s çözünürlük ayarı yüksek/adaptif yenileme hızını desteklemiyor. Öncelikle ayarlarda çözünürlüğü ve pürüzsüz hareket modunu değiştirin.\n\nBu uygulama, ADB kurulumu gerçekleştirildikten sonra bildirim paneli üzerindeki tuş ile çözünürlüğü ve pürüzsüz hareket modunu kolayca değiştirebilir.</string>
+    <string name="chng_res_qs">%s çözünürlük ayarı yüksek/adaptif yenileme hızını desteklemiyor. Bildirim panelindeki çözünürlük değiştirme tuşu ile çözünürlüğü hızlıca değiştirebilirsiniz.</string>
+    <string name="psm_on_inf">Güç tasarrufu modunda yenileme hızı 60 hz ile sınırlıdır. Önce güç tasarrufunu kapatın, ardından yenileme hızını adaptif/yüksek olarak ayarlayın.\n\nBu uygulama, ADB kurulumu gerçekleştirildikten sonra güç tasarrufu modunda bile pürüzsüz hareket modunu adaptif/yüksek olarak ayarlayabilir.</string>
+    <string name="rrm_std_inf">Pürüzsüz hareket modu şu anda Standart olarak ayarlanmıştır. Önce ayarlardan değiştirin.
+        \n\nBu uygulama, ADB kurulumu gerçekleştirildikten sonra pürüzsüz hareket modunu kolayca adaptif/yüksek olarak değiştirebilir.
+        Bu ayar, güç tasarrufu modunda bile çalışır.
     </string>
     <string name="input_ac_inf">
-        Bu cihaz sıfırlaması nedeniyle reklamsız olarak kaybettiyseniz, reklamsız olarak yeniden etkinleştirmek için e-postanıza gönderilen aktivasyon kodunu girin.
+        Bu cihaz sıfırlaması nedeniyle premiumunuzu kaybettiyseniz, reklamsız olarak yeniden etkinleştirmek için e-postanıza gönderilen aktivasyon kodunu girin.
     </string>
-    <string name="show_ns">İnternet Hız Göstergesi göster</string>
+    <string name="show_ns">İnternet Hız Göstergesi\'ni göster</string>
     <string name="combined">Kombine</string>
     <string name="upload">Yükleme</string>
-    <string name="download">İndir</string>
+    <string name="download">İndirme</string>
     <string name="font_size">Bindirme Yazı Tipi Boyutu</string>
     <string name="overlay_pos">bindirme Yeri</string>
+
+    <!-- Overlay function is shows refresh rate somewhere of screen. Isnt it? -->
     <string name="overlay">Kaplama</string>
     <string name="statusbar">Durum çubuğu</string>
     <string name="perm_appx">
-        \n\nADB kurulumu yapıldığında, bu uygulama ile aşağıdakileri yapabilirsiniz:
-        \n- Ekran çözünürlüklerini hızla değiştirin
-        \n- (Otomatik)Güç Tasarrufu Modunda bile Uyarlamalı veya Yüksek hareket pürüzsüzlüğü uygulayın
-        \n- Ekran kapalıyken otomatik olarak güç tasarrufu modunu uygulayın
-        \n- Hızlı doze modunu kullanın (premium)
-        \n- Yerel olarak desteklenmeyen cihazda bile Uyarlanabilir yenileme hızı modunu uygulayın (premium)
-        \n- Otomatik Sensörler Kapalı(premium)
+        \n\nADB kurulumu yapıldığında, bu uygulama ile şunları yapabilirsiniz:
+        \n- Ekran çözünürlüğünü hızlıca değiştirin
+        \n- (Otomatik)Güç tasarrufu modunda bile adaptif veya yüksek hareket pürüzsüzlüğü kullanın
+        \n- Ekran kapalıyken otomatik olarak güç tasarrufu modunu kullanın
+        \n- Hızlıca doze moduna geçme ayarını kullanın(premium)
+        \n- Desteklemeyen cihazda adaptif hareket pürüzsüzlüğü kullanın(premium)
+        \n- Sensörleri otomatik kapatma ayarını kullanın(premium)
     </string>
-    <string name="ac_none">Hiçbir aktivasyon kodunu girdi.</string>
+    <string name="ac_none">Hiçbir aktivasyon kodu girilmedi.</string>
     <string name="in_bd">Aktivasyon kodunu girin</string>
-    <string name="apply">Uygulamak</string>
+    <string name="apply">Giriş</string>
     <string name="psm_on">Güç Tasarruf Modu Açık</string>
     <string name="chng_res">Ekran Çözünürlüğünü Değiştirin</string>
-    <string name="open_settings">Ayarları aç</string>
-    <string name="chng_res_failed">değişim çözünürlüğe alınamadı.</string>
-    <string name="one_res_def">sistemde tanımlı Sadece bir çözünürlük.</string>
-    <string name="rrp_not_loaded">Mevcut yenileme hızları henüz yüklenmedi. Tekrar deneyin.</string>
-    <string name="sot_no_perm">Üst iznine göster Verilen değil!</string>
+    <string name="open_settings">Ayarları Aç</string>
+    <string name="chng_res_failed">Çözünürlük değiştirilemedi</string>
+    <string name="one_res_def">Sistemde sadece tek çözünürük tanımlı.</string>
+    <string name="rrp_not_loaded">Mevcut yenileme hızları yüklenmedi. Tekrar deneyin.</string>
+    <string name="sot_no_perm">\"Üstte Göster\" izni verilmedi!</string>
     <string name="cie">Hata! İnternet bağlantınızı kontrol edip tekrar deneyin.</string>
     <string name="aca">Geçersiz aktivasyon kodu.</string>
     <string name="afa">Premium başarıyla etkinleştirildi!</string>
@@ -76,72 +79,69 @@
         <item quantity="one">Premium deneme etkinleştirildi: %d gün kaldı</item>
         <item quantity="other">Premium deneme etkinleştirildi: %d gün kaldı</item>
     </plurals>
-    <string name="nlh">Bu cihaz için premium lisans bulunamadı: %s</string>
+    <string name="nlh">Bu cihaz için premium lisansı bulunamadı: %s</string>
     <string name="edit">Düzenle</string>
-    <string name="quick_doz_mod">Hızlı Doze Mod</string>
-    <string name="quick_mod_inf">Bu, bekleme pil tüketimini iyileştirmek için cihazınızı ekran kapalıyken hızlı bir şekilde doz moduna girecek şekilde ayarlayacaktır.</string>
-    <string name="adp_min_hz">Adaptive için Min. Hz</string>
-    <string name="enable_as_inf">Görünen pencerede, \"Yüklü Hizmetler\" e tıklayın ve ardından \"Galaxy Max Hz\" hizmetini etkinleştirin</string>
-    <string name="adp_delay">Saniye cinsinden uyarlanabilir minimum hertz gecikmesi</string>
-    <string name="cur_rr_h">Mevcut Yenileme Hızı: %s Hz</string>
-    <string name="show_ns_card">Netspeed aracını göster</string>
-    <string name="lbl_rrm">Yenileme Hızı Mods</string>
-    <string name="prr_psm">Güç Tasarrufu Modunda Hareket Düzgünlüğünü Koruyun</string>
-    <string name="actvt_trial">Ücretsiz deneme etkinleştirilsin mi?</string>
-    <string name="auto_psm">Ekran Kapalıyken güç Tasarrufu Modu</string>
-    <string name="reso_opts">Çözünürlük Seçeneklerini Değiştir</string>
-    <string name="requires_ws_perm_h">
-        %1$s bu özelliği çalıştırmak için özel bir izne ihtiyacı var.
-        Nasıl yapılacağını öğrenmek için aşağıdaki ADB kurulum bağlantısını tıklayın.
-        \n\nTLDR: Run \'adb shell pm grant %2$s android.permission.WRITE_SECURE_SETTINGS\'
-        \n\nBu tek seferlik bir prosedürdür.
+    <string name="quick_doz_mod">Hızlıca Doze Moduna Geç</string>
+    <string name="quick_mod_inf">
+        Bu ayar, boştayken pil tüketimini iyileştirmek için cihazınızın ekran kapalıyken hızlı bir şekilde doze moduna girecek şekilde ayarlar.
     </string>
+    <string name="quick_doz_mod_mwi">Dakika cinsinden ilk bakım zamanı(0 = bakım yok)</string>
+    <string name="quick_doz_mod_inf2">Doze modu, uygulama arka plan işlerini ve ağ etkinliğini erteleyerek pil ömrünü uzatır. Uyku modundayken cihaz periyodik olarak uygulamaların bekleyen işleri tamamlayabileceği bir bakım moduna girer. Cihaz her seferinde bakım aralığının uzunluğunu iki katına çıkararak bu döngüye devam edecektir. Bakım aralığı ne kadar uzun olursa pil tasarrufu o kadar iyi olur. Doze modu bazı uygulamalarda bildirim gecikmelerine neden olabilir. SMS, Yüksek Öncelikli FCM ve pil optimizasyonlarının devre dışı bırakıldığı uygulamaları etkilemez. Doze modu, cihazın kilidi açıldığında devre dışı bırakılır.</string>
+    <string name="adp_min_hz">Adaptif Mod için Asgari Hz</string>
+    <string name="enable_as_inf">Açılan pencerede Yüklü Hizmetler\'e tıklayın ve ardından \"Galaxy Max Hz\" hizmetini etkinleştirin</string>
+    <string name="adp_delay">Adaptif Modun Asgari Hz\'a Geçiş Süresi</string>
+    <string name="cur_rr_h">Yenileme Hızı: %s Hz</string>
+    <string name="show_ns_card">Netspeed aracını göster</string>
+    <string name="lbl_rrm">Yenileme Hızı Modları</string>
+    <string name="prr_psm">Güç Tasarrufu Modunda Pürüzsüz Hareketi Koru</string>
+    <string name="actvt_trial">Ücretsiz deneme etkinleştirilsin mi?</string>
+    <string name="auto_psm">Ekran Kapalıyken Güç Tasarrufu</string>
+    <string name="reso_opts">Çözünürlük Seçeneklerini Değiştir</string>
+    <string name="requires_ws_perm_h">%1$s bu özelliği çalıştırmak için özel bir izne ihtiyacı var. Nasıl yapılacağını öğrenmek için aşağıdaki ADB kurulum bağlantısını tıklayın.\n\nTLDR: Run \'adb shell pm grant %2$s android.permission.WRITE_SECURE_SETTINGS\'\n\nBu tek seferlik bir prosedürdür.</string>
     <string name="std">Standart</string>
-    <string name="lbl_profiles_h">%sEkran Cözünürlüğü ve Yenileme Hızı Profilleri</string>
-    <string name="high_mode">Yüksek Mod</string>
-    <string name="std_mode">Standart Mod</string>
-    <string name="adp_mode">Uyarlamalı Mod</string>
+    <string name="lbl_profiles_h">%sEkran Çözünürlüğü ve Yenileme Hızı Profilleri</string>
+    <string name="high_mode">Yüksek Modu</string>
+    <string name="std_mode">Standart Modu</string>
+    <string name="adp_mode">Adaptif Modu</string>
     <string name="perm_reqd">İzin Gerekli</string>
     <string name="adb_setup">ADB Kurulumu</string>
     <string name="dismiss">Reddet</string>
+    <string name="allow">İzin Ver</string>
+    <!-- What does feature for? -->
+    <string name="allow_aot">Yukarıda belirmeye izin ver</string>
+    <string name="allow_bg_act">
+        Bu uygulamanın arka planda düzgün çalışması için \"Arkaplan aktivitesine izin ver\" ayarını etkinleştirin veya \"Pil kullanımını optimize et\" ayarını devre dışı bırakın.
+    </string>
     <string name="help">Yardım</string>
     <string name="reload_profiles">Profilleri Yeniden Yükle</string>
-    <string name="options">"Seçenekler "</string>
-    <string name="psm_options"><u>Enerji tasarrufu modu seçenekleri</u></string>
-    <string name="disable_sync_on_so">Ekran kapalıyken otomatik senk kapatın</string>
-    <string name="autosync_settings"><u>Otomatik senk ayarları</u></string>
+    <string name="options">Seçenekler </string>
+    <string name="data_usage"><u>Veri kullanımı</u></string>
+    <string name="psm_options"><u>Güç tasarrufu modu seçenekleri</u></string>
+    <string name="disable_sync_on_so">Senkronizasyonu otomatik olarak kapat</string>
+    <string name="autosync_settings"><u>Otomatik senkronizasyon ayarları</u></string>
     <string name="apps_bat_opt_settings"><u>Pil optimizasyon ayarları</u></string>
-    <string name="quick_doz_mod_inf2">
-        Doze modu, uygulama arka plan CPU\'sunu ve ağ etkinliğini erteleyerek pil ömrünü uzatır.
-        Uyku modundayken, cihaz periyodik olarak uygulamaların bekleyen işleri (eşitlemeler, işler vb.) tamamlayabileceği bir bakım penceresine (MW) girer.
-        Cihaz, her seferinde MW aralığının uzunluğunu iki katına çıkararak bu döngüye devam edecektir.
-        MW aralığı ne kadar uzun olursa, pil tasarrufu o kadar iyi olur.
-        Doze modu, bazı uygulamalarda bildirim gecikmelerine neden olabilir.
-        SMS, Yüksek Öncelikli FCM ve pil optimizasyonlarının devre dışı bırakıldığı uygulamaları etkilemez.
-        Doze modu, cihazın kilidi açıldığında devre dışı bırakılır.
-    </string>
-    <string name="quick_doz_mod_mwi">Dakika cinsinden ilk bakım aralığı (0 = bakım yok)</string>
-    <string name="brightness_threshold">Uyarlanabilir mod için minimum parlaklık</string>
-    <string name="sensor_off_info">Cihaz kilidi açılana kadar ekran kapatıldığında cihaz sensörleri otomatik olarak kapanır. Bu, pili tüketen harekete bağlı uyanık kalma kilitlerini en aza indirmeye yardımcı olur.</string>
+    <string name="brightness_threshold">Adaptif mod için minimum parlaklık</string>
+    <string name="sensor_off_info">Cihaz kilidi açılana kadar ekran kapatıldığında cihaz sensörleri otomatik olarak kapatır.</string>
     <string name="sensors_off_note">
-      Önemli Not: SensorsOff paneli etkinleştirildiğinde ünitenin kamerası, mikrofonu ve diğer sensörlerine erişilemez.
-        Etkilenen özellikler arasında yüz tanıma kilidi, sesli aramalar sırasında işitilebilirlik (bazılarında) ve menteşe açısı algılama yer alır.
+        Önemli Not: Sensors Off özelliği etkinleştirildiğinde cihazın kamerası, mikrofonu ve diğer sensörlerine erişilemez.
+        Etkilenen özellikler arasında yüz tanıma kilidi, sesli aramalar sırasında işitilebilirlik(bazılarında) ve menteşe açısı algılama yer alır.
         Bunu yalnızca sensörleri kapatmanın sonuçlarını açıkça anlıyorsanız kullanın.
         \n\nAndroid 12\'den itibaren güvenli kilit ekranı gereklidir; alternatif olarak, önceki Android sürümünde WRITE_SECURE_SETTINGS izni verilebilir.
     </string>
-    <string name="sensor_off_setup_info">Do this first: Enable \'Sensors Off\' tile in Settings > Developer options > Quick settings developer tiles. ></string>
-    <string name="dev_opt_setup_info">To enable Developer options, go to Settings > About phone > Software info and tap \'Build number\' 7x.</string>
-    <string name="enable_write_settings">Enable Galaxy Max Hz change/write system settings permission.</string>
-    <string name="as_desc">Táto služba je potrebná, aby fungovali režimy galaxy max hz.</string>
-    <string name="enable">Olanak vermek</string>
-    <string name="allow">Allow</string>
-    <string name="allow_aot">Allow Appear on Top</string>
-    <string name="allow_bg_act">Pre stabilný chod tejto aplikácie povoľte \'Povoliť aktivitu na pozadí\' alebo deaktivujte \'Optimalizovať využitie batérie\'.</string>
-    <string name="premium_features">Prémiové funkcie</string>
-    <string name="prevent_high">Yüksek Moda geçişi engelle</string>
     <string name="auto_sensors_off_exp">Otomatik SENSÖRLER KAPALI</string>
-    <string name="data_usage"><u>Veri kullanımı</u></string>
+    <string name="sensor_off_setup_info">
+        Önce şunu yapın: \"Sensors Off\" tuşunu Ayarlar > Geliştirici Seçenekleri > Hızlı ayarlar geliştirici döşemeleri üzerinden etkinleştirin.
+    </string>
+    <string name="dev_opt_setup_info">
+        Geliştirici seçeneklerini etkinleştirmek için, Ayarlar > Telefon Hakkında > Yazılım bilgisine tıklayın,
+        ardından \"Yapım Numarası\" tuşuna 7 kez dokunun.
+    </string>
+    <string name="enable_write_settings">Galaxy Max Hz için sistem ayarlarını değiştirme izni verin.</string>
+    <string name="as_desc">Bu servis, Galaxy Max Hz\'nin çalışması için gereklidir.</string>
+    <string name="enable">Etkinleştir</string>
+    <string name="premium_features">Premium Özellikleri</string>
+    <string name="prevent_high">Yüksek Moda geçişi engelle</string>
     <string name="acces_req">Erişilebilirlik Hizmetini Etkinleştir</string>
-    <string name="max_hz_for_psm">Güç tasarrufu modu için maksimum Hz</string>
-    <string name="is_prem_ft">%s is premium feature</string>
+    <string name="is_prem_ft">%s premium bir özelliktir</string>
+    <string name="using_spay">SPay başarısız oluyor</string>
 </resources>

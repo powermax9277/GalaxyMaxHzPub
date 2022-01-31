@@ -2,12 +2,10 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="lbl_enable_msm">Ενεργοποίηση Motion Smoothness</string>
     <string name="buy_adfree">Αγορά Premium|Coffee</string>
-   <!-- <string name="info_expired">Παρακολουθήστε αυτό το βίντεο και να ενεργοποιηθεί γρήγορα πλακάκια ρύθμιση για ακόμη %d ημέρες.</string>-->
     <string name="resolution">Ανάλυση και κίνησης Ομαλότητα Εναλλαγή</string>
     <string name="act">Ενεργοποίηση Premium|Trial</string>
-    <string name="max_hz">Max Hz</string>
+    <string name="max_hz">Μέγιστο Hz</string>
     <string name="feat_n_a" tools:keep="@string/feat_n_a">Αλλαγή ψήφισμα δεν υποστηρίζεται</string>
-    <!--    <string name="qs_active">Γρήγορες ρυθμίσεις Πλακάκια ενεργοποιηθεί με επιτυχία</string>-->
     <string name="min_hz_for_toggle">Ελάχ. Hz για την εναλλαγή</string>
     <string name="adaptive">Adaptive</string>
     <string name="high">Υψηλός</string>
@@ -18,7 +16,7 @@
     <string name="bottom">Κάτω πλευρά</string>
     <string name="use_qstile_reso_switch">Χρησιμοποιήστε το παρεχόμενο κεραμίδι γρήγορη ρυθμίσεις στα ψηφίσματα του διακόπτη γρήγορα και τρόπους ομαλότητα κίνησης.</string>
     <string name="center">Κέντρο</string>
-    <string name="info_qs_max_hz">Περιλαμβάνει μια γρήγορη κεραμίδι ρύθμιση για εναλλαγή max hz</string>
+    <string name="info_qs_max_hz">Περιλαμβάνει γρήγορα πλακίδια για μέγιστο Hz και min Hz</string>
     <string name="info_qs_rtrr">Περιλαμβάνει ένα πλακίδιο γρήγορης ρύθμισης για να ενεργοποιήσετε την οθόνη ρυθμού ανανέωσης</string>
     <string name="s_off_mod">Off Οθόνη Ρυθμός ανανέωσης</string>
     <string name="force_hz_mod">Δύναμη στο χαμηλότερο Hz</string>
@@ -45,8 +43,6 @@
     </string>
     <string name="input_ac_inf">Εάν χάσετε το ασφάλιστρο ως αποτέλεσμα της επαναφοράς αυτής της συσκευής, μπορείτε να την ενεργοποιήσετε ξανά εισάγοντας τον κωδικό ενεργοποίησης που στάλθηκε στο email σας.
     </string>
-<!--    <string name="failed_show_ad">Αποτυχία να δείξει το βίντεο διαφήμισης. ΠΑΡΑΚΑΛΩ προσπαθησε ξανα.</string>-->
-<!--    <string name="failed_load_ad">Απέτυχε η διαφήμιση βίντεο φορτίου. Παρακαλώ ελέγξτε στο διαδίκτυο και δοκιμάστε ξανά.</string>-->
     <string name="show_ns">Εμφάνιση Καθαρή Δείκτης Ταχύτητας</string>
     <string name="combined">σε συνδυασμό</string>
     <string name="upload">Μεταφόρτωση</string>
@@ -70,14 +66,10 @@
     <string name="psm_on">Η λειτουργία εξοικονόμησης ενέργειας είναι σε λειτουργία</string>
     <string name="chng_res">Αλλαγή ανάλυσης οθόνης</string>
     <string name="open_settings">Ανοίξτε τις Ρυθμίσεις</string>
-<!--    <string name="qst_exp">Γρήγορες ρυθμίσεις Πλακάκια Έληξε</string>-->
-<!--    <string name="ad_starting_in">"Βίντεο αρχής γενομένης από το "</string>-->
-<!--    <string name="no_thanks">Οχι ευχαριστώ!</string>-->
     <string name="chng_res_failed">Απέτυχε η ανάλυση της αλλαγής.</string>
     <string name="one_res_def">Μόνο ένα ψήφισμα που ορίζονται στο σύστημα.</string>
     <string name="rrp_not_loaded">Διαθέσιμο ρυθμούς ανανέωσης δεν έχει ακόμα τοποθετηθεί. Προσπάθησε ξανά.</string>
     <string name="sot_no_perm">Εμφάνιση στην κορυφή άδεια δεν χορηγείται!</string>
-    <!--<string name="error_opening_settings">Ρυθμίσεις Σφάλμα κατά το άνοιγμα.</string>-->
     <string name="cie">Λάθος! Ελέγξτε τη σύνδεση στο διαδίκτυο και δοκιμάστε ξανά.</string>
     <string name="aca">Μη έγκυρο κωδικό ενεργοποίησης.</string>
     <string name="afa">Το Premium ενεργοποιήθηκε επιτυχώς!</string>
@@ -86,7 +78,6 @@
         <item quantity="one">Η δοκιμαστική έκδοση Premium ενεργοποιήθηκε: %d ημέρα απομένουν</item>
         <item quantity="other">Η δοκιμαστική έκδοση Premium ενεργοποιήθηκε: %d ημέρες απομένουν</item>
     </plurals>
-   <!-- <string name="eta">Σφάλμα ad-δωρεάν δοκιμαστική ενεργοποίηση!</string>-->
     <string name="nlh">Δεν βρέθηκε άδεια πριμοδότησης για αυτήν τη συσκευή: %s</string>
     <string name="edit">Επεξεργασία</string>
     <string name="quick_doz_mod">Γρήγορο Doze Mod</string>
@@ -146,5 +137,6 @@
     <string name="data_usage"><u>Χρήση δεδομένων</u></string>
     <string name="acces_req">Ενεργοποιήστε την υπηρεσία προσβασιμότητας</string>
     <string name="max_hz_for_psm">" Μέγιστο Hz για λειτουργία εξοικονόμησης ενέργειας"</string>
-    <string name="is_prem_ft">%s is premium feature</string>
+    <string name="is_prem_ft">Το %s είναι ένα χαρακτηριστικό premium</string>
+    <string name="using_spay">Το SPay αποτυγχάνει</string>
 </resources>

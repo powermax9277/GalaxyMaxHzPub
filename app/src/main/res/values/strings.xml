@@ -8,7 +8,7 @@
     <string name="max_hz">Max Hz</string>
     <string name="max_hz_for_psm">Max Hz for Power Saving Mode</string>
     <string name="feat_n_a" tools:keep="@string/feat_n_a">Feature Not Supported</string>
-    <string name="min_hz_for_toggle">Lowest Hz for Toggle</string>
+    <string name="min_hz_for_toggle">Lowest Hz for Tile</string>
     <string name="adaptive">Adaptive</string>
     <string name="high">High</string>
     <string name="refresh_rate_mon">Refresh Rate Monitor</string>
@@ -18,7 +18,7 @@
     <string name="bottom">Bottom</string>
     <string name="use_qstile_reso_switch">Use the included quick settings (qs) tile to quickly switch screen resolution.</string>
     <string name="center">Center</string>
-    <string name="info_qs_max_hz">Includes a quick setting tile to change max hz</string>
+    <string name="info_qs_max_hz">Includes quick setting tiles for max Hz and min Hz</string>
     <string name="info_qs_rtrr">Includes a quick setting tile to turn-on refresh rate monitor.</string>
     <string name="s_off_mod">Screen-off Mods</string>
     <string name="force_hz_mod">Force Lowest Hz</string>
@@ -157,6 +157,7 @@
     </plurals>
     <string name="no_access_notif" translatable="false">Disabling accessibility service will cause unexpected behavior for the following enabled feature(s): %s</string>
     <string name="acces_req">Enable Accessibility Service</string>
-    <string name="is_prem_ft">%s is premium feature</string>
+    <string name="is_prem_ft">%s is a premium feature</string>
+    <string name="using_spay">SPay is failing</string>
 
 </resources>

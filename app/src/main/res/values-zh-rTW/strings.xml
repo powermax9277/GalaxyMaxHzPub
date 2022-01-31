@@ -6,7 +6,7 @@
     <string name="act">激活高級|試用</string>
     <string name="max_hz">最大Hz</string>
     <string name="feat_n_a" tools:keep="@string/feat_n_a">更改分辨率不支持</string>
-    <string name="min_hz_for_toggle">最小Hz限制可以在最大刷新率按鈕中選擇</string>
+    <string name="min_hz_for_toggle">可以選擇最小赫茲限制</string>
     <string name="adaptive">Adaptive</string>
     <string name="high">High</string>
     <string name="refresh_rate_mon">刷新率監視器</string>
@@ -16,10 +16,10 @@
     <string name="bottom">底部</string>
     <string name="use_qstile_reso_switch">使用附帶的快速設置瓷磚快速切換分辨率和平滑的運動模式。</string>
     <string name="center">中心</string>
-    <string name="info_qs_max_hz">包括速凝瓷磚切換最大赫茲</string>
+    <string name="info_qs_max_hz">包括最大赫茲和最小赫茲的快速設置瓷磚</string>
     <string name="info_qs_rtrr">包括用於打開刷新率監視器的快速設置磁貼。</string>
     <string name="s_off_mod">關閉屏幕刷新率</string>
-    <string name="force_hz_mod">強制最低Hz</string>
+    <string name="force_hz_mod">強制最小赫茲</string>
     <string name="s_off_hz_inf">這會將屏幕關閉或 AOD 刷新率設置為最低，以提高備用電池的使用率。 \n屏幕關閉刷新率: %s</string>
     <string name="chng_res_stng">%s分辨率設置不支持“High/Adaptive Refresh Rate”。首先在設置中更改“Resolution”和“Motion smoothness mode”。
 一旦執行ADB設置，此應用即可使用快速設置圖塊輕鬆切換分辨率和運動平滑度模式。
@@ -127,5 +127,6 @@
     <string name="data_usage"><u>數據使用</u></string>
     <string name="acces_req">啟用無障礙服務</string>
     <string name="max_hz_for_psm">省電模式的最大赫茲</string>
-    <string name="is_prem_ft">%s is premium feature</string>
+    <string name="is_prem_ft">%s 是付費功能</string>
+    <string name="using_spay">SPay 失敗</string>
 </resources>

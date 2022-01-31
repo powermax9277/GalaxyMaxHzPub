@@ -4,7 +4,7 @@
     <string name="buy_adfree">Premium kaufen</string>
     <string name="resolution">Auflösung und Bildwiederholrate umschalten</string>
     <string name="act">Werbefrei aktivieren</string>
-    <string name="max_hz">Bildwiederholrate</string>
+    <string name="max_hz">Max Hz</string>
     <string name="feat_n_a" tools:keep="@string/feat_n_a">Diese Auflösung wird nicht unterstützt</string>
     <string name="min_hz_for_toggle">Min Hz für das Umschalten</string>
     <string name="adaptive">Adaptiv</string>
@@ -16,7 +16,7 @@
     <string name="bottom">Unten</string>
     <string name="center">Mitte</string>
     <string name="use_qstile_reso_switch">Verwenden Sie die Schnelleinstellungskachel, um die Auflösungs.</string>
-    <string name="info_qs_max_hz">Bietet eine Schnelleinstellungskachel zum wechseln der Bildwiederholrate.</string>
+    <string name="info_qs_max_hz">Bietet schnelle Kacheln für max Hz und min Hz</string>
     <string name="info_qs_rtrr">
         Bietet eine Schnelleinstellungskachel zum Ein- und Ausschalten der Überwachung.
     </string>
@@ -151,5 +151,6 @@
     <string name="data_usage"><u>Data Usage</u></string>
     <string name="acces_req">Enable Accessibility Service</string>
     <string name="max_hz_for_psm">Max Hz für den Energiesparmodus</string>
-    <string name="is_prem_ft">%s is premium feature</string>
+    <string name="is_prem_ft">%s ist eine premium-funktion</string>
+    <string name="using_spay">SPay schlägt fehl</string>
 </resources>

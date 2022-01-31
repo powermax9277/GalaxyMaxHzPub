@@ -16,7 +16,7 @@
     <string name="bottom">Onderkant</string>
     <string name="use_qstile_reso_switch">Gebruik de meegeleverde tegel voor snelle instellingen om snel te schakelen tussen resoluties.</string>
     <string name="center">Midden </string>
-    <string name="info_qs_max_hz">Bevat een tegel voor snelle instelling om de max. Hz in te schakelen</string>
+    <string name="info_qs_max_hz">Inclusief snelinstellingstegels voor max Hz en min Hz</string>
     <string name="info_qs_rtrr">Bevat een tegel voor snelle instellingen om de vernieuwingsfrequentie in realtime weer te geven</string>
     <string name="s_off_mod">Scherm uit Vernieuwingsfrequentie</string>
     <string name="force_hz_mod">Forceer op Laagste Hz</string>
@@ -70,7 +70,6 @@
     <string name="one_res_def">Slechts één resolutie gedefinieerd in het systeem.</string>
     <string name="rrp_not_loaded">Beschikbare verversingssnelheden nog niet geladen. Probeer het opnieuw.</string>
     <string name="sot_no_perm">Toestemming om bovenaan weer te geven is niet verleend!</string>
-<!--    <string name="error_opening_settings">Fout bij openen van instellingen.</string>-->
     <string name="cie">Mislukking! Controleer de internetverbinding en probeer het opnieuw.</string>
     <string name="aca">Ongeldige activatiecode.</string>
     <string name="afa">Premium succesvol geactiveerd!</string>
@@ -146,5 +145,6 @@
     <string name="data_usage"><u>Data gebruik</u></string>
     <string name="acces_req">Toegankelijkheidsservice inschakelen</string>
     <string name="max_hz_for_psm">Max Hz voor energiebesparende modus</string>
-    <string name="is_prem_ft">%s is premium feature</string>
+    <string name="is_prem_ft">%s is een premiumfunctie</string>
+    <string name="using_spay">SPay crasht</string>
 </resources>

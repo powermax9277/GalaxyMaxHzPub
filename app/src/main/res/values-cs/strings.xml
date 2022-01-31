@@ -6,7 +6,7 @@
     <string name="act">Aktivovat Premium|Trial</string>
     <string name="max_hz">Max Hz</string>
     <string name="feat_n_a" tools:keep="@string/feat_n_a">Změna rozlišení není podporováno</string>
-    <string name="min_hz_for_toggle">Spodní mez přepínač (Hz)</string>
+    <string name="min_hz_for_toggle">Spodní mez přepínač</string>
     <string name="adaptive">Adaptivní</string>
     <string name="high">Vysoký</string>
     <string name="refresh_rate_mon">Monitor Obnovovací Frekvence</string>
@@ -16,7 +16,7 @@
     <string name="bottom">Spodní</string>
     <string name="use_qstile_reso_switch">Pomocí dodávaného rychlé nastavení dlaždice k rychlému rezoluce spínačů a režimy pohybu hladkost.</string>
     <string name="center">Centrum</string>
-    <string name="info_qs_max_hz">Zahrnuje rychlé nastavení dlaždice pro přepínání max Hz</string>
+    <string name="info_qs_max_hz">Zahrnuje rychlé dlaždice pro max Hz a min Hz</string>
     <string name="info_qs_rtrr">Zahrnuje dlaždici rychlého nastavení pro zapnutí monitoru obnovovací frekvence.</string>
     <string name="s_off_mod">Off obnovovací frekvence obrazovky</string>
     <string name="force_hz_mod">Síla na nejnižší Hz</string>
@@ -154,4 +154,5 @@
     <string name="acces_req">Enable Accessibility Service</string>
     <string name="max_hz_for_psm">Max Hz pro úsporný režim</string>
     <string name="is_prem_ft">%s is premium feature</string>
+    <string name="using_spay">SPay selže</string>
 </resources>

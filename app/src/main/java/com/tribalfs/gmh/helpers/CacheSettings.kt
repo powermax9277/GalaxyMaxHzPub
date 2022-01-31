@@ -14,24 +14,16 @@ object CacheSettings {
     internal var isOnePlus: Boolean = false
 
     internal const val TIMEOUT_FACTOR = 0.90
-    /***Updated by GmhBroadcastReceiver***/
     @Volatile internal var isScreenOn = true
     internal var offScreenRefreshRate:String? = null
 
-    /***Updated by MyApplication, KeepMotion, GmhBroadcastReceiver***/
     internal val isPowerSaveModeOn = ObservableField<Boolean>() //Reflects SCREEN ON status only
 
-    /***Updated by MainActivity***/
-   // internal var isTileExpired = false
     internal var adaptiveDelayMillis = 1750L
     internal var adaptiveAccessTimeout: Long = max(1500L, adaptiveDelayMillis * TIMEOUT_FACTOR.toLong())
 
-   // internal var prrKey = PEAK_REFRESH_RATE
-
-    /***Updated by DisplayInfo, MainActivity***/
     internal var displayId: Int = DEFAULT_DISPLAY
 
-    /***Updated by MainActivity,MyApplication***/
     internal var isPremium = ObservableField(false)
     internal val prrActive = ObservableField(60)
     internal val lrrPref = ObservableField(60)
@@ -42,7 +34,6 @@ object CacheSettings {
     internal val isFakeAdaptive = ObservableField(false)
     internal var turnOff5GOnPsm: Boolean? = null
 
-    /***Updated by ProfilesHelperSt***/
     internal var isOfficialAdaptive: Boolean = false
     internal var isMultiResolution: Boolean = true
     internal var lowestHzCurMode: Int = 60 //default
@@ -55,17 +46,11 @@ object CacheSettings {
     internal var supportedHzIntAllMod: List<Int>? = null
     internal var modesWithLowestHz: List<String>? = null
 
-    /***Updated by MainActivity,MyApplication, TaskerPlugin***/
     internal var keepModeOnPowerSaving: Boolean = false
 
-    /***Updated by MyApplication,HzService***/
     internal val hzNotifOn = ObservableField(false)
 
     internal var hzStatus = ObservableField(STOPPED)
-
-    /***Updated by MyApplication,NetSpeedService***/
-    internal val isNetSpeedRunning = ObservableField(false)
-
 
     internal val isFakeAdaptiveValid = object : ObservableField<Boolean>(isFakeAdaptive,isPremium, prrActive,lrrPref) {
         override fun get(): Boolean {

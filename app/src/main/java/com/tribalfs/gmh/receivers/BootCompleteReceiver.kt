@@ -28,7 +28,7 @@ class BootCompleteReceiver : BroadcastReceiver() {
                     val resName = resoChangeUtil.getResName(null)
                     if (resName == "CQHD+") resoChangeUtil.changeRes(reso)
                     HzServiceHelperStn.instance(appCtx).switchHz()
-                    NetSpeedServiceHelperStn.instance(appCtx).runNetSpeed(null)
+                    NetSpeedServiceHelperStn.instance(appCtx).updateNetSpeed()
                     resoChangeUtil.mUtilsRefreshRate.requestListeningAllTiles()
                 }
             }

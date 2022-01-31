@@ -35,11 +35,8 @@ internal class PsmChangeHandler(context: Context) {
                 prrActive.set( mUtilsRefreshRate.mUtilsPrefsGmh.hzPrefMaxRefreshRatePsm)
                 mUtilsRefreshRate.setPrefOrAdaptOrHighRefreshRateMode(null)
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    val pipIntent = Intent(appCtx, PipActivity::class.java)
-                    pipIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    appCtx.startActivity(pipIntent)
-                }
+                startPipActivity()
+
             } else {
                 mUtilsRefreshRate.setRefreshRateMode(REFRESH_RATE_MODE_STANDARD)
             }
@@ -58,6 +55,13 @@ internal class PsmChangeHandler(context: Context) {
         }
     }
 
+    fun startPipActivity(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && isPowerSaveModeOn.get() == true) {
+            val pipIntent = Intent(appCtx, PipActivity::class.java)
+            pipIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            appCtx.startActivity(pipIntent)
+        }
+    }
     /* fun checkSemPowerModeRefreshRate(){
           try {
              Settings.Global.putString(mContentResolver, SEM_POWER_MODE_REFRESH_RATE, mode)

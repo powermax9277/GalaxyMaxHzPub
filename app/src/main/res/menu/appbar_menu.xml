@@ -1,39 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:tools="http://schemas.android.com/tools"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-            android:title="Check Update"
-            android:id="@+id/menuUpd"
-            app:showAsAction="ifRoom"
-            android:icon="@drawable/ic_baseline_system_update_24"
-            tools:ignore="HardcodedText" />
+        android:title="Check Update"
+        android:id="@+id/menuUpd"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_baseline_system_update_24"
+        tools:ignore="HardcodedText" />
     <item
-            android:title="@string/buy_adfree"
-            android:id="@+id/menuBuy"
-            tools:ignore="HardcodedText"
-            app:showAsAction="collapseActionView" />
+        android:title="@string/buy_adfree"
+        android:id="@+id/menuBuy"
+        tools:ignore="HardcodedText"
+        app:showAsAction="collapseActionView" />
 
     <item
-            android:title="@string/act"
-            android:id="@+id/menuAct"
-            app:showAsAction="collapseActionView"
-            tools:ignore="HardcodedText" />
+        android:title="@string/act"
+        android:id="@+id/menuAct"
+        app:showAsAction="collapseActionView"
+        tools:ignore="HardcodedText" />
     <item
-            android:title="@string/in_bd"
-            android:id="@+id/menuAc"
-            app:showAsAction="collapseActionView"
-            tools:ignore="HardcodedText" />
+        android:title="@string/in_bd"
+        android:id="@+id/menuAc"
+        app:showAsAction="collapseActionView"
+        tools:ignore="HardcodedText" />
     <item
         android:title="@string/reload_profiles"
         android:id="@+id/menuRf"
         app:showAsAction="collapseActionView" />
 
     <item
-            android:title="@string/help"
-            android:id="@+id/menuHlp"
-            android:visible="true"
-            app:showAsAction="collapseActionView" />
+        android:title="@string/help"
+        android:id="@+id/menuHlp"
+        android:visible="true"
+        app:showAsAction="collapseActionView" />
 
     <item
         android:title="@string/premium_features"
@@ -42,10 +42,17 @@
         app:showAsAction="collapseActionView" />
 
     <item
-            android:title="@string/show_ns_card"
-            android:id="@+id/menuNs"
-            android:checkable="true"
-            android:visible="false"
-            app:showAsAction="collapseActionView" />
+        android:title="@string/using_spay"
+        android:id="@+id/menuUsingSpay"
+        android:checkable="true"
+        android:visible="false"
+        app:showAsAction="collapseActionView" />
+
+    <item
+        android:title="@string/show_ns_card"
+        android:id="@+id/menuNs"
+        android:checkable="true"
+        android:visible="false"
+        app:showAsAction="collapseActionView" />
 
 </menu>

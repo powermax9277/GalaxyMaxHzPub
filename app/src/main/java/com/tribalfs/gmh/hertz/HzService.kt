@@ -31,9 +31,11 @@ import com.tribalfs.gmh.PLAYING
 import com.tribalfs.gmh.R
 import com.tribalfs.gmh.STOPPED
 import com.tribalfs.gmh.callbacks.DisplayChangedCallback
+import com.tribalfs.gmh.helpers.CacheSettings
 import com.tribalfs.gmh.helpers.CacheSettings.displayId
 import com.tribalfs.gmh.helpers.CacheSettings.hzNotifOn
 import com.tribalfs.gmh.helpers.CacheSettings.hzStatus
+import com.tribalfs.gmh.helpers.CacheSettings.isScreenOn
 import com.tribalfs.gmh.helpers.UtilNotifIcon
 import com.tribalfs.gmh.hertz.HzNotifGlobal.CHANNEL_ID_HZ
 import com.tribalfs.gmh.hertz.HzNotifGlobal.NOTIFICATION_ID_HZ
@@ -104,7 +106,6 @@ internal class HzService : Service(), CoroutineScope{
             override fun onReceive(context: Context?, intent: Intent?) {
                 when(intent?.action){
                     ACTION_SCREEN_ON ->{
-                        //pauseHz()
                         mPauseHzJob?.cancel()
                         startHz()
                         hznotificationBuilder?.setVisibility(Notification.VISIBILITY_PRIVATE)
@@ -118,7 +119,9 @@ internal class HzService : Service(), CoroutineScope{
                         mPauseHzJob = null
                         mPauseHzJob = launch(Dispatchers.Main){
                             delay(10000)
-                            pauseHz()
+                            if (!isScreenOn) {
+                                pauseHz()
+                            }
                         }
                         mPauseHzJob?.start()
                     }

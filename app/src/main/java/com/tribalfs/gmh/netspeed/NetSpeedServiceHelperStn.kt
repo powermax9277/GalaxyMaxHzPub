@@ -2,8 +2,10 @@ package com.tribalfs.gmh.netspeed
 
 import android.content.Context
 import android.content.Intent
-import com.tribalfs.gmh.helpers.CacheSettings.isNetSpeedRunning
+import android.os.Build
+import com.tribalfs.gmh.GalaxyMaxHzAccess.Companion.gmhAccessInstance
 import com.tribalfs.gmh.helpers.SingletonMaker
+import com.tribalfs.gmh.netspeed.NetSpeedService.Companion.netSpeedService
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt
 
 
@@ -14,42 +16,48 @@ class NetSpeedServiceHelperStn private constructor(context: Context)  {
     private val appCtx =  context.applicationContext
     private val mUtilsPrefGmh by lazy  {UtilsPrefsGmhSt.instance(appCtx)}
 
-    private val serviceIntent: Intent
-        get() {
-            return Intent(appCtx, NetSpeedService::class.java)
-        }
 
+    fun updateStreamType(){
+        netSpeedService?.setStream(mUtilsPrefGmh.gmhPrefSpeedToShow)
+    }
+
+    fun updateSpeedUnit(){
+        netSpeedService?.setSpeedUnit(mUtilsPrefGmh.gmhPrefSpeedUnit)
+    }
+
+
+    fun updateNetSpeed(){
+        runNetSpeed(null)
+    }
 
     fun runNetSpeed(enable: Boolean?){
-        enable?.let{
-            mUtilsPrefGmh.gmhPrefNetSpeedIsOn = it
-            if (it) {
-                startService()
-            } else {
-                stopService(null)
-            }
-        }?:run {
-            if (mUtilsPrefGmh.gmhPrefNetSpeedIsOn) {
-                startService()
-            } else {
-                stopService(null)
-            }
+        mUtilsPrefGmh.gmhPrefNetSpeedIsOn = enable ?: mUtilsPrefGmh.gmhPrefNetSpeedIsOn
+        if (mUtilsPrefGmh.gmhPrefNetSpeedIsOn ) {
+            startNetSpeed()
+        } else {
+            stopNetSpeed()
         }
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            gmhAccessInstance?.setupNetworkCallback()
+        }
     }
 
-
-    fun startService() {
-        isNetSpeedRunning.set(true)
-        appCtx.startService(serviceIntent)
+    //This is also called by network callback so don't register callback here
+    fun startNetSpeed() {
+        if (netSpeedService == null) {
+            appCtx.startService(Intent(appCtx, NetSpeedService::class.java))
+            updateStreamType()
+            updateSpeedUnit()
+        }
     }
 
-
-    
-    fun stopService(isTemp: Boolean?) {
-        isNetSpeedRunning.set(isTemp?:false)
+    //This is also called by network callback so don't register callback here
+    fun stopNetSpeed() {
         try {
-            appCtx.stopService(serviceIntent)
+            if (netSpeedService != null) {
+                appCtx.stopService(Intent(appCtx, NetSpeedService::class.java))
+            }
         }catch (_:Exception){}
     }
+
 }

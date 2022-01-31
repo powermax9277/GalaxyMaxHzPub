@@ -18,7 +18,7 @@
         Utilizza il pulsante di impostazione rapida incluso per modificare velocemente la modalità di risoluzione.
     </string>
     <string name="center">Centrale</string>
-    <string name="info_qs_max_hz">Include un pulsante per attivare rapidamente gli Hz massimi</string>
+    <string name="info_qs_max_hz">Include pulsanti per cambiare rapidamente Hz mass. e Hz min.</string>
     <string name="info_qs_rtrr">Include un pulsante per mostrare rapidamente la frequenza di aggiornamento in tempo reale</string>
     <string name="s_off_mod">Mod. Schermo spento</string>
     <string name="force_hz_mod">Forza Hz Minimi</string>
@@ -147,5 +147,6 @@
         <item quantity="other">Periodo di prova premium attivo: %d giorni rimanenti</item>
         <item quantity="one">Periodo di prova premium attivo: %d giorno rimanente</item>
     </plurals>
-    <string name="is_prem_ft">%s is premium feature</string>
+    <string name="is_prem_ft">%s è una funzione premium</string>
+    <string name="using_spay">SPay sta andando in crash</string>
 </resources>
