@@ -5,8 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.annotation.RequiresApi
-import com.tribalfs.gmh.hertz.HzServiceHelperStn
-import com.tribalfs.gmh.netspeed.NetSpeedServiceHelperStn
 import com.tribalfs.gmh.profiles.ProfilesObj.refreshRateModeMap
 import com.tribalfs.gmh.resochanger.ResolutionChangeUtil
 import kotlinx.coroutines.*
@@ -27,8 +25,6 @@ class BootCompleteReceiver : BroadcastReceiver() {
                     val reso = resoChangeUtil.mUtilsRefreshRate.mUtilsDeviceInfo.getDisplayResolution()
                     val resName = resoChangeUtil.getResName(null)
                     if (resName == "CQHD+") resoChangeUtil.changeRes(reso)
-                    HzServiceHelperStn.instance(appCtx).switchHz()
-                    NetSpeedServiceHelperStn.instance(appCtx).updateNetSpeed()
                     resoChangeUtil.mUtilsRefreshRate.requestListeningAllTiles()
                 }
             }

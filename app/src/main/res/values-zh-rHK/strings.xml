@@ -37,7 +37,7 @@
         \n\n此應用程序可以很容易地改變運動平滑度自適應模式/高11 ADB設置的設置更改。這個工程即使在省電模式。
     </string>
     <string name="input_ac_inf">如果您因重置此設備而失去保費，請輸入發送到您的電子郵件的激活碼以重新激活保費。</string>
-    <string name="show_ns">顯示上網速度指示器</string>
+    <string name="show_ns">網速指示器</string>
     <string name="combined">結合</string>
     <string name="upload">上傳</string>
     <string name="download">下載</string>
@@ -130,4 +130,8 @@
     <string name="max_hz_for_psm">省電模式的最大赫茲</string>
     <string name="is_prem_ft">%s 是付費功能</string>
     <string name="using_spay">SPay 失敗</string>
+    <string name="aot_perm_inf">此應用程序需要權限才能顯示在頂部才能正常工作。您可以通過長按通知並關閉將出現的切換來禁用通知。</string>
+    <string name="so_location_info">確保將 SENSOR Off 磁貼放置在前四個快速設置插槽中。</string>
+    <string name="no_access_notif">禁用無障礙服務將導致以下啟用的功能出現意外行為: %s</string>
+
 </resources>

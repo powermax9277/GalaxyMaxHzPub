@@ -2,12 +2,10 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="lbl_enable_msm">Bật tính năng mượt mà của chuyển động</string>
     <string name="buy_adfree">Mua cao cấp</string>
-<!--    <string name="info_expired">Xem video này và nhận được kích hoạt gạch thiết lập nhanh chóng cho một %d ngày.</string>-->
     <string name="resolution">Kiểm soát độ phân giải và độ mượt của chuyển động</string>
     <string name="act">Kích hoạt phí bảo hiểm</string>
     <string name="max_hz">Max Hz</string>
     <string name="feat_n_a" tools:keep="@string/feat_n_a">Thay đổi độ phân giải không được hỗ trợ</string>
-    <!--    <string name="qs_active">Nhanh Cài đặt gạch kích hoạt thành công</string>-->
     <string name="min_hz_for_toggle">Thấp hơn giới hạn của chuyển đổi</string>
     <string name="adaptive">Adaptive</string>
     <string name="high">Cao</string>
@@ -49,9 +47,7 @@
     </string>
     <string name="input_ac_inf">Nếu bạn mất phí bảo hiểm do đặt lại thiết bị này, hãy nhập mã kích hoạt được gửi đến email của bạn để kích hoạt lại phí bảo hiểm.
     </string>
-<!--    <string name="failed_show_ad">Không thể hiển thị quảng cáo video. Vui lòng thử lại.</string>-->
-<!--    <string name="failed_load_ad">Không thể quảng cáo video tải. Vui lòng kiểm tra internet và thử lại.</string>-->
-    <string name="show_ns">Hiện Internet Tốc độ Chỉ số</string>
+    <string name="show_ns">Máy đo tốc độ Internet</string>
     <string name="combined">Kết hợp</string>
     <string name="upload">Tải lên</string>
     <string name="download">Tải xuống</string>
@@ -74,14 +70,10 @@
     <string name="psm_on">Chế độ tiết kiệm năng lượng đang bật</string>
     <string name="chng_res">Thay đổi nghị quyết</string>
     <string name="open_settings">Mở cài đặt</string>
-<!--    <string name="qst_exp">Nhanh Cài đặt gạch hết hạn</string>-->
-<!--    <string name="ad_starting_in">"Video bắt đầu từ năm "</string>-->
-<!--    <string name="no_thanks">Không, cám ơn!</string>-->
     <string name="chng_res_failed">Thất bại trong việc giải quyết sự thay đổi.</string>
     <string name="one_res_def">Chỉ có một độ phân giải được xác định trong hệ thống.</string>
     <string name="rrp_not_loaded">Mức độ refresh sẵn chưa nạp. Thử lại.</string>
     <string name="sot_no_perm">Hiển thị trên phép đầu không được Cấp!</string>
-<!--    <string name="error_opening_settings">Thiết lập Lỗi khi mở.</string>-->
     <string name="cie">Lỗi! Vui lòng kiểm tra kết nối internet và thử lại.</string>
     <string name="aca">Mã kích hoạt không hợp lệ.</string>
     <string name="afa">Phí bảo hiểm đã được kích hoạt thành công!</string>
@@ -89,7 +81,6 @@
     <plurals name="aha">
         <item quantity="other">Đã kích hoạt bản dùng thử đặc biệt: %d ngày còn lại</item>
     </plurals>
-   <!-- <string name="eta">Lỗi thử kích hoạt không có quảng cáo miễn phí!</string>-->
     <string name="nlh">Không tìm thấy giấy phép cao cấp nào cho thiết bị này: %s</string>
     <string name="edit">Biên tập</string>
     <string name="quick_doz_mod">Nhanh Doze Mod</string>
@@ -104,7 +95,6 @@
     <string name="actvt_trial">Kích hoạt bản dùng thử miễn phí?</string>
     <string name="auto_psm">Chế độ tiết kiệm năng lượng khi màn hình tắt</string>
     <string name="reso_opts">Thay đổi tùy chọn độ phân giải</string>
-
     <string name="requires_ws_perm_h">
         %1$s cần một quyền đặc biệt để thực thi tính năng này.
         Nhấp vào liên kết thiết lập ADB bên dưới để tìm hiểu cách thực hiện.
@@ -158,4 +148,8 @@
     <string name="max_hz_for_psm">Hz tối đa cho chế độ tiết kiệm năng lượng</string>
     <string name="is_prem_ft">%s là một tính năng trả phí</string>
     <string name="using_spay">SPay đang gặp sự cố</string>
+    <string name="aot_perm_inf">Ứng dụng này cần quyền hiển thị ở trên cùng để hoạt động bình thường. Bạn có thể tắt thông báo bằng cách nhấn và giữ chúng và tắt nút chuyển sẽ xuất hiện.</string>
+    <string name="so_location_info">Đảm bảo đặt ô SENSOR Off trong bốn vị trí cài đặt nhanh đầu tiên.</string>
+    <string name="no_access_notif">Việc tắt dịch vụ trợ năng sẽ gây ra hành vi không mong muốn đối với (các) tính năng đã bật sau:%s</string>
+
 </resources>

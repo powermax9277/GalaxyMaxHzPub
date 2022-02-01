@@ -11,8 +11,7 @@ import android.widget.Toast
 import androidx.annotation.Keep
 import androidx.annotation.RequiresApi
 import com.google.gson.Gson
-import com.tribalfs.gmh.AccessibilityPermission.isAccessibilityEnabled
-import com.tribalfs.gmh.GalaxyMaxHzAccess
+import com.tribalfs.gmh.GalaxyMaxHzAccess.Companion.gmhAccessInstance
 import com.tribalfs.gmh.R
 import com.tribalfs.gmh.helpers.CacheSettings.canApplyFakeAdaptive
 import com.tribalfs.gmh.helpers.CacheSettings.currentRefreshRateMode
@@ -23,7 +22,7 @@ import com.tribalfs.gmh.helpers.CacheSettings.isFakeAdaptive
 import com.tribalfs.gmh.helpers.CacheSettings.isMultiResolution
 import com.tribalfs.gmh.helpers.CacheSettings.isOfficialAdaptive
 import com.tribalfs.gmh.helpers.CacheSettings.isOnePlus
-import com.tribalfs.gmh.helpers.CacheSettings.isPowerSaveModeOn
+import com.tribalfs.gmh.helpers.CacheSettings.isPowerSaveMode
 import com.tribalfs.gmh.helpers.CacheSettings.isPremium
 import com.tribalfs.gmh.helpers.CacheSettings.isXiaomi
 import com.tribalfs.gmh.helpers.CacheSettings.keepModeOnPowerSaving
@@ -399,7 +398,7 @@ class UtilRefreshRateSt private constructor (val context: Context)  {
     }
 
 
-    private fun isAdaptiveSupportedUpd(): Boolean {
+    fun isAdaptiveSupportedUpd(): Boolean {
         // if (BuildConfig.DEBUG) return false
         return mUtilsDeviceInfo.deviceModel.let { model ->
             ProfilesObj.adaptiveModelsObj.run {
@@ -743,7 +742,7 @@ class UtilRefreshRateSt private constructor (val context: Context)  {
 
     internal fun getPeakRefreshRate(): Int {
         var prr =  if (isFakeAdaptive.get()!!) {
-            (if (keepModeOnPowerSaving && isPowerSaveModeOn.get() ==true)
+            (if (keepModeOnPowerSaving && isPowerSaveMode.get() ==true)
                 mUtilsPrefsGmh.hzPrefMaxRefreshRatePsm
             else
                 mUtilsPrefsGmh.hzPrefMaxRefreshRate
@@ -778,21 +777,23 @@ class UtilRefreshRateSt private constructor (val context: Context)  {
             val prr =  Settings.System.getString(mContentResolver, PEAK_REFRESH_RATE)
             prr.toInt()
         } catch (_: Exception) {
-           //TODO(REFLECTION: android.provider.Settings.config)
-            //null
-           // context.resources.getInteger(android.R.integer.config_defaultPeakRefreshRate).toInt()
+           //No choice
             mUtilsDeviceInfo.currentDisplay.refreshRate.toInt()
         }
     }
 
-
     @ExperimentalCoroutinesApi
     @RequiresApi(Build.VERSION_CODES.M)
     internal fun setPrefOrAdaptOrHighRefreshRateMode(resStrLxw: String?): Boolean{
-        try {
+        return setPrefOrAdaptOrHighRefreshRateMode(resStrLxw, false)
+    }
+
+    @ExperimentalCoroutinesApi
+    @RequiresApi(Build.VERSION_CODES.M)
+    internal fun setPrefOrAdaptOrHighRefreshRateMode(resStrLxw: String?, autoApplyStandard: Boolean): Boolean{
+        return try {
             val rrm =
-                if (mUtilsPrefsGmh.gmhPrefRefreshRateModePref != null
-                   /* && mUtilsPrefsGmh.gmhPrefRefreshRateModePref != REFRESH_RATE_MODE_STANDARD*/) {
+                if (mUtilsPrefsGmh.gmhPrefRefreshRateModePref != null) {
                     mUtilsPrefsGmh.gmhPrefRefreshRateModePref
                 } else {
                     if (isOfficialAdaptive) {
@@ -801,9 +802,9 @@ class UtilRefreshRateSt private constructor (val context: Context)  {
                         REFRESH_RATE_MODE_ALWAYS
                     }
                 }
-            return tryThisRrm(rrm!!, resStrLxw)
+            tryThisRrm(rrm!!, resStrLxw,autoApplyStandard)
         }catch (_:Exception){
-            return false
+            false
         }
     }
 
@@ -811,12 +812,22 @@ class UtilRefreshRateSt private constructor (val context: Context)  {
     @ExperimentalCoroutinesApi
     @RequiresApi(Build.VERSION_CODES.M)
     internal fun tryThisRrm(rrm: String, resStrLxw: String?) : Boolean {
+        return tryThisRrm(rrm, resStrLxw, false)
+    }
+
+
+    @ExperimentalCoroutinesApi
+    @RequiresApi(Build.VERSION_CODES.M)
+    internal fun tryThisRrm(rrm: String, resStrLxw: String?, autoApplyStandard: Boolean) : Boolean {
         if (hasWriteSecureSetPerm) {
             return if (rrm != REFRESH_RATE_MODE_STANDARD) {
                 val highest = getThisRrmAndResoHighestHz(resStrLxw, rrm)
                 if (highest > STANDARD_REFRESH_RATE_HZ) {
                     setRefreshRateMode(rrm) && setRefreshRate(prrActive.get()!!, null)
                 } else {
+                    if (autoApplyStandard) {
+                        setRefreshRateMode(REFRESH_RATE_MODE_STANDARD)
+                    }
                     false
                 }
             }else{
@@ -843,11 +854,11 @@ class UtilRefreshRateSt private constructor (val context: Context)  {
 
 
     @ExperimentalCoroutinesApi
-    internal fun updateRefreshRateParams() {
+    internal fun updateAdaptiveModCachedParams() {
         canApplyFakeAdaptive = canApplyFakeAdaptiveInt()//don't interchange
         isFakeAdaptive.set(isFakeAdaptive())//don't interchange
         prrActive.set(
-            if (isPowerSaveModeOn.get() == true && isPremium.get()!!) {
+            if (isPowerSaveMode.get() == true && isPremium.get()!!) {
                 mUtilsPrefsGmh.hzPrefMaxRefreshRatePsm
             } else {
                 mUtilsPrefsGmh.hzPrefMaxRefreshRate
@@ -861,19 +872,19 @@ class UtilRefreshRateSt private constructor (val context: Context)  {
     private fun canApplyFakeAdaptiveInt(): Boolean {
 
         return isOfficialAdaptive && (currentRefreshRateMode.get() == REFRESH_RATE_MODE_SEAMLESS)
-                && (hasWriteSecureSetPerm || isAccessibilityEnabled(
+                && (hasWriteSecureSetPerm || gmhAccessInstance != null/*isAccessibilityEnabled(
             appCtx, GalaxyMaxHzAccess::class.java
-        ))
+        )*/)
     }
 
 
     @ExperimentalCoroutinesApi
     private fun isFakeAdaptive(): Boolean {
         return (currentRefreshRateMode.get() == REFRESH_RATE_MODE_SEAMLESS)
-                && (hasWriteSecureSetPerm || isAccessibilityEnabled(
+                && (hasWriteSecureSetPerm || gmhAccessInstance != null/*isAccessibilityEnabled(
             appCtx,
             GalaxyMaxHzAccess::class.java
-        ))
+        )*/)
                 && (if (isOfficialAdaptive) (mUtilsPrefsGmh.gmhPrefMinHzAdapt < STANDARD_REFRESH_RATE_HZ) else true)
     }
 

@@ -780,19 +780,18 @@
 
                     <TextView
                         android:id="@+id/tv_so_psm_options"
-                        android:layout_width="290dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="0dp"
                         android:layout_marginBottom="8dp"
+                        android:background="?android:selectableItemBackground"
                         android:onClick="@{(v) ->  clickListener.onClickView(v)}"
                         android:text="@string/psm_options"
                         android:textColor="@color/primary_color"
                         android:textSize="13sp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/sw_so_psm"
                         app:layout_constraintTop_toBottomOf="@+id/sw_so_psm"
-                        tools:ignore="TooManyViews"
-                        app:layout_constraintBottom_toTopOf="@+id/sw_auto_off_sync"/>
+                        app:layout_constraintBottom_toTopOf="@+id/sw_auto_off_sync"
+                        tools:ignore="TooManyViews" />
 
                     <Switch
                         android:id="@+id/sw_auto_off_sync"
@@ -811,17 +810,16 @@
 
                     <TextView
                         android:id="@+id/tv_auto_sync_settings"
-                        android:layout_width="290dp"
+                        android:background="?android:selectableItemBackground"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="0dp"
                         android:layout_marginBottom="8dp"
                         android:onClick="@{(v) -> premium ? clickListener.onClickView(v) : null}"
                         android:text="@string/autosync_settings"
                         android:textColor="@color/primary_color"
                         android:textSize="13sp"
                         android:visibility="@{premium ? View.VISIBLE : View.GONE}"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/sw_auto_off_sync"
                         app:layout_constraintTop_toBottomOf="@+id/sw_auto_off_sync"
                         app:layout_constraintBottom_toTopOf="@+id/sw_screen_off_doze"/>
 
@@ -860,17 +858,16 @@
 
                     <TextView
                         android:id="@+id/tv_batt_optim_settings"
-                        android:layout_width="290dp"
+                        android:background="?android:selectableItemBackground"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
                         android:layout_marginBottom="8dp"
                         android:onClick="@{(v) -> (premium ? clickListener.onClickView(v) : null)}"
                         android:text="@string/apps_bat_opt_settings"
                         android:textColor="@color/primary_color"
                         android:textSize="13sp"
                         android:visibility="@{premium ? View.VISIBLE : View.GONE}"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/screen_off_doze_info"
                         app:layout_constraintTop_toBottomOf="@+id/screen_off_doze_info" />
 
                     <TextView
@@ -1058,8 +1055,9 @@
 
                     <TextView
                         android:id="@+id/tv_data_usage"
+                        android:background="?android:selectableItemBackground"
                         android:layout_width="wrap_content"
-                        android:layout_height="0dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
                         android:clickable="true"
                         android:focusable="true"

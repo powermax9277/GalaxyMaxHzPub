@@ -35,7 +35,7 @@
         \n\nこのアプリは、ADBのセットアップが実行されると、モーションスムーズモードをアダプティブ/ハイに簡単に変更できます。これは、省電力モードでも機能します。
     </string>
     <string name="input_ac_inf">このデバイスをリセットしたためにプレミアムを失った場合は、メールに送信されたアクティベーションコードを入力して、プレミアムを再度アクティブにします。</string>>
-    <string name="show_ns">ネットスピードインジケーターを表示</string>
+    <string name="show_ns">ネットスピードインジケーター</string>
     <string name="combined">組み合わせ</string>
     <string name="upload">アップロード</string>
     <string name="download">ダウンロード</string>
@@ -137,4 +137,8 @@
     <string name="max_hz_for_psm">省電力モードの最大Hz</string>
     <string name="is_prem_ft">%sはプレミアム機能です</string>
     <string name="using_spay">SPayがクラッシュしています</string>
+    <string name="aot_perm_inf">このアプリを正しく動作させるには、上部に表示するための権限が必要です。通知を長押しして表示されるトグルをオフにすることで、通知を無効にできます。</string>
+    <string name="so_location_info">SENSOROffタイルを最初の4つのクイック設定スロット内に配置してください。</string>
+    <string name="no_access_notif">ユーザー補助サービスを無効にすると、次の有効な機能で予期しない動作が発生します：%s</string>
+
 </resources>

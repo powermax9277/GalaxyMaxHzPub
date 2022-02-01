@@ -31,7 +31,6 @@ import com.tribalfs.gmh.PLAYING
 import com.tribalfs.gmh.R
 import com.tribalfs.gmh.STOPPED
 import com.tribalfs.gmh.callbacks.DisplayChangedCallback
-import com.tribalfs.gmh.helpers.CacheSettings
 import com.tribalfs.gmh.helpers.CacheSettings.displayId
 import com.tribalfs.gmh.helpers.CacheSettings.hzNotifOn
 import com.tribalfs.gmh.helpers.CacheSettings.hzStatus
@@ -46,12 +45,10 @@ import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
 
-
 @SuppressLint("InlinedApi")
 internal class HzService : Service(), CoroutineScope{
 
     companion object {
-        // private const val TAG = "HzService"
         private const val ANIMATION_DURATION = 700L
     }
 

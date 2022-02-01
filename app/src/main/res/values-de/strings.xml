@@ -52,7 +52,6 @@
     <!--    <string name="failed_load_ad">-->
     <!--        Die Videoanzeige konnte nicht geladen werden. Bitte überprüfen Sie die Internetverbindung und versuchen Sie es dann erneut.-->
     <!--    </string>-->
-    <string name="show_ns">Datennutzung Überwachen</string>
     <string name="combined">Kombiniert</string>
     <string name="upload">Hochladen</string>
     <string name="download">Herunterladen</string>
@@ -98,7 +97,7 @@
     <string name="brightness_threshold">Mindesthelligkeit für adaptive Bildwiederholrate</string>
     <string name="adp_delay">Wartezeit bis geringste Bildwiederholrate aktiviert wird (in Sekunden)</string>
     <string name="cur_rr_h">Aktuelle Bildwiederholrate: %s Hz</string>
-    <string name="show_ns_card">Datennutzungstool</string>
+    <string name="show_ns_card">Überwachen Sie die Internetgeschwindigkeit</string>
     <string name="prr_psm">Hohe/Adpative Bildwiederholrate trotz Energiesparmodus</string>
     <string name="lbl_rrm">Bildwiederholraten Mods</string>
     <string name="actvt_trial">Kostenlose Testversion aktivieren</string>
@@ -153,4 +152,8 @@
     <string name="max_hz_for_psm">Max Hz für den Energiesparmodus</string>
     <string name="is_prem_ft">%s ist eine premium-funktion</string>
     <string name="using_spay">SPay schlägt fehl</string>
+    <string name="aot_perm_inf">Diese App benötigt die Erlaubnis, oben angezeigt zu werden, um ordnungsgemäß zu funktionieren. Sie können die Benachrichtigung deaktivieren, indem Sie lange darauf drücken und den angezeigten Schalter ausschalten.</string>
+    <string name="so_location_info">Stellen Sie sicher, dass Sie die Kachel „SENSOREN AUS“ innerhalb der ersten vier Schnelleinstellungsplätze platzieren.</string>
+    <string name="no_access_notif">Das Deaktivieren des Barrierefreiheitsdienstes führt zu unerwartetem Verhalten für die folgende(n) aktivierte(n) Funktion(en): %s</string>
+    <string name="show_ns">Überwachen Sie die Internetgeschwindigkeit</string>
 </resources>

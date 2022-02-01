@@ -18,12 +18,9 @@ import com.tribalfs.gmh.helpers.CacheSettings.disablePsm
 import com.tribalfs.gmh.helpers.CacheSettings.hasWriteSecureSetPerm
 import com.tribalfs.gmh.helpers.CacheSettings.ignorePowerModeChange
 import com.tribalfs.gmh.helpers.CacheSettings.ignoreRrmChange
-import com.tribalfs.gmh.helpers.CacheSettings.isPowerSaveModeOn
+import com.tribalfs.gmh.helpers.CacheSettings.isPowerSaveMode
 import com.tribalfs.gmh.helpers.CacheSettings.isScreenOn
-import com.tribalfs.gmh.helpers.CacheSettings.lowestHzCurMode
-import com.tribalfs.gmh.helpers.CacheSettings.lowestHzForAllMode
 import com.tribalfs.gmh.helpers.CacheSettings.offScreenRefreshRate
-import com.tribalfs.gmh.helpers.CacheSettings.prrActive
 import com.tribalfs.gmh.helpers.CacheSettings.restoreSync
 import com.tribalfs.gmh.helpers.CacheSettings.screenOffRefreshRateMode
 import com.tribalfs.gmh.helpers.CacheSettings.sensorOnKey
@@ -37,6 +34,7 @@ private const val PREF_NET_TYPE_5G_LTE_GSM_WCDMA = 26
 
 @ExperimentalCoroutinesApi
 open class GmhBroadcastReceivers(context: Context, private val gmhBroadcastCallback: GmhBroadcastCallback, private val scope: CoroutineScope): BroadcastReceiver() {
+
     private val appCtx = context.applicationContext
     private val mContentResolver = appCtx.contentResolver
 
@@ -107,7 +105,7 @@ open class GmhBroadcastReceivers(context: Context, private val gmhBroadcastCallb
 
     private val psmEnablerRunnable: Runnable by lazy {
         Runnable {
-            if (isPowerSaveModeOn.get() == false) {
+            if (isPowerSaveMode.get() == false) {
                 disablePsm = true
                 setPowerSaving(true)
             }
@@ -128,9 +126,9 @@ open class GmhBroadcastReceivers(context: Context, private val gmhBroadcastCallb
 
         when (p1.action) {
             ACTION_POWER_SAVE_MODE_CHANGED -> {
-                isPowerSaveModeOn.set(mUtilsRefreshRate.mUtilsDeviceInfo.isPowerSavingsModeOn)
+                isPowerSaveMode.set(mUtilsRefreshRate.mUtilsDeviceInfo.isPowerSavingsMode())
                 if (ignorePowerModeChange.getAndSet(false) || !hasWriteSecureSetPerm) return
-                mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefPsmIsOffCache = isPowerSaveModeOn.get() != true
+                mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefPsmIsOffCache = isPowerSaveMode.get() != true
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     PsmChangeHandler.instance(appCtx).handle()
                 }

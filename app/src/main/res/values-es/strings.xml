@@ -45,7 +45,7 @@
     </string>
     <string name="input_ac_inf">Si perdió sin publicidad debido a restablecer este dispositivo, ingrese el código de activación
         enviado a su correo electrónico para reactivar sin publicidad.</string>
-    <string name="show_ns">Mostrar indicador de velocidad neta</string>
+    <string name="show_ns">Indicador de velocidad neta</string>
     <string name="combined">Conjunto</string>
     <string name="upload">Subir</string>
     <string name="download">Descargar</string>
@@ -143,4 +143,8 @@
     <string name="max_hz_for_psm">Hz máximo para el modo de ahorro de energía</string>
     <string name="is_prem_ft">%s es una característica premium</string>
     <string name="using_spay">SPay está fallando</string>
+    <string name="aot_perm_inf">Esta aplicación necesita permiso para aparecer en la parte superior para funcionar correctamente. Puede deshabilitar la notificación manteniéndola presionada y apagando el interruptor que aparecerá.</string>
+    <string name="so_location_info">Asegúrese de colocar el mosaico SENSOR Off dentro de las primeras cuatro ranuras de configuración rápida.</string>
+    <string name="no_access_notif">Deshabilitar el servicio de accesibilidad provocará un comportamiento inesperado para las siguientes características habilitadas: %s</string>
+
 </resources>

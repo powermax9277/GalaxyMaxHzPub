@@ -4,8 +4,11 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.annotation.Keep
 import com.tribalfs.gmh.R
+import com.tribalfs.gmh.helpers.CacheSettings.currentRefreshRateMode
 import com.tribalfs.gmh.helpers.CacheSettings.highestHzForAllMode
+import com.tribalfs.gmh.helpers.CacheSettings.isOfficialAdaptive
 import com.tribalfs.gmh.helpers.CacheSettings.lowestHzCurMode
+import com.tribalfs.gmh.helpers.REFRESH_RATE_MODE_SEAMLESS
 import com.tribalfs.gmh.helpers.STANDARD_REFRESH_RATE_HZ
 import com.tribalfs.gmh.helpers.SingletonMaker
 import com.tribalfs.gmh.hertz.HzGravity
@@ -61,9 +64,7 @@ internal const val USING = 1
 
 internal class UtilsPrefsGmhSt private constructor(val context: Context) {
 
-    companion object : SingletonMaker<UtilsPrefsGmhSt, Context>(::UtilsPrefsGmhSt){
-       // private const val TAG = "UtilsSharedPrefsHz"
-    }
+    companion object : SingletonMaker<UtilsPrefsGmhSt, Context>(::UtilsPrefsGmhSt)
 
     val hzSharedPref: SharedPreferences by lazy {context.applicationContext.getSharedPreferences(
         GMH_PREFS,
@@ -307,4 +308,30 @@ internal class UtilsPrefsGmhSt private constructor(val context: Context) {
             return hzSharedPref.getString(SENSOR_ON_KEY, null)
         }
         set(key){hzSharedPrefEditor.putString(SENSOR_ON_KEY, key as String).apply()}
+
+
+    fun getEnabledAccessibilityFeatures(): List<String>{
+        val featuresOn = mutableListOf<String>()
+        if (gmhPrefForceLowestSoIsOn) {
+            featuresOn.add("-${context.applicationContext.getString(R.string.force_hz_mod)}")
+        }
+        if (gmhPrefPsmOnSo) {
+            featuresOn.add("-${context.applicationContext.getString(R.string.auto_psm)}")
+        }
+        if (gmhPrefDisableSyncIsOn) {
+            featuresOn.add("-${context.applicationContext.getString(R.string.disable_sync_on_so)}")
+        }
+        if (gmhPrefSensorsOff) {
+            featuresOn.add("-${context.applicationContext.getString(R.string.auto_sensors_off_exp)}")
+        }
+        if (gmhPrefKmsOnPsm) {
+            featuresOn.add("-${context.applicationContext.getString(R.string.prr_psm)}")
+        }
+        if (currentRefreshRateMode.get() == REFRESH_RATE_MODE_SEAMLESS
+                && (!isOfficialAdaptive  || hzSharedPref.getInt(MIN_HZ_ADAPT, STANDARD_REFRESH_RATE_HZ) < STANDARD_REFRESH_RATE_HZ)
+        ){
+            featuresOn.add("-${context.applicationContext.getString(R.string.adaptive)} mod")
+        }
+        return featuresOn
+    }
 }

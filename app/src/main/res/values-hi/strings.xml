@@ -44,7 +44,7 @@
     </string>
 <!--    <string name="failed_show_ad">वीडियो विज्ञापन दिखाने में विफल। कृपया पुन: प्रयास करें।</string>-->
 <!--    <string name="failed_load_ad">लोड वीडियो विज्ञापन करने में विफल। इंटरनेट की जाँच करें और पुन: प्रयास करें।</string>-->
-    <string name="show_ns">दिखाएँ इंटरनेट स्पीड संकेतक</string>
+    <string name="show_ns">इंटरनेट स्पीड संकेतक</string>
     <string name="combined">संयुक्त</string>
     <string name="upload">डालना</string>
     <string name="download">डाउनलोड</string>
@@ -152,4 +152,8 @@
     <string name="max_hz_for_psm">पावर सेविंग मोड के लिए अधिकतम हर्ट्ज</string>
     <string name="is_prem_ft">%s एक सशुल्क फ़ंक्शन है</string>
     <string name="using_spay">एसपी क्रैश हो रहा है</string>
+    <string name="aot_perm_inf">This app needs permission to appear on top in order to work properly. You can disable the notification by long-pressing it and turning off the toggle that will appear.</string>
+    <string name="so_location_info">Ensure to put the SENSOR Off tile within the first 4 quick settings slots.</string>
+    <string name="no_access_notif">Disabling accessibility service will cause unexpected behavior for the following enabled feature(s): %s</string>
+
 </resources>

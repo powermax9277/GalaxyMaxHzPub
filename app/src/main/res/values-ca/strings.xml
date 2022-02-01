@@ -49,7 +49,7 @@
         Això funciona fins i tot en mode d\'estalvi d\'energia.</string>
     <string name="input_ac_inf">Si perdeu la prima per restablir aquest dispositiu, introduïu el codi d\'activació que s\'envia al vostre correu electrònic per reactivar la prima.
     </string>
-    <string name="show_ns">Mostra l\'indicador de velocitat d\'Internet</string>
+    <string name="show_ns">l\'indicador de velocitat d\'Internet</string>
     <string name="combined">Combinat</string>
     <string name="upload">Pujar</string>
     <string name="download">Descarregar</string>
@@ -153,4 +153,8 @@
     <string name="acces_req">Enable Accessibility Service</string>
     <string name="is_prem_ft">%s is premium feature</string>
     <string name="using_spay">SPay falla</string>
+    <string name="aot_perm_inf">This app needs permission to appear on top in order to work properly. You can disable the notification by long-pressing it and turning off the toggle that will appear.</string>
+    <string name="so_location_info">Ensure to put the SENSOR Off tile within the first 4 quick settings slots.</string>
+    <string name="no_access_notif">Disabling accessibility service will cause unexpected behavior for the following enabled feature(s): %s</string>
+
 </resources>

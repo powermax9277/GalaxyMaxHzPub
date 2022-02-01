@@ -6,7 +6,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import com.tribalfs.gmh.helpers.CacheSettings.currentRefreshRateMode
 import com.tribalfs.gmh.helpers.CacheSettings.hasWriteSecureSetPerm
-import com.tribalfs.gmh.helpers.CacheSettings.isPowerSaveModeOn
+import com.tribalfs.gmh.helpers.CacheSettings.isPowerSaveMode
 import com.tribalfs.gmh.helpers.CacheSettings.isPremium
 import com.tribalfs.gmh.helpers.CacheSettings.lowestHzCurMode
 import com.tribalfs.gmh.helpers.CacheSettings.prrActive
@@ -87,7 +87,7 @@ class UtilChangeMaxHz (private val appCtx: Context) {
                 }
             } else {
                 //standard mode and no writeSecure perm
-                if (mUtilsRefreshRate.mUtilsDeviceInfo.isPowerSavingsModeOn){
+                if (mUtilsRefreshRate.mUtilsDeviceInfo.isPowerSavingsMode()){
                     return@withContext POWER_SAVINGS
                 }
 
@@ -149,7 +149,7 @@ class UtilChangeMaxHz (private val appCtx: Context) {
             }
 
             prrActive.set(maxHzToApplyFinal.coerceAtLeast(lowestHzCurMode))
-            if (isPremium.get()!! && isPowerSaveModeOn.get() == true){// && keepModeOnPowerSaving) {
+            if (isPremium.get()!! && isPowerSaveMode.get() == true){// && keepModeOnPowerSaving) {
                 mUtilsRefreshRate.mUtilsPrefsGmh.hzPrefMaxRefreshRatePsm = maxHzToApplyFinal
             }else{
                 mUtilsRefreshRate.mUtilsPrefsGmh.hzPrefMaxRefreshRate = maxHzToApplyFinal

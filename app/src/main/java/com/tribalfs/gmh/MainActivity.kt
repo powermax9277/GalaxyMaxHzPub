@@ -47,12 +47,11 @@ import com.google.android.material.snackbar.Snackbar
 import com.tribalfs.appupdater.AppUpdaterLite
 import com.tribalfs.appupdater.UpdateDownloader.Companion.isDownloading
 import com.tribalfs.appupdater.interfaces.OnUpdateCheckedCallback
-import com.tribalfs.gmh.AccessibilityPermission.allowAccessibility
-import com.tribalfs.gmh.AccessibilityPermission.isAccessibilityEnabled
 import com.tribalfs.gmh.BuildConfig.APPLICATION_ID
 import com.tribalfs.gmh.BuildConfig.VERSION_NAME
 import com.tribalfs.gmh.GalaxyMaxHzAccess.Companion.gmhAccessInstance
 import com.tribalfs.gmh.MyApplication.Companion.applicationName
+import com.tribalfs.gmh.UtilAccessibilityService.allowAccessibility
 import com.tribalfs.gmh.callbacks.LvlSbMsgCallback
 import com.tribalfs.gmh.databinding.ActivityMainBinding
 import com.tribalfs.gmh.dialogs.*
@@ -75,7 +74,7 @@ import com.tribalfs.gmh.helpers.CacheSettings.isFakeAdaptive
 import com.tribalfs.gmh.helpers.CacheSettings.isMultiResolution
 import com.tribalfs.gmh.helpers.CacheSettings.isOfficialAdaptive
 import com.tribalfs.gmh.helpers.CacheSettings.isOnePlus
-import com.tribalfs.gmh.helpers.CacheSettings.isPowerSaveModeOn
+import com.tribalfs.gmh.helpers.CacheSettings.isPowerSaveMode
 import com.tribalfs.gmh.helpers.CacheSettings.isPremium
 import com.tribalfs.gmh.helpers.CacheSettings.isSpayInstalled
 import com.tribalfs.gmh.helpers.CacheSettings.keepModeOnPowerSaving
@@ -115,8 +114,6 @@ import kotlin.collections.HashSet
 import kotlin.coroutines.CoroutineContext
 
 
-//private const val TAG = "MainActivity"
-//private const val REWARDED_INTERSTITIAL_ID = "ca-app-pub-3239920037413959/1863514308"
 
 internal const val GMH_WEB_APP ="https://script.google.com/macros/s/AKfycbzlRKh4-YXyXLufXZfDqAs1xJEJK7BF8zmhEDGDpbP1luu97trI/exec"
 internal const val ACTION_HIDE_MAIN_ACTIVITY = "$APPLICATION_ID.ACTION_HIDE"
@@ -343,8 +340,8 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                     }
                 }
 
-                isPowerSaveModeOn -> {
-                    mBinding.powerSavingIsOn = isPowerSaveModeOn.get()
+                isPowerSaveMode -> {
+                    mBinding.powerSavingIsOn = isPowerSaveMode.get()
                 }
             }
         }
@@ -617,7 +614,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                         return
                     }
                     keepModeOnPowerSaving = checked
-                    mUtilsPrefsGmh.gmhPrefPsmIsOffCache = (isPowerSaveModeOn.get() != true)
+                    mUtilsPrefsGmh.gmhPrefPsmIsOffCache = (isPowerSaveMode.get() != true)
                     mUtilsPrefsGmh.gmhPrefKmsOnPsm = checked
                     PsmChangeHandler.instance(applicationContext).handle()
                     return
@@ -767,7 +764,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                 1.0f, 0f
             ).apply{
                 interpolator = AnticipateInterpolator()
-                duration = 1000
+                duration = 1500
                 addListener(object : AnimatorListenerAdapter() {
                     override fun onAnimationEnd(animator: Animator) {
                         splashScreenView.remove()
@@ -780,10 +777,6 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                 }
                 animator.start()
             }
-        }
-
-        launch {
-            checkAccessibilityPerm(false)
         }
 
         inflateViews()
@@ -815,9 +808,9 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
         viewModel.setAdFreeCode(mUtilsPrefsAct.gmhPrefLicType)
 
         updateDynamicViews()
-        mBinding.powerSavingIsOn = isPowerSaveModeOn.get()
+        mBinding.powerSavingIsOn = isPowerSaveMode.get()
         currentRefreshRateMode.addOnPropertyChangedCallback(rrmChangeCallback)
-        isPowerSaveModeOn.addOnPropertyChangedCallback(rrmChangeCallback)
+        isPowerSaveMode.addOnPropertyChangedCallback(rrmChangeCallback)
 
         setupBroadcastReceiver()
         checkIfAllowedBackgroundTask()
@@ -907,11 +900,10 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
 
     private fun initDisableAutoSync(adFree: Boolean?){
         //Disable if not Ad-free
-        if ((adFree?:viewModel.isValidAdFree.value != true) || !checkAccessibilityPerm(false)){
+        if ((adFree?:viewModel.isValidAdFree.value != true) || gmhAccessInstance == null){
             mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefDisableSyncIsOn = false
         }else{
             mBinding.swAutoOffSync.isChecked = mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefDisableSyncIsOn
-
         }
     }
 
@@ -1350,19 +1342,11 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
     }
 
 
-/*    private fun checkIfUsingSpay(){
-        if (isSpayInstalled == true && mUtilsRefreshRate.mUtilsPrefsGmh.hzPrefUsingSPay == NOT_ASKED) {
-            launch(Dispatchers.Main) {
-                DialogUsingSpay().show(supportFragmentManager, null)
-            }
-        }
-    }*/
-
     @Synchronized
     private fun checkAccessibilityPerm(showRequest: Boolean): Boolean{
-        return if (!isAccessibilityEnabled(applicationContext, GalaxyMaxHzAccess::class.java)){
+        return if (gmhAccessInstance == null){
             if (hasWriteSecureSetPerm && (isSpayInstalled == false ||  mUtilsRefreshRate.mUtilsPrefsGmh.hzPrefSPayUsage == NOT_USING)) {
-                allowAccessibility(applicationContext, GalaxyMaxHzAccess::class.java, true)
+                allowAccessibility(applicationContext, true)
                 true
             }else{
                 if (showRequest) {
@@ -1375,8 +1359,6 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
         }
     }
 
-
-
     private fun setupKeepMod() {
         launch {
             while (!isProfilesLoaded) {
@@ -1386,7 +1368,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                 && currentRefreshRateMode.get() != REFRESH_RATE_MODE_ALWAYS
             //Standard mode
             ) {
-                if (isPowerSaveModeOn.get() == true
+                if (isPowerSaveMode.get() == true
                     && hasWriteSecureSetPerm && keepModeOnPowerSaving && isPremium.get()!!
                 ) {
                     if (SDK_INT >= VERSION_CODES.M) {
@@ -1395,7 +1377,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                 }
             } else {
                 //High/Adaptive mode
-                if (isPowerSaveModeOn.get() == true
+                if (isPowerSaveMode.get() == true
                     && (currentRefreshRateMode.get() == REFRESH_RATE_MODE_SEAMLESS || currentRefreshRateMode.get() == REFRESH_RATE_MODE_ALWAYS)
                     && isPremium.get()!!
                 ) {
@@ -1495,7 +1477,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                         return
                     }
                     mUtilsRefreshRate.mUtilsPrefsGmh.hzPrefMaxRefreshRate = prog
-                    if (isPowerSaveModeOn.get() != true || !isPremium.get()!!) {
+                    if (isPowerSaveMode.get() != true || !isPremium.get()!!) {
                         mUtilsRefreshRate.mUtilsPrefsGmh.hzPrefMaxRefreshRate.let{
                             prrActive.set( it)
                             mUtilsRefreshRate.setRefreshRate(it, mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefMinHzAdapt)
@@ -1661,7 +1643,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                         return
                     }
                     mUtilsRefreshRate.mUtilsPrefsGmh.hzPrefMaxRefreshRatePsm = prog
-                    if (isPowerSaveModeOn.get() == true) {
+                    if (isPowerSaveMode.get() == true) {
                         mUtilsRefreshRate.mUtilsPrefsGmh.hzPrefMaxRefreshRatePsm.let{
                             prrActive.set( it)
                             mUtilsRefreshRate.setRefreshRate(it, mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefMinHzAdapt)
@@ -2071,7 +2053,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
         }
         mBinding.sensorsOffSupported =true
 
-        if (adfree && checkAccessibilityPerm(false)
+        if (adfree && gmhAccessInstance != null //checkAccessibilityPerm(false)
         ) {
             mBinding.swAutoSensorsOff.isChecked = mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefSensorsOff
             if (!mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefSensorOnKey.isNullOrEmpty()) {
@@ -2108,7 +2090,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
         // Log.d(TAG, "onDestroy() called")
         mUtilsRefreshRate.mUtilsPrefsGmh.hzSharedPref.unregisterOnSharedPreferenceChangeListener(listener)
         currentRefreshRateMode.removeOnPropertyChangedCallback(rrmChangeCallback)
-        isPowerSaveModeOn.removeOnPropertyChangedCallback(rrmChangeCallback)
+        isPowerSaveMode.removeOnPropertyChangedCallback(rrmChangeCallback)
         unregisterReceiver(mReceiver)
         sensorOnKey?.let{mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefSensorOnKey = it}
         masterJob.cancel()

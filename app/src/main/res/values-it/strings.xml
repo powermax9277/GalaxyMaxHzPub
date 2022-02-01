@@ -47,7 +47,7 @@
     <string name="input_ac_inf">
         Se perdi il premio a seguito del ripristino di questo dispositivo, puoi riattivarlo inserendo il codice di attivazione inviato alla tua email.
     </string>
-    <string name="show_ns">Mostra Indicatore Velocità Internet</string>
+    <string name="show_ns">Indicatore Velocità Internet</string>
     <string name="combined">Combinata</string>
     <string name="upload">Upload</string>
     <string name="download">Download</string>
@@ -149,4 +149,10 @@
     </plurals>
     <string name="is_prem_ft">%s è una funzione premium</string>
     <string name="using_spay">SPay sta andando in crash</string>
+    <string name="aot_perm_inf">
+        Questa app ha bisogno dell\'autorizzazione per apparire in alto per funzionare correttamente.
+        Puoi disabilitare la notifica tenendo premuto su di essa e disattivando l\'interruttore che apparirà.</string>
+    <string name="so_location_info">Assicurati di posizionare il riquadro SENSOR Off all\'interno dei primi quattro slot delle impostazioni rapide.</string>
+    <string name="no_access_notif">La disabilitazione del servizio di accessibilità causerà un comportamento imprevisto per le seguenti funzionalità abilitate: %s</string>
+
 </resources>

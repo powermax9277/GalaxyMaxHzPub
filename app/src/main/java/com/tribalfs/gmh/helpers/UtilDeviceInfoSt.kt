@@ -194,40 +194,36 @@ class UtilDeviceInfoSt private constructor(val context: Context) {
     }
 
 
-
-
-    internal var isPowerSavingsModeOn: Boolean
-        get() {
-            return try {
-                Settings.Global.getInt(mContentResolver, POWER_SAVING_MODE) == 1
-            }catch(_:Exception){
-                val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
-                powerManager.isPowerSaveMode
-            }
+    internal fun isPowerSavingsMode(): Boolean {
+        return try {
+            Settings.Global.getInt(mContentResolver, POWER_SAVING_MODE) == 1
+        } catch (_: Exception) {
+            val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
+            powerManager.isPowerSaveMode
         }
-        set(on) { try{Settings.Global.putInt(mContentResolver, POWER_SAVING_MODE, if (on) 1 else 0) }catch(_:Exception){}}
+    }
+    //set(on) { try{Settings.Global.putInt(mContentResolver, POWER_SAVING_MODE, if (on) 1 else 0) }catch(_:Exception){}}
 
 
 
     val oneUiVersion: Double?
         @SuppressLint("PrivateApi")
         get() {
-            if (!isSemAvailable()) {
-                return null
-            }
-            val semPlatformIntField: Field = Build.VERSION::class.java.getDeclaredField("SEM_PLATFORM_INT")
-            val version: Int = semPlatformIntField.getInt(null) - 90000
-            return if (version < 0) {
-                1.0
+            return if (appCtx.packageManager.hasSystemFeature("com.samsung.feature.samsung_experience_mobile")
+                || appCtx.packageManager.hasSystemFeature("com.samsung.feature.samsung_experience_mobile_lite")
+            ) {
+                val semPlatformIntField: Field = Build.VERSION::class.java.getDeclaredField("SEM_PLATFORM_INT")
+                val version: Int = semPlatformIntField.getInt(null) - 90000
+                if (version < 0) {
+                    1.0
+                } else {
+                    ((version / 10000).toString() + "." + version % 10000 / 100).toDouble()
+                }
             } else {
-                ((version / 10000).toString() + "." + version % 10000 / 100).toDouble()
+                null
             }
         }
 
-    private fun isSemAvailable(): Boolean {
-        return appCtx.packageManager.hasSystemFeature("com.samsung.feature.samsung_experience_mobile") ||
-                appCtx.packageManager.hasSystemFeature("com.samsung.feature.samsung_experience_mobile_lite")
-    }
 
     fun getSettingsList(settings: String):List<String>{
         val list = mutableListOf<String>()

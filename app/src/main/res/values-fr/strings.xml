@@ -47,7 +47,7 @@
     </string>
     <string name="input_ac_inf">Si vous perdez votre prime suite à la réinitialisation de cet appareil, vous pouvez le réactiver en saisissant le code d\'activation envoyé à votre adresse e-mail.
     </string>
-    <string name="show_ns">Afficher l\'indicateur de vitesse Internet</string>
+    <string name="show_ns">Compteur de vitesse Internet</string>
     <string name="combined">Combiné</string>
     <string name="upload">En amont</string>
     <string name="download">En aval</string>
@@ -154,4 +154,8 @@
     <string name="max_hz_for_psm">Hz max pour le mode d\'économie d\'énergie</string>
     <string name="is_prem_ft">%s est une fonctionnalité premium</string>
     <string name="using_spay">SPay échoue</string>
+    <string name="aot_perm_inf">This app needs permission to appear on top in order to work properly. You can disable the notification by long-pressing it and turning off the toggle that will appear.</string>
+    <string name="so_location_info">Ensure to put the SENSOR Off tile within the first 4 quick settings slots.</string>
+    <string name="no_access_notif">Disabling accessibility service will cause unexpected behavior for the following enabled feature(s): %s</string>
+
 </resources>

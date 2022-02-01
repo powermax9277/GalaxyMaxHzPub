@@ -21,8 +21,8 @@ android {
         minSdkVersion 22
         //noinspection ExpiredTargetSdkVersion
         targetSdkVersion 22
-        versionCode 123
-        versionName "7.14.19"
+        versionCode 125
+        versionName "7.14.20"
         setProperty("archivesBaseName", "galaxy_max_hz_v${versionName}")
     }
 
@@ -66,42 +66,7 @@ android {
   /*      freeCompilerArgs += [
                 "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi"]*/
     }
-
-
-    /*
-    flavorDimensions "version"
-    productFlavors {
-        xdaLab {
-            dimension "version"
-            applicationId "com.tribalfs.gmh"
-            minSdkVersion 22
-            targetSdkVersion 22
-            versionCode 93
-            versionName "7.14.03"
-            setProperty("archivesBaseName", "galaxy_max_hz_v${versionName}")
-        }
-    }*/
-
-    /*    lintOptions {
-        checkReleaseBuilds false
-        // Or, if you prefer, you can continue to check for errors in release builds,
-        // but continue the build even when errors are found:
-        abortOnError false
-    }*/
-
-
-    /*  sourceSets {
-          xdaLab {
-              java.srcDirs = ["src/main/java", "common"]
-              res.srcDirs = ["src/main/res"]
-          }
-      }*/
 }
-
-
-/*configurations {
-    all*.exclude group: 'com.google.firebase', module: 'firebase-core'
-}*/
 
 
 
@@ -115,12 +80,6 @@ dependencies {
     implementation project(path:':appupdater')
 
     implementation 'androidx.core:core-splashscreen:1.0.0-beta01'
-    /*
-    implementation platform('com.google.firebase:firebase-bom:26.3.0')
-    implementation 'com.google.firebase:firebase-analytics-ktx'
-    implementation "com.google.firebase:firebase-ads:$firebase_version"
-    implementation "com.google.android.gms:play-services-ads-lite:$firebase_version"
-    */
 
     // ViewModel
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
@@ -135,15 +94,13 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.9'
     implementation 'androidx.security:security-crypto:1.1.0-alpha03'
 
-    //TODO{reason: comment out below}
-    implementation "ch.acra:acra-mail:$acraVersion"
+    //implementation "ch.acra:acra-mail:$acraVersion"
     implementation "ch.acra:acra-limiter:$acraVersion"
-    implementation "ch.acra:acra-toast:$acraVersion"
+    //implementation "ch.acra:acra-toast:$acraVersion"
     implementation "ch.acra:acra-http:$acraVersion"
 
     implementation 'com.joaomgcd:taskerpluginlibrary:0.4.1'
 
-   // implementation files('C:/Android-Sdk/sources/android-31/com/android/server/display')
     //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.8.1'
 
 }

@@ -49,19 +49,13 @@ class QSTileResSw : TileService() {
     override fun onClick() {
         super.onClick()
 
-        /*    if (isTileExpired) {
-                mUtilsPrefsGmh.gmhPrefExpireDialogAllowed = true
-                val i = Intent(this, Class.forName("$APPLICATION_ID.MainActivity"))
-                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                startActivityAndCollapse(i)
-            } else {*/
         applicationScope.launch {
 
             val startMain = Intent(Intent.ACTION_MAIN)
             startMain.addCategory(Intent.CATEGORY_HOME)
             startMain.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             startActivityAndCollapse(startMain)
-            delay(200)
+            delay(500)
 
             val result = ResolutionChangeUtil(applicationContext).changeRes(null)
 

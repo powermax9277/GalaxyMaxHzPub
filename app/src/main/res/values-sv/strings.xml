@@ -42,7 +42,7 @@
     </string>
     <string name="input_ac_inf">Om du förlorade premien på grund av att du återställde den här enheten,
         ange aktiveringskoden som skickades till din e-post för att återaktivera premien.</string>
-    <string name="show_ns">"Visa näthastighetsindikator"</string>
+    <string name="show_ns">Näthastighetsindikator</string>
     <string name="combined">"Kombinerad"</string>
     <string name="upload">"Uppladdning"</string>
     <string name="download">"Nedladdning"</string>
@@ -141,4 +141,12 @@
     <string name="acces_req">"Aktivera tillgänglighetstjänst"</string>
     <string name="is_prem_ft">%s är en premiumfunktion</string>
     <string name="using_spay">SPay kraschar</string>
+    <string name="aot_perm_inf">Denna app behöver tillåtelse att visas överst för att fungera korrekt. Du kan inaktivera notifikationen genom att långtrycka på den, och stänga av den via alternativen som dyker upp.</string>
+    <string name="so_location_info">Se till att ha "Sensorer av"-brickan bland de 4 första snabbinställningarna.</string>
+    <plurals name="access_notif">
+        <item quantity="one">  Tillgänglighetsservice krävs för följande - stäng först av denna för att avaktivera tillgänglighetshjälp: %s</item>
+        <item quantity="other">Tillgänglighetsservice krävs för följande - stäng först av dessa för att avaktivera tillgänglighetshjälp: %s</item>
+    </plurals>
+    <string name="no_access_notif">Inaktivering av tillgänglighetstjänsten kan skapa problem för följande funktion(er): %s</string>
+
 </resources>

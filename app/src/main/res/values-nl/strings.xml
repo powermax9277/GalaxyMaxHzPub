@@ -44,7 +44,7 @@
     <string name="input_ac_inf">
         Als u uw premie verliest als gevolg van het resetten van dit apparaat, kunt u opnieuw activeren door de activeringscode in te voeren die naar uw e-mail is verzonden.
     </string>
-    <string name="show_ns">Geef de internetsnelheidsindicator weer</string>
+    <string name="show_ns">Internetsnelheidsmeter</string>
     <string name="combined">Gecombineerd</string>
     <string name="upload">Uploaden</string>
     <string name="download">Downloaden</string>
@@ -147,4 +147,8 @@
     <string name="max_hz_for_psm">Max Hz voor energiebesparende modus</string>
     <string name="is_prem_ft">%s is een premiumfunctie</string>
     <string name="using_spay">SPay crasht</string>
+    <string name="aot_perm_inf">This app needs permission to appear on top in order to work properly. You can disable the notification by long-pressing it and turning off the toggle that will appear.</string>
+    <string name="so_location_info">Ensure to put the SENSOR Off tile within the first 4 quick settings slots.</string>
+    <string name="no_access_notif">Disabling accessibility service will cause unexpected behavior for the following enabled feature(s): %s</string>
+
 </resources>

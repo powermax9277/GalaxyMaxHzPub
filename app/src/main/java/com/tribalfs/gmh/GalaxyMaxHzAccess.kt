@@ -78,9 +78,6 @@ internal const val PLAYING = 1
 internal const val STOPPED = -1
 internal const val PAUSE = 0
 private const val MAX_TRY = 8
-//private const val TAG = "GalaxyMaxHzAccess"
-// var isGMHBroadcastReceiverRegistered = false
-// private val SENSORS_OFF_DELAY = if (BuildConfig.DEBUG) 5000L else 15000L
 
 @ExperimentalCoroutinesApi
 @RequiresApi(Build.VERSION_CODES.M)
@@ -477,8 +474,15 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         }
     }
 
+    override fun onUnbind(intent: Intent?): Boolean {
+        //Log.d("TESTEST","OnUnbind called")
+        gmhAccessInstance = null
+        HzServiceHelperStn.instance(applicationContext).switchHz()
+        return super.onUnbind(intent)
+    }
+
+
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-       // Log.d("TESTEST","onStartCommand called")
         return START_STICKY
     }
 
@@ -514,8 +518,8 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
     internal fun startHz() {
         hzStatus.set(PLAYING)
-        //Log.d("TESTEST","startHz called")
         hzNotifOn.set(mUtilsPrefGmh.gmhPrefHzNotifIsOn)
+
         if (hzNotifOn.get() == true) {
             hznotificationBuilder?.setVisibility(VISIBILITY_PRIVATE)
             notificationManagerCompat.notify(
@@ -540,12 +544,11 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         }
 
         updateRefreshRateViews(mDisplay.refreshRate.toInt())
-        //updateOverlay(mDisplay.refreshRate.toInt())
+
         dm.registerDisplayListener(displayListener, Handler(Looper.getMainLooper()))
     }
 
     internal fun stopHz() {
-        //Log.d("TESTEST","stopHz called")
         hzStatus.set(STOPPED)
         hznotificationBuilder!!.setVisibility(Notification.VISIBILITY_SECRET)
         notificationManagerCompat.notify(
@@ -603,15 +606,6 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
 
 
-    override fun onUnbind(intent: Intent?): Boolean {
-        //Log.d("TESTEST","OnUnbind called")
-        gmhAccessInstance = null
-        HzServiceHelperStn.instance(applicationContext).switchHz()
-        return super.onUnbind(intent)
-    }
-
-
-
     private fun isPartOf(list: List<String>, cn: ComponentName): Boolean {
         list.forEach {item ->
             item.split(":").let{
@@ -624,7 +618,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     }
 
 
-    private val manualVideoAppList by lazy {
+    private val manualVideoAppList =
         listOf(
             "com.amazon.avod.thirdpartyclient",
             "com.vanced.android.youtube",
@@ -633,9 +627,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
             "com.google.android.apps.youtube"//Youtube Music
         )
 
-    }
-
-    private val manualGameList by lazy{
+    private val manualGameList =
         listOf(
             "com.google.stadia",
             "com.valvesoftware.steamlink",
@@ -644,7 +636,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
             "com.gameloft.android",
             "com.sec.android.app.samsungapps:com.sec.android.app.samsungapps.instantplays.InstantPlaysGameActivity"
         )
-    }
+
 
 
     private fun tryGetActivity(componentName: ComponentName): ActivityInfo? {
@@ -669,12 +661,10 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     @SuppressLint("SwitchIntDef")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
-
         /*Log.i(
             TAG,
             "EVENT_TYPE ${event?.eventType} CHANGE_TYPE ${event?.contentChangeTypes} $ ${event?.packageName} Classname: ${event?.className}"
         )*/
-
         if (!isScreenOn || !applyAdaptiveMod.get()!!) return
 
         when (event?.eventType) {
@@ -712,7 +702,6 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                             }
 
                         }
-                        //Log.i(TAG, "TYPE_WINDOW_STATE_CHANGED: ${event.packageName} isGame:$isGameOpen isVideoApp:$isVideoApp useMin60:$useMin60")
                         makeAdaptive()
                     }
                 }
@@ -739,15 +728,10 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                                     if (isGameOpen) {
                                         isGameOpen = false
                                     }
-                                } else {
-                                    rootInActiveWindow?.findAccessibilityNodeInfosByText("open settings")?.let{
-                                        // Log.i(TAG, "Notif is expanded")
-                                        makeAdaptive()
-                                    }
                                 }
                             }
 
-                            "com.android.settings", "com.samsung.android.app.notes" -> {
+                            "com.samsung.android.app.notes" -> {
                                 makeAdaptive()
                             }
 
@@ -770,10 +754,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
 
     @RequiresApi(Build.VERSION_CODES.M)
-    //@Synchronized
     private fun makeAdaptive() {
-        //Log.i(TAG, "makeAdaptive called")
-        //if(resources.configuration.keyboardHidden ==  KEYBOARDHIDDEN_NO) return
 
         mUtilsRefreshRate.setPeakRefreshRate(prrActive.get()!!)
 

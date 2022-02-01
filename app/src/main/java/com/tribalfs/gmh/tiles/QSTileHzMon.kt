@@ -23,6 +23,7 @@ class QSTileHzMon : TileService() {
     }
 
 
+
     private fun updateTile(){
         val isOn = !HzServiceHelperStn.instance(applicationContext).isHzServiceStopped()
         if (isOn) qsTile.state = Tile.STATE_ACTIVE else qsTile.state = Tile.STATE_INACTIVE
@@ -32,13 +33,6 @@ class QSTileHzMon : TileService() {
 
     override fun onClick() {
         super.onClick()
-        /* if (isTileExpired){
-             mUtilsPrefsGmh.gmhPrefExpireDialogAllowed = true
-             val i = Intent(this, Class.forName("$APPLICATION_ID.MainActivity"))
-             i.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-             startActivityAndCollapse(i)
-
-         }else {*/
         if (gmhAccessInstance == null && !UtilPermSt.instance(applicationContext).hasOverlayPerm()
             && UtilsPrefsGmhSt.instance(applicationContext).gmhPrefHzOverlayIsOn
         ) {
@@ -50,7 +44,12 @@ class QSTileHzMon : TileService() {
         val newStat = HzServiceHelperStn.instance(applicationContext).isHzServiceStopped()
 
         HzServiceHelperStn.instance(applicationContext).switchHz(newStat, null, null)
-        // }
+
+    }
+
+    override fun onTileAdded() {
+        super.onTileAdded()
+        updateTile()
     }
 
     override fun onBind(intent: Intent?): IBinder? {

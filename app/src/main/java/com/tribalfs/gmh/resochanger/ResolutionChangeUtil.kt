@@ -10,7 +10,6 @@ import com.tribalfs.gmh.helpers.*
 import com.tribalfs.gmh.helpers.CacheSettings.displayId
 import com.tribalfs.gmh.helpers.CacheSettings.hasWriteSecureSetPerm
 import com.tribalfs.gmh.helpers.CacheSettings.isMultiResolution
-import com.tribalfs.gmh.helpers.CacheSettings.isSamsung
 import com.tribalfs.gmh.profiles.ResolutionDetails
 import kotlinx.coroutines.*
 
@@ -67,7 +66,6 @@ class ResolutionChangeUtil (context: Context) {
         val currentResString = mUtilsRefreshRate.mUtilsDeviceInfo.getDisplayResoStr("x")
         val resList = getFilteredResList()
 
-        // Log.d(TAG, "resList ${resList?.joinToString(",").toString()}")
         val idx = resList.indexOfFirst {
             it.containsKey(currentResString)
         }
@@ -82,12 +80,11 @@ class ResolutionChangeUtil (context: Context) {
 
         val newDen = ( (density.toFloat() / curResH.toFloat()) * (nextResH.toFloat()) ).toInt()
 
-        // Log.d(TAG, "ChangeRes / Current Resolution detected: $currentResString DPI: $newDen")
-        return SizeDensity(nextResW, nextResH, newDen) /* ("$nextResH,$nextResW,$newDen").split(",")*/
+        return SizeDensity(nextResW, nextResH, newDen)
     }
 
     @ExperimentalCoroutinesApi
-    private suspend fun changeResInternal(reso: Size?/*String?*/): Boolean = withContext(Dispatchers.Default) {
+    private suspend fun changeResInternal(providedNextReso: Size?): Boolean = withContext(Dispatchers.Default) {
 
         val currentDensity = mUtilsRefreshRate.mUtilsDeviceInfo.getDisplayDensity()
 
@@ -106,16 +103,16 @@ class ResolutionChangeUtil (context: Context) {
         val nextReso: Size?
         val nextDen: Int?
 
-        if (reso == null) {
+        if (providedNextReso == null) {
             val nextResAndDen = getNextResAndDen(currentDensity)
             nextReso = Size(nextResAndDen.w,nextResAndDen.h)
             nextDen = nextResAndDen.dpi
         } else {
             if (getFilteredResList().indexOfFirst {
-                    it.containsKey("${reso.height}x${reso.width}")
+                    it.containsKey("${providedNextReso.height}x${providedNextReso.width}")
                 } != -1) {
-                nextReso = reso
-                val nexResoH = reso.height.toFloat()
+                nextReso = providedNextReso
+                val nexResoH = providedNextReso.height.toFloat()
                 val currentReso = mUtilsRefreshRate.mUtilsDeviceInfo.getDisplayResolution()
                 val curResH = currentReso.height
                 nextDen = ((currentDensity.toFloat() / curResH.toFloat()) * nexResoH).toInt()
@@ -128,16 +125,12 @@ class ResolutionChangeUtil (context: Context) {
         val nextResName =  getResName(nextResStr)
         val curResName = getResName(null)
 
-        if (isSamsung) {
-            // Log.d(TAG, "setRefreshRateMode(REFRESH_RATE_MODE_STANDARD) called")
-            mUtilsRefreshRate.setRefreshRateMode(REFRESH_RATE_MODE_STANDARD)
-        }
 
         if (nextResName == "CQHD+" && listOf("WQHD+","CQHD+").indexOf(curResName) != -1){
-                ResolutionChangeApi(appCtx).setDisplaySizeDensity(
-                    displayId,Size(1080, (nextReso.height.toFloat()/nextReso.width.toFloat()*1080f).toInt()),
-                    null
-                )
+            ResolutionChangeApi(appCtx).setDisplaySizeDensity(
+                displayId,Size(1080, (nextReso.height.toFloat()/nextReso.width.toFloat()*1080f).toInt()),
+                (nextDen/nextReso.width*1080)
+            )
         }
 
         val changeResResult = ResolutionChangeApi(appCtx).setDisplaySizeDensity(
@@ -146,11 +139,10 @@ class ResolutionChangeUtil (context: Context) {
             nextDen
         )
 
-        delay(300)
         if (changeResResult) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                mUtilsRefreshRate.setPrefOrAdaptOrHighRefreshRateMode(nextResStr)
-            delay(250)//don't remove
+                mUtilsRefreshRate.setPrefOrAdaptOrHighRefreshRateMode(nextResStr, true)
+                delay(250)//don't remove
             }
             launch(Dispatchers.Main){
                 Toast.makeText(

@@ -8,11 +8,9 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 private const val GMH_INFO = "gmh_info"
-//private const val TILE_EXPIRY_DAYS = "0x201"
 private const val TRIAL_DAYS = "0x301"
 private const val AD_FREE_AUTO_CHECKED = "0x401"
 private const val ACTIVATION_CODE = "0x501"
-//private const val INS_DATE = "0x601"
 private const val TRIAL_DATE = "0x701"
 private const val SIGNATURE = "0x801"
 internal const val ACT_STATUS = "0x901"

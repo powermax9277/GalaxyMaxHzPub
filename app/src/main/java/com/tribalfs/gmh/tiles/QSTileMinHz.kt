@@ -4,11 +4,10 @@ import android.os.Build
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
 import androidx.annotation.RequiresApi
-import com.tribalfs.gmh.AccessibilityPermission
-import com.tribalfs.gmh.GalaxyMaxHzAccess
 import com.tribalfs.gmh.GalaxyMaxHzAccess.Companion.gmhAccessInstance
 import com.tribalfs.gmh.MyApplication.Companion.applicationScope
 import com.tribalfs.gmh.R
+import com.tribalfs.gmh.UtilAccessibilityService.allowAccessibility
 import com.tribalfs.gmh.dialogs.QSDialogs
 import com.tribalfs.gmh.helpers.CacheSettings.currentRefreshRateMode
 import com.tribalfs.gmh.helpers.CacheSettings.hasWriteSecureSetPerm
@@ -126,15 +125,12 @@ class QSTileMinHz : TileService() {
 
 
     private fun checkAccessibilityPerm(): Boolean{
-        return if (!AccessibilityPermission.isAccessibilityEnabled(
-                applicationContext,
-                GalaxyMaxHzAccess::class.java
-            )
+        return if (
+            gmhAccessInstance == null
         ){
             if (hasWriteSecureSetPerm && (isSpayInstalled == false ||  mUtilsRefreshRate.mUtilsPrefsGmh.hzPrefSPayUsage == NOT_USING)) {
-                AccessibilityPermission.allowAccessibility(
+                allowAccessibility(
                     applicationContext,
-                    GalaxyMaxHzAccess::class.java,
                     true
                 )
                 true

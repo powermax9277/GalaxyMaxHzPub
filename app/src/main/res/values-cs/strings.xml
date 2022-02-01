@@ -51,7 +51,6 @@
 <!--    <string name="failed_load_ad">-->
 <!--        Nepodařilo se zatížení videoreklamy. Zkontrolujte prosím připojení k internetu a zkuste to znovu.-->
 <!--    </string>-->
-    <string name="show_ns">Ukáže rychloměr Čistá</string>
     <string name="combined">Kombinovaný</string>
     <string name="upload">Nahrát</string>
     <string name="download">Stažení</string>
@@ -155,4 +154,8 @@
     <string name="max_hz_for_psm">Max Hz pro úsporný režim</string>
     <string name="is_prem_ft">%s is premium feature</string>
     <string name="using_spay">SPay selže</string>
+    <string name="aot_perm_inf">This app needs permission to appear on top in order to work properly. You can disable the notification by long-pressing it and turning off the toggle that will appear.</string>
+    <string name="so_location_info">Ensure to put the SENSOR Off tile within the first 4 quick settings slots.</string>
+    <string name="no_access_notif">Disabling accessibility service will cause unexpected behavior for the following enabled feature(s): %s</string>
+    <string name="show_ns">Měřič Rychlosti Internetu</string>
 </resources>

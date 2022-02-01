@@ -43,7 +43,7 @@
     </string>
     <string name="input_ac_inf">Εάν χάσετε το ασφάλιστρο ως αποτέλεσμα της επαναφοράς αυτής της συσκευής, μπορείτε να την ενεργοποιήσετε ξανά εισάγοντας τον κωδικό ενεργοποίησης που στάλθηκε στο email σας.
     </string>
-    <string name="show_ns">Εμφάνιση Καθαρή Δείκτης Ταχύτητας</string>
+    <string name="show_ns">Μετρητής ταχύτητας Διαδικτύου</string>
     <string name="combined">σε συνδυασμό</string>
     <string name="upload">Μεταφόρτωση</string>
     <string name="download">Κατεβάστε</string>
@@ -86,7 +86,7 @@
     <string name="enable_as_inf">Στο παράθυρο που εμφανίζεται, κάντε κλικ στο \"Εγκατεστημένες υπηρεσίες\" και, στη συνέχεια, ενεργοποιήστε την υπηρεσία \"Galaxy Max Hz\"</string>
     <string name="adp_delay">Προσαρμοστική καθυστέρηση ελάχιστου hz (δευτερόλεπτα)</string>
     <string name="cur_rr_h">Τρέχων Refresh Rate: %s Hz</string>
-    <string name="show_ns_card">Εμφάνιση εργαλείου Netspeed</string>
+    <string name="show_ns_card">Μετρητής ταχύτητας Διαδικτύου</string>
     <string name="lbl_rrm">Refresh Rate Mods</string>
     <string name="prr_psm">Διατηρήστε motion smoothness σε λειτουργία εξοικονόμησης ενέργειας</string>
     <string name="actvt_trial">Ενεργοποίηση δωρεάν δοκιμής</string>
@@ -139,4 +139,8 @@
     <string name="max_hz_for_psm">" Μέγιστο Hz για λειτουργία εξοικονόμησης ενέργειας"</string>
     <string name="is_prem_ft">Το %s είναι ένα χαρακτηριστικό premium</string>
     <string name="using_spay">Το SPay αποτυγχάνει</string>
+    <string name="aot_perm_inf">Αυτή η εφαρμογή χρειάζεται άδεια για να εμφανίζεται στην κορυφή για να λειτουργεί σωστά. Μπορείτε να απενεργοποιήσετε την ειδοποίηση πατώντας την παρατεταμένα και απενεργοποιώντας την εναλλαγή που θα εμφανιστεί.</string>
+    <string name="so_location_info">Βεβαιωθείτε ότι έχετε τοποθετήσει το πλακίδιο SENSOR Off μέσα στις τέσσερις πρώτες υποδοχές γρήγορων ρυθμίσεων.</string>
+    <string name="no_access_notif">Η απενεργοποίηση της υπηρεσίας προσβασιμότητας θα προκαλέσει απροσδόκητη συμπεριφορά για τις ακόλουθες ενεργοποιημένες λειτουργίες: %s</string>
+
 </resources>

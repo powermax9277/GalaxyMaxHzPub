@@ -17,7 +17,7 @@ object CacheSettings {
     @Volatile internal var isScreenOn = true
     internal var offScreenRefreshRate:String? = null
 
-    internal val isPowerSaveModeOn = ObservableField<Boolean>() //Reflects SCREEN ON status only
+    internal val isPowerSaveMode = ObservableField<Boolean>() //Reflects SCREEN ON status only
 
     internal var adaptiveDelayMillis = 1750L
     internal var adaptiveAccessTimeout: Long = max(1500L, adaptiveDelayMillis * TIMEOUT_FACTOR.toLong())
@@ -50,7 +50,7 @@ object CacheSettings {
 
     internal val hzNotifOn = ObservableField(false)
 
-    internal var hzStatus = ObservableField(STOPPED)
+    internal val hzStatus = ObservableField(STOPPED)
 
     internal val isFakeAdaptiveValid = object : ObservableField<Boolean>(isFakeAdaptive,isPremium, prrActive,lrrPref) {
         override fun get(): Boolean {

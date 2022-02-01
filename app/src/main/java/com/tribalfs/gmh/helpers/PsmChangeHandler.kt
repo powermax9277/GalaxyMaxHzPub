@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.tribalfs.gmh.PipActivity
-import com.tribalfs.gmh.helpers.CacheSettings.isPowerSaveModeOn
+import com.tribalfs.gmh.helpers.CacheSettings.isPowerSaveMode
 import com.tribalfs.gmh.helpers.CacheSettings.isPremium
 import com.tribalfs.gmh.helpers.CacheSettings.keepModeOnPowerSaving
 import com.tribalfs.gmh.helpers.CacheSettings.prrActive
@@ -23,7 +23,7 @@ internal class PsmChangeHandler(context: Context) {
     @RequiresApi(Build.VERSION_CODES.M)
     fun handle() {
         // Log.d(TAG, "execute called $isPowerSaveModeOn")
-        if (isPowerSaveModeOn.get() == true) {
+        if (isPowerSaveMode.get() == true) {
             if (keepModeOnPowerSaving && isPremium.get()!!) {
                 //Use Psm Max Hz
                 /*try {
@@ -56,7 +56,7 @@ internal class PsmChangeHandler(context: Context) {
     }
 
     fun startPipActivity(){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && isPowerSaveModeOn.get() == true) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && isPowerSaveMode.get() == true) {
             val pipIntent = Intent(appCtx, PipActivity::class.java)
             pipIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             appCtx.startActivity(pipIntent)

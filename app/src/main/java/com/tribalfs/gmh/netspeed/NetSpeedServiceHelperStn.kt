@@ -45,9 +45,10 @@ class NetSpeedServiceHelperStn private constructor(context: Context)  {
     //This is also called by network callback so don't register callback here
     fun startNetSpeed() {
         if (netSpeedService == null) {
-            appCtx.startService(Intent(appCtx, NetSpeedService::class.java))
-            updateStreamType()
-            updateSpeedUnit()
+            val i = Intent(appCtx, NetSpeedService::class.java)
+            i.putExtra(EXTRA_STREAM, mUtilsPrefGmh.gmhPrefSpeedToShow)
+            i.putExtra(EXTRA_SPEED_UNIT, mUtilsPrefGmh.gmhPrefSpeedUnit)
+            appCtx.startService(i)
         }
     }
 

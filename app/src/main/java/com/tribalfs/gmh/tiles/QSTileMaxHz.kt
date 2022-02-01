@@ -94,15 +94,6 @@ class QSTileMaxHz : TileService() {
     override fun onClick() {
         super.onClick()
 
-        //Log.d(TAG, "onClick() called")
-
-        /* if (isTileExpired) {
-                mUtilsPrefsGmh.gmhPrefExpireDialogAllowed = true
-                val i = Intent(this, Class.forName("${APPLICATION_ID}.MainActivity"))
-                i.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                startActivityAndCollapse(i)
-            } else {*/
-
 
         applicationScope.launch(Dispatchers.Main) {
 

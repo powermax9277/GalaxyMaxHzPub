@@ -50,7 +50,7 @@
     </string>
     <string name="input_ac_inf">Se você perder o prêmio como resultado da redefinição deste dispositivo, poderá reativá-lo digitando o código de ativação enviado para o seu e-mail.
     </string>
-    <string name="show_ns">Mostrar Indicador de velocidade gratuita</string>
+    <string name="show_ns">Medidor de velocidade da internet</string>
     <string name="combined">Combinado</string>
     <string name="upload">Envio</string>
     <string name="download">Download</string>
@@ -147,4 +147,8 @@
     <string name="max_hz_for_psm">Hz máx para o modo de economia de energia</string>
     <string name="is_prem_ft">%s é um recurso pago</string>
     <string name="using_spay">SPay está travando</string>
+    <string name="aot_perm_inf">This app needs permission to appear on top in order to work properly. You can disable the notification by long-pressing it and turning off the toggle that will appear.</string>
+    <string name="so_location_info">Ensure to put the SENSOR Off tile within the first 4 quick settings slots.</string>
+    <string name="no_access_notif">Disabling accessibility service will cause unexpected behavior for the following enabled feature(s): %s</string>
+
 </resources>

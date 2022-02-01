@@ -30,7 +30,7 @@
     <string name="rrm_std_inf">运动平滑度模式当前设置为“标准”。  首先在设置中进行更改。一旦执行ADB设置，此应用即可轻松将“运动平滑度模式”更改为“自适应/高”。即使在省电模式下也可以使用。
     </string>
     <string name="input_ac_inf">如果您因重置此设备而失去保费，请输入发送到您的电子邮件的激活码以重新激活保费。</string>
-    <string name="show_ns">显示净速度指示器</string>
+    <string name="show_ns">网速指示器</string>
     <string name="combined">组合式</string>
     <string name="download">上载</string>
     <string name="upload">上载</string>
@@ -121,4 +121,8 @@
     <string name="max_hz_for_psm">省电模式的最大赫兹</string>
     <string name="is_prem_ft">%s 是付费功能</string>
     <string name="using_spay">SPay 失败</string>
+    <string name="aot_perm_inf">此应用程序需要权限才能显示在顶部才能正常工作。您可以通过长按通知并关闭将出现的切换来禁用通知。</string>
+    <string name="so_location_info">确保将 SENSOR Off 磁贴放置在前四个快速设置插槽中。</string>
+    <string name="no_access_notif">禁用无障碍服务将导致以下启用的功能出现意外行为: %s</string>
+
 </resources>

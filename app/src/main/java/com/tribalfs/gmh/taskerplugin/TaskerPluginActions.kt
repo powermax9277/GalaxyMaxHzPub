@@ -20,8 +20,6 @@ import com.joaomgcd.taskerpluginlibrary.input.TaskerInputInfos
 import com.joaomgcd.taskerpluginlibrary.runner.TaskerPluginResult
 import com.joaomgcd.taskerpluginlibrary.runner.TaskerPluginResultSucess
 import com.tribalfs.gmh.ACTION_HIDE_MAIN_ACTIVITY
-import com.tribalfs.gmh.AccessibilityPermission.isAccessibilityEnabled
-import com.tribalfs.gmh.GalaxyMaxHzAccess
 import com.tribalfs.gmh.GalaxyMaxHzAccess.Companion.gmhAccessInstance
 import com.tribalfs.gmh.MyApplication.Companion.applicationName
 import com.tribalfs.gmh.helpers.*
@@ -29,7 +27,7 @@ import com.tribalfs.gmh.helpers.CacheSettings.displayId
 import com.tribalfs.gmh.helpers.CacheSettings.hasWriteSecureSetPerm
 import com.tribalfs.gmh.helpers.CacheSettings.highestHzForAllMode
 import com.tribalfs.gmh.helpers.CacheSettings.isOfficialAdaptive
-import com.tribalfs.gmh.helpers.CacheSettings.isPowerSaveModeOn
+import com.tribalfs.gmh.helpers.CacheSettings.isPowerSaveMode
 import com.tribalfs.gmh.helpers.CacheSettings.isPremium
 import com.tribalfs.gmh.helpers.CacheSettings.keepModeOnPowerSaving
 import com.tribalfs.gmh.helpers.CacheSettings.lowestHzCurMode
@@ -90,9 +88,9 @@ private val infosForTasker = InfosFromMainApp().apply {
         return "${dropLast(1).joinToString(delimiter)} or ${last()}"
     }
 
-        ProfilesObj.refreshRateModeMap["$displayId-0"]?.forEach {
-            resoList.add(it.keys.first())
-        }
+    ProfilesObj.refreshRateModeMap["$displayId-0"]?.forEach {
+        resoList.add(it.keys.first())
+    }
 
 
     if (resoList.size  > 1) {
@@ -157,11 +155,11 @@ private val infosForTasker = InfosFromMainApp().apply {
                             "\n[for disable auto sensors off, enable auto sensors off, turn on tile only or turn off tile only, respectively]"
                 ),
                 InfoFromMainApp(
-                        "Protect Battery",
+                    "Protect Battery",
                     protect_battery,
-                "Valid value: true or false" +
-                        "\n[limits charging to 85% on Samsung device with OneUI4.0+ to extend its battery lifespan]"
-            )
+                    "Valid value: true or false" +
+                            "\n[limits charging to 85% on Samsung device with OneUI4.0+ to extend its battery lifespan]"
+                )
             )
         )
     }
@@ -224,7 +222,7 @@ class DynamicInputRunner : TaskerPluginRunnerActionNoOutputOrInput() {
                                 } else {
                                     if (supportedHzIntCurMod?.indexOfFirst { hz -> hz == mHz } != -1) {
                                         prrActive.set(mHz.coerceAtLeast(lowestHzCurMode))
-                                        if (isPremium.get()!! && isPowerSaveModeOn.get() == true){// && keepModeOnPowerSaving) {
+                                        if (isPremium.get()!! && isPowerSaveMode.get() == true){// && keepModeOnPowerSaving) {
                                             mUtilsPrefsGmh.hzPrefMaxRefreshRatePsm = mHz
                                         }else{
                                             mUtilsPrefsGmh.hzPrefMaxRefreshRate = mHz
@@ -350,7 +348,7 @@ class DynamicInputRunner : TaskerPluginRunnerActionNoOutputOrInput() {
                                 if (minHzListForAdp?.indexOf(minHz) != -1){
 
                                     if (isOfficialAdaptive && minHz < STANDARD_REFRESH_RATE_HZ) {
-                                        if (!isAccessibilityEnabled(appCtx, GalaxyMaxHzAccess::class.java)) {
+                                        if (gmhAccessInstance == null/*!isAccessibilityEnabled(appCtx, GalaxyMaxHzAccess::class.java)*/) {
                                             return@launch
                                         }
                                     }
@@ -382,13 +380,13 @@ class DynamicInputRunner : TaskerPluginRunnerActionNoOutputOrInput() {
                     }
 
                     protect_battery ->{
-                        if (hasWriteSecureSetPerm) {
-                            try {
-                                Settings.Global.putString(appCtx.contentResolver,
-                                    "protect_battery",
-                                    if (info.value as Boolean) "1" else "0")
-                            }catch (_:Exception){}
-                        }
+                        try {
+                            Settings.Global.putString(
+                                appCtx.contentResolver,
+                                "protect_battery",
+                                if ((info.value as String).toBoolean()) "1" else "0"
+                            )
+                        }catch(_:Exception){}
                     }
 
                     else -> {

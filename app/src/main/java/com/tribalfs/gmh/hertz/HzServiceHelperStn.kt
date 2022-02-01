@@ -24,8 +24,6 @@ class HzServiceHelperStn private constructor(context: Context) {
 
     private val appCtx = context.applicationContext
     private val mHzSharePref by lazy {UtilsPrefsGmhSt.instance(appCtx)}
-    @ExperimentalCoroutinesApi
-    private val qsHzMonTileComponent = ComponentName(appCtx, QSTileHzMon::class.java)
 
     @RequiresApi(Build.VERSION_CODES.M)
     @ExperimentalCoroutinesApi
@@ -80,7 +78,6 @@ class HzServiceHelperStn private constructor(context: Context) {
     @RequiresApi(Build.VERSION_CODES.M)
     @ExperimentalCoroutinesApi
     internal fun switchHz(isSwOn: Boolean?, showOverlayHz: Boolean?, showNotifHz: Boolean?) {
-        //Log.d(TAG, "HzServiceHelper/startHertz: showHzFpsOverlay() called")
         isSwOn?.let{mHzSharePref.gmhPrefHzIsOn = it}
         showOverlayHz?.let{mHzSharePref.gmhPrefHzOverlayIsOn = showOverlayHz}
         showNotifHz?.let{
@@ -106,12 +103,11 @@ class HzServiceHelperStn private constructor(context: Context) {
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            TileService.requestListeningState(appCtx, qsHzMonTileComponent)
+            TileService.requestListeningState(appCtx, ComponentName(appCtx, QSTileHzMon::class.java))
         }
     }
 
     private fun startHzService(){
-        //Log.d(TAG, "HzServiceHelper/stopHertz")
         try {
             appCtx.startService(Intent(appCtx, HzService::class.java))
         }catch(_:Exception){}
@@ -119,7 +115,6 @@ class HzServiceHelperStn private constructor(context: Context) {
     }
 
     internal fun stopHzService(){
-        //Log.d(TAG, "HzServiceHelper/stopHertz")
         try {
             appCtx.stopService(Intent(appCtx, HzService::class.java))
         }catch(_:Exception){}

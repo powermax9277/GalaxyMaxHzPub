@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- This can also mean "Enable High or Adaptive Refresh Rate" -->
     <string name="lbl_enable_msm">Yüksek veya Adaptif Modu Etkinleştir</string>
     <string name="buy_adfree">Premium Satın Al</string>
-
-    <!-- What is actually for? Switch between resolutions or a button enabler on notification bar? -->
     <string name="resolution">Çözünürlük ve Hareket Düzgünlüğü Değiştirici</string>
     <string name="act">Premium\'u Etkinleştir</string>
     <string name="max_hz">Azami Hz</string>
@@ -20,12 +17,8 @@
     <string name="bottom">Alt</string>
     <string name="use_qstile_reso_switch">Çözünürlüğü değiştirmek için bildirim panelindeki çözünürlük değiştirme tuşunu kullanın.</string>
     <string name="center">Merkez</string>
-
-    <!-- I don't understand anything. Is a configurator for button? -->
-    <string name="info_qs_max_hz">Azami hz\'yi değiştirmek için bildirim paneline </string>
-
-    <!-- I don't understand anything. Is a configurator for button? -->
-    <string name="info_qs_rtrr">Gerçek zamanlı yenileme hızını göstermek için hızlı ayar karo içerir</string>
+    <string name="info_qs_max_hz">Asgari Hz ve Azami Hz\'i hızlı bir şekilde değiştirmek için bildirim paneline tuşlar eklenebilir.</string>
+    <string name="info_qs_rtrr">Yenileme hızını hızlıca göstermek için bildirim paneline tuş eklenebilir.</string>
     <string name="s_off_mod">Ekran Kapalı Seçenekleri</string>
     <string name="force_hz_mod">Asgari Hz\'ye Zorla</string>
     <string name="s_off_hz_inf">
@@ -42,15 +35,13 @@
     <string name="input_ac_inf">
         Bu cihaz sıfırlaması nedeniyle premiumunuzu kaybettiyseniz, reklamsız olarak yeniden etkinleştirmek için e-postanıza gönderilen aktivasyon kodunu girin.
     </string>
-    <string name="show_ns">İnternet Hız Göstergesi\'ni göster</string>
+    <string name="show_ns">İnternet Hız Göstergesi</string>
     <string name="combined">Kombine</string>
     <string name="upload">Yükleme</string>
     <string name="download">İndirme</string>
     <string name="font_size">Bindirme Yazı Tipi Boyutu</string>
     <string name="overlay_pos">bindirme Yeri</string>
-
-    <!-- Overlay function is shows refresh rate somewhere of screen. Isnt it? -->
-    <string name="overlay">Kaplama</string>
+    <string name="overlay">Ekran Üzerinde Göster</string>
     <string name="statusbar">Durum çubuğu</string>
     <string name="perm_appx">
         \n\nADB kurulumu yapıldığında, bu uygulama ile şunları yapabilirsiniz:
@@ -107,8 +98,7 @@
     <string name="adb_setup">ADB Kurulumu</string>
     <string name="dismiss">Reddet</string>
     <string name="allow">İzin Ver</string>
-    <!-- What does feature for? -->
-    <string name="allow_aot">Yukarıda belirmeye izin ver</string>
+    <string name="allow_aot">Ekran üzerinde göstermeye izin verin </string>
     <string name="allow_bg_act">
         Bu uygulamanın arka planda düzgün çalışması için \"Arkaplan aktivitesine izin ver\" ayarını etkinleştirin veya \"Pil kullanımını optimize et\" ayarını devre dışı bırakın.
     </string>
@@ -144,4 +134,11 @@
     <string name="acces_req">Erişilebilirlik Hizmetini Etkinleştir</string>
     <string name="is_prem_ft">%s premium bir özelliktir</string>
     <string name="using_spay">SPay başarısız oluyor</string>
+    <string name="aot_perm_inf">Bu uygulama düzgün çalışabilmek için "üstte göster" iznine ihtiyaç duyar. Bu bildirimi üzerine uzun basarak çıkan menüdeki ayarı kapatarak devre dışı bırakabilirsiniz.</string>
+    <string name="so_location_info">"Sensor OFF" tuşunu bildirim panelinin ilk dört yuvasına koyduğunuzdan emin olun.</string>
+    <plurals name="access_notif">
+        <item quantity="one">Erişilebilirlik hizmeti aşağıdakiler için gereklidir. Erişilebilirliği devre dışı bırakmak için şunu devre dışı bırakın: %s</item>
+        <item quantity="other">Erişilebilirlik hizmeti aşağıdakiler için gereklidir. Erişilebilirliği devre dışı bırakmak için şunları devre dışı bırakın: %s</item>
+    </plurals>
+    <string name="no_access_notif">Erişilebilirlik hizmetini devre dışı bırakmak aşağıdaki özelliklerin düzgün çalışmamasına yol açabilir: %s</string>
 </resources>
