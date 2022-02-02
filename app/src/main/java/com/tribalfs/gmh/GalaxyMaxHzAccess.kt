@@ -37,6 +37,8 @@ import android.widget.RemoteViews
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationManagerCompat
+import androidx.databinding.Observable
+import androidx.databinding.Observable.OnPropertyChangedCallback
 import com.tribalfs.gmh.callbacks.DisplayChangedCallback
 import com.tribalfs.gmh.callbacks.GmhBroadcastCallback
 import com.tribalfs.gmh.helpers.*
@@ -63,7 +65,7 @@ import com.tribalfs.gmh.hertz.*
 import com.tribalfs.gmh.hertz.HzNotifGlobal.CHANNEL_ID_HZ
 import com.tribalfs.gmh.hertz.HzNotifGlobal.NOTIFICATION_ID_HZ
 import com.tribalfs.gmh.hertz.HzNotifGlobal.hznotificationBuilder
-import com.tribalfs.gmh.netspeed.NetSpeedService.Companion.netSpeedService
+import com.tribalfs.gmh.hertz.HzNotifGlobal.hznotificationChannel
 import com.tribalfs.gmh.netspeed.NetSpeedServiceHelperStn
 import com.tribalfs.gmh.profiles.ProfilesObj.isProfilesLoaded
 import com.tribalfs.gmh.receivers.GmhBroadcastReceivers
@@ -78,6 +80,22 @@ internal const val PLAYING = 1
 internal const val STOPPED = -1
 internal const val PAUSE = 0
 private const val MAX_TRY = 8
+private val manualVideoAppList = listOf(
+    "com.amazon.avod.thirdpartyclient",
+    "com.vanced.android.youtube",
+    "com.cisco.webex.meetings",
+    "com.sec.android.gallery3d",
+    "com.google.android.apps.youtube"//Youtube Music
+)
+private val manualGameList = listOf(
+    "com.google.stadia",
+    "com.valvesoftware.steamlink",
+    "com.microsoft.xcloud",
+    "com.microsoft.xboxone",
+    "com.gameloft.android",
+    "com.sec.android.app.samsungapps:com.sec.android.app.samsungapps.instantplays.InstantPlaysGameActivity"
+)
+
 
 @ExperimentalCoroutinesApi
 @RequiresApi(Build.VERSION_CODES.M)
@@ -105,23 +123,32 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     private var cameraOpen: Boolean = false
     private val mUtilsPrefGmh by lazy { UtilsPrefsGmhSt.instance(applicationContext) }
     private val notificationManagerCompat by lazy { NotificationManagerCompat.from(applicationContext)}
-    private val mNotificationContentView by lazy { RemoteViews(applicationContext.packageName, R.layout.view_hz_notification) }
+    private val mNotificationContentView by lazy { RemoteViews(applicationContext.packageName, R.layout.hz_notification) }
     private val mNotifIcon by lazy{ UtilNotifIcon() }
     private var mTransfyHzJob: Job? = null
     private var mPauseHzJob: Job? = null
+    private val refreshRateModeChangeCallback by lazy{
+        object : OnPropertyChangedCallback() {
+            override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
+                launch {
+                    updateNotif(mDisplay.refreshRate.toInt().toString())
+                }
+            }
+        }
+    }
 
     private val autoSensorsOffRunnable: Runnable by lazy {
         Runnable {
             if (mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefSensorsOff) {
-                    switchSensorsOff(true)
-                    //Workaround sensors off sometimes trigger action_SCREEN_ON
-                    handler.postDelayed(forceLowestRunnable,1000)
+                switchSensorsOff(true)
+                //Workaround sensors off sometimes trigger action_SCREEN_ON
+                handler.postDelayed(forceLowestRunnable,1000)
             }
         }
     }
 
     private val forceLowestRunnable: Runnable by lazy {
-       Runnable {
+        Runnable {
             if (screenOffRefreshRateMode != currentRefreshRateMode.get()) {
                 CacheSettings.ignoreRrmChange = true
                 if (mUtilsRefreshRate.setRefreshRateMode(screenOffRefreshRateMode!!)) {
@@ -244,7 +271,6 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         }
     }
 
-
     private val cameraCallback by lazy{
         object : CameraManager.AvailabilityCallback() {
             override fun onCameraAvailable(cameraId: String) {
@@ -260,7 +286,6 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     }
 
     private val defaultLauncherName by lazy{DefaultApps.getLauncher(applicationContext)}
-
 
     private fun switchSensorsOff(on: Boolean) {
         triesA = 0
@@ -370,7 +395,6 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         }
     }
 
-
     private fun setupScreenStatusReceiver(){
         IntentFilter().apply {
             addAction(ACTION_SCREEN_OFF)
@@ -383,22 +407,20 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         }
     }
 
-
     private fun disableNetworkCallback(){
         try{
             mConnectivityManager.unregisterNetworkCallback(networkCallback)
         }catch (_: java.lang.Exception){}
     }
 
-
     @RequiresApi(Build.VERSION_CODES.N)
-    internal fun setupNetworkCallback(){
-            disableNetworkCallback()
-            if (netSpeedService != null) {
-                try {
-                    mConnectivityManager.registerDefaultNetworkCallback(networkCallback)
-                } catch (_: Exception) {
-                }
+    internal fun setupNetworkCallback(enable: Boolean){
+        disableNetworkCallback()
+        if (enable){
+            try {
+                mConnectivityManager.registerDefaultNetworkCallback(networkCallback)
+            } catch (_: Exception) {
+            }
         }
     }
 
@@ -420,8 +442,8 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
     @SuppressLint("NewApi")
     private fun setupNotification() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && HzNotifGlobal.hznotificationChannel == null) {
-            HzNotifGlobal.hznotificationChannel = NotificationChannel(
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && hznotificationChannel == null) {
+            hznotificationChannel = NotificationChannel(
                 CHANNEL_ID_HZ,
                 getString(R.string.refresh_rate_mon),
                 NotificationManager.IMPORTANCE_LOW
@@ -452,7 +474,6 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         }
     }
 
-
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onServiceConnected() {
         gmhAccessInstance = this
@@ -475,7 +496,6 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     }
 
     override fun onUnbind(intent: Intent?): Boolean {
-        //Log.d("TESTEST","OnUnbind called")
         gmhAccessInstance = null
         HzServiceHelperStn.instance(applicationContext).switchHz()
         return super.onUnbind(intent)
@@ -515,7 +535,6 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         }catch(_:Exception){ }
     }
 
-
     internal fun startHz() {
         hzStatus.set(PLAYING)
         hzNotifOn.set(mUtilsPrefGmh.gmhPrefHzNotifIsOn)
@@ -529,23 +548,28 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         }
 
         hzOverlayOn = mUtilsPrefGmh.gmhPrefHzOverlayIsOn
-        if (hzOverlayOn == true) {
-            if (params?.gravity != mUtilsPrefGmh.gmhPrefHzPosition) {
-                params?.gravity = mUtilsPrefGmh.gmhPrefHzPosition
-                try {
-                    mWindowsManager?.updateViewLayout(mLayout, params)
-                } catch (_: Exception) {
+
+        launch(Dispatchers.Main) {
+            if (hzOverlayOn == true) {
+                if (params?.gravity != mUtilsPrefGmh.gmhPrefHzPosition) {
+                    params?.gravity = mUtilsPrefGmh.gmhPrefHzPosition
+                    try {
+                        mWindowsManager?.updateViewLayout(mLayout, params)
+                    } catch (_: Exception) {
+                    }
                 }
+                hzText?.visibility = View.VISIBLE
+                hzText?.textSize = mUtilsPrefGmh.gmhPrefHzOverlaySize
+            } else {
+                hzText?.visibility = View.GONE
             }
-            hzText?.visibility = View.VISIBLE
-            hzText?.textSize  = mUtilsPrefGmh.gmhPrefHzOverlaySize
-        }else{
-            hzText?.visibility = View.GONE
         }
 
         updateRefreshRateViews(mDisplay.refreshRate.toInt())
 
         dm.registerDisplayListener(displayListener, Handler(Looper.getMainLooper()))
+        currentRefreshRateMode.addOnPropertyChangedCallback(refreshRateModeChangeCallback)
+        lrrPref.addOnPropertyChangedCallback(refreshRateModeChangeCallback)
     }
 
     internal fun stopHz() {
@@ -556,29 +580,43 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
             hznotificationBuilder!!.build()
         )
         mTransfyHzJob?.cancel()
-        hzText?.visibility = View.GONE
+        launch(Dispatchers.Main) {
+            hzText?.visibility = View.GONE
+        }
         notificationManagerCompat.cancel(NOTIFICATION_ID_HZ)
         dm.unregisterDisplayListener(displayListener)
-
+        currentRefreshRateMode.removeOnPropertyChangedCallback(refreshRateModeChangeCallback)
+        lrrPref.removeOnPropertyChangedCallback(refreshRateModeChangeCallback)
     }
-
 
     private fun updateRefreshRateViews(newHz: Int){
         updateNotif(newHz.toString())
         updateOverlay(newHz)
     }
 
-
-
     private fun updateNotif(hzStr: String) = launch(Dispatchers.Main) {
-        //Log.d(TAG, "updateNotifContent called")
         if (hzNotifOn.get()!!) {
             hznotificationBuilder?.apply {
                 setSmallIcon(mNotifIcon.getIcon(hzStr, "Hz"))
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                     setCustomContentView(
                         RemoteViews(mNotificationContentView).apply {
-                            setTextViewText(R.id.tvHz, getString(R.string.cur_rr_h, hzStr))
+                            setTextViewText(R.id.tvHz,
+                                "${
+                                    when (currentRefreshRateMode.get()){
+                                        REFRESH_RATE_MODE_SEAMLESS ->{
+                                            getString(R.string.adp_mode)+ ": " + lrrPref.get()+"-"+prrActive.get()
+                                        }
+                                        REFRESH_RATE_MODE_ALWAYS ->{
+                                            getString(R.string.high_mode)
+                                        }
+                                        else ->{
+                                            getString(R.string.std_mode)
+                                        } }
+                                }  |  ${
+                                    getString(R.string.cur_rr_h, hzStr)
+                                }"
+                            )
                         }
                     )
                 }
@@ -616,26 +654,6 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         }
         return false
     }
-
-
-    private val manualVideoAppList =
-        listOf(
-            "com.amazon.avod.thirdpartyclient",
-            "com.vanced.android.youtube",
-            "com.cisco.webex.meetings",
-            "com.sec.android.gallery3d",
-            "com.google.android.apps.youtube"//Youtube Music
-        )
-
-    private val manualGameList =
-        listOf(
-            "com.google.stadia",
-            "com.valvesoftware.steamlink",
-            "com.microsoft.xcloud",
-            "com.microsoft.xboxone",
-            "com.gameloft.android",
-            "com.sec.android.app.samsungapps:com.sec.android.app.samsungapps.instantplays.InstantPlaysGameActivity"
-        )
 
 
 
@@ -841,7 +859,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     private fun updateOverlay(newHz: Int){
         launch(Dispatchers.Main) {
             mTransfyHzJob?.cancel()
-            hzText?.setTextColor(if (newHz <= 60.05) Color.RED else Color.rgb(44,255,29))
+            hzText?.setTextColor(if (newHz <= 60.05) Color.RED else getColor(R.color.refresh_rate))
             hzText?.alpha = 0.85f
             hzText?.text = newHz.toString()
 

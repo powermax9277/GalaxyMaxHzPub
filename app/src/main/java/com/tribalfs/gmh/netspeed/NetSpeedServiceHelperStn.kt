@@ -9,7 +9,7 @@ import com.tribalfs.gmh.netspeed.NetSpeedService.Companion.netSpeedService
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt
 
 
-class NetSpeedServiceHelperStn private constructor(context: Context)  {
+internal class NetSpeedServiceHelperStn private constructor(context: Context)  {
 
     companion object : SingletonMaker<NetSpeedServiceHelperStn, Context>(::NetSpeedServiceHelperStn)
 
@@ -23,6 +23,7 @@ class NetSpeedServiceHelperStn private constructor(context: Context)  {
 
     fun updateSpeedUnit(){
         netSpeedService?.setSpeedUnit(mUtilsPrefGmh.gmhPrefSpeedUnit)
+
     }
 
 
@@ -34,13 +35,17 @@ class NetSpeedServiceHelperStn private constructor(context: Context)  {
         mUtilsPrefGmh.gmhPrefNetSpeedIsOn = enable ?: mUtilsPrefGmh.gmhPrefNetSpeedIsOn
         if (mUtilsPrefGmh.gmhPrefNetSpeedIsOn ) {
             startNetSpeed()
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                gmhAccessInstance?.setupNetworkCallback(true)
+            }
         } else {
             stopNetSpeed()
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            gmhAccessInstance?.setupNetworkCallback()
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                gmhAccessInstance?.setupNetworkCallback(false)
+            }
         }
     }
+
 
     //This is also called by network callback so don't register callback here
     fun startNetSpeed() {
@@ -58,7 +63,7 @@ class NetSpeedServiceHelperStn private constructor(context: Context)  {
             if (netSpeedService != null) {
                 appCtx.stopService(Intent(appCtx, NetSpeedService::class.java))
             }
-        }catch (_:Exception){}
+        } catch (_: Exception) {
+        }
     }
-
 }

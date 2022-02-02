@@ -41,10 +41,11 @@ internal const val EXTRA_SPEED_UNIT = "eu"
 class NetSpeedService : Service(), CoroutineScope {
 
     companion object{
+        //even with volatile this does not reflects real time
         internal var netSpeedService: NetSpeedService? = null
     }
 
-    private val mNotificationContentView: RemoteViews by lazy {RemoteViews(applicationContext.packageName, R.layout.view_indicator_notification) }
+    private val mNotificationContentView: RemoteViews by lazy {RemoteViews(applicationContext.packageName, R.layout.ns_notification) }
     private val notificationManagerCompat by lazy{NotificationManagerCompat.from(applicationContext)}
     private val mNotifIcon by lazy{ UtilNotifIcon() }
     private val mHandler by lazy {Handler(Looper.getMainLooper())}
@@ -102,7 +103,7 @@ class NetSpeedService : Service(), CoroutineScope {
         measureNetStat.cancel()
     }
 
-    private val mCallback = Runnable {
+    private val pauseNetStatRunnable = Runnable {
         if (!isScreenOn) {
             stopNetStatInternal()
             notificationBuilderInstance.setVisibility(Notification.VISIBILITY_SECRET)
@@ -119,7 +120,7 @@ class NetSpeedService : Service(), CoroutineScope {
             override fun onReceive(context: Context?, intent: Intent?) {
                 when (intent?.action) {
                     Intent.ACTION_SCREEN_ON -> {
-                        mHandler.removeCallbacks(mCallback)
+                        mHandler.removeCallbacks(pauseNetStatRunnable)
                         startNetStatInternal()
                         notificationBuilderInstance.setVisibility(Notification.VISIBILITY_PRIVATE)
                         notificationManagerCompat.notify(
@@ -128,7 +129,7 @@ class NetSpeedService : Service(), CoroutineScope {
                         )
                     }
                     Intent.ACTION_SCREEN_OFF -> {
-                        mHandler.postDelayed(mCallback, 7000)
+                        mHandler.postDelayed(pauseNetStatRunnable, 7000)
                     }
                 }
 
@@ -177,7 +178,7 @@ class NetSpeedService : Service(), CoroutineScope {
             Notification.Builder(applicationContext)
         })
         notificationBuilderInstance.apply {
-            setSmallIcon(R.drawable.ic_baseline_speed_12)
+            setSmallIcon(R.drawable.ic_speed_12)
             setOngoing(true)
             setOnlyAlertOnce(true)
             setCategory(Notification.CATEGORY_STATUS)

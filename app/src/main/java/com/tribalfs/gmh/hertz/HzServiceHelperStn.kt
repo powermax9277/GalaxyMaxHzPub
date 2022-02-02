@@ -72,7 +72,9 @@ class HzServiceHelperStn private constructor(context: Context) {
     @RequiresApi(Build.VERSION_CODES.M)
     @ExperimentalCoroutinesApi
     internal fun switchHz() {
-        switchHz(null,null,null)
+        try {
+            switchHz(null, null, null)
+        }catch (_: Exception){}
     }
 
     @RequiresApi(Build.VERSION_CODES.M)

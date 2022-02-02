@@ -3,8 +3,10 @@ package com.tribalfs.gmh.receivers
 import android.content.BroadcastReceiver
 import android.content.ContentResolver
 import android.content.Context
+import android.content.Context.CONNECTIVITY_SERVICE
 import android.content.Intent
 import android.content.Intent.*
+import android.net.ConnectivityManager
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
@@ -29,6 +31,9 @@ import com.tribalfs.gmh.netspeed.NetSpeedService.Companion.netSpeedService
 import com.tribalfs.gmh.netspeed.NetSpeedServiceHelperStn
 import kotlinx.coroutines.*
 
+
+
+
 private const val PREF_NET_TYPE_LTE_GSM_WCDMA    = 9 /* LTE, GSM/WCDMA */
 private const val PREF_NET_TYPE_5G_LTE_GSM_WCDMA = 26
 
@@ -40,6 +45,7 @@ open class GmhBroadcastReceivers(context: Context, private val gmhBroadcastCallb
 
     private val mUtilsRefreshRate by lazy { UtilRefreshRateSt.instance(appCtx)}
     private val handler by lazy { Handler(Looper.getMainLooper()) }
+    private val connectivityManager by  lazy { appCtx.getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager}
 
     init{
         mUtilsRefreshRate.mUtilsDeviceInfo.isDisplayOn().let {
@@ -154,7 +160,9 @@ open class GmhBroadcastReceivers(context: Context, private val gmhBroadcastCallb
                     if (disablePsm) setPowerSaving(false)
 
                     if (netSpeedService == null && mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefNetSpeedIsOn) {
-                        NetSpeedServiceHelperStn.instance(appCtx).startNetSpeed()
+                        if (isInternetConnected()) {
+                            NetSpeedServiceHelperStn.instance(appCtx).startNetSpeed()
+                        }
                     }
                 }
 
@@ -170,7 +178,18 @@ open class GmhBroadcastReceivers(context: Context, private val gmhBroadcastCallb
         }
     }
 
-
+    private fun isInternetConnected(): Boolean {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (connectivityManager.activeNetwork != null && connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork) != null) {
+                    return  true
+                }
+            } else {
+                if (connectivityManager.activeNetworkInfo != null && connectivityManager.activeNetworkInfo!!.isConnectedOrConnecting) {
+                    return true
+                }
+            }
+        return false
+    }
 
     @Synchronized
     private fun setPowerSaving(psmOn: Boolean){

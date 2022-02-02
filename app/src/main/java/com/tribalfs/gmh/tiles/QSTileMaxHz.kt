@@ -94,7 +94,6 @@ class QSTileMaxHz : TileService() {
     override fun onClick() {
         super.onClick()
 
-
         applicationScope.launch(Dispatchers.Main) {
 
             when (mUtilsChangeMaxHz.changeMaxHz(null)) {

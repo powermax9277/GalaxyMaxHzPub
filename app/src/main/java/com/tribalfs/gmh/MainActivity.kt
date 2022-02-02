@@ -1836,9 +1836,9 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
 
                     try {
                         //Needed
-                        if (SDK_INT >= VERSION_CODES.N) {
+                        if (SDK_INT >= VERSION_CODES.M) {
                             gmhAccessInstance?.setupAdaptiveEnhancer()
-                            gmhAccessInstance?.setupNetworkCallback()
+                           // mNetspeedService.setupNetworkCallback()
                         }
                     } catch (_: Exception) {
                     }
@@ -1971,7 +1971,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
         mBinding.clickListener = this@MainActivity
 
         @SuppressLint("InflateParams")
-        thumbView = LayoutInflater.from(this).inflate(R.layout.com_seekbar_thumb, null, false)
+        thumbView = LayoutInflater.from(this).inflate(R.layout.sb_thumb, null, false)
     }
 
     private fun updateDisplayId(){

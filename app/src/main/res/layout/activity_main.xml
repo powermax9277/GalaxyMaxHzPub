@@ -3,7 +3,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
-
         <variable
             name="showNsTool"
             type="Boolean" />
@@ -185,7 +184,7 @@
                         style="@style/topTitle"
                         android:layout_width="0dp"
                         android:layout_marginTop="16dp"
-                        android:drawableStart="@drawable/ic_max_hz"
+                        android:drawableStart="@drawable/ic_max_hz_circle"
                         android:text="@string/lbl_rrm"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -709,7 +708,7 @@
                     <TextView
                         android:id="@+id/lbl_so_mods"
                         style="@style/topTitle"
-                        android:drawableStart="@drawable/ic_baseline_visibility_off_24"
+                        android:drawableStart="@drawable/ic_screen_off_24"
                         android:text="@string/s_off_mod"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -937,7 +936,7 @@
                     <TextView
                         style="@style/topTitle"
                         android:text="@string/show_ns"
-                        android:drawableStart="@drawable/ic_baseline_speed_24"
+                        android:drawableStart="@drawable/ic_speed_24"
                         tools:ignore="UseCompatTextViewDrawableXml"
                         android:id="@+id/tv_show_netspeed_lbl"
                         app:layout_constraintTop_toTopOf="parent"

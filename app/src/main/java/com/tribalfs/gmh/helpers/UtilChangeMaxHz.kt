@@ -42,8 +42,6 @@ class UtilChangeMaxHz (private val appCtx: Context) {
             return@withContext CHANGE_SETTINGS
         }
 
-        //if (mUtilsDisplayInfo.deviceIsSamsung) {
-
         if (currentRefreshRateMode.get() == REFRESH_RATE_MODE_STANDARD) {
             if (hasWriteSecureSetPerm) {
                 if (mUtilsRefreshRate.getResoHighestHzForAllMode(null)

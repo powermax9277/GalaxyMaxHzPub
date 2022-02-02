@@ -67,18 +67,4 @@ internal object ModelNumbers {
         S22P,
         S22U
     )
-
-    val withAllResoAtHigh: List<String> = listOf(
-        S21,
-        S21_JP,
-        S21_P,
-        S21_P_JP,
-        S21_U,
-        S22,
-        S22P,
-        S22U,
-        ZFp3,
-        ZFp3_JP,
-        N20U5G
-    )
 }

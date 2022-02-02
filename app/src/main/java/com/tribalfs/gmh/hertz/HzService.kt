@@ -62,7 +62,7 @@ internal class HzService : Service(), CoroutineScope{
     private var mTransfyHzJob: Job? = null
     private val mNotificationContentView by lazy {RemoteViews(
         applicationContext.packageName,
-        R.layout.view_hz_notification
+        R.layout.hz_notification
     )}
 
     private val wm by lazy {applicationContext.getSystemService(Context.WINDOW_SERVICE) as WindowManager}
