@@ -186,8 +186,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                         mPauseHzJob = launch(Dispatchers.Main) {
                             delay(10000)
                             if (!isScreenOn) {
-                                stopHz()
-                                hzStatus.set(PAUSE)
+                                pauseHz()
                             }
                         }
                         mPauseHzJob?.start()
@@ -572,7 +571,12 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         lrrPref.addOnPropertyChangedCallback(refreshRateModeChangeCallback)
     }
 
-    internal fun stopHz() {
+    private fun pauseHz() {
+        stopHz()
+        hzStatus.set(PAUSE)
+    }
+
+        internal fun stopHz() {
         hzStatus.set(STOPPED)
         hznotificationBuilder!!.setVisibility(Notification.VISIBILITY_SECRET)
         notificationManagerCompat.notify(

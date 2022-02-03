@@ -20,6 +20,7 @@ import com.tribalfs.gmh.helpers.CacheSettings.disablePsm
 import com.tribalfs.gmh.helpers.CacheSettings.hasWriteSecureSetPerm
 import com.tribalfs.gmh.helpers.CacheSettings.ignorePowerModeChange
 import com.tribalfs.gmh.helpers.CacheSettings.ignoreRrmChange
+import com.tribalfs.gmh.helpers.CacheSettings.isFakeAdaptiveValid
 import com.tribalfs.gmh.helpers.CacheSettings.isPowerSaveMode
 import com.tribalfs.gmh.helpers.CacheSettings.isScreenOn
 import com.tribalfs.gmh.helpers.CacheSettings.offScreenRefreshRate
@@ -166,8 +167,11 @@ open class GmhBroadcastReceivers(context: Context, private val gmhBroadcastCallb
                     }
                 }
 
-                scope.launch {
-                    currentBrightness.set(mUtilsRefreshRate.mUtilsDeviceInfo.getScreenBrightnessPercent())
+                if (isFakeAdaptiveValid.get() == true) {
+                    scope.launch {
+                        currentBrightness.set(mUtilsRefreshRate.mUtilsDeviceInfo.getScreenBrightnessPercent())
+                    }
+
                 }
             }
 

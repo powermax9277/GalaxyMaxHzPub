@@ -61,7 +61,7 @@
     </string>
     <string name="ac_none">Код активации не может быть пустым.</string>
     <string name="in_bd">Введите код активации</string>
-    <string name="apply">применить</string>
+    <string name="apply">Применить</string>
     <string name="psm_on">Включен режим энергосбережения</string>
     <string name="chng_res">Изменить разрешение экрана</string>
     <string name="open_settings">Открыть настройки</string>
