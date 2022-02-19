@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="accent_color">#B87973</color>
     <color name="primary_color">#B87973</color>
     <color name="card_view_background">#151515</color>
-    <color name="launcher_foreground_color">#FFCA28</color>
+<!--    <color name="launcher_foreground_color">#FFCA28</color>-->
+    <color name="ic_launcher_background">#B87973</color>
+    <color name="launcher_foreground_color">@color/material_dynamic_neutral95</color>
 </resources>

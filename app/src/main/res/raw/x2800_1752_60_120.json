@@ -1,0 +1,5 @@
+{
+  "0-2": {"2800x1752": "{\"highestHz\":120.0,\"lowestHz\":60.0,\"refreshRates\":[120.0,60.0],\"resHeight\":2800,\"resName\":\"WQXGA+\",\"resStrLxw\":\"2800x1752\",\"resWidth\":1752}"},
+  "0-1": {"2800x1752": "{\"highestHz\":120.0,\"lowestHz\":60.0,\"refreshRates\":[120.0,60.0],\"resHeight\":2800,\"resName\":\"WQXGA+\",\"resStrLxw\":\"2800x1752\",\"resWidth\":1752}"},
+  "0-0": {"2800x1752": "{\"highestHz\":60.0,\"lowestHz\":60.0,\"refreshRates\":[60.0],\"resHeight\":2800,\"resName\":\"WQXGA+\",\"resStrLxw\":\"2800x1752\",\"resWidth\":1752}"}
+}

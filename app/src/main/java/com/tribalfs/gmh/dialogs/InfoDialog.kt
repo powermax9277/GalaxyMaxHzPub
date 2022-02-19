@@ -7,17 +7,19 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
+import android.view.Gravity
+import androidx.fragment.app.DialogFragment
 import com.tribalfs.gmh.BuildConfig.APPLICATION_ID
 import com.tribalfs.gmh.MyApplication.Companion.applicationName
 import com.tribalfs.gmh.R
 import com.tribalfs.gmh.helpers.CacheSettings.hasWriteSecureSetPerm
 import com.tribalfs.gmh.helpers.UtilNotifBarSt
-import com.tribalfs.gmh.helpers.UtilDeviceInfoSt
 import com.tribalfs.gmh.helpers.UtilSettingsIntents
+import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt
 
 const val ADB_SETUP_LINK = "https://github.com/tribalfs/GalaxyMaxHzPub/blob/main/README.md"
 
-class InfoDialog : MyDialogFragment(){
+class InfoDialog : DialogFragment(){
 
     private var actionIdx: Int? = null
     private var msg: String? = null
@@ -53,7 +55,7 @@ class InfoDialog : MyDialogFragment(){
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         isCancelable = false
-        return AlertDialog.Builder(context).apply {
+        val builder =  AlertDialog.Builder(requireContext()).apply {
             setTitle(title)
             setMessage(msg)
             setPositiveButton(plusStr) { _, _ ->
@@ -64,7 +66,10 @@ class InfoDialog : MyDialogFragment(){
                     dialog?.dismiss()
                 }
             }
-        }.create()
+        }
+        val dialog = builder.create()
+        dialog.window?.setGravity(Gravity.BOTTOM)
+        return dialog
     }
 
 
@@ -78,9 +83,9 @@ class InfoDialog : MyDialogFragment(){
             }
             CHANGE_RES_INFO ->{
                 listOf(getString(R.string.chng_res), if (hasWriteSecureSetPerm) {
-                    getString(R.string.chng_res_qs, UtilDeviceInfoSt.instance(requireContext().applicationContext).getDisplayResoStr("x"))
+                    getString(R.string.chng_res_qs, UtilsDeviceInfoSt.instance(requireContext().applicationContext).getDisplayResoStr("x"))
                 } else {
-                    getString(R.string.chng_res_stng, UtilDeviceInfoSt.instance(requireContext().applicationContext).getDisplayResoStr("x"))
+                    getString(R.string.chng_res_stng, UtilsDeviceInfoSt.instance(requireContext().applicationContext).getDisplayResoStr("x"))
                 },getString(android.R.string.ok), null)
             }
             ADB_PERM_INFO ->{

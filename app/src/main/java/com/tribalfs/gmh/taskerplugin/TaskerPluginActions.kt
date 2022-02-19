@@ -41,6 +41,7 @@ import com.tribalfs.gmh.helpers.DozeUpdater.updateDozValues
 import com.tribalfs.gmh.helpers.UtilCommon.closestValue
 import com.tribalfs.gmh.profiles.ProfilesObj
 import com.tribalfs.gmh.resochanger.ResolutionChangeUtil
+import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt
 import com.tribalfs.gmh.taskerplugin.TaskerKeys.auto_sensors_off
 import com.tribalfs.gmh.taskerplugin.TaskerKeys.change_res
 import com.tribalfs.gmh.taskerplugin.TaskerKeys.keep_motion_smoothness_on_psm
@@ -104,7 +105,7 @@ private val infosForTasker = InfosFromMainApp().apply {
     }
 
 
-    if (highestHzForAllMode > STANDARD_REFRESH_RATE_HZ) {
+    if (highestHzForAllMode > SIXTY_HZ) {
         addAll(
             arrayOf(
                 InfoFromMainApp(
@@ -172,7 +173,6 @@ class DynamicInputRunner : TaskerPluginRunnerActionNoOutputOrInput() {
     @RequiresApi(Build.VERSION_CODES.M)
     override fun run(context: Context, input: TaskerInput<Unit>): TaskerPluginResult<Unit> {
         val appCtx = context.applicationContext
-        val mUtilsRefreshRate by lazy { UtilRefreshRateSt.instance(appCtx) }
         val dm by lazy {appCtx.getSystemService(Context.DISPLAY_SERVICE) as DisplayManager}
         val km by lazy {appCtx.getSystemService(KEYGUARD_SERVICE) as KeyguardManager}
 
@@ -199,11 +199,11 @@ class DynamicInputRunner : TaskerPluginRunnerActionNoOutputOrInput() {
                     motion_smoothness_mode -> {
                         try{
                             when (val msm = info.value as String){
-                                REFRESH_RATE_MODE_STANDARD -> mUtilsRefreshRate.setRefreshRateMode(msm)
-                                REFRESH_RATE_MODE_ALWAYS -> mUtilsRefreshRate.tryThisRrm(msm, null)
+                                REFRESH_RATE_MODE_STANDARD -> UtilRefreshRateSt.instance(appCtx).setRefreshRateMode(msm)
+                                REFRESH_RATE_MODE_ALWAYS -> UtilRefreshRateSt.instance(appCtx).tryThisRrm(msm, null)
                                 REFRESH_RATE_MODE_SEAMLESS ->{
                                     if (isPremium.get()!! || isOfficialAdaptive) {
-                                        mUtilsRefreshRate.tryThisRrm(msm, null)
+                                        UtilRefreshRateSt.instance(appCtx).tryThisRrm(msm, null)
                                     }
                                 }
                             }
@@ -215,7 +215,6 @@ class DynamicInputRunner : TaskerPluginRunnerActionNoOutputOrInput() {
                     max_hertz -> {
                         CoroutineScope(Dispatchers.Main).launch {
                             try {
-                                val mUtilsPrefsGmh = mUtilsRefreshRate.mUtilsPrefsGmh
                                 val mHz = (info.value as String).toInt()
                                 if (dm.getDisplay(displayId).state == STATE_ON) {
                                     UtilChangeMaxHz(appCtx).changeMaxHz(mHz)
@@ -223,9 +222,9 @@ class DynamicInputRunner : TaskerPluginRunnerActionNoOutputOrInput() {
                                     if (supportedHzIntCurMod?.indexOfFirst { hz -> hz == mHz } != -1) {
                                         prrActive.set(mHz.coerceAtLeast(lowestHzCurMode))
                                         if (isPremium.get()!! && isPowerSaveMode.get() == true){// && keepModeOnPowerSaving) {
-                                            mUtilsPrefsGmh.hzPrefMaxRefreshRatePsm = mHz
+                                            UtilsPrefsGmhSt.instance(appCtx).hzPrefMaxRefreshRatePsm = mHz
                                         }else{
-                                            mUtilsPrefsGmh.hzPrefMaxRefreshRate = mHz
+                                            UtilsPrefsGmhSt.instance(appCtx).hzPrefMaxRefreshRate = mHz
                                         }
                                     }else{
                                         Toast.makeText(appCtx,"Refresh rate not supported.",Toast.LENGTH_SHORT).show()
@@ -247,7 +246,7 @@ class DynamicInputRunner : TaskerPluginRunnerActionNoOutputOrInput() {
                                             keepModeOnPowerSaving = isKeep
 
                                             PsmChangeHandler.instance(appCtx).handle()
-                                            mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefKmsOnPsm =
+                                            UtilsPrefsGmhSt.instance(appCtx).gmhPrefKmsOnPsm =
                                                 isKeep
                                             gmhAccessInstance?.setupAdaptiveEnhancer()
                                         }
@@ -268,14 +267,13 @@ class DynamicInputRunner : TaskerPluginRunnerActionNoOutputOrInput() {
                             CoroutineScope(Dispatchers.IO).launch {
                                 try {
                                     (info.value as String).toInt().let { dozInt ->
-                                        val mUtilsPrefsGmh = mUtilsRefreshRate.mUtilsPrefsGmh
                                         if (dozInt == -1){
-                                            mUtilsPrefsGmh.gmhPrefQuickDozeIsOn = false
+                                            UtilsPrefsGmhSt.instance(appCtx).gmhPrefQuickDozeIsOn = false
                                             appCtx.updateDozValues(false, null)
                                         }else{
-                                            mUtilsPrefsGmh.gmhPrefQuickDozeIsOn = true
+                                            UtilsPrefsGmhSt.instance(appCtx).gmhPrefQuickDozeIsOn = true
                                             mwInterval.closestValue(dozInt).let{dozeMw ->
-                                                mUtilsPrefsGmh.gmhPrefGDozeModOpt = dozeMw!!
+                                                UtilsPrefsGmhSt.instance(appCtx).gmhPrefGDozeModOpt = dozeMw!!
                                                 appCtx.updateDozValues(true, dozeMw)
                                             }
                                         }
@@ -290,11 +288,10 @@ class DynamicInputRunner : TaskerPluginRunnerActionNoOutputOrInput() {
                         if (isPremium.get()!!) {
                             CoroutineScope(Dispatchers.IO).launch{
                                 try {
-                                    val mUtilsPrefsGmh = mUtilsRefreshRate.mUtilsPrefsGmh
                                     when ((info.value as String).toInt()) {
                                         1 -> {//turn On
-                                            mUtilsPrefsGmh.gmhPrefSensorsOff = true
-                                            if (dm.getDisplay(displayId).state != STATE_ON && mUtilsPrefsGmh.gmhPrefSensorsOff){
+                                            UtilsPrefsGmhSt.instance(appCtx).gmhPrefSensorsOff = true
+                                            if (dm.getDisplay(displayId).state != STATE_ON && UtilsPrefsGmhSt.instance(appCtx).gmhPrefSensorsOff){
                                                 gmhAccessInstance?.checkAutoSensorsOff(true, screenOffOnly = true)
                                             }
                                         }
@@ -304,7 +301,7 @@ class DynamicInputRunner : TaskerPluginRunnerActionNoOutputOrInput() {
                                                 turnOffAutoSensorsOff = true
                                             }else{
                                                 gmhAccessInstance?.checkAutoSensorsOff(false, screenOffOnly = true)
-                                                mUtilsPrefsGmh.gmhPrefSensorsOff = false
+                                                UtilsPrefsGmhSt.instance(appCtx).gmhPrefSensorsOff = false
                                             }
 
                                         }
@@ -316,9 +313,9 @@ class DynamicInputRunner : TaskerPluginRunnerActionNoOutputOrInput() {
 
                                         3 -> {//turn Off Tile only
                                             if (km.isKeyguardLocked) {
-                                                if (!mUtilsPrefsGmh.gmhPrefSensorsOff){
+                                                if (!UtilsPrefsGmhSt.instance(appCtx).gmhPrefSensorsOff){
                                                     //temporarily turn on to trigger on unlock
-                                                    mUtilsPrefsGmh.gmhPrefSensorsOff = true
+                                                    UtilsPrefsGmhSt.instance(appCtx).gmhPrefSensorsOff = true
                                                     turnOffAutoSensorsOff = true//this will switch off mUtilsPrefsGmh.gmhPrefSensorsOff automatically
                                                 }//else don't need to touch settings
                                             }else{
@@ -347,16 +344,16 @@ class DynamicInputRunner : TaskerPluginRunnerActionNoOutputOrInput() {
                                 val minHz = (info.value as String).toInt()
                                 if (minHzListForAdp?.indexOf(minHz) != -1){
 
-                                    if (isOfficialAdaptive && minHz < STANDARD_REFRESH_RATE_HZ) {
+                                    if (isOfficialAdaptive && minHz < SIXTY_HZ) {
                                         if (gmhAccessInstance == null/*!isAccessibilityEnabled(appCtx, GalaxyMaxHzAccess::class.java)*/) {
                                             return@launch
                                         }
                                     }
                                     if (minHz >= prrActive.get()!!) return@launch
 
-                                    mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefMinHzAdapt = minHz
+                                    UtilsPrefsGmhSt.instance(appCtx).gmhPrefMinHzAdapt = minHz
 
-                                    mUtilsRefreshRate.applyMinHz()
+                                    UtilRefreshRateSt.instance(appCtx).applyMinHz()
 
                                     gmhAccessInstance?.setupAdaptiveEnhancer()
 

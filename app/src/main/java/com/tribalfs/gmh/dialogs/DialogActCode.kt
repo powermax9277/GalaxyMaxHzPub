@@ -4,16 +4,18 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Build
 import android.os.Bundle
+import android.view.Gravity
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.fragment.app.DialogFragment
 import com.tribalfs.gmh.MainActivity
 import com.tribalfs.gmh.R
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @ExperimentalCoroutinesApi
-class DialogActCode : MyDialogFragment()  {
+class DialogActCode : DialogFragment()  {
 
     companion object {
         internal const val KEY_AC = "0X1"
@@ -61,7 +63,7 @@ class DialogActCode : MyDialogFragment()  {
             setText(actCode?:"")
         }
 
-        return AlertDialog.Builder(context).apply {
+        val dialog =  AlertDialog.Builder(requireContext()).apply {
             setTitle(getString(R.string.in_bd))
             setMessage(getString(R.string.input_ac_inf))
             setView(input)
@@ -71,6 +73,7 @@ class DialogActCode : MyDialogFragment()  {
         }
             .create()
             .apply {
+                window?.setGravity(Gravity.BOTTOM)
                 setOnShowListener { dialogInterface ->
                     (dialogInterface as AlertDialog).getButton(AlertDialog.BUTTON_POSITIVE).apply {
                         setOnClickListener {
@@ -103,6 +106,8 @@ class DialogActCode : MyDialogFragment()  {
 
                 }
             }
+
+        return dialog
     }
 
 }

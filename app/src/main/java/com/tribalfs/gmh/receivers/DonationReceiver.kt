@@ -30,12 +30,11 @@ class DonationReceiver : BroadcastReceiver() {
 
                     if (!activationCode.isNullOrEmpty()) {
 
-                        val mUtilsRefreshRate = UtilRefreshRateSt.instance(context.applicationContext)
-                        val resultJson = mUtilsRefreshRate.mSyncer.syncLicense(activationCode, false)
+                        val resultJson = UtilRefreshRateSt.instance(context.applicationContext).mSyncer.syncLicense(activationCode, false)
 
                         if (resultJson != null) {
-                            val appCtx = context.applicationContext
-                            appCtx.sendBroadcast(Intent(ACTION_CLOSE_MAIN_ACTIVITY))
+
+                            context.applicationContext.sendBroadcast(Intent(ACTION_CLOSE_MAIN_ACTIVITY))
                             mUtilsPrefsAct.apply {
                                 gmhPrefSignature = resultJson[KEY_JSON_SIGNATURE] as String
                                 gmhPrefTrialStartDate =
@@ -48,8 +47,8 @@ class DonationReceiver : BroadcastReceiver() {
 
                             launch(Dispatchers.Main) {
                                 Toast.makeText(
-                                    appCtx,
-                                    "${appCtx.getString(R.string.app_name)} ${appCtx.getString(R.string.afa)}",
+                                    context.applicationContext,
+                                    "${context.applicationContext.getString(R.string.app_name)} ${context.applicationContext.getString(R.string.afa)}",
                                     Toast.LENGTH_LONG
                                 ).show()
                             }

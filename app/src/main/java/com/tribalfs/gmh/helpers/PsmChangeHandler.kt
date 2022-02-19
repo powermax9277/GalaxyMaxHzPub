@@ -9,14 +9,12 @@ import com.tribalfs.gmh.helpers.CacheSettings.isPowerSaveMode
 import com.tribalfs.gmh.helpers.CacheSettings.isPremium
 import com.tribalfs.gmh.helpers.CacheSettings.keepModeOnPowerSaving
 import com.tribalfs.gmh.helpers.CacheSettings.prrActive
+import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
-internal class PsmChangeHandler(context: Context) {
+internal class PsmChangeHandler private constructor(val appCtx: Context) {
 
     companion object: SingletonMaker<PsmChangeHandler, Context>(::PsmChangeHandler)
-
-    private val appCtx: Context = context.applicationContext
-    private val mUtilsRefreshRate by lazy {UtilRefreshRateSt.instance(appCtx)}
 
     @ExperimentalCoroutinesApi
     @Synchronized
@@ -25,6 +23,7 @@ internal class PsmChangeHandler(context: Context) {
         // Log.d(TAG, "execute called $isPowerSaveModeOn")
         if (isPowerSaveMode.get() == true) {
             if (keepModeOnPowerSaving && isPremium.get()!!) {
+
                 //Use Psm Max Hz
                 /*try {
                     UtilDisplayMod.updateVote(appCtx)
@@ -32,13 +31,13 @@ internal class PsmChangeHandler(context: Context) {
                     e.printStackTrace()
                 }*/
 
-                prrActive.set( mUtilsRefreshRate.mUtilsPrefsGmh.hzPrefMaxRefreshRatePsm)
-                mUtilsRefreshRate.setPrefOrAdaptOrHighRefreshRateMode(null)
+                prrActive.set( UtilsPrefsGmhSt.instance(appCtx).hzPrefMaxRefreshRatePsm)
+                UtilRefreshRateSt.instance(appCtx).setPrefOrAdaptOrHighRefreshRateMode(null)
 
                 startPipActivity()
 
             } else {
-                mUtilsRefreshRate.setRefreshRateMode(REFRESH_RATE_MODE_STANDARD)
+                UtilRefreshRateSt.instance(appCtx).setRefreshRateMode(REFRESH_RATE_MODE_STANDARD)
             }
         }else{
             if (isPremium.get()!!) {
@@ -47,9 +46,9 @@ internal class PsmChangeHandler(context: Context) {
                     UtilPermSt.instance(appCtx).requestWriteSettings()
                     return
                 }
-                mUtilsRefreshRate.mUtilsPrefsGmh.hzPrefMaxRefreshRate.let {
+                UtilsPrefsGmhSt.instance(appCtx).hzPrefMaxRefreshRate.let {
                     prrActive.set(it)
-                    mUtilsRefreshRate.setRefreshRate(it, mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefMinHzAdapt)
+                    UtilRefreshRateSt.instance(appCtx).setRefreshRate(it, UtilsPrefsGmhSt.instance(appCtx).gmhPrefMinHzAdapt)
                 }
             }
         }
@@ -62,6 +61,7 @@ internal class PsmChangeHandler(context: Context) {
             appCtx.startActivity(pipIntent)
         }
     }
+
     /* fun checkSemPowerModeRefreshRate(){
           try {
              Settings.Global.putString(mContentResolver, SEM_POWER_MODE_REFRESH_RATE, mode)

@@ -88,7 +88,7 @@ class HzServiceHelperStn private constructor(context: Context) {
         }
 
         if ((isSwOn?:mHzSharePref.gmhPrefHzIsOn)
-            && (mHzSharePref.gmhPrefHzOverlayIsOn || mHzSharePref.gmhPrefHzNotifIsOn) && isScreenOn
+            && (mHzSharePref.gmhPrefHzOverlayIsOn || mHzSharePref.gmhPrefHzNotifIsOn) && isScreenOn.get()
         ) {
             if (gmhAccessInstance != null) {
                 gmhAccessInstance!!.startHz()

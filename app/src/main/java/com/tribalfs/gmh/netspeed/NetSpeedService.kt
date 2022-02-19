@@ -57,9 +57,9 @@ class NetSpeedService : Service(), CoroutineScope {
     private var mLastTime: Long = 0
 
 
-    private val job = SupervisorJob()
+    private val masterJob = SupervisorJob()
     override val coroutineContext: CoroutineContext
-        get() = job + Dispatchers.IO
+        get() = masterJob + Dispatchers.IO
 
 
     private var continueMeasureNetStat: Boolean = false
@@ -104,7 +104,7 @@ class NetSpeedService : Service(), CoroutineScope {
     }
 
     private val pauseNetStatRunnable = Runnable {
-        if (!isScreenOn) {
+        if (!isScreenOn.get()) {
             stopNetStatInternal()
             notificationBuilderInstance.setVisibility(Notification.VISIBILITY_SECRET)
             notificationManagerCompat.notify(
@@ -223,7 +223,7 @@ class NetSpeedService : Service(), CoroutineScope {
         try {
             unregisterReceiver(mScreenStatusReceiver)
         }catch(_: java.lang.Exception){}
-        job.cancel()
+        masterJob.cancel()
         stopForeground(true)
         super.onDestroy()
     }
@@ -263,7 +263,7 @@ class NetSpeedService : Service(), CoroutineScope {
                 }
             }
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 setCustomContentView(RemoteViews(mNotificationContentView).apply {
                     setTextViewText(
                         R.id.notificationTextDl,

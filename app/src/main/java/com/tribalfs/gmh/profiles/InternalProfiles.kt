@@ -1,15 +1,14 @@
 package com.tribalfs.gmh.profiles
 
 import android.content.ContentResolver
+import android.content.Context
 import android.provider.Settings
 import com.google.gson.Gson
+import com.tribalfs.gmh.helpers.*
 import com.tribalfs.gmh.helpers.CacheSettings.displayId
 import com.tribalfs.gmh.helpers.CacheSettings.hasWriteSecureSetPerm
 import com.tribalfs.gmh.helpers.CacheSettings.ignoreRrmChange
-import com.tribalfs.gmh.helpers.REFRESH_RATE_MODE
-import com.tribalfs.gmh.helpers.UtilRefreshRateSt
-import com.tribalfs.gmh.helpers.UtilRefreshRateSt.Companion.refreshRateModes
-import com.tribalfs.gmh.helpers.UtilResoName.getName
+import com.tribalfs.gmh.helpers.UtilsReso.getName
 import com.tribalfs.gmh.profiles.ProfilesObj.refreshRateModeMap
 import kotlinx.coroutines.*
 import org.json.JSONObject
@@ -17,7 +16,7 @@ import org.json.JSONObject
 object InternalProfiles {
     private val mLock = Any()
 
-    @Synchronized
+
     private fun getKey(contentResolver: ContentResolver): String{
         //return if (mUtilsDeviceInfo.deviceIsSamsung) {
         synchronized(mLock) {
@@ -30,55 +29,50 @@ object InternalProfiles {
         }
     }
 
-    @Synchronized
-    internal fun isModeProfilesAdded(key: String?, contentResolver: ContentResolver): Boolean{
-        val mKey = key ?: getKey(contentResolver)
-        return refreshRateModeMap.containsKey(mKey)
+
+    private fun isModeProfilesAdded(key: String?, contentResolver: ContentResolver): Boolean{
+        synchronized(mLock) {
+            val mKey = key ?: getKey(contentResolver)
+            return refreshRateModeMap.containsKey(mKey)
+        }
     }
 
-    
 
-    suspend fun loadToProfilesObj(currentModeOnly: Boolean, overwriteExisting: Boolean, mUtilRefreshRateSt: UtilRefreshRateSt): JSONObject = withContext(Dispatchers.IO) {
 
-        if (!currentModeOnly && hasWriteSecureSetPerm
-            //Ensure that device is not resolution with no high refresh rate support
-            /*&& (!isSamsung || mUtilsDeviceInfo.samRefreshRateMode != REFRESH_RATE_MODE_STANDARD)*/){
+    suspend fun loadToProfilesObj(currentModeOnly: Boolean, overwriteExisting: Boolean, appCtx: Context): JSONObject = withContext(Dispatchers.IO) {
+        if (!currentModeOnly && hasWriteSecureSetPerm){
 
-            val originalRefreshRateMode = mUtilRefreshRateSt.samRefreshRateMode
-            delay(100)
+            val originalRefreshRateMode = UtilRefreshRateSt.instance(appCtx).getRefreshRateMode()
             var endingRefreshRateMode = originalRefreshRateMode
-            //loadComplete = withContext(Dispatchers.IO) {
             var modeAddedCnt = 0
             try {
                 refreshRateModes.forEach { rrm ->
                     val key = "$displayId-$rrm"
-                    if (overwriteExisting || !isModeProfilesAdded(key, mUtilRefreshRateSt.mContentResolver)) {
-                        ignoreRrmChange = true
-                        delay(200)
-                        mUtilRefreshRateSt.samRefreshRateMode = rrm
+                    if (overwriteExisting || !isModeProfilesAdded(key,appCtx.contentResolver)) {
+                        ignoreRrmChange.set(true)
+                        UtilRefreshRateSt.instance(appCtx).setRefreshRateMode(rrm)
                         endingRefreshRateMode = rrm
-                        delay(400)
-                        if (addModeToProfileObj(mUtilRefreshRateSt, key)) {
+                        delay(1000)
+                        if (addModeToProfileObj(appCtx, key)) {
                             modeAddedCnt += 0
                         }
                     }
-                    delay(200)
                 }
+
             } catch (_: Exception) { }
 
 
             //restore user refresh rate mode
             if (originalRefreshRateMode != endingRefreshRateMode) {
                 //assert(hasWriteSecureSetPerm)
-                mUtilRefreshRateSt.samRefreshRateMode = originalRefreshRateMode
+                UtilRefreshRateSt.instance(appCtx).setRefreshRateMode(originalRefreshRateMode)
             }
 
         } else {
             //add current DisplayMode only in case syncs results below is empty or failed
-            if (overwriteExisting ||  !isModeProfilesAdded(null, mUtilRefreshRateSt.mContentResolver)) {
-
-                val key = getKey(mUtilRefreshRateSt.mContentResolver)
-                addModeToProfileObj(mUtilRefreshRateSt, key)
+            if (overwriteExisting ||  !isModeProfilesAdded(null, appCtx.contentResolver)) {
+                val key = getKey(appCtx.contentResolver)
+                addModeToProfileObj(appCtx, key)
             }
         }
 
@@ -104,47 +98,34 @@ object InternalProfiles {
         return keyJson
     }
 
+    private fun addModeToProfileObj(appCtx: Context, key: String?): Boolean {
+        synchronized(mLock) {
+            try {
+                val resMapList = mutableListOf<Map<String, ResolutionDetails>>()
 
-    private suspend fun addModeToProfileObj(mUtilRefreshRateSt: UtilRefreshRateSt, key: String?): Boolean = withContext(Dispatchers.IO) {
-        try {
+                for (mode in UtilsDeviceInfoSt.instance(appCtx).getDisplayModesSet()) {
+                    val resMap = mutableMapOf<String, ResolutionDetails>()
+                    val resSplit = mode.key.split("x")
+                    val h = resSplit[0].toInt()
+                    val w = resSplit[1].toInt()
+                    resMap[mode.key] = ResolutionDetails(
+                        h,//height
+                        w,//width
+                        mode.key,//resLxw
+                        getName(h, w),
+                        mode.value,//[refresh rates]
+                        mode.value.minOrNull()!!,//lowest refresh rate
+                        mode.value.maxOrNull()!!//highest refresh rate
+                    )
 
-            //Workaround for inconsistent read
-            var modesSet: Map<String, List<Float>>? = null
-            var pass = false
-            while (!pass){
-                modesSet = mUtilRefreshRateSt.mUtilsDeviceInfo.getDisplayModesSet()
-                while (modesSet != mUtilRefreshRateSt.mUtilsDeviceInfo.getDisplayModesSet()) {
-                    delay(1000)
-                    modesSet = mUtilRefreshRateSt.mUtilsDeviceInfo.getDisplayModesSet()
+                    resMapList.add(resMap)
                 }
-                delay(1000)
-                pass = modesSet == mUtilRefreshRateSt.mUtilsDeviceInfo.getDisplayModesSet()
+                refreshRateModeMap[key ?: getKey(appCtx.contentResolver)] = resMapList
+
+                return true
+            } catch (_: Exception) {
+                return false
             }
-
-            val resMapList = mutableListOf<Map<String, ResolutionDetails>>()
-
-            for (mode in modesSet!!) {
-                val resMap = mutableMapOf<String, ResolutionDetails>()
-                val resSplit = mode.key.split("x")
-                val h = resSplit[0].toInt()
-                val w = resSplit[1].toInt()
-                resMap[mode.key] = ResolutionDetails(
-                    h,//height
-                    w,//width
-                    mode.key,//resLxw
-                    getName(h, w),
-                    mode.value,//[refresh rates]
-                    mode.value.minOrNull()!!,//lowest refresh rate
-                    mode.value.maxOrNull()!!//highest refresh rate
-                )
-
-                resMapList.add(resMap)
-            }
-            refreshRateModeMap[key ?: getKey(mUtilRefreshRateSt.mContentResolver)] = resMapList
-
-            return@withContext true
-        } catch (_: Exception) {
-            return@withContext false
         }
     }
 }

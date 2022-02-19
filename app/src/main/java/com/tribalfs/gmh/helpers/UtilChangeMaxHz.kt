@@ -14,6 +14,7 @@ import com.tribalfs.gmh.helpers.CacheSettings.supportedHzIntCurMod
 import com.tribalfs.gmh.helpers.UtilPermSt.Companion.CHANGE_SETTINGS
 import com.tribalfs.gmh.profiles.InternalProfiles
 import com.tribalfs.gmh.profiles.ProfilesObj.loadComplete
+import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt
 import kotlinx.coroutines.*
 import kotlin.math.max
 
@@ -25,13 +26,10 @@ class UtilChangeMaxHz (private val appCtx: Context) {
         const val CHANGE_MODE = -16
         const val POWER_SAVINGS = -17
         const val NO_CONFIG_LOADED = -18
-        // private const val TAG = "UtilsChangeMaxHz"
     }
 
-    //  private val appCtx = context.applicationContext
     private var isModeUpdated = false
-    internal val mUtilsRefreshRate by lazy { UtilRefreshRateSt.instance(appCtx) }
-
+    
     @ExperimentalCoroutinesApi
     @RequiresApi(Build.VERSION_CODES.M)
     suspend fun changeMaxHz(maxHzToApply: Int?): Int = withContext(Dispatchers.IO){
@@ -44,12 +42,12 @@ class UtilChangeMaxHz (private val appCtx: Context) {
 
         if (currentRefreshRateMode.get() == REFRESH_RATE_MODE_STANDARD) {
             if (hasWriteSecureSetPerm) {
-                if (mUtilsRefreshRate.getResoHighestHzForAllMode(null)
-                    > STANDARD_REFRESH_RATE_HZ
+                if (UtilRefreshRateSt.instance(appCtx).getResoHighestHzForAllMode(null)
+                    > SIXTY_HZ
                 ) {
                     isModeUpdated = true
                     withContext(Dispatchers.IO) {
-                        mUtilsRefreshRate.setPrefOrAdaptOrHighRefreshRateMode(null)
+                        UtilRefreshRateSt.instance(appCtx).setPrefOrAdaptOrHighRefreshRateMode(null)
                         delay(400)
                     }
                 } else {
@@ -60,13 +58,13 @@ class UtilChangeMaxHz (private val appCtx: Context) {
                     } else {
                         //hasWriteSecure perm so test if current reso supports adaptive or high
                         withContext(Dispatchers.IO) {
-                            mUtilsRefreshRate.setPrefOrAdaptOrHighRefreshRateMode(null)
+                            UtilRefreshRateSt.instance(appCtx).setPrefOrAdaptOrHighRefreshRateMode(null)
                             delay(400)//don't remove
                         }
 
-                        if (mUtilsRefreshRate.mUtilsDeviceInfo.getMaxHzForCurrentReso(null).toInt() <= STANDARD_REFRESH_RATE_HZ) {
+                        if (UtilsDeviceInfoSt.instance(appCtx).getMaxHzForCurrentReso(null).toInt() <= SIXTY_HZ) {
                             //restore to standard if not high refresh rate
-                            mUtilsRefreshRate.setRefreshRateMode(REFRESH_RATE_MODE_STANDARD)
+                            UtilRefreshRateSt.instance(appCtx).setRefreshRateMode(REFRESH_RATE_MODE_STANDARD)
                             return@withContext CHANGE_RES
 
                         } else {
@@ -77,7 +75,7 @@ class UtilChangeMaxHz (private val appCtx: Context) {
                                 InternalProfiles.loadToProfilesObj(
                                     currentModeOnly = true,
                                     overwriteExisting = false,
-                                    mUtilRefreshRateSt = mUtilsRefreshRate
+                                    appCtx
                                 )
                             }
                         }
@@ -85,7 +83,7 @@ class UtilChangeMaxHz (private val appCtx: Context) {
                 }
             } else {
                 //standard mode and no writeSecure perm
-                if (mUtilsRefreshRate.mUtilsDeviceInfo.isPowerSavingsMode()){
+                if (UtilsDeviceInfoSt.instance(appCtx).isPowerSavingsMode()){
                     return@withContext POWER_SAVINGS
                 }
 
@@ -94,7 +92,7 @@ class UtilChangeMaxHz (private val appCtx: Context) {
                     return@withContext CHANGE_MODE
                 } else {
                     //  Log.d(TAG, "getHighestHzForAllMode called from UtilsChangeMaxHz")
-                    if (mUtilsRefreshRate.getResoHighestHzForAllMode(null).toInt() > STANDARD_REFRESH_RATE_HZ) {
+                    if (UtilRefreshRateSt.instance(appCtx).getResoHighestHzForAllMode(null).toInt() > SIXTY_HZ) {
                         //no writeSecure perm but profile is complete, so we are sure that reso support high/adapt
                         return@withContext CHANGE_MODE
                     } else{
@@ -110,15 +108,15 @@ class UtilChangeMaxHz (private val appCtx: Context) {
                 InternalProfiles.loadToProfilesObj(
                     currentModeOnly = true,
                     overwriteExisting = false,
-                    mUtilRefreshRateSt = mUtilsRefreshRate
+                    appCtx
                 )
                 delay(250)
             }
 
             try {
-                if (mUtilsRefreshRate.getThisRrmAndResoHighestHz(null, null)
+                if (UtilRefreshRateSt.instance(appCtx).getThisRrmAndResoHighestHz(null, null)
                         .toInt()
-                    <= STANDARD_REFRESH_RATE_HZ
+                    <= SIXTY_HZ
                 ) {
                     return@withContext CHANGE_RES
                 }
@@ -131,26 +129,26 @@ class UtilChangeMaxHz (private val appCtx: Context) {
         if (supportedHzIntCurMod != null) {
             val maxHzToApplyFinal :Int =
                 if (maxHzToApply == null) {
-                    val idx = supportedHzIntCurMod!!.indexOfFirst { it == mUtilsRefreshRate.getPeakRefreshRate() }
+                    val idx = supportedHzIntCurMod!!.indexOfFirst { it == UtilRefreshRateSt.instance(appCtx).getPeakRefreshRate() }
                     max(if (idx >= supportedHzIntCurMod!!.size - 1) { supportedHzIntCurMod!![0] } else { supportedHzIntCurMod!![idx + 1]},
-                        mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefMinHzForToggle)
+                        UtilsPrefsGmhSt.instance(appCtx).gmhPrefMinHzForToggle)
                 } else {
                     if (supportedHzIntCurMod!!.indexOfFirst { it == maxHzToApply } != -1) {
                         maxHzToApply
                     }else{
-                        mUtilsRefreshRate.getPeakRefreshRate()
+                        UtilRefreshRateSt.instance(appCtx).getPeakRefreshRate()
                     }
                 }
 
-            if (mUtilsRefreshRate.mUtilsDeviceInfo.isDisplayOn()) {
-                mUtilsRefreshRate.setRefreshRate(maxHzToApplyFinal.coerceAtLeast(lowestHzCurMode), mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefMinHzAdapt)
+            if (UtilsDeviceInfoSt.instance(appCtx).isDisplayOn()) {
+                UtilRefreshRateSt.instance(appCtx).setRefreshRate(maxHzToApplyFinal.coerceAtLeast(lowestHzCurMode), UtilsPrefsGmhSt.instance(appCtx).gmhPrefMinHzAdapt)
             }
 
             prrActive.set(maxHzToApplyFinal.coerceAtLeast(lowestHzCurMode))
             if (isPremium.get()!! && isPowerSaveMode.get() == true){// && keepModeOnPowerSaving) {
-                mUtilsRefreshRate.mUtilsPrefsGmh.hzPrefMaxRefreshRatePsm = maxHzToApplyFinal
+                UtilsPrefsGmhSt.instance(appCtx).hzPrefMaxRefreshRatePsm = maxHzToApplyFinal
             }else{
-                mUtilsRefreshRate.mUtilsPrefsGmh.hzPrefMaxRefreshRate = maxHzToApplyFinal
+                UtilsPrefsGmhSt.instance(appCtx).hzPrefMaxRefreshRate = maxHzToApplyFinal
             }
             return@withContext per
 

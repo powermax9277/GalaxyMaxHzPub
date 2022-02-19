@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="primary_color">@color/design_default_color_primary</color>
+    <color name="accent_color">@color/design_default_color_primary</color>
     <color name="card_view_background">#FFFFFF</color>
+<!--
     <color name="ic_launcher_background">@color/primary_color</color>
     <color name="launcher_foreground_color">#FF5722</color>
+-->
+    <color name="ic_launcher_background">@color/design_default_color_primary</color>
+    <color name="launcher_foreground_color">#FFB522</color>
+
     <color name="refresh_rate">#66D511</color>
 </resources>

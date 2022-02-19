@@ -10,7 +10,9 @@ import com.tribalfs.gmh.helpers.*
 import com.tribalfs.gmh.helpers.CacheSettings.displayId
 import com.tribalfs.gmh.helpers.CacheSettings.hasWriteSecureSetPerm
 import com.tribalfs.gmh.helpers.CacheSettings.isMultiResolution
+import com.tribalfs.gmh.helpers.UtilsReso.getNewMatchingDpi
 import com.tribalfs.gmh.profiles.ResolutionDetails
+import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt
 import kotlinx.coroutines.*
 
 
@@ -18,7 +20,7 @@ class ResolutionChangeUtil (context: Context) {
 
 
     private val appCtx = context.applicationContext
-    internal val mUtilsRefreshRate by lazy { UtilRefreshRateSt.instance(appCtx) }
+    //internal val UtilRefreshRateSt.instance(appCtx) by lazy { UtilRefreshRateSt.instance(appCtx) }
 
     @ExperimentalCoroutinesApi
     suspend fun changeRes(reso: Size?): Int? {
@@ -41,52 +43,50 @@ class ResolutionChangeUtil (context: Context) {
     }
 
     private fun getFilteredResList(): List<Map<String, ResolutionDetails>>{
-        return mUtilsRefreshRate.getResolutionsForKey(null)?.filter {
+        return UtilRefreshRateSt.instance(appCtx).getResolutionsForKey(null)?.filter {
             val key = it.keys.first()
             val res = "$key(${it[key]?.resName})"
-            (mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefGetSkippedRes?.contains(res) != true)
+            (UtilsPrefsGmhSt.instance(appCtx).gmhPrefGetSkippedRes?.contains(res) != true)
         }!!
     }
 
     internal fun getResName(resLxw: String?): String {
-        val reso = resLxw?:mUtilsRefreshRate.mUtilsDeviceInfo.getDisplayResoStr("x")
-        mUtilsRefreshRate.getResolutionsForKey(null)?.forEach{
+        val reso = resLxw?:UtilsDeviceInfoSt.instance(appCtx).getDisplayResoStr("x")
+        UtilRefreshRateSt.instance(appCtx).getResolutionsForKey(null)?.forEach{
             it[reso]?.let{res ->
                 return res.resName
             }
         }
 
         reso.split("x").let {
-            return UtilResoName.getName(it[0].toInt(),it[1].toInt())
+            return UtilsReso.getName(it[0].toInt(),it[1].toInt())
         }
     }
 
 
-    private fun getNextResAndDen(density : Int) : SizeDensity/*List<String>*/{
-        val currentResString = mUtilsRefreshRate.mUtilsDeviceInfo.getDisplayResoStr("x")
+    private fun getNextResAndDen() : SizeDensity{
+        val currentReso = UtilsDeviceInfoSt.instance(appCtx).getDisplaySizeDensity()
         val resList = getFilteredResList()
 
         val idx = resList.indexOfFirst {
-            it.containsKey(currentResString)
+            it.containsKey("${currentReso.h}x${currentReso.w}")
         }
 
-        var nextResDetails: ResolutionDetails? =  null
-        resList[if (idx-1>= 0) idx-1 else resList.size-1].forEach{
-            nextResDetails = it.value
+        var nextReso: SizeDensity? = null
+
+        resList[if (idx > 0) idx-1 else resList.size-1].forEach{
+            val resoDetails =  it.value
+            nextReso = SizeDensity(resoDetails.resWidth, resoDetails.resHeight, -1)
         }
-        val nextResH = nextResDetails!!.resHeight
-        val nextResW = nextResDetails!!.resWidth
-        val curResH = currentResString.split("x")[0]
 
-        val newDen = ( (density.toFloat() / curResH.toFloat()) * (nextResH.toFloat()) ).toInt()
+        val newDen = getNewMatchingDpi(currentReso,nextReso!!)
 
-        return SizeDensity(nextResW, nextResH, newDen)
+        return SizeDensity(nextReso!!.w, nextReso!!.h, newDen)
     }
 
     @ExperimentalCoroutinesApi
-    private suspend fun changeResInternal(providedNextReso: Size?): Boolean = withContext(Dispatchers.Default) {
+    private suspend fun changeResInternal(providedNextReso: Size?): Boolean = withContext(Dispatchers.IO) {
 
-        val currentDensity = mUtilsRefreshRate.mUtilsDeviceInfo.getDisplayDensity()
 
         if (!isMultiResolution) {
             launch(Dispatchers.Main) {
@@ -104,16 +104,17 @@ class ResolutionChangeUtil (context: Context) {
         val nextDen: Int?
 
         if (providedNextReso == null) {
-            val nextResAndDen = getNextResAndDen(currentDensity)
+            val nextResAndDen = getNextResAndDen()
             nextReso = Size(nextResAndDen.w,nextResAndDen.h)
             nextDen = nextResAndDen.dpi
         } else {
             if (getFilteredResList().indexOfFirst {
                     it.containsKey("${providedNextReso.height}x${providedNextReso.width}")
                 } != -1) {
+                val currentDensity = UtilsDeviceInfoSt.instance(appCtx).getDisplayDensity()
                 nextReso = providedNextReso
                 val nexResoH = providedNextReso.height.toFloat()
-                val currentReso = mUtilsRefreshRate.mUtilsDeviceInfo.getDisplayResolution()
+                val currentReso = UtilsDeviceInfoSt.instance(appCtx).getDisplayResolution()
                 val curResH = currentReso.height
                 nextDen = ((currentDensity.toFloat() / curResH.toFloat()) * nexResoH).toInt()
             } else {
@@ -141,7 +142,7 @@ class ResolutionChangeUtil (context: Context) {
 
         if (changeResResult) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                mUtilsRefreshRate.setPrefOrAdaptOrHighRefreshRateMode(nextResStr, true)
+                UtilRefreshRateSt.instance(appCtx).setPrefOrAdaptOrHighRefreshRateMode(nextResStr, true)
                 delay(250)//don't remove
             }
             launch(Dispatchers.Main){

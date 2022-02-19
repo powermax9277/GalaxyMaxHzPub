@@ -11,7 +11,7 @@ import android.service.quicksettings.TileService
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.tribalfs.gmh.BuildConfig
-import com.tribalfs.gmh.MyApplication.Companion.applicationScope
+import com.tribalfs.gmh.MyApplication.Companion.appScopeIO
 import com.tribalfs.gmh.R
 import com.tribalfs.gmh.dialogs.ADB_SETUP_LINK
 import com.tribalfs.gmh.helpers.*
@@ -64,7 +64,7 @@ class QSTileMaxHz : TileService() {
                 }
 
                 REFRESH_RATE_MODE_SEAMLESS -> {
-                    val prr = mUtilsChangeMaxHz.mUtilsRefreshRate.getPeakRefreshRate()
+                    val prr = UtilRefreshRateSt.instance(applicationContext).getPeakRefreshRate()
                     qsTile.icon = mUtilTileIcon.getIcon("$prr", "Adp")
                     qsTile.label =
                         "${getString(R.string.adaptive)} ${getString(R.string.max_hz)}: $prr"
@@ -72,7 +72,7 @@ class QSTileMaxHz : TileService() {
                 }
 
                 REFRESH_RATE_MODE_ALWAYS -> {
-                    val prr = mUtilsChangeMaxHz.mUtilsRefreshRate.getPeakRefreshRate()
+                    val prr = UtilRefreshRateSt.instance(applicationContext).getPeakRefreshRate()
                     qsTile.state = Tile.STATE_ACTIVE
                     qsTile.icon = mUtilTileIcon.getIcon(prr.toString(), getString(R.string.high))
                     qsTile.label =
@@ -80,7 +80,7 @@ class QSTileMaxHz : TileService() {
                 }
 
                 else -> {
-                    val prr = mUtilsChangeMaxHz.mUtilsRefreshRate.getPeakRefreshRate()
+                    val prr = UtilRefreshRateSt.instance(applicationContext).getPeakRefreshRate()
                     qsTile.icon = mUtilTileIcon.getIcon(prr.toString(), "?")
                     qsTile.label = "${getString(R.string.max_hz)}:${prr} ?"
                     qsTile.state = Tile.STATE_INACTIVE
@@ -94,7 +94,7 @@ class QSTileMaxHz : TileService() {
     override fun onClick() {
         super.onClick()
 
-        applicationScope.launch(Dispatchers.Main) {
+        appScopeIO.launch(Dispatchers.Main) {
 
             when (mUtilsChangeMaxHz.changeMaxHz(null)) {
                 PERMISSION_GRANTED -> {
@@ -114,7 +114,7 @@ class QSTileMaxHz : TileService() {
                     if (supportedHzIntCurMod != null && supportedHzIntCurMod?.size!! > 1) {
                         showDialog(
                             getChangeResDialog(
-                                mUtilsChangeMaxHz.mUtilsRefreshRate.getCurrentResWithName()
+                                UtilRefreshRateSt.instance(applicationContext).getCurrentResWithName()
                             )
                         )
                     } else {

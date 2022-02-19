@@ -7,7 +7,7 @@ apply plugin: 'kotlin-kapt'
 android {
     signingConfigs {
         release {
-            storeFile file('C:\\Users\\Louie Pamisa.LOUPAMS\\AppProjects\\tribalfs.jks')
+            storeFile file('./tribalfs.jks')
             keyAlias 'tribalfs'
             keyPassword 'Ge0ltp1986'
             storePassword 'Ge0ltp1986'
@@ -21,8 +21,8 @@ android {
         minSdkVersion 22
         //noinspection ExpiredTargetSdkVersion
         targetSdkVersion 22
-        versionCode 126
-        versionName "7.14.20"
+        versionCode 127
+        versionName "7.14.30"
         setProperty("archivesBaseName", "galaxy_max_hz_v${versionName}")
     }
 
@@ -71,6 +71,7 @@ android {
 
 
 dependencies {
+
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
 
     androidTestImplementation "androidx.test:runner:1.4.0"
@@ -101,6 +102,7 @@ dependencies {
 
     implementation 'com.joaomgcd:taskerpluginlibrary:0.4.1'
 
+    implementation 'eu.chainfire:libsuperuser:1.1.0+'
     //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.8.1'
 
 }

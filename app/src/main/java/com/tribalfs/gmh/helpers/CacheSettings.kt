@@ -14,7 +14,7 @@ object CacheSettings {
     internal var isOnePlus: Boolean = false
 
     internal const val TIMEOUT_FACTOR = 0.90
-    @Volatile internal var isScreenOn = true
+    internal var isScreenOn = AtomicBoolean(true)
     internal var offScreenRefreshRate:String? = null
 
     internal val isPowerSaveMode = ObservableField<Boolean>() //Reflects SCREEN ON status only
@@ -74,9 +74,9 @@ object CacheSettings {
 
     internal var ignorePowerModeChange = AtomicBoolean(false)
 
-    @Volatile internal var restoreSync  = false
-    @Volatile internal var disablePsm  = false
-    @Volatile internal var ignoreRrmChange  = false
+    internal var restoreSync  = AtomicBoolean(false)
+    internal var disablePsm  = AtomicBoolean(false)
+    internal var ignoreRrmChange  = AtomicBoolean( false)
     @Volatile internal var screenOffRefreshRateMode: String?  = null
 
     internal var turnOffAutoSensorsOff = false

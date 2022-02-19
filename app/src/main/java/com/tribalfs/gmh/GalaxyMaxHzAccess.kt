@@ -22,6 +22,7 @@ import android.hardware.camera2.CameraManager
 import android.hardware.display.DisplayManager
 import android.net.ConnectivityManager
 import android.net.Network
+import android.os.BatteryManager
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
@@ -50,6 +51,7 @@ import com.tribalfs.gmh.helpers.CacheSettings.disablePsm
 import com.tribalfs.gmh.helpers.CacheSettings.displayId
 import com.tribalfs.gmh.helpers.CacheSettings.hzNotifOn
 import com.tribalfs.gmh.helpers.CacheSettings.hzStatus
+import com.tribalfs.gmh.helpers.CacheSettings.ignoreRrmChange
 import com.tribalfs.gmh.helpers.CacheSettings.isFakeAdaptiveValid
 import com.tribalfs.gmh.helpers.CacheSettings.isOfficialAdaptive
 import com.tribalfs.gmh.helpers.CacheSettings.isScreenOn
@@ -76,6 +78,9 @@ import java.lang.Runnable
 import java.util.*
 import kotlin.coroutines.CoroutineContext
 
+
+
+
 internal const val PLAYING = 1
 internal const val STOPPED = -1
 internal const val PAUSE = 0
@@ -93,7 +98,8 @@ private val manualGameList = listOf(
     "com.microsoft.xcloud",
     "com.microsoft.xboxone",
     "com.gameloft.android",
-    "com.sec.android.app.samsungapps:com.sec.android.app.samsungapps.instantplays.InstantPlaysGameActivity"
+    "com.sec.android.app.samsungapps:com.sec.android.app.samsungapps.instantplays.InstantPlaysGameActivity",
+    "com.distractionware.superhexagon"
 )
 
 
@@ -105,13 +111,13 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         internal var gmhAccessInstance: GalaxyMaxHzAccess? = null
     }
 
-    private val job = SupervisorJob()
+    private val masterJob = SupervisorJob()
     override val coroutineContext: CoroutineContext
-        get() = job + Dispatchers.IO
+        get() = masterJob + Dispatchers.IO
 
     private val mConnectivityManager by lazy {applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager}
     private val mKeyguardManager by lazy {applicationContext.getSystemService(KEYGUARD_SERVICE) as KeyguardManager}
-    private val handler by lazy {Handler(Looper.getMainLooper())}
+    private val mHandler by lazy {Handler(Looper.getMainLooper())}
     private val mCameraManager by lazy {getSystemService(CAMERA_SERVICE) as CameraManager}
     private val mUtilsRefreshRate by lazy {UtilRefreshRateSt.instance(applicationContext)}
     private val mNotifBar by lazy {UtilNotifBarSt.instance(applicationContext)}
@@ -136,13 +142,19 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
             }
         }
     }
+    private val myBatteryManager by lazy {applicationContext.getSystemService(BATTERY_SERVICE) as BatteryManager}
+
+    private fun isCharging(): Boolean {
+        return myBatteryManager.isCharging
+    }
 
     private val autoSensorsOffRunnable: Runnable by lazy {
         Runnable {
-            if (mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefSensorsOff) {
+            if (UtilsPrefsGmhSt.instance(applicationContext).gmhPrefSensorsOff) {
+                if (isCharging()) return@Runnable
                 switchSensorsOff(true)
                 //Workaround sensors off sometimes trigger action_SCREEN_ON
-                handler.postDelayed(forceLowestRunnable,1000)
+                mHandler.postDelayed(forceLowestRunnable,1000)
             }
         }
     }
@@ -150,12 +162,12 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     private val forceLowestRunnable: Runnable by lazy {
         Runnable {
             if (screenOffRefreshRateMode != currentRefreshRateMode.get()) {
-                CacheSettings.ignoreRrmChange = true
+                ignoreRrmChange.set(true)
                 if (mUtilsRefreshRate.setRefreshRateMode(screenOffRefreshRateMode!!)) {
                     mUtilsRefreshRate.setRefreshRate(lowestHzForAllMode, null)
                 } else {
                     mUtilsRefreshRate.setRefreshRate(lowestHzCurMode, null)
-                    CacheSettings.ignoreRrmChange = false
+                    ignoreRrmChange.set(false)
                 }
             } else {
                 mUtilsRefreshRate.setRefreshRate(lowestHzCurMode, null)
@@ -169,23 +181,23 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         override fun onIntentReceived(intent: String) {
             when (intent) {
                 ACTION_SCREEN_OFF -> {
-                    isScreenOn = false
-                    restoreSync = false
-                    disablePsm = false
+                    isScreenOn.set(false)
+                    restoreSync.set(false)
+                    disablePsm.set(false)
 
                     // Workaround for AOD Bug on some device????
                     mUtilsRefreshRate.clearPeakAndMinRefreshRate()
 
-                    if (mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefForceLowestSoIsOn) { handler.postDelayed(forceLowestRunnable,2000) }
+                    if (UtilsPrefsGmhSt.instance(applicationContext).gmhPrefForceLowestSoIsOn) { mHandler.postDelayed(forceLowestRunnable,2000) }
 
-                    handler.postDelayed(autoSensorsOffRunnable, 20000)
+                    mHandler.postDelayed(autoSensorsOffRunnable, 20000)
 
                     if (hzStatus.get() == PLAYING) {
                         mPauseHzJob?.cancel()
                         mPauseHzJob = null
                         mPauseHzJob = launch(Dispatchers.Main) {
                             delay(10000)
-                            if (!isScreenOn) {
+                            if (!isScreenOn.get()) {
                                 pauseHz()
                             }
                         }
@@ -194,13 +206,13 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                 }
 
                 ACTION_SCREEN_ON ->{
-                    isScreenOn = true
+                    isScreenOn.set(true)
 
                     //handler.removeCallbacks { autoSensorsOffRunnable }
-                    handler.removeCallbacksAndMessages(null)
+                    mHandler.removeCallbacksAndMessages(null)
 
                     launch {
-                        mUtilsRefreshRate.setRefreshRate(prrActive.get()!!, mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefMinHzAdapt)
+                        mUtilsRefreshRate.setRefreshRate(prrActive.get()!!, UtilsPrefsGmhSt.instance(applicationContext).gmhPrefMinHzAdapt)
                         currentRefreshRateMode.get()?.let {
                             if (screenOffRefreshRateMode != it) {
                                 mUtilsRefreshRate.setRefreshRateMode(it)
@@ -217,11 +229,11 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
                 ACTION_USER_PRESENT -> {
                     if (isFakeAdaptiveValid.get()!!) makeAdaptive()
-                    if (mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefSensorsOff || turnOffAutoSensorsOff) {
+                    if (UtilsPrefsGmhSt.instance(applicationContext).gmhPrefSensorsOff || turnOffAutoSensorsOff) {
                         switchSensorsOff(false)
                     }
                     if (turnOffAutoSensorsOff){
-                        mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefSensorsOff = false
+                        UtilsPrefsGmhSt.instance(applicationContext).gmhPrefSensorsOff = false
                         turnOffAutoSensorsOff = false
                     }
                 }
@@ -231,7 +243,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     }
 
     private val mScreenStatusReceiver by lazy{
-        GmhBroadcastReceivers(applicationContext, mGmhBroadcastCallback, this)
+        GmhBroadcastReceivers(applicationContext, mGmhBroadcastCallback, this, mHandler)
     }
 
     private var mWindowsManager: WindowManager? = null
@@ -291,6 +303,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         triesB = 0
         switchSensorsOffInner(on)
     }
+
 
     private fun switchSensorsOffInner(targetState: Boolean) {
 
@@ -427,7 +440,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         try{
             unregisterCameraCallback()
         }catch (_: Exception){}
-        mCameraManager.registerAvailabilityCallback(cameraCallback, handler)
+        mCameraManager.registerAvailabilityCallback(cameraCallback, mHandler)
     }
 
     private fun unregisterCameraCallback(){
@@ -635,7 +648,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     //if triggered by tasker
     internal fun checkAutoSensorsOff(switchOn:Boolean, screenOffOnly: Boolean){
         if (switchOn){
-            if ((screenOffOnly && !isScreenOn) || !screenOffOnly) {
+            if ((screenOffOnly && !isScreenOn.get()) || !screenOffOnly) {
                 //turnOnAutoSensorsOff = false
                 switchSensorsOff(true)
             }
@@ -675,19 +688,20 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     }
 
     private fun setTempIgnoreTwsc(){
-        handler.removeCallbacks(ignoreRunnable)
+        mHandler.removeCallbacks(ignoreRunnable)
         ignoreNextTWSC = true
-        handler.postDelayed(ignoreRunnable, 2000L)
+        mHandler.postDelayed(ignoreRunnable, 2000L)
     }
 
     @SuppressLint("SwitchIntDef")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
-        /*Log.i(
-            TAG,
+        //TODO (check scrolling toolbar not detected)
+       /* Log.d(
+            "TESTEST",
             "EVENT_TYPE ${event?.eventType} CHANGE_TYPE ${event?.contentChangeTypes} $ ${event?.packageName} Classname: ${event?.className}"
         )*/
-        if (!isScreenOn || !applyAdaptiveMod.get()!!) return
+        if (!isScreenOn.get() || !applyAdaptiveMod.get()!!) return
 
         when (event?.eventType) {
 
@@ -786,7 +800,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         }
         makeAdaptiveJob = launch(Dispatchers.IO) {
             delay(adaptiveDelayMillis)
-            if (applyAdaptiveMod.get()!! && isScreenOn && !isGameOpen) {
+            if (applyAdaptiveMod.get()!! && isScreenOn.get() && !isGameOpen) {
                 mUtilsRefreshRate.setPeakRefreshRate(
                     if (useMin60 || cameraOpen) max(60,lrrPref.get()!!) else lrrPref.get()!!
                 )
@@ -797,7 +811,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
 
     private fun initialAdaptive() {
-        mUtilsRefreshRate.setRefreshRate(prrActive.get()!!, mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefMinHzAdapt)
+        mUtilsRefreshRate.setRefreshRate(prrActive.get()!!, UtilsPrefsGmhSt.instance(applicationContext).gmhPrefMinHzAdapt)
         makeAdaptive()
     }
 
@@ -812,7 +826,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         unregisterReceiver(mScreenStatusReceiver)
         disableNetworkCallback()
         makeAdaptiveJob?.cancel()
-        job.cancel()
+        masterJob.cancel()
         super.onDestroy()
     }
 
@@ -837,7 +851,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
             launch(Dispatchers.Main){
                 if (isFakeAdaptiveValid.get()!!) {
                     mLayout?.setOnTouchListener(adaptiveEnhancer)
-                    if (isScreenOn) {
+                    if (isScreenOn.get()) {
                         initialAdaptive()//initial trigger
                     }else{
                         if (UtilPermSt.instance(applicationContext).hasWriteSystemPerm()) {
@@ -847,10 +861,10 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                     registerCameraCallback()
                 } else {
                     if (UtilPermSt.instance(applicationContext).hasWriteSystemPerm()) {
-                        if (mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefMinHzAdapt > STANDARD_REFRESH_RATE_HZ) {
-                            mUtilsRefreshRate.setRefreshRate(prrActive.get()!!,mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefMinHzAdapt)
+                        if (UtilsPrefsGmhSt.instance(applicationContext).gmhPrefMinHzAdapt > UtilsDeviceInfoSt.instance(applicationContext).regularMinHz) {
+                            mUtilsRefreshRate.setRefreshRate(prrActive.get()!!, UtilsPrefsGmhSt.instance(applicationContext).gmhPrefMinHzAdapt)
                         }else{
-                            mUtilsRefreshRate.setRefreshRate(prrActive.get()!!,lowestHzForAllMode)
+                            mUtilsRefreshRate.setRefreshRate(prrActive.get()!!, lowestHzForAllMode)
                         }
                     }
                     mLayout?.setOnTouchListener(null)

@@ -7,7 +7,7 @@ import android.os.Build
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
 import androidx.annotation.RequiresApi
-import com.tribalfs.gmh.MyApplication.Companion.applicationScope
+import com.tribalfs.gmh.MyApplication.Companion.appScopeIO
 import com.tribalfs.gmh.R
 import com.tribalfs.gmh.dialogs.QSDialogs
 import com.tribalfs.gmh.helpers.*
@@ -28,7 +28,6 @@ import kotlinx.coroutines.launch
 class QSTileResSw : TileService() {
 
     private val mUtilsPermSt by lazy {UtilPermSt.instance(applicationContext)}
-    private val mUtilsRefreshRate by lazy {UtilRefreshRateSt.instance(applicationContext)}
     private val mUtilTileIcon = UtilTileIcon()
 
     override fun onTileAdded() {
@@ -49,7 +48,7 @@ class QSTileResSw : TileService() {
     override fun onClick() {
         super.onClick()
 
-        applicationScope.launch {
+        appScopeIO.launch {
 
             val startMain = Intent(Intent.ACTION_MAIN)
             startMain.addCategory(Intent.CATEGORY_HOME)
@@ -110,8 +109,8 @@ class QSTileResSw : TileService() {
     }
 
     private fun updateTileInner() {
-        val reso = mUtilsRefreshRate.mUtilsDeviceInfo.getDisplayResolution()//  getResoAndRefRateModeArr(currentRefreshRateMode.get())
-        val resoCat = UtilResoName.getName(
+        val reso = UtilsDeviceInfoSt.instance(applicationContext).getDisplayResolution()//  getResoAndRefRateModeArr(currentRefreshRateMode.get())
+        val resoCat = UtilsReso.getName(
             reso.height,
             reso.width
         )

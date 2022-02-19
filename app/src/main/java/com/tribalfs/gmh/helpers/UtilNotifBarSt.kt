@@ -16,11 +16,9 @@ private const val sensorsOffVal = "custom(com.android.settings/.development.qsti
 internal const val SYSUI_QS_TILES = "sysui_qs_tiles"
 
 @SuppressLint("WrongConstant", "PrivateApi")
-internal class UtilNotifBarSt private constructor (context: Context) {
+internal class UtilNotifBarSt private constructor (val appCtx: Context) {
 
     companion object : SingletonMaker<UtilNotifBarSt, Context>(::UtilNotifBarSt)
-
-    private val appCtx = context.applicationContext
 
     private val sensorPrivacyService by lazy {appCtx.getSystemService("sensor_privacy")}
     private val sensorPrivacyManager by lazy {Class.forName("android.hardware.SensorPrivacyManager")}

@@ -3,6 +3,11 @@ package com.tribalfs.gmh.profiles
 internal object ModelNumbers {
     const val S20FE5G = "SM-G781"
     const val S20FE = "SM-G780"
+    const val A725G = "SM-A726"
+    const val A525G = "SM-A526"
+    const val A52S5G = "SM-A528"
+    const val S21FE = "SM-G990"
+    const val M25G = "SM-M526"
 
     const val S20 = "SM-G980"
     const val S205G = "SM-G981"
@@ -20,9 +25,9 @@ internal object ModelNumbers {
     const val S21_P_JP = "SCG10"
     const val S21_U = "SM-G998"
 
-    private const val S22 = "SM-S901"
-    private const val S22P = "SM-S906"
-    private const val S22U = "SM-S908"
+    const val S22 = "SM-S901"
+    const val S22P = "SM-S906"
+    const val S22U = "SM-S908"
 
     const val ZF2 = "SM-F916"
     const val ZF2_JP = "SCG05"
@@ -42,6 +47,7 @@ internal object ModelNumbers {
 
     const val ZFp3 = "SM-F711"
     const val ZFp3_JP = "SCG12"
+
 
     val fordableWithHrrExternal = listOf(ZF3,ZF3_JP)
 

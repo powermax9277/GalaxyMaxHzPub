@@ -52,9 +52,9 @@ internal class HzService : Service(), CoroutineScope{
         private const val ANIMATION_DURATION = 700L
     }
 
-    private val job = SupervisorJob()
+    private val masterJob = SupervisorJob()
     override val coroutineContext: CoroutineContext
-        get() = job + Dispatchers.IO
+        get() = masterJob + Dispatchers.IO
 
     private val notificationManagerCompat by lazy {NotificationManagerCompat.from(applicationContext)}
     private val mHzSharePref by lazy { UtilsPrefsGmhSt.instance(applicationContext) }
@@ -68,7 +68,11 @@ internal class HzService : Service(), CoroutineScope{
     private val wm by lazy {applicationContext.getSystemService(Context.WINDOW_SERVICE) as WindowManager}
     private val params by lazy { WindowManager.LayoutParams(
         WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT, 0, 0,
-        WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
+        }else{
+            WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY
+             },
         WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
                 or WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
                 or WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
@@ -116,7 +120,7 @@ internal class HzService : Service(), CoroutineScope{
                         mPauseHzJob = null
                         mPauseHzJob = launch(Dispatchers.Main){
                             delay(10000)
-                            if (!isScreenOn) {
+                            if (!isScreenOn.get()) {
                                 pauseHz()
                             }
                         }
@@ -244,6 +248,7 @@ internal class HzService : Service(), CoroutineScope{
         }catch (_: java.lang.Exception){}
         mPauseHzJob?.cancel()
         mPauseHzJob = null
+        masterJob.cancel()
         super.onDestroy()
     }
 
@@ -256,12 +261,14 @@ internal class HzService : Service(), CoroutineScope{
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     setSmallIcon(mNotifIcon.getIcon(hzStr, "Hz"))
                 }
-                setCustomContentView(
-                    RemoteViews(mNotificationContentView).apply {
-                        setTextViewText(R.id.tvHz, getString(R.string.cur_rr_h, hzStr))
-                    }
-                )
-                notificationManagerCompat.notify(
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                    setCustomContentView(
+                        RemoteViews(mNotificationContentView).apply {
+                            setTextViewText(R.id.tvHz, getString(R.string.cur_rr_h, hzStr))
+                        }
+                    )
+                }
+                    notificationManagerCompat.notify(
                     NOTIFICATION_ID_HZ,
                     build()
                 )

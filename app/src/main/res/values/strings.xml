@@ -3,7 +3,7 @@
     <string name="app_name" translatable="false">Galaxy Max Hz</string>
     <string name="lbl_enable_msm">Enable Motion Smoothness</string>
     <string name="buy_adfree">Buy Premium|Coffee</string>
-    <string name="resolution">Resolution &amp; Motion Smoothness Toggle</string>
+    <string name="resolution">Screen Resolution Toggle</string>
     <string name="act">Activate Premium|Trial</string>
     <string name="max_hz">Max Hz</string>
     <string name="max_hz_for_psm">Max Hz for Power Saving Mode</string>

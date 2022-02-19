@@ -3,8 +3,12 @@ package com.tribalfs.gmh
 import android.content.Context
 import android.provider.Settings
 import android.provider.Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
+import com.tribalfs.gmh.GalaxyMaxHzAccess.Companion.gmhAccessInstance
 import com.tribalfs.gmh.MyApplication.Companion.ignoreAccessibilityChange
+import com.tribalfs.gmh.helpers.CacheSettings
 import com.tribalfs.gmh.helpers.CacheSettings.hasWriteSecureSetPerm
+import com.tribalfs.gmh.sharedprefs.NOT_USING
+import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt
 import kotlinx.coroutines.*
 
 
@@ -14,22 +18,22 @@ object UtilAccessibilityService {
     private val serviceName = GalaxyMaxHzAccess::class.java.name
 
     internal fun isAccessibilityEnabled(
-        context: Context
+        appCtx: Context
     ): Boolean {
         synchronized(this) {
-            val mContentResolver = context.applicationContext.contentResolver
-            val gmhAccessibilityStr = "${context.applicationContext.packageName}/$serviceName"
+            val mContentResolver = appCtx.contentResolver
+            val gmhAccessibilityStr = "${appCtx.packageName}/$serviceName"
             return (Settings.Secure.getString(mContentResolver, ENABLED_ACCESSIBILITY_SERVICES)
                 ?: "").contains(gmhAccessibilityStr)
         }
     }
 
-    internal fun allowAccessibility(context: Context, add: Boolean) {
+    internal fun allowAccessibility(appCtx: Context, add: Boolean) {
         synchronized(this) {
             CoroutineScope(Dispatchers.IO).launch {
-                val mContentResolver = context.applicationContext.contentResolver
+                val mContentResolver = appCtx.contentResolver
                 val gmhAccessibilityStr =
-                    "${context.applicationContext.packageName}/$serviceName"
+                    "${appCtx.packageName}/$serviceName"
                 (Settings.Secure.getString(mContentResolver, ENABLED_ACCESSIBILITY_SERVICES)
                     ?: "").let {
                     if (hasWriteSecureSetPerm) {
@@ -63,13 +67,35 @@ object UtilAccessibilityService {
         }
     }
 
+    internal fun checkAccessibility(required:Boolean?, appCtx: Context): Boolean{
+
+        val accesRequired = required ?: UtilsPrefsGmhSt.instance(appCtx).getEnabledAccessibilityFeatures().isNotEmpty()
+
+        if (accesRequired) {
+            return if (
+                (CacheSettings.isSpayInstalled == false || UtilsPrefsGmhSt.instance(appCtx).hzPrefSPayUsage == NOT_USING)
+                && hasWriteSecureSetPerm
+            ) {
+                allowAccessibility(
+                    appCtx,
+                    true
+                )
+                true
+            } else {
+                false
+            }
+        }else{
+            return gmhAccessInstance != null
+        }
+    }
+
     /*internal fun isAccessibilityEnabled(
         context: Context,
         service: Class<out AccessibilityService?>
     ): Boolean {
         synchronized(this) {
-            val mContentResolver = context.applicationContext.contentResolver
-            val gmhAccessibilityStr = "${context.applicationContext.packageName}/${service.name}"
+            val mContentResolver = appCtx.contentResolver
+            val gmhAccessibilityStr = "${appCtx.packageName}/${service.name}"
             return (Settings.Secure.getString(mContentResolver, ENABLED_ACCESSIBILITY_SERVICES)
                 ?: "").contains(gmhAccessibilityStr)
         }
@@ -78,9 +104,9 @@ object UtilAccessibilityService {
     internal fun allowAccessibility(context: Context, service: Class<out AccessibilityService?>, add: Boolean) {
         synchronized(this) {
             CoroutineScope(Dispatchers.IO).launch {
-                val mContentResolver = context.applicationContext.contentResolver
+                val mContentResolver = appCtx.contentResolver
                 val gmhAccessibilityStr =
-                    "${context.applicationContext.packageName}/${service.name}"
+                    "${appCtx.packageName}/${service.name}"
                 (Settings.Secure.getString(mContentResolver, ENABLED_ACCESSIBILITY_SERVICES)
                     ?: "").let {
                     if (hasWriteSecureSetPerm) {

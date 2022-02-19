@@ -17,14 +17,11 @@ import com.tribalfs.gmh.R
 import com.tribalfs.gmh.helpers.UtilSettingsIntents.changeSystemSettingsIntent
 
 
-class UtilPermSt(context: Context){
+class UtilPermSt private constructor(val appCtx: Context){
 
     companion object: SingletonMaker<UtilPermSt, Context>(::UtilPermSt){
         internal const val CHANGE_SETTINGS = -11
     }
-
-    private val appCtx: Context = context.applicationContext
-
 
     fun hasWriteSecurePerm(): Boolean{
         return getPerm(SECURE) == PERMISSION_GRANTED

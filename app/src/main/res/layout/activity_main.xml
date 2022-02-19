@@ -37,7 +37,9 @@
         <variable
             name="minHzAdaptive"
             type="Integer" />
-
+        <variable
+            name="regMinHzAdaptive"
+            type="Integer" />
         <variable
             name="hasMinHzOptions"
             type="Boolean" />
@@ -401,7 +403,7 @@
                         android:layout_marginTop="12dp"
                         android:text="@string/brightness_threshold"
                         android:textSize="11sp"
-                        android:visibility="@{refreshRateMode.equals(&quot;1&quot;)  &amp;&amp; premium &amp;&amp; (!adaptiveSupported || minHzAdaptive &lt; 60) ? View.VISIBLE : View.GONE, default=visible}"
+                        android:visibility="@{refreshRateMode.equals(&quot;1&quot;)  &amp;&amp; premium &amp;&amp; (!adaptiveSupported || minHzAdaptive &lt; regMinHzAdaptive) ? View.VISIBLE : View.GONE, default=visible}"
                         app:layout_constraintStart_toStartOf="@+id/sb_brightness"
                         app:layout_constraintTop_toBottomOf="@+id/sb_min_hz_adapt"
                         tools:ignore="SmallSp" />
@@ -413,7 +415,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="4dp"
-                        android:visibility="@{refreshRateMode.equals(&quot;1&quot;) &amp;&amp; hasWssPerm &amp;&amp; premium &amp;&amp; (!adaptiveSupported || minHzAdaptive &lt; 60)  ? View.VISIBLE : View.GONE, default=visible}"
+                        android:visibility="@{refreshRateMode.equals(&quot;1&quot;) &amp;&amp; premium &amp;&amp; (!adaptiveSupported || minHzAdaptive &lt; regMinHzAdaptive)  ? View.VISIBLE : View.GONE, default=visible}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/tv_brightness" />
@@ -785,7 +787,7 @@
                         android:background="?android:selectableItemBackground"
                         android:onClick="@{(v) ->  clickListener.onClickView(v)}"
                         android:text="@string/psm_options"
-                        android:textColor="@color/primary_color"
+                        android:textColor="@color/accent_color"
                         android:textSize="13sp"
                         app:layout_constraintStart_toStartOf="@+id/sw_so_psm"
                         app:layout_constraintTop_toBottomOf="@+id/sw_so_psm"
@@ -815,7 +817,7 @@
                         android:layout_marginBottom="8dp"
                         android:onClick="@{(v) -> premium ? clickListener.onClickView(v) : null}"
                         android:text="@string/autosync_settings"
-                        android:textColor="@color/primary_color"
+                        android:textColor="@color/accent_color"
                         android:textSize="13sp"
                         android:visibility="@{premium ? View.VISIBLE : View.GONE}"
                         app:layout_constraintStart_toStartOf="@+id/sw_auto_off_sync"
@@ -863,7 +865,7 @@
                         android:layout_marginBottom="8dp"
                         android:onClick="@{(v) -> (premium ? clickListener.onClickView(v) : null)}"
                         android:text="@string/apps_bat_opt_settings"
-                        android:textColor="@color/primary_color"
+                        android:textColor="@color/accent_color"
                         android:textSize="13sp"
                         android:visibility="@{premium ? View.VISIBLE : View.GONE}"
                         app:layout_constraintStart_toStartOf="@+id/screen_off_doze_info"
@@ -1062,7 +1064,7 @@
                         android:focusable="true"
                         android:onClick="@{(v) -> (premium ? clickListener.onClickView(v) : null)}"
                         android:text="@string/data_usage"
-                        android:textColor="@color/primary_color"
+                        android:textColor="@color/accent_color"
                         android:textSize="14sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"

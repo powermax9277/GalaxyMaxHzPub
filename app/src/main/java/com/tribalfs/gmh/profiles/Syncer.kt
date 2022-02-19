@@ -2,10 +2,8 @@ package com.tribalfs.gmh.profiles
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.os.Build
 import android.provider.Settings
 import android.provider.Settings.Secure.ANDROID_ID
-import androidx.annotation.RequiresApi
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
@@ -43,21 +41,21 @@ private const val KEY_JSON_GLOBAL_LIST = "0x17"
 private const val REQUEST_HELP_URL = 0x15
 
 @SuppressLint("HardwareIds")
-internal class Syncer(context: Context) {
+internal class Syncer(private val context: Context) {
 
-    private val appCtx = context.applicationContext
-    private val mUtilsDeviceInfo by lazy { UtilDeviceInfoSt.instance(appCtx) }
-    private val mUtilsPrefsGmh by lazy { UtilsPrefsGmhSt.instance(appCtx) }
+   // private val context.applicationContext = context.applicationContext
+    //private val UtilDeviceInfoSt.instance(context.applicationContext) by lazy { UtilDeviceInfoSt.instance(context.applicationContext) }
+   // private val UtilsPrefsGmhSt.instance(context.applicationContext) by lazy { UtilsPrefsGmhSt.instance(context.applicationContext) }
 
     private val deviceId by lazy {
-        Settings.Secure.getString(appCtx.contentResolver, ANDROID_ID)
+        Settings.Secure.getString(context.applicationContext.contentResolver, ANDROID_ID)
     }
 
     suspend fun fetchProfileFromBackEnd(): JSONObject? = withContext(Dispatchers.IO) {
         val jsonBody = JSONObject().apply {
-            put(KEY_JSON_MODEL_NUMBER, mUtilsDeviceInfo.deviceModelVariant)
-            put(KEY_JSON_ONEUI_VERSION, mUtilsDeviceInfo.oneUiVersion)
-            put(KEY_JSON_SIGNATURE, PackageInfo.getSignatureString(appCtx))
+            put(KEY_JSON_MODEL_NUMBER, UtilsDeviceInfoSt.instance(context.applicationContext).deviceModelVariant)
+            put(KEY_JSON_ONEUI_VERSION, UtilsDeviceInfoSt.instance(context.applicationContext).oneUiVersion)
+            put(KEY_JSON_SIGNATURE, PackageInfo.getSignatureString(context.applicationContext))
             put(KEY_JSON_APP_VERSION_CODE, BuildConfig.VERSION_CODE)
         }
 
@@ -72,10 +70,10 @@ internal class Syncer(context: Context) {
 
     suspend fun postProfileToBackEnd(): JSONObject? = withContext(Dispatchers.IO) {
         val jsonBody = JSONObject().apply {
-            put(KEY_JSON_MODEL_NUMBER, mUtilsDeviceInfo.deviceModelVariant)
-            put(KEY_JSON_ONEUI_VERSION, mUtilsDeviceInfo.oneUiVersion)
-            put(KEY_JSON_SIGNATURE, PackageInfo.getSignatureString(appCtx))
-            put(KEY_JSON_REFRESH_RATES_PROFILE, mUtilsPrefsGmh.gmhPrefDisplayModesObjectInJson)
+            put(KEY_JSON_MODEL_NUMBER, UtilsDeviceInfoSt.instance(context.applicationContext).deviceModelVariant)
+            put(KEY_JSON_ONEUI_VERSION, UtilsDeviceInfoSt.instance(context.applicationContext).oneUiVersion)
+            put(KEY_JSON_SIGNATURE, PackageInfo.getSignatureString(context.applicationContext))
+            put(KEY_JSON_REFRESH_RATES_PROFILE, UtilsPrefsGmhSt.instance(context.applicationContext).gmhPrefDisplayModesObjectInJson)
         }
 
         val result = postDataVolley(REQUEST_DISPLAY_MODES_POST, GMH_WEB_APP, jsonBody)
@@ -90,9 +88,9 @@ internal class Syncer(context: Context) {
     suspend fun syncLicense(activationCode: String, trial: Boolean): JSONObject? = withContext(Dispatchers.IO) {
         val jsonObject = JSONObject().apply {
             put(KEY_JSON_DEVICE_ID, deviceId)
-            put(KEY_JSON_MODEL_NUMBER, mUtilsDeviceInfo.deviceModelVariant)
+            put(KEY_JSON_MODEL_NUMBER, UtilsDeviceInfoSt.instance(context.applicationContext).deviceModelVariant)
             put(KEY_JSON_ACTIVATION_CODE, activationCode)//don't remove
-            put(KEY_JSON_SIGNATURE, PackageInfo.getSignatureString(appCtx))
+            put(KEY_JSON_SIGNATURE, PackageInfo.getSignatureString(context.applicationContext))
             put(KEY_JSON_TRIAL, trial)
         }
         val result = postDataVolley(REQUEST_VERIFY_LICENSE, GMH_WEB_APP, jsonObject)
@@ -107,7 +105,7 @@ internal class Syncer(context: Context) {
     suspend fun getBuyAdFreeLink(): JSONObject? = withContext(Dispatchers.IO) {
         val jsonBody = JSONObject().apply {
             put(KEY_JSON_DEVICE_ID, deviceId)
-            put(KEY_JSON_MODEL_NUMBER, mUtilsDeviceInfo.deviceModelVariant)
+            put(KEY_JSON_MODEL_NUMBER, UtilsDeviceInfoSt.instance(context.applicationContext).deviceModelVariant)
         }
 
         val result = postDataVolley(REQUEST_BUY_LINK, GMH_WEB_APP, jsonBody)
@@ -121,7 +119,7 @@ internal class Syncer(context: Context) {
     
     suspend fun getHelpUrl(): JSONObject? = withContext(Dispatchers.IO) {
         val jsonBody = JSONObject().apply {
-            put(KEY_JSON_MODEL_NUMBER, mUtilsDeviceInfo.deviceModelVariant)
+            put(KEY_JSON_MODEL_NUMBER, UtilsDeviceInfoSt.instance(context.applicationContext).deviceModelVariant)
         }
 
         val result = postDataVolley(REQUEST_HELP_URL, GMH_WEB_APP, jsonBody)
@@ -133,19 +131,20 @@ internal class Syncer(context: Context) {
     }
 
 
+/*
     @ExperimentalCoroutinesApi
     @RequiresApi(Build.VERSION_CODES.M)
     suspend fun postSettingsList() = withContext(Dispatchers.IO){
         val settingsListAsync = listOf(
             // get simultaneously
-            async{ mUtilsDeviceInfo.getSettingsList(SECURE)},
-            async{ mUtilsDeviceInfo.getSettingsList(SYSTEM)},
-            async{ mUtilsDeviceInfo.getSettingsList(GLOBAL)}
+            async{ UtilsDeviceInfoSt.instance(context.applicationContext).getSettingsList(SECURE)},
+            async{ UtilsDeviceInfoSt.instance(context.applicationContext).getSettingsList(SYSTEM)},
+            async{ UtilsDeviceInfoSt.instance(context.applicationContext).getSettingsList(GLOBAL)}
         )
         settingsListAsync.awaitAll()
 
         val jsonBody = JSONObject().apply {
-            put(KEY_JSON_MODEL_NUMBER, mUtilsDeviceInfo.deviceModelVariant)
+            put(KEY_JSON_MODEL_NUMBER, UtilsDeviceInfoSt.instance(context.applicationContext).deviceModelVariant)
             put(KEY_JSON_SECURE_LIST, settingsListAsync[0].getCompleted().joinToString(";"))
             put(KEY_JSON_SYSTEM_LIST, settingsListAsync[1].getCompleted().joinToString(";"))
             put(KEY_JSON_GLOBAL_LIST, settingsListAsync[2].getCompleted().joinToString(";"))
@@ -157,11 +156,12 @@ internal class Syncer(context: Context) {
             jsonBody
         )
     }
+*/
 
 
     private suspend fun postDataVolley(requestType: Int, url: String, sendObj: JSONObject?)  = suspendCoroutine<JSONObject?> {
         try {
-            val queue = Volley.newRequestQueue(appCtx)
+            val queue = Volley.newRequestQueue(context.applicationContext)
             val jsonObjReq = JsonObjectRequest(
                 Request.Method.POST,
                 "$url?Rq=$requestType", sendObj,

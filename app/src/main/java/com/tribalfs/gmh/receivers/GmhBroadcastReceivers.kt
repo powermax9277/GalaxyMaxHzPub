@@ -9,7 +9,6 @@ import android.content.Intent.*
 import android.net.ConnectivityManager
 import android.os.Build
 import android.os.Handler
-import android.os.Looper
 import android.os.PowerManager.ACTION_POWER_SAVE_MODE_CHANGED
 import android.provider.Settings
 import com.tribalfs.gmh.callbacks.GmhBroadcastCallback
@@ -30,8 +29,11 @@ import com.tribalfs.gmh.helpers.CacheSettings.sensorOnKey
 import com.tribalfs.gmh.helpers.CacheSettings.turnOff5GOnPsm
 import com.tribalfs.gmh.netspeed.NetSpeedService.Companion.netSpeedService
 import com.tribalfs.gmh.netspeed.NetSpeedServiceHelperStn
-import kotlinx.coroutines.*
-
+import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.Runnable
+import kotlinx.coroutines.launch
 
 
 
@@ -39,49 +41,48 @@ private const val PREF_NET_TYPE_LTE_GSM_WCDMA    = 9 /* LTE, GSM/WCDMA */
 private const val PREF_NET_TYPE_5G_LTE_GSM_WCDMA = 26
 
 @ExperimentalCoroutinesApi
-open class GmhBroadcastReceivers(context: Context, private val gmhBroadcastCallback: GmhBroadcastCallback, private val scope: CoroutineScope): BroadcastReceiver() {
+open class GmhBroadcastReceivers(private val appCtx: Context,
+                                 private val gmhBroadcastCallback: GmhBroadcastCallback,
+                                 private val scope: CoroutineScope,
+                                 private val handler: Handler): BroadcastReceiver() {
 
-    private val appCtx = context.applicationContext
-    private val mContentResolver = appCtx.contentResolver
-
-    private val mUtilsRefreshRate by lazy { UtilRefreshRateSt.instance(appCtx)}
-    private val handler by lazy { Handler(Looper.getMainLooper()) }
+   // private val handler by lazy { Handler(Looper.getMainLooper()) }
     private val connectivityManager by  lazy { appCtx.getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager}
 
     init{
-        mUtilsRefreshRate.mUtilsDeviceInfo.isDisplayOn().let {
-            isScreenOn = it
+        UtilsDeviceInfoSt.instance(appCtx).isDisplayOn().let { screenOn ->
+            isScreenOn.set(screenOn)
 
             //Check if app is destroyed on screen off
-            if (mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefRefreshRateModePref != null
-                && mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefRefreshRateModePref != currentRefreshRateMode.get()
-            ) {
-                scope.launch {
-                    mUtilsRefreshRate.setRefreshRateMode(mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefRefreshRateModePref!!)
-                    if (!it) {
-                        delay(250)
-                        ignoreRrmChange = true
-                        screenOffRefreshRateMode?.let { soRefreshrate ->
-                            mUtilsRefreshRate.setRefreshRateMode(
-                                soRefreshrate
-                            )
+            UtilsPrefsGmhSt.instance(appCtx).gmhPrefRefreshRateModePref?.let{ prefRrm ->
+                if (prefRrm != currentRefreshRateMode.get()) {
+                    scope.launch {
+                        if (screenOn) {
+                            UtilRefreshRateSt.instance(appCtx).setRefreshRateMode(UtilsPrefsGmhSt.instance(appCtx).gmhPrefRefreshRateModePref!!)
+                        }else {//= Screen-off
+                            //delay(250)
+                            ignoreRrmChange.set(true)
+                            screenOffRefreshRateMode?.let { soRefreshrate ->
+                                UtilRefreshRateSt.instance(appCtx).setRefreshRateMode(soRefreshrate)
+                            }
                         }
                     }
                 }
             }
 
-            if (it) {
+
+            if (screenOn) {
                 scope.launch {
-                    if (mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefRestoreSyncIsOn) {
+                    if (UtilsPrefsGmhSt.instance(appCtx).gmhPrefRestoreSyncIsOn) {
                         ContentResolver.setMasterSyncAutomatically(true)
                     }
                 }
                 scope.launch {
-                    if (mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefPsmIsOffCache) {
+                    if (UtilsPrefsGmhSt.instance(appCtx).gmhPrefPsmIsOffCache) {
                         //Not ignored
                             if (hasWriteSecureSetPerm) {
                                 Settings.Global.putString(
-                                    context.applicationContext.contentResolver,
+                                    appCtx.contentResolver,
                                     POWER_SAVING_MODE,
                                     POWER_SAVING_OFF
                                 )
@@ -90,8 +91,8 @@ open class GmhBroadcastReceivers(context: Context, private val gmhBroadcastCallb
                 }
             } else {
                 //Screen is off
-                restoreSync = (mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefRestoreSyncIsOn)
-                disablePsm = (mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefPsmIsOffCache)
+                restoreSync.set(UtilsPrefsGmhSt.instance(appCtx).gmhPrefRestoreSyncIsOn)
+                disablePsm.set(UtilsPrefsGmhSt.instance(appCtx).gmhPrefPsmIsOffCache)
             }
         }
     }
@@ -100,8 +101,8 @@ open class GmhBroadcastReceivers(context: Context, private val gmhBroadcastCallb
     private val autosyncDisablerRunnable: Runnable by lazy {
         Runnable {
             ContentResolver.getMasterSyncAutomatically().let {
-                restoreSync = it
-                mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefRestoreSyncIsOn = it
+                restoreSync.set(it)
+                UtilsPrefsGmhSt.instance(appCtx).gmhPrefRestoreSyncIsOn = it
                 if (it) {
                     ContentResolver.setMasterSyncAutomatically(false)
                 }
@@ -113,7 +114,7 @@ open class GmhBroadcastReceivers(context: Context, private val gmhBroadcastCallb
     private val psmEnablerRunnable: Runnable by lazy {
         Runnable {
             if (isPowerSaveMode.get() == false) {
-                disablePsm = true
+                disablePsm.set(true)
                 setPowerSaving(true)
             }
         }
@@ -122,7 +123,7 @@ open class GmhBroadcastReceivers(context: Context, private val gmhBroadcastCallb
 
     private val captureRrRunnable: Runnable by lazy {
         Runnable {
-            offScreenRefreshRate = "${mUtilsRefreshRate.mUtilsDeviceInfo.currentDisplay.refreshRate.toInt()} hz"
+            offScreenRefreshRate = "${UtilsDeviceInfoSt.instance(appCtx).getCurrentDisplay().refreshRate.toInt()} hz"
         }
     }
 
@@ -133,9 +134,9 @@ open class GmhBroadcastReceivers(context: Context, private val gmhBroadcastCallb
 
         when (p1.action) {
             ACTION_POWER_SAVE_MODE_CHANGED -> {
-                isPowerSaveMode.set(mUtilsRefreshRate.mUtilsDeviceInfo.isPowerSavingsMode())
+                isPowerSaveMode.set(UtilsDeviceInfoSt.instance(appCtx).isPowerSavingsMode())
                 if (ignorePowerModeChange.getAndSet(false) || !hasWriteSecureSetPerm) return
-                mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefPsmIsOffCache = isPowerSaveMode.get() != true
+                UtilsPrefsGmhSt.instance(appCtx).gmhPrefPsmIsOffCache = isPowerSaveMode.get() != true
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     PsmChangeHandler.instance(appCtx).handle()
                 }
@@ -145,22 +146,22 @@ open class GmhBroadcastReceivers(context: Context, private val gmhBroadcastCallb
 
                 handler.postDelayed(captureRrRunnable, 5000)
 
-                if (mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefPsmOnSo) { handler.postDelayed(psmEnablerRunnable,8000) }
+                if (UtilsPrefsGmhSt.instance(appCtx).gmhPrefPsmOnSo) { handler.postDelayed(psmEnablerRunnable,8000) }
 
-                if (mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefDisableSyncIsOn) { handler.postDelayed(autosyncDisablerRunnable,12000) }
+                if (UtilsPrefsGmhSt.instance(appCtx).gmhPrefDisableSyncIsOn) { handler.postDelayed(autosyncDisablerRunnable,12000) }
 
             }
 
 
             ACTION_SCREEN_ON -> {
 
-                handler.removeCallbacksAndMessages(null)
+               // handler.removeCallbacksAndMessages(null)
 
                 scope.launch {
-                    if (restoreSync) ContentResolver.setMasterSyncAutomatically(true)
-                    if (disablePsm) setPowerSaving(false)
+                    if (restoreSync.get()) ContentResolver.setMasterSyncAutomatically(true)
+                    if (disablePsm.get()) setPowerSaving(false)
 
-                    if (netSpeedService == null && mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefNetSpeedIsOn) {
+                    if (netSpeedService == null && UtilsPrefsGmhSt.instance(appCtx).gmhPrefNetSpeedIsOn) {
                         if (isInternetConnected()) {
                             NetSpeedServiceHelperStn.instance(appCtx).startNetSpeed()
                         }
@@ -169,14 +170,14 @@ open class GmhBroadcastReceivers(context: Context, private val gmhBroadcastCallb
 
                 if (isFakeAdaptiveValid.get() == true) {
                     scope.launch {
-                        currentBrightness.set(mUtilsRefreshRate.mUtilsDeviceInfo.getScreenBrightnessPercent())
+                        currentBrightness.set(UtilsDeviceInfoSt.instance(appCtx).getScreenBrightnessPercent())
                     }
 
                 }
             }
 
             ACTION_LOCALE_CHANGED -> {
-                mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefSensorOnKey = ""
+                UtilsPrefsGmhSt.instance(appCtx).gmhPrefSensorOnKey = ""
                 sensorOnKey = null
             }
         }
@@ -197,19 +198,19 @@ open class GmhBroadcastReceivers(context: Context, private val gmhBroadcastCallb
 
     @Synchronized
     private fun setPowerSaving(psmOn: Boolean){
-        //Log.d(TAG, "turnOnPowerSaving: $on")
+
         ignorePowerModeChange.set(true)
 
         if (hasWriteSecureSetPerm) {
             Settings.Global.putString(
-                mContentResolver,
+                appCtx.contentResolver,
                 POWER_SAVING_MODE,
                 if (psmOn) POWER_SAVING_ON else POWER_SAVING_OFF
             )
         }
 
         if (turnOff5GOnPsm == true) {
-            val pnm = (Settings.Global.getString(mContentResolver, PREFERRED_NETWORK_MODE)
+            val pnm = (Settings.Global.getString(appCtx.contentResolver, PREFERRED_NETWORK_MODE)
                 ?: "$PREF_NET_TYPE_LTE_GSM_WCDMA,$PREF_NET_TYPE_LTE_GSM_WCDMA").split(",")
 
             val idxOf5G = pnm.indexOf(PREF_NET_TYPE_5G_LTE_GSM_WCDMA.toString())
@@ -222,7 +223,7 @@ open class GmhBroadcastReceivers(context: Context, private val gmhBroadcastCallb
                 }
                 if (hasWriteSecureSetPerm) {
                     Settings.Global.putString(
-                        mContentResolver,
+                        appCtx.contentResolver,
                         "$PREFERRED_NETWORK_MODE${idxOf5G + 1}",
                         (if (psmOn) alt else PREF_NET_TYPE_5G_LTE_GSM_WCDMA).toString()
                     )

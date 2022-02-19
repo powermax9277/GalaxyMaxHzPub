@@ -9,19 +9,16 @@ private const val HAP = "hidden_api_policy"
 private const val HAP_PRE_P = "hidden_api_policy_pre_p_apps"
 private const val HAP_P = "hidden_api_policy_p_apps"
 
-internal class CheckBlacklistApiSt private constructor(context: Context) {
+internal class CheckBlacklistApiSt private constructor(val appCtx: Context) {
 
     companion object : SingletonMaker<CheckBlacklistApiSt, Context>(::CheckBlacklistApiSt)
 
-    private val appCtx = context.applicationContext
-    private val mResolver = appCtx.contentResolver
-
     fun isAllowed(): Boolean{
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            Settings.Global.getString(mResolver, HAP) == "1"
+            Settings.Global.getString(appCtx.contentResolver, HAP) == "1"
         }else {
-            Settings.Global.getString(mResolver, HAP_PRE_P) == "1" &&
-                    Settings.Global.getString(mResolver, HAP_P) == "1"
+            Settings.Global.getString(appCtx.contentResolver, HAP_PRE_P) == "1" &&
+                    Settings.Global.getString(appCtx.contentResolver, HAP_P) == "1"
 
         }
     }
@@ -30,10 +27,10 @@ internal class CheckBlacklistApiSt private constructor(context: Context) {
         return if (hasWriteSecureSetPerm) {
             try {
                 if (Build.VERSION.SDK_INT >= 29) {
-                    Settings.Global.putString(mResolver, HAP, "1")
+                    Settings.Global.putString(appCtx.contentResolver, HAP, "1")
                 } else {
-                    Settings.Global.putString(mResolver, HAP_PRE_P, "1") &&
-                            Settings.Global.putString(mResolver, HAP_P, "1")
+                    Settings.Global.putString(appCtx.contentResolver, HAP_PRE_P, "1") &&
+                            Settings.Global.putString(appCtx.contentResolver, HAP_P, "1")
                 }
             }catch (_: Exception){
                 false

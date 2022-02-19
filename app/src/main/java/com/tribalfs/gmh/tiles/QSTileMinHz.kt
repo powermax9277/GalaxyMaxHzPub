@@ -5,7 +5,7 @@ import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
 import androidx.annotation.RequiresApi
 import com.tribalfs.gmh.GalaxyMaxHzAccess.Companion.gmhAccessInstance
-import com.tribalfs.gmh.MyApplication.Companion.applicationScope
+import com.tribalfs.gmh.MyApplication.Companion.appScopeIO
 import com.tribalfs.gmh.R
 import com.tribalfs.gmh.UtilAccessibilityService.allowAccessibility
 import com.tribalfs.gmh.dialogs.QSDialogs
@@ -18,10 +18,11 @@ import com.tribalfs.gmh.helpers.CacheSettings.lrrPref
 import com.tribalfs.gmh.helpers.CacheSettings.minHzListForAdp
 import com.tribalfs.gmh.helpers.CacheSettings.prrActive
 import com.tribalfs.gmh.helpers.REFRESH_RATE_MODE_SEAMLESS
-import com.tribalfs.gmh.helpers.STANDARD_REFRESH_RATE_HZ
+import com.tribalfs.gmh.helpers.SIXTY_HZ
 import com.tribalfs.gmh.helpers.UtilRefreshRateSt
 import com.tribalfs.gmh.helpers.UtilTileIcon
 import com.tribalfs.gmh.sharedprefs.NOT_USING
+import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -32,7 +33,6 @@ import kotlinx.coroutines.launch
 @RequiresApi(Build.VERSION_CODES.N)
 class QSTileMinHz : TileService() {
 
-    private val mUtilsRefreshRate by lazy{UtilRefreshRateSt.instance(applicationContext)}
     private val mUtilTileIcon = UtilTileIcon()
 
     override fun onTileAdded() {
@@ -78,8 +78,10 @@ class QSTileMinHz : TileService() {
     override fun onClick() {
         super.onClick()
 
-        applicationScope.launch(Dispatchers.Main) {
+        appScopeIO.launch(Dispatchers.Main) {
+
             var idx = minHzListForAdp?.indexOf(lrrPref.get())
+
             var nexMinHzTemp = 500
             while (nexMinHzTemp >= prrActive.get()!!
                 && nexMinHzTemp != minHzListForAdp?.minOrNull()
@@ -94,13 +96,13 @@ class QSTileMinHz : TileService() {
             }
             var nexMinHz = nexMinHzTemp
 
-            if (isOfficialAdaptive && nexMinHz < STANDARD_REFRESH_RATE_HZ) {
+            if (isOfficialAdaptive && nexMinHz < SIXTY_HZ) {
                 if (isPremium.get() == true) {
                     if (!checkAccessibilityPerm()) {
-                        nexMinHz = STANDARD_REFRESH_RATE_HZ
+                        nexMinHz = SIXTY_HZ
                     }
                 }else{
-                    nexMinHz = STANDARD_REFRESH_RATE_HZ
+                    nexMinHz = SIXTY_HZ
                 }
             }
 
@@ -114,9 +116,9 @@ class QSTileMinHz : TileService() {
                 }
             }
 
-            mUtilsRefreshRate.mUtilsPrefsGmh.gmhPrefMinHzAdapt = nexMinHz
+            UtilsPrefsGmhSt.instance(applicationContext).gmhPrefMinHzAdapt = nexMinHz
 
-            mUtilsRefreshRate.applyMinHz()
+            UtilRefreshRateSt.instance(applicationContext).applyMinHz()
 
             gmhAccessInstance?.setupAdaptiveEnhancer()
 
@@ -128,7 +130,7 @@ class QSTileMinHz : TileService() {
         return if (
             gmhAccessInstance == null
         ){
-            if (hasWriteSecureSetPerm && (isSpayInstalled == false ||  mUtilsRefreshRate.mUtilsPrefsGmh.hzPrefSPayUsage == NOT_USING)) {
+            if (hasWriteSecureSetPerm && (isSpayInstalled == false ||  UtilsPrefsGmhSt.instance(applicationContext).hzPrefSPayUsage == NOT_USING)) {
                 allowAccessibility(
                     applicationContext,
                     true

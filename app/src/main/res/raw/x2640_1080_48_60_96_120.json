@@ -1,0 +1,7 @@
+{ "0-0": { "2640x1080": "{\"highestHz\":60.0,\"lowestHz\":60.0,\"refreshRates\":[60.0],\"resHeight\":2640,\"resName\":\"FHD+\",\"resStrLxw\":\"2640x1080\",\"resWidth\":1080}",
+        "1760x720": "{\"highestHz\":60.0,\"lowestHz\":60.0,\"refreshRates\":[60.0],\"resHeight\":1760,\"resName\":\"HD+\",\"resStrLxw\":\"1760x720\",\"resWidth\":720}" },
+  "0-2": { "2640x1080": "{\"highestHz\":120.0,\"lowestHz\":48.0,\"refreshRates\":[120.0,96.0,60.0,48.0],\"resHeight\":2640,\"resName\":\"FHD+\",\"resStrLxw\":\"2640x1080\",\"resWidth\":1080}",
+          "1760x720": "{\"highestHz\":120.0,\"lowestHz\":48.0,\"refreshRates\":[120.0,96.0,60.0,48.0],\"resHeight\":1760,\"resName\":\"HD+\",\"resStrLxw\":\"1760x720\",\"resWidth\":720}" },
+  "0-1": { "2640x1080": "{\"highestHz\":120.0,\"lowestHz\":48.0,\"refreshRates\":[120.0,96.0,60.0,48.0],\"resHeight\":2640,\"resName\":\"FHD+\",\"resStrLxw\":\"2640x1080\",\"resWidth\":1080}",
+          "1760x720": "{\"highestHz\":120.0,\"lowestHz\":48.0,\"refreshRates\":[120.0,96.0,60.0,48.0],\"resHeight\":1760,\"resName\":\"HD+\",\"resStrLxw\":\"1760x720\",\"resWidth\":720}" }
+}
