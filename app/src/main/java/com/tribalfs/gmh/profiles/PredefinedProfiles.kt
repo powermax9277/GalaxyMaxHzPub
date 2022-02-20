@@ -9,6 +9,7 @@ import com.tribalfs.gmh.profiles.ModelNumbers.A725G
 import com.tribalfs.gmh.profiles.ModelNumbers.M25G
 import com.tribalfs.gmh.profiles.ModelNumbers.N20U
 import com.tribalfs.gmh.profiles.ModelNumbers.N20U5G
+import com.tribalfs.gmh.profiles.ModelNumbers.N20U5G_NTT
 import com.tribalfs.gmh.profiles.ModelNumbers.N20U_JP
 import com.tribalfs.gmh.profiles.ModelNumbers.S20
 import com.tribalfs.gmh.profiles.ModelNumbers.S205G
@@ -64,9 +65,12 @@ internal object PredefinedProfiles {
                 raw = context.resources.openRawResource(R.raw.x2560_1600_48_60_96_120)
             }
 
-
-            S20FE5G, S20FE, A725G, A525G, A52S5G, S21FE, M25G -> {
+            S20FE5G, S20FE, A725G, A525G, A52S5G, M25G -> {
                 raw = context.resources.openRawResource(R.raw.x2400_1080_60_120)
+            }
+
+            S21FE -> {
+                raw = context.resources.openRawResource(R.raw.x2340_1080_60_120)
             }
 
             S20, S205G, S20P_S, S20P_E, S20U -> {
@@ -85,7 +89,7 @@ internal object PredefinedProfiles {
                 raw = context.resources.openRawResource(R.raw.x2640_1080_48_60_96_120)
             }
 
-            N20U, N20U5G, N20U_JP -> {
+            N20U, N20U5G, N20U_JP, N20U5G_NTT -> {
                 raw = context.resources.openRawResource(R.raw.x3088_1440_48_60_96_120)
             }
 

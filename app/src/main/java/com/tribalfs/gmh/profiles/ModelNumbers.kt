@@ -18,6 +18,7 @@ internal object ModelNumbers {
     const val N20U5G = "SM-N986"
     const val N20U = "SM-N985"
     const val N20U_JP = "SCG06"
+    const val N20U5G_NTT = "SC-53A"
 
     const val S21 = "SM-G991"
     const val S21_JP = "SCG09"
@@ -55,6 +56,7 @@ internal object ModelNumbers {
         N20U,
         N20U5G,
         N20U_JP,
+        N20U5G_NTT,
         ZF2,
         ZF2_JP,
         ZF2_TW,

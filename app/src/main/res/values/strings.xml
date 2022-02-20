@@ -50,7 +50,7 @@
     <string name="perm_appx">
         \n\nWhen adb setup is performed, you can do the following with this app:
         \n- Quickly switch screen resolutions
-        \n- (Auto)activate/keep Adaptive or High motion smoothness on Power Saving Mode
+        \n- Auto-activate Adaptive or High motion smoothness on Power Saving Mode
         \n- Auto activate power saving mode on screen-off
         \n- Use the quick-doze mod (premium)
         \n- Apply Adaptive refresh rate mod even on non-natively supported device(premium)

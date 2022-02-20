@@ -9,14 +9,24 @@ import android.util.Rational
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 
+
+
+
 class PipActivity : AppCompatActivity() {
     @RequiresApi(api = Build.VERSION_CODES.S)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+   /*     //TODO test
+        val params = window.attributes
+        params.preferredDisplayModeId = 3
+        window.attributes = params*/
+
         val ratio = Rational(1, 1)
         val mBuilder = PictureInPictureParams.Builder()
         mBuilder.setAspectRatio(ratio).build()
         enterPictureInPictureMode(mBuilder.build())
+
         Handler(Looper.getMainLooper()).postDelayed(Exit(), 400)
     }
 

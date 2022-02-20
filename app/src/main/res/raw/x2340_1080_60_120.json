@@ -1,0 +1,4 @@
+{"0-0": {"2340x1080": "{\"highestHz\":60.0,\"lowestHz\":60.0,\"refreshRates\":[60.0],\"resHeight\":2340,\"resName\":\"FHD+\",\"resStrLxw\":\"2340x1080\",\"resWidth\":1080}"},
+  "0-1": {"2340x1080": "{\"highestHz\":120.0,\"lowestHz\":60.0,\"refreshRates\":[120.0,60.0],\"resHeight\":2340,\"resName\":\"FHD+\",\"resStrLxw\":\"2340x1080\",\"resWidth\":1080}"},
+  "0-2": {"2340x1080": "{\"highestHz\":120.0,\"lowestHz\":60.0,\"refreshRates\":[120.0,60.0],\"resHeight\":2340,\"resName\":\"FHD+\",\"resStrLxw\":\"2340x1080\",\"resWidth\":1080}"}
+}
