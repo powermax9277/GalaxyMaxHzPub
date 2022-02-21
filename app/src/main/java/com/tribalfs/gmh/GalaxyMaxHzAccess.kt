@@ -88,7 +88,8 @@ private val manualVideoAppList = listOf(
     "com.vanced.android.youtube",
     "com.cisco.webex.meetings",
     "com.sec.android.gallery3d",
-    "com.google.android.apps.youtube"//Youtube Music
+    "com.google.android.apps.youtube",//Youtube Music
+    "com.samsung.android.tvplus"
 )
 private val manualGameList = listOf(
     "com.google.stadia",
