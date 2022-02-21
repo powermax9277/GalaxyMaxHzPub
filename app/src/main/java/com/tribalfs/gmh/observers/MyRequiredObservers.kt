@@ -16,6 +16,9 @@ import com.tribalfs.gmh.UtilAccessibilityService
 import com.tribalfs.gmh.UtilAccessibilityService.checkAccessibility
 import com.tribalfs.gmh.helpers.*
 import com.tribalfs.gmh.helpers.CacheSettings.ignoreRrmChange
+import com.tribalfs.gmh.helpers.CacheSettings.isFakeAdaptive
+import com.tribalfs.gmh.helpers.CacheSettings.isOfficialAdaptive
+import com.tribalfs.gmh.helpers.CacheSettings.lrrPref
 import com.tribalfs.gmh.helpers.CacheSettings.turnOff5GOnPsm
 import com.tribalfs.gmh.helpers.DozeUpdater.updateDozValues
 import com.tribalfs.gmh.profiles.ProfilesObj
@@ -196,9 +199,9 @@ internal class MyRequiredObservers(h: Handler?, private val appCtx: Context) : C
             } else  {
                 UtilsPrefsGmhSt.instance(appCtx).gmhPrefForceLowestSoIsOn = false
                 UtilsPrefsGmhSt.instance(appCtx).gmhPrefDisableSyncIsOn = false
-                if (CacheSettings.isFakeAdaptive.get() == true && CacheSettings.isOfficialAdaptive) {
-                    CacheSettings.lrrPref.set(SIXTY_HZ)
-                    UtilsPrefsGmhSt.instance(appCtx).gmhPrefMinHzAdapt = SIXTY_HZ
+                if (isFakeAdaptive.get() == true && isOfficialAdaptive) {
+                    lrrPref.set(UtilsDeviceInfoSt.instance(appCtx).regularMinHz)
+                    UtilsPrefsGmhSt.instance(appCtx).gmhPrefMinHzAdapt = UtilsDeviceInfoSt.instance(appCtx).regularMinHz
                 }
                 UtilsPrefsGmhSt.instance(appCtx).gmhPrefSensorsOff = false
 

@@ -112,8 +112,6 @@ import java.util.*
 import kotlin.collections.HashSet
 import kotlin.coroutines.CoroutineContext
 
-
-
 internal const val GMH_WEB_APP ="https://script.google.com/macros/s/AKfycbzlRKh4-YXyXLufXZfDqAs1xJEJK7BF8zmhEDGDpbP1luu97trI/exec"
 internal const val ACTION_HIDE_MAIN_ACTIVITY = "$APPLICATION_ID.ACTION_HIDE"
 internal const val ACTION_CLOSE_MAIN_ACTIVITY = "$APPLICATION_ID.ACTION_CLOSE"
@@ -240,9 +238,10 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                 //Only max refresh rate changes
                 mUtilsPrefsGmh.gmhPrefMinHzAdapt.let{mnrr ->
                     if (mBinding.sbMinHzAdapt.progress != mnrr) {
-                        if (mnrr <  SIXTY_HZ && isPremium.get() != true){
-                            mBinding.sbMinHzAdapt.progress = SIXTY_HZ
-                            mBinding.minHzAdaptive = SIXTY_HZ
+                        val regMinHz = UtilsDeviceInfoSt.instance(applicationContext).regularMinHz
+                        if (mnrr <  regMinHz && isPremium.get() != true){
+                            mBinding.sbMinHzAdapt.progress = regMinHz
+                            mBinding.minHzAdaptive = regMinHz
                         }else {
                             mBinding.sbMinHzAdapt.progress = mnrr
                             mBinding.minHzAdaptive = mnrr
@@ -1590,7 +1589,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
 
     @SuppressLint("NewApi")
     private fun setupPsmMaxHzSeekBar() {
-        var oldProg = SIXTY_HZ
+        var oldProg = UtilsDeviceInfoSt.instance(applicationContext).regularMinHz
         mBinding.sbPeakHzPsm.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 val newProgress = supportedHzIntAllMod?.closestValue(

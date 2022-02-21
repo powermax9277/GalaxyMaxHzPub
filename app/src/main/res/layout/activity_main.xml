@@ -62,6 +62,7 @@
 
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
+            android:background="?attr/colorPrimary"
             android:layout_height="wrap_content"
             android:animateLayoutChanges="true"
             app:liftOnScroll="true">
@@ -719,7 +720,7 @@
 
                     <Switch
                         android:id="@+id/sw_so_force_lowest_hz"
-                        android:layout_width="290dp"
+                        android:layout_width="@dimen/item_width"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginHorizontal="0dp"
@@ -735,7 +736,7 @@
 
                     <TextView
                         android:id="@+id/tv_so_refresh"
-                        android:layout_width="290dp"
+                        android:layout_width="@dimen/item_width"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="0dp"
@@ -750,7 +751,7 @@
 
                     <Switch
                         android:id="@+id/sw_so_psm"
-                        android:layout_width="290dp"
+                        android:layout_width="@dimen/item_width"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginVertical="8dp"
@@ -796,7 +797,7 @@
 
                     <Switch
                         android:id="@+id/sw_auto_off_sync"
-                        android:layout_width="290dp"
+                        android:layout_width="@dimen/item_width"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="16dp"
@@ -826,7 +827,7 @@
 
                     <Switch
                         android:id="@+id/sw_screen_off_doze"
-                        android:layout_width="290dp"
+                        android:layout_width="@dimen/item_width"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="16dp"
@@ -843,7 +844,7 @@
 
                     <TextView
                         android:id="@+id/screen_off_doze_info"
-                        android:layout_width="290dp"
+                        android:layout_width="@dimen/item_width"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginHorizontal="48dp"
@@ -901,7 +902,7 @@
 
                     <Switch
                         android:id="@+id/sw_auto_sensors_off"
-                        android:layout_width="290dp"
+                        android:layout_width="@dimen/item_width"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="16dp"
@@ -916,7 +917,7 @@
 
                     <TextView
                         android:id="@+id/tv_auto_sensors_off_info"
-                        android:layout_width="290dp"
+                        android:layout_width="@dimen/item_width"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginHorizontal="48dp"

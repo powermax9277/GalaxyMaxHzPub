@@ -87,13 +87,8 @@
     <style name="Theme.App.Starting" parent="Theme.SplashScreen">
         // Set the splash screen background, animated icon, and animation duration.
         <item name="windowSplashScreenBackground">@color/ic_launcher_background</item>
-
-        // Use windowSplashScreenAnimatedIcon to add either a drawable or an
-        // animated drawable. One of these is required.
         <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
-        <item name="windowSplashScreenAnimationDuration">500</item>  # Required for animated icons
-
-        // Set the theme of the Activity that directly follows your splash screen.
+        <item name="windowSplashScreenAnimationDuration">500</item>
         <item name="postSplashScreenTheme">@style/AppTheme</item>  # Required.
     </style>
 
@@ -102,20 +97,4 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-   <!-- <style name="SlidingDialogAnimation">
-        <item name="android:windowEnterAnimation">@android:anim/slide_in_left</item>
-        <item name="android:windowExitAnimation">@android:anim/slide_out_right</item>
-    </style>
-
-    <style name="FadeDialogAnimation">
-        <item name="android:windowEnterAnimation">@anim/dialog_enter</item>
-        <item name="android:windowExitAnimation">@anim/dialog_exit</item>
-    </style>
--->
-
-    <!--   <style name="AppThemeTilePref" parent="Theme.MaterialComponents.DayNight">
-           <item name="android:alertDialogTheme">@style/AlertDialogTheme</item>
-           <item name="android:colorControlActivated">@color/design_default_color_primary</item>
-           <item name="android:itemTextAppearance">@style/myCustomMenuTextAppearance</item>
-       </style>-->
   </resources>

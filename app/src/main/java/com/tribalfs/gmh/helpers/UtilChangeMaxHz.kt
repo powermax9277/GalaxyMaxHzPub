@@ -42,9 +42,7 @@ class UtilChangeMaxHz (private val appCtx: Context) {
 
         if (currentRefreshRateMode.get() == REFRESH_RATE_MODE_STANDARD) {
             if (hasWriteSecureSetPerm) {
-                if (UtilRefreshRateSt.instance(appCtx).getResoHighestHzForAllMode(null)
-                    > SIXTY_HZ
-                ) {
+                if (UtilRefreshRateSt.instance(appCtx).getResoHighestHzForAllMode(null) > SIXTY_HZ) {
                     isModeUpdated = true
                     withContext(Dispatchers.IO) {
                         UtilRefreshRateSt.instance(appCtx).setPrefOrAdaptOrHighRefreshRateMode(null)
@@ -114,10 +112,7 @@ class UtilChangeMaxHz (private val appCtx: Context) {
             }
 
             try {
-                if (UtilRefreshRateSt.instance(appCtx).getThisRrmAndResoHighestHz(null, null)
-                        .toInt()
-                    <= SIXTY_HZ
-                ) {
+                if (UtilRefreshRateSt.instance(appCtx).getThisRrmAndResoHighestHz(null, null).toInt() <= SIXTY_HZ) {
                     return@withContext CHANGE_RES
                 }
             }catch(_: Exception){

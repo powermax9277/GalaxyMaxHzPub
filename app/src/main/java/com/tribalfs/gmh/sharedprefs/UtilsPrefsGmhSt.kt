@@ -9,8 +9,8 @@ import com.tribalfs.gmh.helpers.CacheSettings.highestHzForAllMode
 import com.tribalfs.gmh.helpers.CacheSettings.isOfficialAdaptive
 import com.tribalfs.gmh.helpers.CacheSettings.lowestHzCurMode
 import com.tribalfs.gmh.helpers.REFRESH_RATE_MODE_SEAMLESS
-import com.tribalfs.gmh.helpers.SIXTY_HZ
 import com.tribalfs.gmh.helpers.SingletonMaker
+import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt
 import com.tribalfs.gmh.hertz.HzGravity
 import org.json.JSONObject
 
@@ -267,7 +267,7 @@ internal class UtilsPrefsGmhSt private constructor(val context: Context) {
 
 
     var gmhPrefMinHzAdapt: Int
-        get() { return hzSharedPref.getInt(MIN_HZ_ADAPT, SIXTY_HZ).coerceAtLeast(lowestHzCurMode) }
+        get() { return hzSharedPref.getInt(MIN_HZ_ADAPT, UtilsDeviceInfoSt.instance(context).regularMinHz).coerceAtLeast(lowestHzCurMode) }
         set(hz) {hzSharedPrefEditor.putInt(MIN_HZ_ADAPT, hz).apply()}
 
     var gmhPrefGetAdaptives:  MutableList<String>?
@@ -328,7 +328,7 @@ internal class UtilsPrefsGmhSt private constructor(val context: Context) {
             featuresOn.add("-${context.applicationContext.getString(R.string.prr_psm)}")
         }
         if (currentRefreshRateMode.get() == REFRESH_RATE_MODE_SEAMLESS
-                && (!isOfficialAdaptive  || hzSharedPref.getInt(MIN_HZ_ADAPT, SIXTY_HZ) < SIXTY_HZ)
+                && (!isOfficialAdaptive  || hzSharedPref.getInt(MIN_HZ_ADAPT, UtilsDeviceInfoSt.instance(context).regularMinHz) < UtilsDeviceInfoSt.instance(context).regularMinHz)
         ){
             featuresOn.add("-${context.applicationContext.getString(R.string.adaptive)} mod")
         }

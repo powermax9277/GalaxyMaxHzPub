@@ -9,6 +9,7 @@ import com.tribalfs.gmh.MyApplication.Companion.appScopeIO
 import com.tribalfs.gmh.R
 import com.tribalfs.gmh.UtilAccessibilityService.allowAccessibility
 import com.tribalfs.gmh.dialogs.QSDialogs
+import com.tribalfs.gmh.helpers.*
 import com.tribalfs.gmh.helpers.CacheSettings.currentRefreshRateMode
 import com.tribalfs.gmh.helpers.CacheSettings.hasWriteSecureSetPerm
 import com.tribalfs.gmh.helpers.CacheSettings.isOfficialAdaptive
@@ -17,10 +18,6 @@ import com.tribalfs.gmh.helpers.CacheSettings.isSpayInstalled
 import com.tribalfs.gmh.helpers.CacheSettings.lrrPref
 import com.tribalfs.gmh.helpers.CacheSettings.minHzListForAdp
 import com.tribalfs.gmh.helpers.CacheSettings.prrActive
-import com.tribalfs.gmh.helpers.REFRESH_RATE_MODE_SEAMLESS
-import com.tribalfs.gmh.helpers.SIXTY_HZ
-import com.tribalfs.gmh.helpers.UtilRefreshRateSt
-import com.tribalfs.gmh.helpers.UtilTileIcon
 import com.tribalfs.gmh.sharedprefs.NOT_USING
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt
 import kotlinx.coroutines.CoroutineScope
@@ -96,13 +93,13 @@ class QSTileMinHz : TileService() {
             }
             var nexMinHz = nexMinHzTemp
 
-            if (isOfficialAdaptive && nexMinHz < SIXTY_HZ) {
+            if (isOfficialAdaptive && nexMinHz < UtilsDeviceInfoSt.instance(applicationContext).regularMinHz) {
                 if (isPremium.get() == true) {
                     if (!checkAccessibilityPerm()) {
-                        nexMinHz = SIXTY_HZ
+                        nexMinHz = UtilsDeviceInfoSt.instance(applicationContext).regularMinHz
                     }
                 }else{
-                    nexMinHz = SIXTY_HZ
+                    nexMinHz = UtilsDeviceInfoSt.instance(applicationContext).regularMinHz
                 }
             }
 

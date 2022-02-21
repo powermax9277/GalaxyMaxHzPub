@@ -88,11 +88,11 @@
     <string name="help">Помощь</string>
     <string name="reload_profiles">Обновить профили</string>
     <string name="options">Параметры</string>
-    <string name="data_usage">&lt;u>Использование данных&lt;/u></string>
-    <string name="psm_options">&lt;u>Параметры режима энергосбережения&lt;/u></string>
+    <string name="data_usage"><u>Использование данных</u></string>
+    <string name="psm_options"><u>Параметры режима энергосбережения</u></string>
     <string name="disable_sync_on_so">Отключить автосинхронизацию при выключенном экране</string>
-    <string name="autosync_settings">&lt;u>Настройки автосинхронизации&lt;/u></string>
-    <string name="apps_bat_opt_settings">&lt;u>Настройки оптимизации батареи&lt;/u></string>
+    <string name="autosync_settings"><u>Настройки автосинхронизации</u></string>
+    <string name="apps_bat_opt_settings"><u>Настройки оптимизации батареи</u></string>
     <string name="brightness_threshold">Мин. порог яркости для адаптивного режима</string>
     <string name="sensor_off_info">Датчики устройства автоматически отключаются при выключении экрана до тех пор, пока устройство не будет разблокировано. Это помогает свести к минимуму блокировки пробуждения, вызванные движением, которые разряжают аккумулятор.</string>
     <string name="sensors_off_note">Важное примечание: пока активирована плитка SensorsOff, камера, микрофон и другие датчики устройства недоступны. Затронутые функции, среди прочего, включают разблокировку по лицу, слышимость при (некоторых) голосовых вызовах и определение угла поворота. Используйте это только в том случае, если вы четко понимаете эффект отключения датчиков.\n\nМожет не работать на Android 12 с отключенной блокировкой экрана; в качестве альтернативы выдается разрешение WRITE_SECURE_SETTINGS в предыдущей версии Android.</string>
@@ -106,12 +106,14 @@
     <string name="premium_features">Премиум-функции</string>
     <string name="prevent_high">Не переключаться на высокую частоту</string>
     <plurals name="access_notif">
-        <item quantity="one">Accessibility service is required for the following - turn this off first to disable accessibility: %s</item>
-        <item quantity="few">Accessibility service is required for the following - turn these off first to disable accessibility: %s</item>
-        <item quantity="many">Accessibility service is required for the following - turn these off first to disable accessibility: %s</item>
-        <item quantity="other">Accessibility service is required for the following - turn these off first to disable accessibility: %s</item>
+        <item quantity="one">Служба специальных возможностей требуется для следующего: сначала отключите ее, чтобы отключить специальные возможности: %s</item>
+        <item quantity="few">Служба специальных возможностей требуется для следующих действий: сначала отключите их, чтобы отключить специальные возможности: %s</item>
+        <item quantity="many">Служба специальных возможностей требуется для следующих действий: сначала отключите их, чтобы отключить специальные возможности: %s</item>
+        <item quantity="other">Служба специальных возможностей требуется для следующих действий: сначала отключите их, чтобы отключить специальные возможности: %s</item>
     </plurals>
     <string name="acces_req">Включение службы спец. возможностей</string>
+    <string name="is_prem_ft">%s — это премиум-функция</string>
+    <string name="using_spay">SPay вылетает</string>
     <string name="no_access_notif">Отключение службы специальных возможностей приведет к непредвиденному поведению следующих включенных функций: %s</string>
 
 </resources>

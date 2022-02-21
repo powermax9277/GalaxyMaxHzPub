@@ -7,7 +7,7 @@ apply plugin: 'kotlin-kapt'
 android {
     signingConfigs {
         release {
-            storeFile file('./tribalfs.jks')
+            storeFile file('../tribalfs.jks')
             keyAlias 'tribalfs'
             keyPassword 'Ge0ltp1986'
             storePassword 'Ge0ltp1986'
@@ -21,8 +21,8 @@ android {
         minSdkVersion 22
         //noinspection ExpiredTargetSdkVersion
         targetSdkVersion 22
-        versionCode 127
-        versionName "7.14.30"
+        versionCode 129
+        versionName "7.14.32"
         setProperty("archivesBaseName", "galaxy_max_hz_v${versionName}")
     }
 

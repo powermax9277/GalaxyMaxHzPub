@@ -343,8 +343,7 @@ class DynamicInputRunner : TaskerPluginRunnerActionNoOutputOrInput() {
                             CoroutineScope(Dispatchers.IO).launch {
                                 val minHz = (info.value as String).toInt()
                                 if (minHzListForAdp?.indexOf(minHz) != -1){
-
-                                    if (isOfficialAdaptive && minHz < SIXTY_HZ) {
+                                    if (isOfficialAdaptive && minHz < UtilsDeviceInfoSt.instance(context).regularMinHz) {
                                         if (gmhAccessInstance == null/*!isAccessibilityEnabled(appCtx, GalaxyMaxHzAccess::class.java)*/) {
                                             return@launch
                                         }

@@ -109,9 +109,9 @@ class UtilRefreshRateSt private constructor (val appCtx: Context) {
         synchronized(mLock) {
             supportedHzIntAllMod = getSupportedHzIntAllModUpd()
             highestHzForAllMode =
-                supportedHzIntAllMod?.maxOrNull() ?: SIXTY_HZ//?:getHighestHzForAllModeUpd().toInt()
+                supportedHzIntAllMod?.maxOrNull() ?: UtilsDeviceInfoSt.instance(appCtx).regularMinHz
             lowestHzForAllMode =
-                supportedHzIntAllMod?.minOrNull() ?: SIXTY_HZ//?:getLowestHzForAllModeUpd().toInt()
+                supportedHzIntAllMod?.minOrNull() ?:UtilsDeviceInfoSt.instance(appCtx).regularMinHz
             modesWithLowestHz = getModesWithHz(lowestHzForAllMode)
             isOfficialAdaptive = isAdaptiveSupportedUpd()
             isMultiResolution = isMultiResolutionUpd()
@@ -923,10 +923,11 @@ class UtilRefreshRateSt private constructor (val appCtx: Context) {
 
     @ExperimentalCoroutinesApi
     internal fun applyMinHz(){
-        if (UtilsPrefsGmhSt.instance(appCtx).gmhPrefMinHzAdapt > SIXTY_HZ) {
+        val regMinHz = UtilsDeviceInfoSt.instance(appCtx).regularMinHz
+        if (UtilsPrefsGmhSt.instance(appCtx).gmhPrefMinHzAdapt > regMinHz) {
             setMinRefreshRate(UtilsPrefsGmhSt.instance(appCtx).gmhPrefMinHzAdapt)
         }else{
-            setMinRefreshRate(lowestHzForAllMode)
+            setMinRefreshRate(0)
         }
         lrrPref.set(UtilsPrefsGmhSt.instance(appCtx).gmhPrefMinHzAdapt)
         isFakeAdaptive.set(isFakeAdaptive())//don't interchange
