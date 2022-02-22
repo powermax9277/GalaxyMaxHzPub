@@ -27,6 +27,7 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.os.PowerManager.ACTION_POWER_SAVE_MODE_CHANGED
+import android.util.Log
 import android.view.*
 import android.view.WindowManager.LayoutParams.WRAP_CONTENT
 import android.view.accessibility.AccessibilityEvent
@@ -704,6 +705,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         )*/
         if (!isScreenOn.get() || !applyAdaptiveMod.get()!!) return
 
+
         when (event?.eventType) {
 
             TYPE_WINDOW_STATE_CHANGED -> {//32
@@ -715,19 +717,20 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                         event.className.toString()
                     )
                     val activityInfo = tryGetActivity(componentName)
-               /*     //TODO:
-                    Log.d("TESTEST", "activityInfo is null:${activityInfo == null}")*/
                     if (activityInfo != null){
-                        //Log.i("CurrentActivity", componentName.flattenToShortString())
                         val ai = packageManager.getApplicationInfo(componentName.packageName, 0)
                         isGameOpen = false
                         useMin60 = false
                         isVideoApp = false
                         when {
-                            (ai.category == ApplicationInfo.CATEGORY_GAME || isPartOf(manualGameList, componentName)) -> {
+
+                            (ai.category == ApplicationInfo.CATEGORY_GAME ||
+                                    isPartOf(manualGameList, componentName)
+                                    /*||((ai.flags and ApplicationInfo.FLAG_IS_GAME) == ApplicationInfo.FLAG_IS_GAME)*/) -> {
                                 isGameOpen = true
                                 setTempIgnoreTwsc()
                             }
+
 
                             (ai.category == CATEGORY_VIDEO || isPartOf(manualVideoAppList, componentName)) ->{
                                 useMin60 = true
@@ -782,7 +785,15 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                         }
                     }
 
-                    else -> { }
+                    else -> {
+                        for (window in windows) {
+                            if (window.isInPictureInPictureMode){
+                                useMin60 = true
+                                makeAdaptive()
+                                return
+                            }
+                        }
+                    }
                 }
             }
         }
