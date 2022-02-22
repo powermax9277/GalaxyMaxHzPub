@@ -34,7 +34,7 @@ internal class PsmChangeHandler private constructor(val appCtx: Context) {
                 prrActive.set( UtilsPrefsGmhSt.instance(appCtx).hzPrefMaxRefreshRatePsm)
                 UtilRefreshRateSt.instance(appCtx).setPrefOrAdaptOrHighRefreshRateMode(null)
 
-                startPipActivity()
+                startPipActivityIfS()
 
             } else {
                 UtilRefreshRateSt.instance(appCtx).setRefreshRateMode(REFRESH_RATE_MODE_STANDARD)
@@ -54,7 +54,7 @@ internal class PsmChangeHandler private constructor(val appCtx: Context) {
         }
     }
 
-    fun startPipActivity(){
+    fun startPipActivityIfS(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && isPowerSaveMode.get() == true) {
             val pipIntent = Intent(appCtx, PipActivity::class.java)
             pipIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

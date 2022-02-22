@@ -17,10 +17,9 @@ object UtilAccessibilityService {
     @ExperimentalCoroutinesApi
     private val serviceName = GalaxyMaxHzAccess::class.java.name
 
-    internal fun isAccessibilityEnabled(
-        appCtx: Context
-    ): Boolean {
-        synchronized(this) {
+    private val mLock = Any()
+    internal fun isAccessibilityEnabled(appCtx: Context): Boolean {
+        synchronized(mLock) {
             val mContentResolver = appCtx.contentResolver
             val gmhAccessibilityStr = "${appCtx.packageName}/$serviceName"
             return (Settings.Secure.getString(mContentResolver, ENABLED_ACCESSIBILITY_SERVICES)
@@ -29,7 +28,7 @@ object UtilAccessibilityService {
     }
 
     internal fun allowAccessibility(appCtx: Context, add: Boolean) {
-        synchronized(this) {
+        synchronized(mLock) {
             CoroutineScope(Dispatchers.IO).launch {
                 val mContentResolver = appCtx.contentResolver
                 val gmhAccessibilityStr =
@@ -68,76 +67,24 @@ object UtilAccessibilityService {
     }
 
     internal fun checkAccessibility(required:Boolean?, appCtx: Context): Boolean{
-
-        val accesRequired = required ?: UtilsPrefsGmhSt.instance(appCtx).getEnabledAccessibilityFeatures().isNotEmpty()
-
-        if (accesRequired) {
-            return if (
-                (CacheSettings.isSpayInstalled == false || UtilsPrefsGmhSt.instance(appCtx).hzPrefSPayUsage == NOT_USING)
-                && hasWriteSecureSetPerm
-            ) {
-                allowAccessibility(
-                    appCtx,
+        synchronized(mLock) {
+            val accesRequired =
+                required ?: UtilsPrefsGmhSt.instance(appCtx).getEnabledAccessibilityFeatures()
+                    .isNotEmpty()
+            return if (accesRequired) {
+                if (
+                    (CacheSettings.isSpayInstalled == false || UtilsPrefsGmhSt.instance(appCtx).hzPrefSPayUsage == NOT_USING)
+                    && hasWriteSecureSetPerm
+                ) {
+                    allowAccessibility(appCtx, true)
                     true
-                )
-                true
-            } else {
-                false
-            }
-        }else{
-            return gmhAccessInstance != null
-        }
-    }
-
-    /*internal fun isAccessibilityEnabled(
-        context: Context,
-        service: Class<out AccessibilityService?>
-    ): Boolean {
-        synchronized(this) {
-            val mContentResolver = appCtx.contentResolver
-            val gmhAccessibilityStr = "${appCtx.packageName}/${service.name}"
-            return (Settings.Secure.getString(mContentResolver, ENABLED_ACCESSIBILITY_SERVICES)
-                ?: "").contains(gmhAccessibilityStr)
-        }
-    }
-
-    internal fun allowAccessibility(context: Context, service: Class<out AccessibilityService?>, add: Boolean) {
-        synchronized(this) {
-            CoroutineScope(Dispatchers.IO).launch {
-                val mContentResolver = appCtx.contentResolver
-                val gmhAccessibilityStr =
-                    "${appCtx.packageName}/${service.name}"
-                (Settings.Secure.getString(mContentResolver, ENABLED_ACCESSIBILITY_SERVICES)
-                    ?: "").let {
-                    if (hasWriteSecureSetPerm) {
-                        var str = it
-                        while (str.contains(":$gmhAccessibilityStr")) {
-                            str = str.replace(":$gmhAccessibilityStr", "")
-                        }
-                        while (str.contains(gmhAccessibilityStr)) {
-                            str = str.replace(gmhAccessibilityStr, "")
-                        }
-                        ignoreAccessibilityChange = true
-                        Settings.Secure.putString(
-                            mContentResolver,
-                            ENABLED_ACCESSIBILITY_SERVICES,
-                            str
-                        )
-
-                        if (add) {
-                            delay(1000)
-                            //needed as first call above will set this to false
-                            ignoreAccessibilityChange = true
-                            Settings.Secure.putString(
-                                mContentResolver,
-                                ENABLED_ACCESSIBILITY_SERVICES,
-                                if (str.isNotEmpty()) "$str:$gmhAccessibilityStr" else gmhAccessibilityStr
-                            )
-                        }
-                    }
+                } else {
+                    false
                 }
+            } else {
+                gmhAccessInstance != null
             }
         }
     }
-*/
+
 }

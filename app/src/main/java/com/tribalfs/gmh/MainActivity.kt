@@ -630,7 +630,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                     return
                 }
 
-                PsmChangeHandler.instance(applicationContext).startPipActivity()
+                PsmChangeHandler.instance(applicationContext).startPipActivityIfS()
 
                 return
             }
@@ -667,7 +667,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                     }
                     return
                 }
-                PsmChangeHandler.instance(applicationContext).startPipActivity()
+                PsmChangeHandler.instance(applicationContext).startPipActivityIfS()
                 return
             }
 

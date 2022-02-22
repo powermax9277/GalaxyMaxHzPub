@@ -676,7 +676,13 @@ class UtilRefreshRateSt private constructor (val appCtx: Context) {
                 )
             }
         }catch(_:Exception){
-            Toast.makeText(appCtx, "Error! ${appCtx.getString(R.string.enable_write_settings)}", Toast.LENGTH_SHORT).show()
+           CoroutineScope(Dispatchers.Main).launch {
+                Toast.makeText(
+                    appCtx,
+                    "Error! ${appCtx.getString(R.string.enable_write_settings)}",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
     }
 
@@ -684,7 +690,13 @@ class UtilRefreshRateSt private constructor (val appCtx: Context) {
         try {
             Settings.System.putString(appCtx.contentResolver, MIN_REFRESH_RATE, refreshRate.toString())
         }catch(_:Exception){
-            Toast.makeText(appCtx, "Error! ${appCtx.getString(R.string.enable_write_settings)}", Toast.LENGTH_SHORT).show()
+            CoroutineScope(Dispatchers.Main).launch {
+                Toast.makeText(
+                    appCtx,
+                    "Error! ${appCtx.getString(R.string.enable_write_settings)}",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
     }
 
@@ -855,7 +867,7 @@ class UtilRefreshRateSt private constructor (val appCtx: Context) {
     }
 
 
-    private fun getPeakRefreshRateFromSettings(): Int? {
+    internal fun getPeakRefreshRateFromSettings(): Int? {
         return try {
             val prr =  Settings.System.getString(appCtx.contentResolver, PEAK_REFRESH_RATE)
             prr.toInt()

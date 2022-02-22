@@ -27,6 +27,7 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.os.PowerManager.ACTION_POWER_SAVE_MODE_CHANGED
+import android.util.Log
 import android.view.*
 import android.view.WindowManager.LayoutParams.WRAP_CONTENT
 import android.view.accessibility.AccessibilityEvent
@@ -91,6 +92,7 @@ private val manualVideoAppList = listOf(
     "com.google.android.apps.youtube",//Youtube Music
     "com.samsung.android.tvplus"
 )
+
 private val manualGameList = listOf(
     "com.google.stadia",
     "com.valvesoftware.steamlink",
@@ -695,11 +697,11 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     @SuppressLint("SwitchIntDef")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
-        //TODO (check scrolling toolbar not detected)
-       /* Log.d(
+        //TODO
+        Log.d(
             "TESTEST",
             "EVENT_TYPE ${event?.eventType} CHANGE_TYPE ${event?.contentChangeTypes} $ ${event?.packageName} Classname: ${event?.className}"
-        )*/
+        )
         if (!isScreenOn.get() || !applyAdaptiveMod.get()!!) return
 
         when (event?.eventType) {
@@ -713,6 +715,8 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                         event.className.toString()
                     )
                     val activityInfo = tryGetActivity(componentName)
+               /*     //TODO:
+                    Log.d("TESTEST", "activityInfo is null:${activityInfo == null}")*/
                     if (activityInfo != null){
                         //Log.i("CurrentActivity", componentName.flattenToShortString())
                         val ai = packageManager.getApplicationInfo(componentName.packageName, 0)
@@ -771,8 +775,8 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                             }
 
                             else -> {
-                                if (isOfficialAdaptive) {
-                                    if (useMin60) makeAdaptive()
+                                if (event.className == "android.view.ViewGroup" || (isOfficialAdaptive && useMin60)) {
+                                        makeAdaptive()
                                 }
                             }
                         }
@@ -791,7 +795,9 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     @RequiresApi(Build.VERSION_CODES.M)
     private fun makeAdaptive() {
 
-        mUtilsRefreshRate.setPeakRefreshRate(prrActive.get()!!)
+        if (mUtilsRefreshRate.getPeakRefreshRateFromSettings() != prrActive.get()!!) {
+            mUtilsRefreshRate.setPeakRefreshRate(prrActive.get()!!)
+        }
 
         if (makeAdaptiveJob != null){
             makeAdaptiveJob!!.cancel()
