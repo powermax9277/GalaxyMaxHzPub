@@ -27,7 +27,6 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.os.PowerManager.ACTION_POWER_SAVE_MODE_CHANGED
-import android.util.Log
 import android.view.*
 import android.view.WindowManager.LayoutParams.WRAP_CONTENT
 import android.view.accessibility.AccessibilityEvent
@@ -100,7 +99,8 @@ private val manualGameList = listOf(
     "com.microsoft.xboxone",
     "com.gameloft.android",
     "com.sec.android.app.samsungapps:com.sec.android.app.samsungapps.instantplays.InstantPlaysGameActivity",
-    "com.distractionware.superhexagon"
+    "com.distractionware.superhexagon",
+    "com.supercell"
 )
 
 
@@ -698,10 +698,10 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
         //TODO
-        Log.d(
+       /* Log.d(
             "TESTEST",
             "EVENT_TYPE ${event?.eventType} CHANGE_TYPE ${event?.contentChangeTypes} $ ${event?.packageName} Classname: ${event?.className}"
-        )
+        )*/
         if (!isScreenOn.get() || !applyAdaptiveMod.get()!!) return
 
         when (event?.eventType) {
