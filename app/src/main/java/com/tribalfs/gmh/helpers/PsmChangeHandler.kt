@@ -62,26 +62,4 @@ internal class PsmChangeHandler private constructor(val appCtx: Context) {
         }
     }
 
-    /* fun checkSemPowerModeRefreshRate(){
-          try {
-             Settings.Global.putString(mContentResolver, SEM_POWER_MODE_REFRESH_RATE, mode)
-                     && (
-                     if (ModelNumbers.fordableWithHrrExternal.indexOf(mUtilsDeviceInfo.deviceModel) != -1) {
-                         Settings.Secure.putString(mContentResolver,
-                             UtilsDeviceInfo.REFRESH_RATE_MODE_COVER, mode)
-                     } else {
-                         true
-                     })
-                     && (
-                     if (CacheSettings.isOnePlus) {
-                         val onePlusModeEq = if (mode == UtilsDeviceInfo.REFRESH_RATE_MODE_ALWAYS) UtilsDeviceInfo.ONEPLUS_RATE_MODE_ALWAYS else UtilsDeviceInfo.ONEPLUS_RATE_MODE_SEAMLESS
-                         Settings.Global.putString(mContentResolver,
-                             UtilsDeviceInfo.ONEPLUS_SCREEN_REFRESH_RATE, onePlusModeEq)
-                     } else {
-                         true
-                     }
-                     )
-         }catch(_:java.lang.Exception){false}
-         MainActivity.SEM_POWER_MODE_REFRESH_RATE
-     }*/
 }

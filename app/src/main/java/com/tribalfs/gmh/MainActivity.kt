@@ -76,7 +76,6 @@ import com.tribalfs.gmh.helpers.CacheSettings.isOfficialAdaptive
 import com.tribalfs.gmh.helpers.CacheSettings.isOnePlus
 import com.tribalfs.gmh.helpers.CacheSettings.isPowerSaveMode
 import com.tribalfs.gmh.helpers.CacheSettings.isPremium
-import com.tribalfs.gmh.helpers.CacheSettings.isSpayInstalled
 import com.tribalfs.gmh.helpers.CacheSettings.keepModeOnPowerSaving
 import com.tribalfs.gmh.helpers.CacheSettings.lowestHzCurMode
 import com.tribalfs.gmh.helpers.CacheSettings.lowestHzForAllMode
@@ -1121,13 +1120,13 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                 }
                 true
             }
-            R.id.menuUsingSpay ->{
+           /* R.id.menuUsingSpay ->{
                 item.isChecked.let { checked ->
                     item.isChecked = !checked
                     UtilsPrefsGmhSt.instance(applicationContext).hzPrefSPayUsage = if (!checked) USING else NOT_USING
                 }
                 true
-            }
+            }*/
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -1333,7 +1332,8 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
     @Synchronized
     private fun checkAccessibilityPerm(showRequest: Boolean): Boolean{
         return if (gmhAccessInstance == null){
-            if (hasWriteSecureSetPerm && (isSpayInstalled == false ||  UtilsPrefsGmhSt.instance(applicationContext).hzPrefSPayUsage == NOT_USING)) {
+            if (hasWriteSecureSetPerm) {
+            //if (hasWriteSecureSetPerm && (isSpayInstalled == false ||  UtilsPrefsGmhSt.instance(applicationContext).hzPrefSPayUsage == NOT_USING)) {
                 allowAccessibility(applicationContext, true)
                 true
             }else{

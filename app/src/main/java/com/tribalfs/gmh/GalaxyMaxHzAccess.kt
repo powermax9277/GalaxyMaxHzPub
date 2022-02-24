@@ -20,6 +20,7 @@ import android.content.pm.PackageManager
 import android.graphics.*
 import android.hardware.camera2.CameraManager
 import android.hardware.display.DisplayManager
+import android.media.session.MediaSessionManager
 import android.net.ConnectivityManager
 import android.net.Network
 import android.os.BatteryManager
@@ -54,6 +55,7 @@ import com.tribalfs.gmh.helpers.CacheSettings.hzStatus
 import com.tribalfs.gmh.helpers.CacheSettings.ignoreRrmChange
 import com.tribalfs.gmh.helpers.CacheSettings.isFakeAdaptiveValid
 import com.tribalfs.gmh.helpers.CacheSettings.isOfficialAdaptive
+import com.tribalfs.gmh.helpers.CacheSettings.isSamsung
 import com.tribalfs.gmh.helpers.CacheSettings.isScreenOn
 import com.tribalfs.gmh.helpers.CacheSettings.lowestHzCurMode
 import com.tribalfs.gmh.helpers.CacheSettings.lowestHzForAllMode
@@ -77,19 +79,29 @@ import java.lang.Integer.max
 import java.lang.Runnable
 import java.util.*
 import kotlin.coroutines.CoroutineContext
-
-
 internal const val PLAYING = 1
 internal const val STOPPED = -1
 internal const val PAUSE = 0
 private const val MAX_TRY = 8
+
+//TODO (explore mediasession)
 private val manualVideoAppList = listOf(
-    "com.amazon.avod.thirdpartyclient",
+    "com.amazon.avod",
     "com.vanced.android.youtube",
     "com.cisco.webex.meetings",
     "com.sec.android.gallery3d",
     "com.google.android.apps.youtube",//Youtube Music
-    "com.samsung.android.tvplus"
+    "com.samsung.android.tvplus",
+    "com.netflix.mediaclient",
+    "com.disney.disneyplus",
+    "com.samsung.android.video",
+    "com.plexapp.android"
+)
+
+private val browserList = listOf(
+    "com.android.chrome",
+    "com.microsoft.emmx",
+    "com.sec.android.app.sbrowser"
 )
 
 private val manualGameList = listOf(
@@ -99,7 +111,7 @@ private val manualGameList = listOf(
     "com.microsoft.xboxone",
     "com.gameloft.android",
     "com.sec.android.app.samsungapps:com.sec.android.app.samsungapps.instantplays.InstantPlaysGameActivity",
-    "com.distractionware.superhexagon",
+    "com.distractionware",
     "com.supercell"
 )
 
@@ -213,7 +225,17 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                     mHandler.removeCallbacksAndMessages(null)
 
                     launch {
-                        mUtilsRefreshRate.setRefreshRate(prrActive.get()!!, UtilsPrefsGmhSt.instance(applicationContext).gmhPrefMinHzAdapt)
+                        val mHz = if (isSamsung){
+                            if (UtilsDeviceInfoSt.instance(applicationContext).regularMinHz < UtilsPrefsGmhSt.instance(applicationContext).gmhPrefMinHzAdapt){
+                                UtilsPrefsGmhSt.instance(applicationContext).gmhPrefMinHzAdapt
+                            }else{
+                                0
+                            }
+                        }else{
+                            UtilsPrefsGmhSt.instance(applicationContext).gmhPrefMinHzAdapt
+                        }
+
+                        mUtilsRefreshRate.setRefreshRate(prrActive.get()!!, mHz)
                         currentRefreshRateMode.get()?.let {
                             if (screenOffRefreshRateMode != it) {
                                 mUtilsRefreshRate.setRefreshRateMode(it)
@@ -590,7 +612,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         hzStatus.set(PAUSE)
     }
 
-        internal fun stopHz() {
+    internal fun stopHz() {
         hzStatus.set(STOPPED)
         hznotificationBuilder!!.setVisibility(Notification.VISIBILITY_SECRET)
         notificationManagerCompat.notify(
@@ -694,14 +716,17 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         mHandler.postDelayed(ignoreRunnable, 2000L)
     }
 
+    private val mediaSessionManager by lazy {(getSystemService(MEDIA_SESSION_SERVICE) as MediaSessionManager)}
+
     @SuppressLint("SwitchIntDef")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
-        //TODO
-       /* Log.d(
+
+        /*Log.d(
             "TESTEST",
-            "EVENT_TYPE ${event?.eventType} CHANGE_TYPE ${event?.contentChangeTypes} $ ${event?.packageName} Classname: ${event?.className}"
+            "EVENT_TYPE ${event?.eventType} CHANGE_TYPE ${event?.contentChangeTypes} ${event?.packageName} Classname: ${event?.className}"
         )*/
+
         if (!isScreenOn.get() || !applyAdaptiveMod.get()!!) return
 
 
@@ -716,34 +741,63 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                         event.className.toString()
                     )
                     val activityInfo = tryGetActivity(componentName)
+                    val ai = packageManager.getApplicationInfo(componentName.packageName, 0)
                     if (activityInfo != null){
-                        val ai = packageManager.getApplicationInfo(componentName.packageName, 0)
                         isGameOpen = false
                         useMin60 = false
                         isVideoApp = false
                         when {
-
-                            (ai.category == ApplicationInfo.CATEGORY_GAME ||
-                                    isPartOf(manualGameList, componentName)
-                                    /*||((ai.flags and ApplicationInfo.FLAG_IS_GAME) == ApplicationInfo.FLAG_IS_GAME)*/) -> {
+                            (ai.category == ApplicationInfo.CATEGORY_GAME || isPartOf(manualGameList, componentName)) -> {
                                 isGameOpen = true
                                 setTempIgnoreTwsc()
+                                makeAdaptive()
+                                return
                             }
-
 
                             (ai.category == CATEGORY_VIDEO || isPartOf(manualVideoAppList, componentName)) ->{
                                 useMin60 = true
                                 isVideoApp = true
                                 setTempIgnoreTwsc()
+                                makeAdaptive()
+                                return
                             }
 
-                            (ai.category == CATEGORY_SOCIAL && !isOfficialAdaptive) ->{
-                                useMin60 = true
-                                setTempIgnoreTwsc()
+                            (ai.category == CATEGORY_SOCIAL) ->{
+                                if (!isOfficialAdaptive) {
+                                    useMin60 = true
+                                    setTempIgnoreTwsc()
+                                    makeAdaptive()
+                                    return
+                                }else{
+                                    if (UtilsDeviceInfoSt.instance(applicationContext).regularMinHz < SIXTY_HZ){
+                                        isGameOpen = true
+                                        setTempIgnoreTwsc()
+                                        makeAdaptive()
+                                        return
+                                    }
+                                }
                             }
 
+                            isPartOf(browserList, componentName) -> {
+                                if (UtilsDeviceInfoSt.instance(applicationContext).regularMinHz < SIXTY_HZ){
+                                    isGameOpen = true
+                                    setTempIgnoreTwsc()
+                                    makeAdaptive()
+                                    return
+                                }
+                            }
                         }
-                        makeAdaptive()
+                    }else{
+                        if (ai.category == CATEGORY_VIDEO || isPartOf(manualVideoAppList, componentName)){
+                            /* if (isPartOf(manualVideoAppList, componentName)){*/
+                            if (!isOfficialAdaptive) {
+                                useMin60 = true
+                                isVideoApp = true
+                                isGameOpen = false
+                                makeAdaptive()
+                                return
+                            }
+                        }
                     }
                 }
             }
@@ -769,29 +823,68 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                                     if (isGameOpen) {
                                         isGameOpen = false
                                     }
+                                    return
                                 }
                             }
 
                             "com.samsung.android.app.notes" -> {
                                 makeAdaptive()
+                                return
                             }
 
                             else -> {
                                 if (event.className == "android.view.ViewGroup" || (isOfficialAdaptive && useMin60)) {
-                                        makeAdaptive()
+                                    makeAdaptive()
+                                    return
                                 }
                             }
+                        }
+                    }
+
+                    CONTENT_CHANGE_TYPE_SUBTREE + CONTENT_CHANGE_TYPE_TEXT -> {
+                        if (event.packageName?.toString() != "com.android.systemui" && isOfficialAdaptive) {
+                            makeAdaptive()
+                            return
                         }
                     }
 
                     else -> {
                         for (window in windows) {
                             if (window.isInPictureInPictureMode){
-                                useMin60 = true
-                                makeAdaptive()
-                                return
+                                if (!isOfficialAdaptive) {
+                                    isVideoApp = false
+                                    isGameOpen = false
+                                    useMin60 = true
+                                    makeAdaptive()
+                                    return
+                                }else{
+                                    isGameOpen = true
+                                    isVideoApp = false
+                                    useMin60 = false
+                                    makeAdaptive()
+                                    return
+                                }
                             }
                         }
+
+                        /* val sessions = mediaSessionManager.getActiveSessions(
+                             ComponentName(
+                                 this,
+                                 NotificationListener::class.java
+                             )
+                         )
+
+                         for (controller in sessions) {
+                             var isVideoPlaying = false
+                             try {
+                                 isVideoPlaying = controller.playbackInfo?.playbackType == MediaController.PlaybackInfo.PLAYBACK_TYPE_LOCAL
+                             } catch (_: java.lang.Exception) { }
+                             if (isVideoPlaying) {
+                                 useMin60 = true
+                                 makeAdaptive()
+                                 break
+                             }
+                         }*/
                     }
                 }
             }
@@ -805,9 +898,9 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     @RequiresApi(Build.VERSION_CODES.M)
     private fun makeAdaptive() {
 
-        if (mUtilsRefreshRate.getPeakRefreshRateFromSettings() != prrActive.get()!!) {
-            mUtilsRefreshRate.setPeakRefreshRate(prrActive.get()!!)
-        }
+        // if (mUtilsRefreshRate.getPeakRefreshRateFromSettings() != prrActive.get()!!) {
+        mUtilsRefreshRate.setPeakRefreshRate(prrActive.get()!!)
+        // }
 
         if (makeAdaptiveJob != null){
             makeAdaptiveJob!!.cancel()

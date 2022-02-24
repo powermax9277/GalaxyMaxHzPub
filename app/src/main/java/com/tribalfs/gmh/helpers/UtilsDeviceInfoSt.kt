@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Context.DISPLAY_SERVICE
 import android.content.res.Configuration
 import android.hardware.display.DisplayManager
-import android.net.Uri
 import android.os.Build
 import android.os.PowerManager
 import android.provider.Settings
@@ -14,7 +13,6 @@ import android.util.DisplayMetrics
 import android.util.Size
 import android.view.Display
 import androidx.annotation.RequiresApi
-import com.tribalfs.gmh.BuildConfig
 import com.tribalfs.gmh.helpers.CacheSettings.displayId
 import com.tribalfs.gmh.profiles.ModelNumbers.S22
 import com.tribalfs.gmh.profiles.ModelNumbers.S22P
@@ -61,7 +59,7 @@ class UtilsDeviceInfoSt private constructor(val appCtx: Context) {
     companion object : SingletonMaker<UtilsDeviceInfoSt, Context>(::UtilsDeviceInfoSt)
 
     private val mLock = Object()
-    internal val deviceModelVariant: String = if (BuildConfig.DEBUG) "SM-TEST" else Build.MODEL
+    internal val deviceModelVariant: String = /*if (BuildConfig.DEBUG) "SM-TEST" else */Build.MODEL
     internal val androidVersion: String = Build.VERSION.RELEASE
     internal val manufacturer: String = Build.MANUFACTURER.uppercase(Locale.ROOT)
     internal val deviceModel: String = if (manufacturer == "SAMSUNG") {
@@ -241,7 +239,7 @@ class UtilsDeviceInfoSt private constructor(val appCtx: Context) {
         }
 
 
-    fun getSettingsList(settings: String):List<String>{
+   /* fun getSettingsList(settings: String):List<String>{
         val list = mutableListOf<String>()
         val columns = arrayOf("_id", "name", "value")
         val cursor = appCtx.contentResolver.query(Uri.parse("content://settings/$settings"), columns, null, null, null)
@@ -253,6 +251,6 @@ class UtilsDeviceInfoSt private constructor(val appCtx: Context) {
         }
 
         return list
-    }
+    }*/
 
 }

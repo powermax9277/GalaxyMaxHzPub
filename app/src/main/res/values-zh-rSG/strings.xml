@@ -120,9 +120,11 @@
     <string name="acces_req">启用无障碍服务</string>
     <string name="max_hz_for_psm">省电模式的最大赫兹</string>
     <string name="is_prem_ft">%s 是付费功能</string>
-    <string name="using_spay">SPay 失败</string>
+<!--    <string name="using_spay">SPay 失败</string>-->
     <string name="aot_perm_inf">此应用程序需要权限才能显示在顶部才能正常工作。您可以通过长按通知并关闭将出现的切换来禁用通知。</string>
     <string name="so_location_info">确保将 SENSOR Off 磁贴放置在前四个快速设置插槽中。</string>
     <string name="no_access_notif">禁用无障碍服务将导致以下启用的功能出现意外行为: %s</string>
-
+    <plurals name="access_notif">
+        <item quantity="other">以下情況需要輔助功能服務 - 首先關閉這些功能以禁用輔助功能：%s</item>
+    </plurals>
 </resources>

@@ -34,6 +34,9 @@ import com.tribalfs.gmh.profiles.ModelNumbers.TS7PL
 import com.tribalfs.gmh.profiles.ModelNumbers.TS7PL_TM
 import com.tribalfs.gmh.profiles.ModelNumbers.TS7PW
 import com.tribalfs.gmh.profiles.ModelNumbers.TS7W
+import com.tribalfs.gmh.profiles.ModelNumbers.TS8
+import com.tribalfs.gmh.profiles.ModelNumbers.TS8P
+import com.tribalfs.gmh.profiles.ModelNumbers.TS8U
 import com.tribalfs.gmh.profiles.ModelNumbers.ZF2
 import com.tribalfs.gmh.profiles.ModelNumbers.ZF2_JP
 import com.tribalfs.gmh.profiles.ModelNumbers.ZF2_TW
@@ -55,14 +58,6 @@ internal object PredefinedProfiles {
 
             S22U  -> {
                 raw = context.resources.openRawResource(R.raw.x3088_1440_10_24_30_48_60_96_120)
-            }
-
-            TS7PW, TS7PL, TS7P,TS7PL_TM -> {
-                raw = context.resources.openRawResource(R.raw.x2800_1752_60_120)
-            }
-
-            TS7W, TS7L, TS7LW -> {
-                raw = context.resources.openRawResource(R.raw.x2560_1600_48_60_96_120)
             }
 
             S20FE5G, S20FE, A725G, A525G, A52S5G, M25G -> {
@@ -97,6 +92,18 @@ internal object PredefinedProfiles {
                 raw = context.resources.openRawResource(R.raw.x2208_1768_48_60_96_120)
             }
 
+            TS7PW, TS7PL, TS7P,TS7PL_TM, TS8P -> {
+                raw = context.resources.openRawResource(R.raw.x2800_1752_60_120)
+            }
+
+            TS7W, TS7L, TS7LW, TS8 -> {
+                raw = context.resources.openRawResource(R.raw.x2560_1600_48_60_96_120)
+            }
+
+            TS8U ->{
+                raw = context.resources.openRawResource(R.raw.x2960_1848_60_120)
+            }
+            
             else -> return null
         }
 

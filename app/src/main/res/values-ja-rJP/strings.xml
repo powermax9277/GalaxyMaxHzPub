@@ -136,9 +136,11 @@
     <string name="acces_req">アクセシビリティサービスを有効にする</string>
     <string name="max_hz_for_psm">省電力モードの最大Hz</string>
     <string name="is_prem_ft">%sはプレミアム機能です</string>
-    <string name="using_spay">SPayがクラッシュしています</string>
+<!--    <string name="using_spay">SPayがクラッシュしています</string>-->
     <string name="aot_perm_inf">このアプリを正しく動作させるには、上部に表示するための権限が必要です。通知を長押しして表示されるトグルをオフにすることで、通知を無効にできます。</string>
     <string name="so_location_info">SENSOROffタイルを最初の4つのクイック設定スロット内に配置してください。</string>
     <string name="no_access_notif">ユーザー補助サービスを無効にすると、次の有効な機能で予期しない動作が発生します：%s</string>
-
+    <plurals name="access_notif">
+        <item quantity="other">以下の場合、アクセシビリティサービスが必要です。アクセシビリティを無効にするには、最初にそれらをオフにします。%s</item>
+    </plurals>
 </resources>

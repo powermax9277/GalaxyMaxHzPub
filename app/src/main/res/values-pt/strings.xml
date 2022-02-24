@@ -146,9 +146,12 @@
     <string name="acces_req">Ativar serviço de acessibilidade</string>
     <string name="max_hz_for_psm">Hz máx para o modo de economia de energia</string>
     <string name="is_prem_ft">%s é um recurso pago</string>
-    <string name="using_spay">SPay está travando</string>
+<!--    <string name="using_spay">SPay está travando</string>-->
     <string name="aot_perm_inf">This app needs permission to appear on top in order to work properly. You can disable the notification by long-pressing it and turning off the toggle that will appear.</string>
     <string name="so_location_info">Ensure to put the SENSOR Off tile within the first 4 quick settings slots.</string>
     <string name="no_access_notif">Disabling accessibility service will cause unexpected behavior for the following enabled feature(s): %s</string>
-
+    <plurals name="access_notif">
+        <item quantity="one">Accessibility service is required for the following - turn this off first to disable accessibility: %s</item>
+        <item quantity="other">Accessibility service is required for the following - turn these off first to disable accessibility: %s</item>
+    </plurals>
 </resources>

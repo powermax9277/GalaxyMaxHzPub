@@ -14,11 +14,9 @@ import com.tribalfs.gmh.helpers.CacheSettings.currentRefreshRateMode
 import com.tribalfs.gmh.helpers.CacheSettings.hasWriteSecureSetPerm
 import com.tribalfs.gmh.helpers.CacheSettings.isOfficialAdaptive
 import com.tribalfs.gmh.helpers.CacheSettings.isPremium
-import com.tribalfs.gmh.helpers.CacheSettings.isSpayInstalled
 import com.tribalfs.gmh.helpers.CacheSettings.lrrPref
 import com.tribalfs.gmh.helpers.CacheSettings.minHzListForAdp
 import com.tribalfs.gmh.helpers.CacheSettings.prrActive
-import com.tribalfs.gmh.sharedprefs.NOT_USING
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -127,7 +125,8 @@ class QSTileMinHz : TileService() {
         return if (
             gmhAccessInstance == null
         ){
-            if (hasWriteSecureSetPerm && (isSpayInstalled == false ||  UtilsPrefsGmhSt.instance(applicationContext).hzPrefSPayUsage == NOT_USING)) {
+            if (hasWriteSecureSetPerm) {
+            /*if (hasWriteSecureSetPerm && (isSpayInstalled == false ||  UtilsPrefsGmhSt.instance(applicationContext).hzPrefSPayUsage == NOT_USING)) {*/
                 allowAccessibility(
                     applicationContext,
                     true

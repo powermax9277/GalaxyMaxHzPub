@@ -49,6 +49,9 @@ internal object ModelNumbers {
     const val ZFp3 = "SM-F711"
     const val ZFp3_JP = "SCG12"
 
+    const val TS8 = "SM-X706"
+    const val TS8P = "SM-X800"
+    const val TS8U = "SM-X900"
 
     val fordableWithHrrExternal = listOf(ZF3,ZF3_JP)
 
@@ -73,6 +76,7 @@ internal object ModelNumbers {
         ZFp3_JP,
         S22,
         S22P,
-        S22U
+        S22U,
+        TS8
     )
 }

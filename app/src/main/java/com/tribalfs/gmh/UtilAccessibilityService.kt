@@ -5,9 +5,7 @@ import android.provider.Settings
 import android.provider.Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
 import com.tribalfs.gmh.GalaxyMaxHzAccess.Companion.gmhAccessInstance
 import com.tribalfs.gmh.MyApplication.Companion.ignoreAccessibilityChange
-import com.tribalfs.gmh.helpers.CacheSettings
 import com.tribalfs.gmh.helpers.CacheSettings.hasWriteSecureSetPerm
-import com.tribalfs.gmh.sharedprefs.NOT_USING
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt
 import kotlinx.coroutines.*
 
@@ -73,8 +71,8 @@ object UtilAccessibilityService {
                     .isNotEmpty()
             return if (accesRequired) {
                 if (
-                    (CacheSettings.isSpayInstalled == false || UtilsPrefsGmhSt.instance(appCtx).hzPrefSPayUsage == NOT_USING)
-                    && hasWriteSecureSetPerm
+                   hasWriteSecureSetPerm
+                  /*  (isSpayInstalled == false || UtilsPrefsGmhSt.instance(appCtx).hzPrefSPayUsage == NOT_USING) && hasWriteSecureSetPerm*/
                 ) {
                     allowAccessibility(appCtx, true)
                     true

@@ -32,8 +32,8 @@ private const val TOGGLE_MINIMUM_HZ = "tg_min_hz"
 private const val SKIP_RES = "sk_rs"
 private const val KEY_INDICATOR_SPEED_UNIT = "ksu"
 private const val SPEED_TO_SHOW = "its"
-private const val USING_SPAY = "usg_spay"
-private const val SETTINGS_LIST_DONE = "list_done"
+//private const val USING_SPAY = "usg_spay"
+//private const val SETTINGS_LIST_DONE = "list_done"
 private const val HELP_URL = "help_url"
 private const val PREVENT_HIGH = "prev_hi"
 private const val SENSOR_ON_KEY = "s_on"
@@ -58,8 +58,8 @@ internal const val BIT_PER_SEC = 1
 internal const val TOTAL_SPEED = 2
 internal const val UPLOAD_SPEED = 0
 internal const val DOWNLOAD_SPEED = 1
-internal const val NOT_USING = 0
-internal const val USING = 1
+//internal const val NOT_USING = 0
+//internal const val USING = 1
 
 
 internal class UtilsPrefsGmhSt private constructor(val context: Context) {
@@ -73,9 +73,9 @@ internal class UtilsPrefsGmhSt private constructor(val context: Context) {
 
     private val hzSharedPrefEditor by lazy {hzSharedPref.edit()}
 
-    var hzPrefSPayUsage: Int
+    /*var hzPrefSPayUsage: Int
         get() = hzSharedPref.getInt(USING_SPAY, NOT_USING)
-        set(usingSpay) =   hzSharedPrefEditor.putInt(USING_SPAY, usingSpay).apply()
+        set(usingSpay) =   hzSharedPrefEditor.putInt(USING_SPAY, usingSpay).apply()*/
 
     var hzPrefAdaptiveDelay:Long
         get() =  hzSharedPref.getLong(ADAPTIVE_DELAY, 1750L)
@@ -267,7 +267,7 @@ internal class UtilsPrefsGmhSt private constructor(val context: Context) {
 
 
     var gmhPrefMinHzAdapt: Int
-        get() { return hzSharedPref.getInt(MIN_HZ_ADAPT, UtilsDeviceInfoSt.instance(context).regularMinHz).coerceAtLeast(lowestHzCurMode) }
+        get() { return hzSharedPref.getInt(MIN_HZ_ADAPT, UtilsDeviceInfoSt.instance(context).regularMinHz) }
         set(hz) {hzSharedPrefEditor.putInt(MIN_HZ_ADAPT, hz).apply()}
 
     var gmhPrefGetAdaptives:  MutableList<String>?

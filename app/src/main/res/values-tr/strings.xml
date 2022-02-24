@@ -133,7 +133,7 @@
     <string name="prevent_high">Yüksek Moda geçişi engelle</string>
     <string name="acces_req">Erişilebilirlik Hizmetini Etkinleştir</string>
     <string name="is_prem_ft">%s premium bir özelliktir</string>
-    <string name="using_spay">SPay başarısız oluyor</string>
+<!--    <string name="using_spay">SPay başarısız oluyor</string>-->
     <string name="aot_perm_inf">Bu uygulama düzgün çalışabilmek için "üstte göster" iznine ihtiyaç duyar. Bu bildirimi üzerine uzun basarak çıkan menüdeki ayarı kapatarak devre dışı bırakabilirsiniz.</string>
     <string name="so_location_info">"Sensor OFF" tuşunu bildirim panelinin ilk dört yuvasına koyduğunuzdan emin olun.</string>
     <plurals name="access_notif">

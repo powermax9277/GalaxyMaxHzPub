@@ -105,7 +105,7 @@
     <string name="prevent_high">Αποτρέψτε τη μετάβαση σε Υψηλή Λειτουργία</string>
     <string name="acces_req">Ενεργοποίηση Υπηρεσίας Προσβασιμότητας</string>
     <string name="is_prem_ft">Το %s είναι ένα χαρακτηριστικό premium</string>
-    <string name="using_spay">Αποτυχία SPay</string>
+ <!--   <string name="using_spay">Αποτυχία SPay</string>-->
     <string name="so_location_info">Βεβαιωθείτε ότι έχετε τοποθετήσει το εικονίδιο SENSOR Off μέσα στις τέσσερις πρώτες θέσεις των γρήγορων ρυθμίσεων.</string>
     <plurals name="access_notif">
         <item quantity="one">Απαιτείται υπηρεσία προσβασιμότητας για το εξής - για να απενεργοποιήσετε την προσβασιμότητα απενεργοποιήστε πρώτα: %s</item>

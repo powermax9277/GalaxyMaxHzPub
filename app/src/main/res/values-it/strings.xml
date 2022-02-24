@@ -148,11 +148,14 @@
         <item quantity="one">Periodo di prova premium attivo: %d giorno rimanente</item>
     </plurals>
     <string name="is_prem_ft">%s è una funzione premium</string>
-    <string name="using_spay">SPay sta andando in crash</string>
+<!--    <string name="using_spay">SPay sta andando in crash</string>-->
     <string name="aot_perm_inf">
         Questa app ha bisogno dell\'autorizzazione per apparire in alto per funzionare correttamente.
         Puoi disabilitare la notifica tenendo premuto su di essa e disattivando l\'interruttore che apparirà.</string>
     <string name="so_location_info">Assicurati di posizionare il riquadro SENSOR Off all\'interno dei primi quattro slot delle impostazioni rapide.</string>
     <string name="no_access_notif">La disabilitazione del servizio di accessibilità causerà un comportamento imprevisto per le seguenti funzionalità abilitate: %s</string>
-
+    <plurals name="access_notif">
+        <item quantity="one">Accessibility service is required for the following - turn this off first to disable accessibility: %s</item>
+        <item quantity="other">Accessibility service is required for the following - turn these off first to disable accessibility: %s</item>
+    </plurals>
 </resources>

@@ -147,9 +147,11 @@
     <string name="acces_req">Bật dịch vụ trợ năng</string>
     <string name="max_hz_for_psm">Hz tối đa cho chế độ tiết kiệm năng lượng</string>
     <string name="is_prem_ft">%s là một tính năng trả phí</string>
-    <string name="using_spay">SPay đang gặp sự cố</string>
+<!--    <string name="using_spay">SPay đang gặp sự cố</string>-->
     <string name="aot_perm_inf">Ứng dụng này cần quyền hiển thị ở trên cùng để hoạt động bình thường. Bạn có thể tắt thông báo bằng cách nhấn và giữ chúng và tắt nút chuyển sẽ xuất hiện.</string>
     <string name="so_location_info">Đảm bảo đặt ô SENSOR Off trong bốn vị trí cài đặt nhanh đầu tiên.</string>
     <string name="no_access_notif">Việc tắt dịch vụ trợ năng sẽ gây ra hành vi không mong muốn đối với (các) tính năng đã bật sau:%s</string>
-
+    <plurals name="access_notif">
+        <item quantity="other">Dịch vụ hỗ trợ tiếp cận là bắt buộc đối với những trường hợp sau - hãy tắt các dịch vụ này trước để tắt khả năng tiếp cận: %s</item>
+    </plurals>
 </resources>

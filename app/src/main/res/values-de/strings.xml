@@ -151,9 +151,13 @@
     <string name="acces_req">Enable Accessibility Service</string>
     <string name="max_hz_for_psm">Max Hz für den Energiesparmodus</string>
     <string name="is_prem_ft">%s ist eine premium-funktion</string>
-    <string name="using_spay">SPay schlägt fehl</string>
+<!--    <string name="using_spay">SPay schlägt fehl</string>-->
     <string name="aot_perm_inf">Diese App benötigt die Erlaubnis, oben angezeigt zu werden, um ordnungsgemäß zu funktionieren. Sie können die Benachrichtigung deaktivieren, indem Sie lange darauf drücken und den angezeigten Schalter ausschalten.</string>
     <string name="so_location_info">Stellen Sie sicher, dass Sie die Kachel „SENSOREN AUS“ innerhalb der ersten vier Schnelleinstellungsplätze platzieren.</string>
     <string name="no_access_notif">Das Deaktivieren des Barrierefreiheitsdienstes führt zu unerwartetem Verhalten für die folgende(n) aktivierte(n) Funktion(en): %s</string>
     <string name="show_ns">Überwachen Sie die Internetgeschwindigkeit</string>
+    <plurals name="access_notif">
+        <item quantity="one">Accessibility service is required for the following - turn this off first to disable accessibility: %s</item>
+        <item quantity="other">Accessibility service is required for the following - turn these off first to disable accessibility: %s</item>
+    </plurals>
 </resources>

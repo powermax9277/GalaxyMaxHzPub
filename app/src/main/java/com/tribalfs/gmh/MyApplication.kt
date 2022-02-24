@@ -27,7 +27,6 @@ import com.tribalfs.gmh.helpers.CacheSettings.isFakeAdaptiveValid
 import com.tribalfs.gmh.helpers.CacheSettings.isOfficialAdaptive
 import com.tribalfs.gmh.helpers.CacheSettings.isPowerSaveMode
 import com.tribalfs.gmh.helpers.CacheSettings.isPremium
-import com.tribalfs.gmh.helpers.CacheSettings.isSpayInstalled
 import com.tribalfs.gmh.helpers.CacheSettings.keepModeOnPowerSaving
 import com.tribalfs.gmh.helpers.CacheSettings.preventHigh
 import com.tribalfs.gmh.helpers.CacheSettings.turnOff5GOnPsm
@@ -168,7 +167,7 @@ class MyApplication : Application() {
             hasWriteSystemSetPerm = this.hasWriteSystemPerm()
         }
 
-        isSpayInstalled = isSpayInstalled()
+      //  isSpayInstalled = isSpayInstalled()
 
         keepModeOnPowerSaving = UtilsPrefsGmhSt.instance(applicationContext).gmhPrefKmsOnPsm
         brightnessThreshold.set(
@@ -200,65 +199,14 @@ class MyApplication : Application() {
     }
 
 
-    private fun isSpayInstalled(): Boolean {
+    /*private fun isSpayInstalled(): Boolean {
         return try {
             packageManager.getApplicationInfo("com.samsung.android.spay", 0)
             true
         } catch (_: Exception) {
             false
         }
-    }
-
-
- /* private fun notifyAccessibilityNeed() = appScopeIO.launch{
-
-        val featuresOn = UtilsPrefsGmhSt.instance(applicationContext).getEnabledAccessibilityFeatures()
-
-        featuresOn.size.let{
-            if (it > 0) {
-
-                launch(Dispatchers.Main) {
-                    var toastRpt = it
-                    //Will auto turn it back ON if have permission
-                    val toastMsg = if (checkAccessibility(true)) {
-                        applicationContext.resources.getQuantityString(
-                            R.plurals.access_notif,
-                            featuresOn.size,
-                            "\n" + featuresOn.joinToString("" +
-                                    "\n")
-                        )
-                    }else{
-                        applicationContext.getString(
-                            R.string.no_access_notif,
-                            "\n" + featuresOn.joinToString("" +
-                                    "\n")
-                        )
-                    }
-                    while(toastRpt >= 0) {
-                        Toast.makeText(
-                            applicationContext,
-                            toastMsg,
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        delay(400)
-                        toastRpt -= 1
-                    }
-                }
-
-            } else  {
-                UtilsPrefsGmhSt.instance(applicationContext).gmhPrefForceLowestSoIsOn = false
-                UtilsPrefsGmhSt.instance(applicationContext).gmhPrefDisableSyncIsOn = false
-                if (isFakeAdaptive.get() == true && isOfficialAdaptive) {
-                    lrrPref.set(STANDARD_REFRESH_RATE_HZ)
-                    UtilsPrefsGmhSt.instance(applicationContext).gmhPrefMinHzAdapt = STANDARD_REFRESH_RATE_HZ
-                }
-                UtilsPrefsGmhSt.instance(applicationContext).gmhPrefSensorsOff = false
-
-            }
-        }
-    }
-*/
-
+    }*/
 
 
     override fun attachBaseContext(base: Context?) {

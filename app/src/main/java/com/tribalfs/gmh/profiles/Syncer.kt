@@ -34,10 +34,10 @@ internal const val KEY_JSON_SIGNATURE = "0x5"
 internal const val KEY_JSON_TRIAL = "0x16"
 internal const val KEY_JSON_TRIAL_START_DATE = "0x9"
 internal const val KEY_JSON_TRIAL_DAYS = "0x10"
-private const val REQUEST_SETTINGS_LIST_POST = 0x12
+/*private const val REQUEST_SETTINGS_LIST_POST = 0x12
 private const val KEY_JSON_SECURE_LIST = "0x6"
 private const val KEY_JSON_SYSTEM_LIST = "0x15"
-private const val KEY_JSON_GLOBAL_LIST = "0x17"
+private const val KEY_JSON_GLOBAL_LIST = "0x17"*/
 private const val REQUEST_HELP_URL = 0x15
 
 @SuppressLint("HardwareIds")

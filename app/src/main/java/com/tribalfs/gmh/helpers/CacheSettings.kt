@@ -27,7 +27,7 @@ object CacheSettings {
     internal var isPremium = ObservableField(false)
     internal val prrActive = ObservableField(60)
     internal val lrrPref = ObservableField(60)
-    internal var isSpayInstalled: Boolean? = null
+    //internal var isSpayInstalled: Boolean? = null
     internal var hasWriteSecureSetPerm: Boolean = false
     internal var hasWriteSystemSetPerm: Boolean = false
     internal var canApplyFakeAdaptive: Boolean = false
