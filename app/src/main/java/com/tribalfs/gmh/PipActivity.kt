@@ -17,7 +17,7 @@ class PipActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        //TODO test
+
   /*      val params = window.attributes
         params.preferredRefreshRate = 120f
         window.attributes = params*/

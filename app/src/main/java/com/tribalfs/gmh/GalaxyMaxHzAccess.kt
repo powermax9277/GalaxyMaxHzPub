@@ -14,10 +14,10 @@ import android.content.Intent.*
 import android.content.IntentFilter
 import android.content.pm.ActivityInfo
 import android.content.pm.ApplicationInfo
-import android.content.pm.ApplicationInfo.CATEGORY_SOCIAL
-import android.content.pm.ApplicationInfo.CATEGORY_VIDEO
+import android.content.pm.ApplicationInfo.*
 import android.content.pm.PackageManager
-import android.graphics.*
+import android.graphics.Color
+import android.graphics.PixelFormat
 import android.hardware.camera2.CameraManager
 import android.hardware.display.DisplayManager
 import android.media.session.MediaSessionManager
@@ -28,7 +28,9 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.os.PowerManager.ACTION_POWER_SAVE_MODE_CHANGED
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.WindowManager
 import android.view.WindowManager.LayoutParams.WRAP_CONTENT
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityEvent.*
@@ -65,11 +67,13 @@ import com.tribalfs.gmh.helpers.CacheSettings.restoreSync
 import com.tribalfs.gmh.helpers.CacheSettings.screenOffRefreshRateMode
 import com.tribalfs.gmh.helpers.CacheSettings.sensorOnKey
 import com.tribalfs.gmh.helpers.CacheSettings.turnOffAutoSensorsOff
-import com.tribalfs.gmh.hertz.*
+import com.tribalfs.gmh.hertz.HzGravity
 import com.tribalfs.gmh.hertz.HzNotifGlobal.CHANNEL_ID_HZ
 import com.tribalfs.gmh.hertz.HzNotifGlobal.NOTIFICATION_ID_HZ
 import com.tribalfs.gmh.hertz.HzNotifGlobal.hznotificationBuilder
 import com.tribalfs.gmh.hertz.HzNotifGlobal.hznotificationChannel
+import com.tribalfs.gmh.hertz.HzServiceHelperStn
+import com.tribalfs.gmh.hertz.MyDisplayListener
 import com.tribalfs.gmh.netspeed.NetSpeedServiceHelperStn
 import com.tribalfs.gmh.profiles.ProfilesObj.isProfilesLoaded
 import com.tribalfs.gmh.receivers.GmhBroadcastReceivers
@@ -77,7 +81,6 @@ import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt
 import kotlinx.coroutines.*
 import java.lang.Integer.max
 import java.lang.Runnable
-import java.util.*
 import kotlin.coroutines.CoroutineContext
 internal const val PLAYING = 1
 internal const val STOPPED = -1
@@ -95,7 +98,12 @@ private val manualVideoAppList = listOf(
     "com.netflix.mediaclient",
     "com.disney.disneyplus",
     "com.samsung.android.video",
-    "com.plexapp.android"
+    "com.plexapp.android",
+    "sg.hbo.hbogo",
+    "com.bstar.intl",
+    "com.crunchyroll",
+    "com.iqiyi",
+    "com.vuclip.viu"
 )
 
 private val browserList = listOf(
@@ -721,8 +729,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     @SuppressLint("SwitchIntDef")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
-
-        /*Log.d(
+      /*  Log.d(
             "TESTEST",
             "EVENT_TYPE ${event?.eventType} CHANGE_TYPE ${event?.contentChangeTypes} ${event?.packageName} Classname: ${event?.className}"
         )*/
@@ -762,7 +769,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                                 return
                             }
 
-                            (ai.category == CATEGORY_SOCIAL) ->{
+                            (ai.category == CATEGORY_SOCIAL || ai.category == CATEGORY_MAPS) ->{
                                 if (!isOfficialAdaptive) {
                                     useMin60 = true
                                     setTempIgnoreTwsc()
