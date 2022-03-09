@@ -78,6 +78,14 @@ class UtilsDeviceInfoSt private constructor(val appCtx: Context) {
             }
         }
 
+    internal val isLowRefreshDevice: Boolean
+        get() {
+            return when (deviceModel) {
+                S22,S22P,S22U -> true
+                else -> false
+            }
+        }
+
     internal fun getCurrentDisplay(): Display  {
         synchronized(mLock) {
             return dm.getDisplay(displayId)

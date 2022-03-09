@@ -13,14 +13,12 @@ import android.content.Intent
 import android.content.Intent.*
 import android.content.IntentFilter
 import android.content.pm.ActivityInfo
-import android.content.pm.ApplicationInfo
 import android.content.pm.ApplicationInfo.*
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.PixelFormat
 import android.hardware.camera2.CameraManager
 import android.hardware.display.DisplayManager
-import android.media.session.MediaSessionManager
 import android.net.ConnectivityManager
 import android.net.Network
 import android.os.BatteryManager
@@ -28,6 +26,7 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.os.PowerManager.ACTION_POWER_SAVE_MODE_CHANGED
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
@@ -100,16 +99,17 @@ private val manualVideoAppList = listOf(
     "com.samsung.android.video",
     "com.plexapp.android",
     "sg.hbo.hbogo",
-    "com.bstar.intl",
-    "com.crunchyroll",
     "com.iqiyi",
-    "com.vuclip.viu"
+    "com.bilibili",
+    "com.vuclip.viu",
+    "com.google.android.apps.photos"
 )
 
 private val browserList = listOf(
     "com.android.chrome",
     "com.microsoft.emmx",
-    "com.sec.android.app.sbrowser"
+    "com.sec.android.app.sbrowser",
+    "com.samsung.android.app.appsedge"
 )
 
 private val manualGameList = listOf(
@@ -724,15 +724,16 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         mHandler.postDelayed(ignoreRunnable, 2000L)
     }
 
-    private val mediaSessionManager by lazy {(getSystemService(MEDIA_SESSION_SERVICE) as MediaSessionManager)}
+   // private val mediaSessionManager by lazy {(getSystemService(MEDIA_SESSION_SERVICE) as MediaSessionManager)}
 
     @SuppressLint("SwitchIntDef")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
-      /*  Log.d(
+        //Todo
+        Log.d(
             "TESTEST",
             "EVENT_TYPE ${event?.eventType} CHANGE_TYPE ${event?.contentChangeTypes} ${event?.packageName} Classname: ${event?.className}"
-        )*/
+        )
 
         if (!isScreenOn.get() || !applyAdaptiveMod.get()!!) return
 
@@ -754,7 +755,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                         useMin60 = false
                         isVideoApp = false
                         when {
-                            (ai.category == ApplicationInfo.CATEGORY_GAME || isPartOf(manualGameList, componentName)) -> {
+                            (ai.category == CATEGORY_GAME || isPartOf(manualGameList, componentName)) -> {
                                 isGameOpen = true
                                 setTempIgnoreTwsc()
                                 makeAdaptive()
@@ -776,7 +777,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                                     makeAdaptive()
                                     return
                                 }else{
-                                    if (UtilsDeviceInfoSt.instance(applicationContext).regularMinHz < SIXTY_HZ){
+                                    if (UtilsDeviceInfoSt.instance(applicationContext).isLowRefreshDevice){
                                         isGameOpen = true
                                         setTempIgnoreTwsc()
                                         makeAdaptive()
@@ -786,7 +787,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                             }
 
                             isPartOf(browserList, componentName) -> {
-                                if (UtilsDeviceInfoSt.instance(applicationContext).regularMinHz < SIXTY_HZ){
+                                if (UtilsDeviceInfoSt.instance(applicationContext).isLowRefreshDevice){
                                     isGameOpen = true
                                     setTempIgnoreTwsc()
                                     makeAdaptive()
