@@ -132,9 +132,9 @@ internal class UtilsPrefsGmhSt private constructor(val context: Context) {
         set(chipId) {hzSharedPrefEditor.putInt(TOP_BOT_CHIP_ID, chipId).apply()}
 
 
-    var gmhPrefChipIdLrc: Int
+/*    var gmhPrefChipIdLrc: Int
         get() { return hzSharedPref.getInt(LCR_CHIP_ID, R.id.ch_left_hz)}
-        set(chipId) {hzSharedPrefEditor.putInt(LCR_CHIP_ID, chipId).apply()}
+        set(chipId) {hzSharedPrefEditor.putInt(LCR_CHIP_ID, chipId).apply()}*/
 
 
     var gmhPrefMinHzForToggle: Int

@@ -1,8 +1,11 @@
 package com.tribalfs.gmh
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.os.Build
 import android.provider.Settings
 import android.provider.Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
+import androidx.annotation.RequiresApi
 import com.tribalfs.gmh.GalaxyMaxHzAccess.Companion.gmhAccessInstance
 import com.tribalfs.gmh.MyApplication.Companion.ignoreAccessibilityChange
 import com.tribalfs.gmh.helpers.CacheSettings.hasWriteSecureSetPerm
@@ -12,6 +15,7 @@ import kotlinx.coroutines.*
 
 object UtilAccessibilityService {
 
+    @SuppressLint("NewApi")
     @ExperimentalCoroutinesApi
     private val serviceName = GalaxyMaxHzAccess::class.java.name
 
@@ -29,10 +33,8 @@ object UtilAccessibilityService {
         synchronized(mLock) {
             CoroutineScope(Dispatchers.IO).launch {
                 val mContentResolver = appCtx.contentResolver
-                val gmhAccessibilityStr =
-                    "${appCtx.packageName}/$serviceName"
-                (Settings.Secure.getString(mContentResolver, ENABLED_ACCESSIBILITY_SERVICES)
-                    ?: "").let {
+                val gmhAccessibilityStr = "${appCtx.packageName}/$serviceName"
+                (Settings.Secure.getString(mContentResolver, ENABLED_ACCESSIBILITY_SERVICES) ?: "").let {
                     if (hasWriteSecureSetPerm) {
                         var str = it
                         while (str.contains(":$gmhAccessibilityStr")) {
@@ -64,12 +66,13 @@ object UtilAccessibilityService {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     internal fun checkAccessibility(required:Boolean?, appCtx: Context): Boolean{
         synchronized(mLock) {
-            val accesRequired =
+            val accessRequired =
                 required ?: UtilsPrefsGmhSt.instance(appCtx).getEnabledAccessibilityFeatures()
                     .isNotEmpty()
-            return if (accesRequired) {
+            return if (accessRequired) {
                 if (
                    hasWriteSecureSetPerm
                   /*  (isSpayInstalled == false || UtilsPrefsGmhSt.instance(appCtx).hzPrefSPayUsage == NOT_USING) && hasWriteSecureSetPerm*/

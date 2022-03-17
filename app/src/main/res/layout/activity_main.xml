@@ -618,6 +618,16 @@
                                 app:chipMinTouchTargetSize="40dp" />
 
                             <com.google.android.material.chip.Chip
+                                android:id="@+id/ch_cent_hz"
+                                style="@style/chipStyle"
+                                android:clipChildren="false"
+                                android:clipToPadding="false"
+                                android:onClick="@{(v) -> (hasMotionSmoothness ?  clickListener.onClickView(v) : null)}"
+                                android:text="@string/center"
+                                app:chipIconSize="16dp"
+                                app:chipMinTouchTargetSize="40dp" />
+
+                            <com.google.android.material.chip.Chip
                                 android:id="@+id/ch_bottom_hz"
                                 style="@style/chipStyle"
                                 android:onClick="@{(v) -> (hasMotionSmoothness ? clickListener.onClickView(v) : null)}"
@@ -628,7 +638,7 @@
 
                         </com.google.android.material.chip.ChipGroup>
 
-                        <com.google.android.material.chip.ChipGroup
+                    <!--    <com.google.android.material.chip.ChipGroup
                             android:id="@+id/cg_left_cent_right_hz"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -662,7 +672,7 @@
                                 app:chipIconSize="16dp"
                                 app:chipMinTouchTargetSize="40dp" />
                         </com.google.android.material.chip.ChipGroup>
-                    </LinearLayout>
+-->                    </LinearLayout>
 
                     <TextView
                         android:id="@+id/tv_overlay_size_hz"

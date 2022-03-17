@@ -16,15 +16,18 @@ import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.net.Uri
-import android.os.*
 import android.os.Build.VERSION.SDK_INT
 import android.os.Build.VERSION_CODES
-import android.os.PowerManager.*
+import android.os.Bundle
+import android.os.PowerManager.ACTION_POWER_SAVE_MODE_CHANGED
 import android.provider.Settings.*
 import android.provider.Settings.Global.DEVELOPMENT_SETTINGS_ENABLED
 import android.text.method.LinkMovementMethod
 import android.util.TypedValue
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
 import android.view.View.MeasureSpec
 import android.view.animation.AnimationUtils.loadAnimation
 import android.view.animation.AnticipateInterpolator
@@ -54,7 +57,8 @@ import com.tribalfs.gmh.MyApplication.Companion.applicationName
 import com.tribalfs.gmh.UtilAccessibilityService.allowAccessibility
 import com.tribalfs.gmh.callbacks.LvlSbMsgCallback
 import com.tribalfs.gmh.databinding.ActivityMainBinding
-import com.tribalfs.gmh.dialogs.*
+import com.tribalfs.gmh.dialogs.DialogActCode
+import com.tribalfs.gmh.dialogs.InfoDialog
 import com.tribalfs.gmh.dialogs.InfoDialog.Companion.ADB_PERM_INFO
 import com.tribalfs.gmh.dialogs.InfoDialog.Companion.CHANGE_RES_INFO
 import com.tribalfs.gmh.dialogs.InfoDialog.Companion.QDM_INFO
@@ -97,18 +101,18 @@ import com.tribalfs.gmh.helpers.UtilSettingsIntents.dataUsageSettingsIntent
 import com.tribalfs.gmh.helpers.UtilSettingsIntents.dataUsageSettingsIntentOP
 import com.tribalfs.gmh.helpers.UtilSettingsIntents.deviceInfoActivity
 import com.tribalfs.gmh.helpers.UtilSettingsIntents.powerSavingModeSettingsIntent
-import com.tribalfs.gmh.hertz.*
+import com.tribalfs.gmh.hertz.HzGravity
 import com.tribalfs.gmh.hertz.HzNotifGlobal.CHANNEL_ID_HZ
-import com.tribalfs.gmh.netspeed.*
+import com.tribalfs.gmh.hertz.HzServiceHelperStn
+import com.tribalfs.gmh.netspeed.CHANNEL_ID_NET_SPEED
 import com.tribalfs.gmh.netspeed.NetSpeedService.Companion.netSpeedService
+import com.tribalfs.gmh.netspeed.NetSpeedServiceHelperStn
 import com.tribalfs.gmh.profiles.*
 import com.tribalfs.gmh.profiles.ProfilesObj.isProfilesLoaded
 import com.tribalfs.gmh.sharedprefs.*
 import com.tribalfs.gmh.viewmodels.MyViewModel
 import kotlinx.coroutines.*
 import java.lang.Integer.min
-import java.util.*
-import kotlin.collections.HashSet
 import kotlin.coroutines.CoroutineContext
 
 internal const val GMH_WEB_APP ="https://script.google.com/macros/s/AKfycbzlRKh4-YXyXLufXZfDqAs1xJEJK7BF8zmhEDGDpbP1luu97trI/exec"
@@ -428,17 +432,22 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                 }
             }
 
-            mBinding.chLeftHz.id, mBinding.chRightHz.id, mBinding.chCentHz.id -> {
+           /* mBinding.chLeftHz.id, mBinding.chRightHz.id, mBinding.chCentHz.id -> {
                 mUtilsPrefsGmh.gmhPrefChipIdLrc = v.id
                 HzServiceHelperStn.instance(applicationContext).updateHzGravity(
                     chIdsToGravity(mBinding.cgTopBottom.checkedChipId, v.id)
                 )
-            }
+            }*/
 
-            mBinding.chTopHz.id, mBinding.chBottomHz.id -> {
+            mBinding.chTopHz.id, mBinding.chBottomHz.id, mBinding.chCentHz.id -> {
                 mUtilsPrefsGmh.gmhPrefChipIdTb = v.id
                 HzServiceHelperStn.instance(applicationContext).updateHzGravity(
-                    chIdsToGravity(v.id, mBinding.cgLeftCentRightHz.checkedChipId)
+                    /*chIdsToGravity(v.id, mBinding.cgLeftCentRightHz.checkedChipId)*/
+                    when (v.id){
+                        mBinding.chBottomHz.id -> HzGravity.BOTTOM_LEFT
+                        mBinding.chCentHz.id -> HzGravity.CENTER_LEFT
+                        else -> HzGravity.TOP_LEFT
+                    }
                 )
             }
 
@@ -884,6 +893,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
     }
 
 
+    @RequiresApi(VERSION_CODES.M)
     private fun initDisableAutoSync(adFree: Boolean?){
         //Disable if not Ad-free
         if ((adFree?:viewModel.isValidAdFree.value != true) || gmhAccessInstance == null){
@@ -1305,7 +1315,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
     }
 
 
-    private fun chIdsToGravity(topBotId: Int?, lcrId: Int?): Int {
+   /* private fun chIdsToGravity(topBotId: Int?, lcrId: Int?): Int {
         return when (lcrId) {
             mBinding.chLeftHz.id -> {
                 when (topBotId) {
@@ -1327,8 +1337,9 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
             }
         }
     }
+*/
 
-
+    @RequiresApi(VERSION_CODES.M)
     @Synchronized
     private fun checkAccessibilityPerm(showRequest: Boolean): Boolean{
         return if (gmhAccessInstance == null){
@@ -2003,7 +2014,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
         mBinding.chNotifHz.isChecked = UtilsPrefsGmhSt.instance(applicationContext).gmhPrefHzNotifIsOn && isHzNotificationEnabled()
         mBinding.swHzOn.isChecked = UtilsPrefsGmhSt.instance(applicationContext).gmhPrefHzIsOn
         mBinding.cgTopBottom.check(UtilsPrefsGmhSt.instance(applicationContext).gmhPrefChipIdTb)
-        mBinding.cgLeftCentRightHz.check(UtilsPrefsGmhSt.instance(applicationContext).gmhPrefChipIdLrc)
+       // mBinding.cgLeftCentRightHz.check(UtilsPrefsGmhSt.instance(applicationContext).gmhPrefChipIdLrc)
 
     }
 
@@ -2011,9 +2022,11 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
 
     private fun setupForceHzOnSo() {
 //Note: Place after Hz status observer
-        mBinding.swSoForceLowestHz.isChecked =
-            UtilsPrefsGmhSt.instance(applicationContext).gmhPrefForceLowestSoIsOn &&
-                    hasWriteSystemSetPerm && checkAccessibilityPerm(false)
+        if (SDK_INT >= VERSION_CODES.M) {
+            mBinding.swSoForceLowestHz.isChecked =
+                UtilsPrefsGmhSt.instance(applicationContext).gmhPrefForceLowestSoIsOn &&
+                        hasWriteSystemSetPerm && checkAccessibilityPerm(false)
+        }
     }
 
 

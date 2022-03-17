@@ -95,7 +95,7 @@ internal class HzService : Service(), CoroutineScope{
     private val displayListener by lazy { MyDisplayListener(mDisplayChangeCallback)}
 
     private val stageView by lazy {LayoutInflater.from(application).inflate(
-        R.layout.hz_fps, RelativeLayout(application)
+        R.layout.hz_overlay, RelativeLayout(application)
     ) as View}
 
     private val hzText: TextView by lazy{stageView.findViewById(R.id.tvHzBeatMain)}

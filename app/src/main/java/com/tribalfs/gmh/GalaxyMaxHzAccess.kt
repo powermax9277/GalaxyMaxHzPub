@@ -26,7 +26,9 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.os.PowerManager.ACTION_POWER_SAVE_MODE_CHANGED
-import android.util.Log
+import android.view.KeyEvent
+import android.view.KeyEvent.KEYCODE_VOLUME_DOWN
+import android.view.KeyEvent.KEYCODE_VOLUME_UP
 import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
@@ -86,7 +88,7 @@ internal const val STOPPED = -1
 internal const val PAUSE = 0
 private const val MAX_TRY = 8
 
-//TODO (explore mediasession)
+//TODO (check notification affecting game, explore mediasession)
 private val manualVideoAppList = listOf(
     "com.amazon.avod",
     "com.vanced.android.youtube",
@@ -101,15 +103,28 @@ private val manualVideoAppList = listOf(
     "sg.hbo.hbogo",
     "com.iqiyi",
     "com.bilibili",
-    "com.vuclip.viu",
-    "com.google.android.apps.photos"
+    "com.vuclip.viu"
 )
 
-private val browserList = listOf(
+private val disableAdaptiveModList = listOf(
     "com.android.chrome",
     "com.microsoft.emmx",
     "com.sec.android.app.sbrowser",
-    "com.samsung.android.app.appsedge"
+    "com.samsung.android.app.appsedge",
+    "com.opera",
+    "com.uc",
+    "org.mozilla.firefox",
+    "com.duckduckgo",
+    "com.brave.browser",
+    "com.kiwibrowser.browser",
+    "com.google.android.apps.photos",
+    "com.nbaimd",
+    "com.twitter",
+    "com.instagram",
+    "org.schabi.newpipe",
+    "free.rm.skytube",
+    "com.github.libretube",
+    "com.ss.android.ugc"
 )
 
 private val manualGameList = listOf(
@@ -120,7 +135,8 @@ private val manualGameList = listOf(
     "com.gameloft.android",
     "com.sec.android.app.samsungapps:com.sec.android.app.samsungapps.instantplays.InstantPlaysGameActivity",
     "com.distractionware",
-    "com.supercell"
+    "com.supercell",
+    "com.google.android.gms"
 )
 
 
@@ -566,7 +582,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         params!!.x = 0
         params!!.y = 0
         params!!.gravity = HzGravity.TOP_LEFT
-        stageView = LayoutInflater.from(this).inflate(R.layout.hz_fps, mLayout)
+        stageView = LayoutInflater.from(this).inflate(R.layout.hz_overlay, mLayout)
         hzText = stageView!!.findViewById(R.id.tvHzBeatMain)
 
         try {
@@ -726,14 +742,25 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
    // private val mediaSessionManager by lazy {(getSystemService(MEDIA_SESSION_SERVICE) as MediaSessionManager)}
 
+    override fun onKeyEvent(event: KeyEvent?): Boolean {
+       /*
+        Log.d(
+            "TESTEST","${event?.keyCode}")*/
+        launch {
+            if (event?.keyCode == KEYCODE_VOLUME_UP || event?.keyCode == KEYCODE_VOLUME_DOWN) {
+                makeAdaptive(4500L)
+            }
+        }
+        return super.onKeyEvent(event)
+    }
+
     @SuppressLint("SwitchIntDef")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
-        //Todo
-        Log.d(
+        /*Log.d(
             "TESTEST",
             "EVENT_TYPE ${event?.eventType} CHANGE_TYPE ${event?.contentChangeTypes} ${event?.packageName} Classname: ${event?.className}"
-        )
+        )*/
 
         if (!isScreenOn.get() || !applyAdaptiveMod.get()!!) return
 
@@ -786,7 +813,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                                 }
                             }
 
-                            isPartOf(browserList, componentName) -> {
+                            isPartOf(disableAdaptiveModList, componentName) -> {
                                 if (UtilsDeviceInfoSt.instance(applicationContext).isLowRefreshDevice){
                                     isGameOpen = true
                                     setTempIgnoreTwsc()
@@ -849,7 +876,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                         }
                     }
 
-                    CONTENT_CHANGE_TYPE_SUBTREE + CONTENT_CHANGE_TYPE_TEXT -> {
+                    CONTENT_CHANGE_TYPE_SUBTREE + CONTENT_CHANGE_TYPE_TEXT -> { //3
                         if (event.packageName?.toString() != "com.android.systemui" && isOfficialAdaptive) {
                             makeAdaptive()
                             return
@@ -902,9 +929,13 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
     private var makeAdaptiveJob: Job? = null
 
-
     @RequiresApi(Build.VERSION_CODES.M)
     private fun makeAdaptive() {
+        makeAdaptive(null)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun makeAdaptive(del: Long?) {
 
         // if (mUtilsRefreshRate.getPeakRefreshRateFromSettings() != prrActive.get()!!) {
         mUtilsRefreshRate.setPeakRefreshRate(prrActive.get()!!)
@@ -915,7 +946,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
             makeAdaptiveJob = null
         }
         makeAdaptiveJob = launch(Dispatchers.IO) {
-            delay(adaptiveDelayMillis)
+            delay(del ?: adaptiveDelayMillis)
             if (applyAdaptiveMod.get()!! && isScreenOn.get() && !isGameOpen) {
                 mUtilsRefreshRate.setPeakRefreshRate(
                     if (useMin60 || cameraOpen) max(60,lrrPref.get()!!) else lrrPref.get()!!
