@@ -103,7 +103,12 @@ private val manualVideoAppList = listOf(
     "sg.hbo.hbogo",
     "com.iqiyi",
     "com.bilibili",
-    "com.vuclip.viu"
+    "com.vuclip.viu",
+    "com.Frontesque.youtube",
+    "org.schabi.newpipe",
+    "free.rm.skytube",
+    "com.github.libretube",
+    "tv.twitch.android"
 )
 
 private val disableAdaptiveModList = listOf(
@@ -121,9 +126,6 @@ private val disableAdaptiveModList = listOf(
     "com.nbaimd",
     "com.twitter",
     "com.instagram",
-    "org.schabi.newpipe",
-    "free.rm.skytube",
-    "com.github.libretube",
     "com.ss.android.ugc"
 )
 
@@ -741,23 +743,32 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     }
 
    // private val mediaSessionManager by lazy {(getSystemService(MEDIA_SESSION_SERVICE) as MediaSessionManager)}
+   var volumeJob: Job? = null
 
     override fun onKeyEvent(event: KeyEvent?): Boolean {
        /*
         Log.d(
             "TESTEST","${event?.keyCode}")*/
-        launch {
+        volumeJob?.cancel()
+        volumeJob = launch {
             if (event?.keyCode == KEYCODE_VOLUME_UP || event?.keyCode == KEYCODE_VOLUME_DOWN) {
-                makeAdaptive(4500L)
+                useMin60 = true
+                makeAdaptive()
+                delay(5000)
+                useMin60 = false
+                makeAdaptive()
+
             }
         }
+        volumeJob?.start()
         return super.onKeyEvent(event)
     }
 
     @SuppressLint("SwitchIntDef")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
-        /*Log.d(
+        /*
+        Log.d(
             "TESTEST",
             "EVENT_TYPE ${event?.eventType} CHANGE_TYPE ${event?.contentChangeTypes} ${event?.packageName} Classname: ${event?.className}"
         )*/
@@ -771,6 +782,13 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                 if (ignoreNextTWSC) return
 
                 if (event.packageName != null && event.className != null) {
+
+                    /*if (event.packageName == "com.samsung.android.app.cocktailbarservice"){
+                        isGameOpen = true
+                        makeAdaptive()
+                        return
+                    }*/
+
                     val componentName = ComponentName(
                         event.packageName.toString(),
                         event.className.toString()
@@ -825,21 +843,26 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                     }else{
                         if (ai.category == CATEGORY_VIDEO || isPartOf(manualVideoAppList, componentName)){
                             /* if (isPartOf(manualVideoAppList, componentName)){*/
-                            if (!isOfficialAdaptive) {
+                             //TODO test
+                            //if (!isOfficialAdaptive) {
                                 useMin60 = true
                                 isVideoApp = true
                                 isGameOpen = false
                                 makeAdaptive()
                                 return
-                            }
+                            //}
                         }
                     }
                 }
             }
 
             TYPE_VIEW_SCROLLED/*4096 */ -> {
-                if (!(!isOfficialAdaptive && isVideoApp)){
+                if (isOfficialAdaptive){
                     makeAdaptive()
+                }else{
+                    if (!isVideoApp){
+                        makeAdaptive()
+                    }
                 }
             }
 
@@ -849,7 +872,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
                     CONTENT_CHANGE_TYPE_SUBTREE -> {//1
                         when (event.packageName?.toString()) {
-                            defaultLauncherName -> {
+                            BuildConfig.APPLICATION_ID ->{
                                 return
                             }
 
@@ -859,28 +882,25 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                                         isGameOpen = false
                                     }
                                     return
-                                }
-                            }
-
-                            "com.samsung.android.app.notes" -> {
-                                makeAdaptive()
-                                return
-                            }
-
-                            else -> {
-                                if (event.className == "android.view.ViewGroup" || (isOfficialAdaptive && useMin60)) {
+                                }else{
                                     makeAdaptive()
                                     return
                                 }
+                            }
+
+
+                            else -> {
+                                makeAdaptive()
+                                return
                             }
                         }
                     }
 
                     CONTENT_CHANGE_TYPE_SUBTREE + CONTENT_CHANGE_TYPE_TEXT -> { //3
-                        if (event.packageName?.toString() != "com.android.systemui" && isOfficialAdaptive) {
-                            makeAdaptive()
+                        /*if (event.packageName?.toString() != "com.android.systemui" && isOfficialAdaptive) {
+                            makeAdaptive()*/
                             return
-                        }
+                       // }
                     }
 
                     else -> {
