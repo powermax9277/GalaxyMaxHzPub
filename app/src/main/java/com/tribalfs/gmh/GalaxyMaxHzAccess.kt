@@ -108,7 +108,8 @@ private val manualVideoAppList = listOf(
     "org.schabi.newpipe",
     "free.rm.skytube",
     "com.github.libretube",
-    "tv.twitch.android"
+    "tv.twitch.android",
+    "org.polymorphicshade.newpipe"
 )
 
 private val disableAdaptiveModList = listOf(
@@ -843,7 +844,6 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                     }else{
                         if (ai.category == CATEGORY_VIDEO || isPartOf(manualVideoAppList, componentName)){
                             /* if (isPartOf(manualVideoAppList, componentName)){*/
-                             //TODO test
                             //if (!isOfficialAdaptive) {
                                 useMin60 = true
                                 isVideoApp = true
