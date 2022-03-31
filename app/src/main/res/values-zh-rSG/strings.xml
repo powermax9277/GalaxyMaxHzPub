@@ -9,8 +9,8 @@
     <string name="min_hz_for_toggle">可选择的最小赫兹限制</string>
     <string name="high">High</string>
     <string name="refresh_rate_mon">刷新率监视器</string>
-    <string name="left">剩下</string>
-    <string name="right">对</string>
+<!--    <string name="left">剩下</string>
+    <string name="right">对</string>-->
     <string name="top">最佳</string>
     <string name="bottom">底部</string>
     <string name="use_qstile_reso_switch">使用随附的快速设置图块可快速切换分辨率和运动平滑度模式。</string>

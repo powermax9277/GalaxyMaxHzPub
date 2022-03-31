@@ -11,8 +11,8 @@
     <string name="adaptive">Adaptif</string>
     <string name="high">Yüksek</string>
     <string name="refresh_rate_mon">Yenileme Hızını Göster</string>
-    <string name="left">Sol</string>
-    <string name="right">Sağ</string>
+<!--    <string name="left">Sol</string>
+    <string name="right">Sağ</string>-->
     <string name="top">Üst</string>
     <string name="bottom">Alt</string>
     <string name="use_qstile_reso_switch">Çözünürlüğü değiştirmek için bildirim panelindeki çözünürlük değiştirme tuşunu kullanın.</string>

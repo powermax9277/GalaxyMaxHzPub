@@ -195,7 +195,9 @@ class MyApplication : Application() {
         hzNotifOn.set (UtilsPrefsGmhSt.instance(applicationContext).gmhPrefHzIsOn
                 && UtilsPrefsGmhSt.instance(applicationContext).gmhPrefHzNotifIsOn)
 
-        UtilRefreshRateSt.instance(applicationContext).updateAdaptiveModCachedParams()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            UtilRefreshRateSt.instance(applicationContext).updateAdaptiveModCachedParams()
+        }
     }
 
 

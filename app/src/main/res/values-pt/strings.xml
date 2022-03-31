@@ -12,8 +12,8 @@
     <string name="adaptive">Adaptativo</string>
     <string name="high">Alta</string>
     <string name="refresh_rate_mon">Mostrar Real-Time Taxa de actualização</string>
-    <string name="left">Esquerda</string>
-    <string name="right">Certa</string>
+<!--    <string name="left">Esquerda</string>
+    <string name="right">Certa</string>-->
     <string name="top">Superior</string>
     <string name="bottom">Inferior</string>
     <string name="use_qstile_reso_switch">Use as configurações rápidas telha incluído para resoluções alternar rapidamente e modos de movimento suavidade.</string>

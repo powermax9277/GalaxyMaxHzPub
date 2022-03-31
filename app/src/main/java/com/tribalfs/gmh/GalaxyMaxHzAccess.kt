@@ -88,55 +88,57 @@ internal const val STOPPED = -1
 internal const val PAUSE = 0
 private const val MAX_TRY = 8
 
-//TODO (check notification affecting game, explore mediasession)
+//TODO (check notification affecting game)
 private val manualVideoAppList = listOf(
-    "com.amazon.avod",
-    "com.vanced.android.youtube",
-    "com.cisco.webex.meetings",
-    "com.sec.android.gallery3d",
-    "com.google.android.apps.youtube",//Youtube Music
-    "com.samsung.android.tvplus",
-    "com.netflix.mediaclient",
-    "com.disney.disneyplus",
-    "com.samsung.android.video",
-    "com.plexapp.android",
-    "sg.hbo.hbogo",
-    "com.iqiyi",
-    "com.bilibili",
-    "com.vuclip.viu",
-    "com.Frontesque.youtube",
-    "org.schabi.newpipe",
-    "free.rm.skytube",
-    "com.github.libretube",
-    "tv.twitch.android",
-    "org.polymorphicshade.newpipe"
+    "amazon.avod",
+    "youtube",
+    "newpipe",
+    "webex.meetings",
+    "gallery",
+    "tvplus",
+    "netflix",
+    "disneyplus",
+    "plexapp",
+    "hbo.hbogo",
+    "iqiyi",
+    "bilibili",
+    "vuclip",
+    "skytube",
+    "libretube",
+    "twitch",
+    "video",
+    "iflix.play",
+    "viki",
+    "player",
+    "koushikdutta.cast",
+    "xbmc.kodi"
 )
 
-private val disableAdaptiveModList = listOf(
-    "com.android.chrome",
-    "com.microsoft.emmx",
-    "com.sec.android.app.sbrowser",
-    "com.samsung.android.app.appsedge",
+private val useStockAdaptiveList = listOf(
+    "browser",
+    "samsung.android.app.appsedge",
     "com.opera",
     "com.uc",
-    "org.mozilla.firefox",
-    "com.duckduckgo",
-    "com.brave.browser",
-    "com.kiwibrowser.browser",
-    "com.google.android.apps.photos",
+    "mozilla.firefox",
+    "duckduckgo",
+    "android.chrome",
+    "microsoft.emmx",
+    "microsoft.bing",
+    "android.apps.photos",
     "com.nbaimd",
     "com.twitter",
     "com.instagram",
-    "com.ss.android.ugc"
+    "ss.android.ugc" //tiktok
 )
 
 private val manualGameList = listOf(
     "com.google.stadia",
-    "com.valvesoftware.steamlink",
+    "steamlink",
+    "android.steam",
     "com.microsoft.xcloud",
     "com.microsoft.xboxone",
-    "com.gameloft.android",
-    "com.sec.android.app.samsungapps:com.sec.android.app.samsungapps.instantplays.InstantPlaysGameActivity",
+    "com.gameloft",
+    "android.app.samsungapps:InstantPlaysGameActivity",
     "com.distractionware",
     "com.supercell",
     "com.google.android.gms"
@@ -163,8 +165,8 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     private val mNotifBar by lazy {UtilNotifBarSt.instance(applicationContext)}
     private var triesA: Int = 0
     private var triesB: Int = 0
-    private var isGameOpen = false
-    private var isVideoApp = false
+    private var useStockAdaptive = false
+    private var ignoreScrollForNonNative = false
     private var useMin60 = false
     private var cameraOpen: Boolean = false
     private val mUtilsPrefGmh by lazy { UtilsPrefsGmhSt.instance(applicationContext) }
@@ -346,7 +348,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         }
     }
 
-    private val defaultLauncherName by lazy{DefaultApps.getLauncher(applicationContext)}
+   // private val defaultLauncherName by lazy{DefaultApps.getLauncher(applicationContext)}
 
     private fun switchSensorsOff(on: Boolean) {
         triesA = 0
@@ -743,13 +745,13 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         mHandler.postDelayed(ignoreRunnable, 2000L)
     }
 
-   // private val mediaSessionManager by lazy {(getSystemService(MEDIA_SESSION_SERVICE) as MediaSessionManager)}
-   var volumeJob: Job? = null
+    // private val mediaSessionManager by lazy {(getSystemService(MEDIA_SESSION_SERVICE) as MediaSessionManager)}
+    private var volumeJob: Job? = null
 
     override fun onKeyEvent(event: KeyEvent?): Boolean {
-       /*
-        Log.d(
-            "TESTEST","${event?.keyCode}")*/
+        /*
+         Log.d(
+             "TESTEST","${event?.keyCode}")*/
         volumeJob?.cancel()
         volumeJob = launch {
             if (event?.keyCode == KEYCODE_VOLUME_UP || event?.keyCode == KEYCODE_VOLUME_DOWN) {
@@ -784,12 +786,6 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
                 if (event.packageName != null && event.className != null) {
 
-                    /*if (event.packageName == "com.samsung.android.app.cocktailbarservice"){
-                        isGameOpen = true
-                        makeAdaptive()
-                        return
-                    }*/
-
                     val componentName = ComponentName(
                         event.packageName.toString(),
                         event.className.toString()
@@ -797,12 +793,11 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                     val activityInfo = tryGetActivity(componentName)
                     val ai = packageManager.getApplicationInfo(componentName.packageName, 0)
                     if (activityInfo != null){
-                        isGameOpen = false
-                        useMin60 = false
-                        isVideoApp = false
                         when {
                             (ai.category == CATEGORY_GAME || isPartOf(manualGameList, componentName)) -> {
-                                isGameOpen = true
+                                useStockAdaptive = true
+                                useMin60 = false
+                                ignoreScrollForNonNative = false
                                 setTempIgnoreTwsc()
                                 makeAdaptive()
                                 return
@@ -810,7 +805,8 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
                             (ai.category == CATEGORY_VIDEO || isPartOf(manualVideoAppList, componentName)) ->{
                                 useMin60 = true
-                                isVideoApp = true
+                                ignoreScrollForNonNative = true
+                                useStockAdaptive = false
                                 setTempIgnoreTwsc()
                                 makeAdaptive()
                                 return
@@ -819,12 +815,16 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                             (ai.category == CATEGORY_SOCIAL || ai.category == CATEGORY_MAPS) ->{
                                 if (!isOfficialAdaptive) {
                                     useMin60 = true
+                                    useStockAdaptive = false
+                                    ignoreScrollForNonNative = false
                                     setTempIgnoreTwsc()
                                     makeAdaptive()
                                     return
                                 }else{
                                     if (UtilsDeviceInfoSt.instance(applicationContext).isLowRefreshDevice){
-                                        isGameOpen = true
+                                        useStockAdaptive = true
+                                        useMin60 = false
+                                        ignoreScrollForNonNative = false
                                         setTempIgnoreTwsc()
                                         makeAdaptive()
                                         return
@@ -832,25 +832,45 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                                 }
                             }
 
-                            isPartOf(disableAdaptiveModList, componentName) -> {
+                            isPartOf(useStockAdaptiveList, componentName) -> {
                                 if (UtilsDeviceInfoSt.instance(applicationContext).isLowRefreshDevice){
-                                    isGameOpen = true
+                                    useStockAdaptive = true
+                                    useMin60 = false
+                                    ignoreScrollForNonNative = false
                                     setTempIgnoreTwsc()
                                     makeAdaptive()
                                     return
                                 }
                             }
+
+                            else ->{
+                                ignoreScrollForNonNative = false
+                                useStockAdaptive = false
+                                useMin60 = false
+                                for (window in windows) {
+                                    if (window.isInPictureInPictureMode || window.type == -1){
+                                        if (!isOfficialAdaptive) {
+                                            useMin60 = true
+                                            ignoreScrollForNonNative = true
+                                            makeAdaptive()
+                                            return
+                                        }else{
+                                            useStockAdaptive = true
+                                            makeAdaptive()
+                                            return
+                                        }
+                                    }
+                                }
+                                return
+                            }
                         }
                     }else{
                         if (ai.category == CATEGORY_VIDEO || isPartOf(manualVideoAppList, componentName)){
-                            /* if (isPartOf(manualVideoAppList, componentName)){*/
-                            //if (!isOfficialAdaptive) {
-                                useMin60 = true
-                                isVideoApp = true
-                                isGameOpen = false
-                                makeAdaptive()
-                                return
-                            //}
+                            useMin60 = true
+                            ignoreScrollForNonNative = true
+                            useStockAdaptive = false
+                            makeAdaptive()
+                            return
                         }
                     }
                 }
@@ -860,7 +880,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                 if (isOfficialAdaptive){
                     makeAdaptive()
                 }else{
-                    if (!isVideoApp){
+                    if (!ignoreScrollForNonNative){
                         makeAdaptive()
                     }
                 }
@@ -878,16 +898,17 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
                             "com.android.systemui" -> {
                                 if (mKeyguardManager.isDeviceLocked) {
-                                    if (isGameOpen) {
-                                        isGameOpen = false
+                                    if (useStockAdaptive) {
+                                        useStockAdaptive = false
                                     }
                                     return
                                 }else{
-                                    makeAdaptive()
+                                    if (isSamsung) {
+                                        makeAdaptive()
+                                    }
                                     return
                                 }
                             }
-
 
                             else -> {
                                 makeAdaptive()
@@ -896,51 +917,6 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                         }
                     }
 
-                    CONTENT_CHANGE_TYPE_SUBTREE + CONTENT_CHANGE_TYPE_TEXT -> { //3
-                        /*if (event.packageName?.toString() != "com.android.systemui" && isOfficialAdaptive) {
-                            makeAdaptive()*/
-                            return
-                       // }
-                    }
-
-                    else -> {
-                        for (window in windows) {
-                            if (window.isInPictureInPictureMode){
-                                if (!isOfficialAdaptive) {
-                                    isVideoApp = false
-                                    isGameOpen = false
-                                    useMin60 = true
-                                    makeAdaptive()
-                                    return
-                                }else{
-                                    isGameOpen = true
-                                    isVideoApp = false
-                                    useMin60 = false
-                                    makeAdaptive()
-                                    return
-                                }
-                            }
-                        }
-
-                        /* val sessions = mediaSessionManager.getActiveSessions(
-                             ComponentName(
-                                 this,
-                                 NotificationListener::class.java
-                             )
-                         )
-
-                         for (controller in sessions) {
-                             var isVideoPlaying = false
-                             try {
-                                 isVideoPlaying = controller.playbackInfo?.playbackType == MediaController.PlaybackInfo.PLAYBACK_TYPE_LOCAL
-                             } catch (_: java.lang.Exception) { }
-                             if (isVideoPlaying) {
-                                 useMin60 = true
-                                 makeAdaptive()
-                                 break
-                             }
-                         }*/
-                    }
                 }
             }
         }
@@ -951,25 +927,16 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
     @RequiresApi(Build.VERSION_CODES.M)
     private fun makeAdaptive() {
-        makeAdaptive(null)
-    }
-
-    @RequiresApi(Build.VERSION_CODES.M)
-    private fun makeAdaptive(del: Long?) {
-
-        // if (mUtilsRefreshRate.getPeakRefreshRateFromSettings() != prrActive.get()!!) {
         mUtilsRefreshRate.setPeakRefreshRate(prrActive.get()!!)
-        // }
-
         if (makeAdaptiveJob != null){
             makeAdaptiveJob!!.cancel()
             makeAdaptiveJob = null
         }
         makeAdaptiveJob = launch(Dispatchers.IO) {
-            delay(del ?: adaptiveDelayMillis)
-            if (applyAdaptiveMod.get()!! && isScreenOn.get() && !isGameOpen) {
+            delay(adaptiveDelayMillis)
+            if (applyAdaptiveMod.get()!! && isScreenOn.get() && !useStockAdaptive && !cameraOpen) {
                 mUtilsRefreshRate.setPeakRefreshRate(
-                    if (useMin60 || cameraOpen) max(60,lrrPref.get()!!) else lrrPref.get()!!
+                    if (useMin60) max(60, lrrPref.get()!!) else lrrPref.get()!!
                 )
             }
         }
@@ -1057,21 +1024,4 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         }
     }
 
-
-    /*   private val ignoredPackages by lazy {
-           listOf(
-               "com.samsung.android.game",
-               "com.samsung.android.plugin.dailylimits",
-               "com.samsung.accessibility",
-               "com.android.systemui",
-               "com.samsung.android.app.cocktailbarservice",
-               "com.google.android.gms",
-               "com.samsung.android.spay",
-               defaultKeyboard,
-               defaultLauncherName,
-               "com.samsung.android.sidegesturepad",
-               "com.samsung.android.app.edgetouch",
-               "com.xiaomi.gameboosterglobal"
-           )
-       }*/
 }

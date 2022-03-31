@@ -12,8 +12,8 @@
     <string name="adaptive">Adaptive</string>
     <string name="high">High</string>
     <string name="refresh_rate_mon">Refresh Rate Monitor</string>
-    <string name="left">Left</string>
-    <string name="right">Right</string>
+   <!-- <string name="left">Left</string>-->
+  <!--  <string name="right">Right</string>-->
     <string name="top">Top</string>
     <string name="bottom">Bottom</string>
     <string name="use_qstile_reso_switch">Use the included quick settings (qs) tile to quickly switch screen resolution.</string>
@@ -139,13 +139,13 @@
         Important Note: While the SensorsOff tile is on, the device\'s camera and microphone and other sensors are inaccessible.
         Functionalities affected include face unlock, audibility on voice calls (on some) and hinge angle detection, among others.
         Only use this if you clearly understand the effects of enabling sensors off.
-        \n\nMay not work if not using secured lockscreen on Android 12; alternatively WRITE_SECURE_SETTINGS permission can be granted on previous android version.
+        \n\nMay not work if using unsecured lockscreen on Android 12; alternatively WRITE_SECURE_SETTINGS permission can be granted on previous android version.
     </string>
     <string name="auto_sensors_off_exp">Auto SENSORS OFF</string>
     <string name="sensor_off_setup_info">Do this first: Enable \'Sensors Off\' tile in Settings > Developer options > Quick settings developer tiles. ></string>
     <string name="dev_opt_setup_info">To enable Developer options, go to Settings > About phone > Software info and tap \'Build number\' 7x.</string>
     <string name="enable_write_settings">Grant Galaxy Max Hz change system settings permission.</string>
-    <string name="as_desc">This service is required for galaxy max hz mods to work.</string>
+    <string name="as_desc">This service is required for most of galaxy max hz mods to work.</string>
     <string name="enable">Enable</string>
     <string name="premium_features">Premium Features</string>
     <string name="prevent_high">Prevent switching to High Mode</string>

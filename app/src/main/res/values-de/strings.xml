@@ -10,8 +10,8 @@
     <string name="adaptive">Adaptiv</string>
     <string name="high">Hoch</string>
     <string name="refresh_rate_mon">Bildwiederholrate Überwachen</string>
-    <string name="left">Links</string>
-    <string name="right">Rechts</string>
+  <!--  <string name="left">Links</string>
+    <string name="right">Rechts</string>-->
     <string name="top">Oben</string>
     <string name="bottom">Unten</string>
     <string name="center">Mitte</string>

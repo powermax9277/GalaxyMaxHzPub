@@ -10,8 +10,8 @@
     <string name="adaptive">Adaptive</string>
     <string name="high">High</string>
     <string name="refresh_rate_mon">刷新率監視器</string>
-    <string name="left">左邊</string>
-    <string name="right">右邊</string>
+<!--    <string name="left">左邊</string>
+    <string name="right">右邊</string>-->
     <string name="top">上側</string>
     <string name="bottom">底部</string>
     <string name="use_qstile_reso_switch">使用附帶的快速設置瓷磚快速切換分辨率和平滑的運動模式。</string>

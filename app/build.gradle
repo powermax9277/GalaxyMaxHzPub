@@ -21,8 +21,8 @@ android {
         minSdkVersion 22
         //noinspection ExpiredTargetSdkVersion
         targetSdkVersion 22
-        versionCode 137
-        versionName "7.14.37"
+        versionCode 138
+        versionName "7.14.38"
         setProperty("archivesBaseName", "galaxy_max_hz_v${versionName}")
     }
 
@@ -47,10 +47,10 @@ android {
 
     }
 
-    buildFeatures{
-        dataBinding = true
-        //viewBinding = true
+    dataBinding {
+        enabled = true
     }
+
 
     compileOptions {
         // Flag to enable support for the new language APIs
@@ -80,7 +80,7 @@ dependencies {
 
     implementation project(path:':appupdater')
 
-    implementation 'androidx.core:core-splashscreen:1.0.0-beta01'
+    implementation 'androidx.core:core-splashscreen:1.0.0-beta02'
 
     // ViewModel
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"

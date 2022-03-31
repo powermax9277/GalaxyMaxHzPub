@@ -10,8 +10,8 @@
     <string name="adaptive">Adaptivní</string>
     <string name="high">Vysoký</string>
     <string name="refresh_rate_mon">Monitor Obnovovací Frekvence</string>
-    <string name="left">Levá</string>
-    <string name="right">Pravá</string>
+<!--    <string name="left">Levá</string>
+    <string name="right">Pravá</string>-->
     <string name="top">Horní</string>
     <string name="bottom">Spodní</string>
     <string name="use_qstile_reso_switch">Pomocí dodávaného rychlé nastavení dlaždice k rychlému rezoluce spínačů a režimy pohybu hladkost.</string>
@@ -88,6 +88,7 @@
     <plurals name="aha">
         <item quantity="one">Prémiová zkušební verze aktivována: %d den zbývá.</item>
         <item quantity="few">Prémiová zkušební verze aktivována: %d dny zbývá.</item>
+        <item quantity="many">Prémiová zkušební verze aktivována: %d dny zbývá.</item>
     </plurals>
     <string name="nlh">Pro toto zařízení nebyla nalezena žádná prémiová licence:%s</string>
     <string name="edit">Upravit</string>
@@ -160,6 +161,7 @@
     <plurals name="access_notif">
         <item quantity="one">Accessibility service is required for the following - turn this off first to disable accessibility: %s</item>
         <item quantity="few">Accessibility service is required for the following - turn these off first to disable accessibility: %s</item>
+        <item quantity="many">Accessibility service is required for the following - turn these off first to disable accessibility: %s</item>
     </plurals>
     <!--    <string name="using_spay">SPay selže</string>-->
 </resources>

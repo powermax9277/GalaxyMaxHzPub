@@ -10,8 +10,8 @@
     <string name="adaptive">Adaptive</string>
     <string name="high">Cao</string>
     <string name="refresh_rate_mon">Tốc độ làm mới theo thời gian thực</string>
-    <string name="left">Trái</string>
-    <string name="right">Phải</string>
+<!--    <string name="left">Trái</string>
+    <string name="right">Phải</string>-->
     <string name="top">Phía trên</string>
     <string name="bottom">Dưới cùng</string>
     <string name="use_qstile_reso_switch">Thao tác này sẽ đặt thiết bị của bạn ở chế độ tiết kiệm pin và nhanh chóng vào chế độ doze trong khi tắt màn hình để cải thiện mức tiêu thụ pin ở chế độ chờ.

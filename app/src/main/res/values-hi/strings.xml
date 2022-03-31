@@ -11,8 +11,8 @@
     <string name="adaptive">अनुकूली</string>
     <string name="high">उच्च</string>
     <string name="refresh_rate_mon">दिखाएँ वास्तविक समय ताज़ा दर</string>
-    <string name="left">बाईं तरफ</string>
-    <string name="right">दाईं ओर</string>
+<!--    <string name="left">बाईं तरफ</string>
+    <string name="right">दाईं ओर</string>-->
     <string name="top">ऊपरी ओर</string>
     <string name="bottom">नीचे की ओर</string>
     <string name="use_qstile_reso_switch">त्वरित रूप से स्विच प्रस्तावों और गति चिकनाई मोड करने के लिए शामिल त्वरित सेटिंग्स टाइल का प्रयोग करें।</string>

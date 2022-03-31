@@ -11,8 +11,8 @@
     <string name="adaptive">Адаптивная</string>
     <string name="high">Высокая</string>
     <string name="refresh_rate_mon">Счетчик текущей Гц</string>
-    <string name="left">Слева</string>
-    <string name="right">Справа</string>
+<!--    <string name="left">Слева</string>
+    <string name="right">Справа</string>-->
     <string name="top">Сверху</string>
     <string name="bottom">Снизу</string>
     <string name="use_qstile_reso_switch">Используйте кнопку на панели быстрых настроек (QS/БН) для быстрой смены разрешения экрана.</string>

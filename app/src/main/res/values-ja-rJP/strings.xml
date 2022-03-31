@@ -10,8 +10,8 @@
     <string name="adaptive">アダプティブ</string>
     <string name="high">フォースハイ</string>
     <string name="refresh_rate_mon">リフレッシュレートモニター</string>
-    <string name="left">左</string>
-    <string name="right">右</string>
+<!--    <string name="left">左</string>
+    <string name="right">右</string>-->
     <string name="top">上</string>
     <string name="bottom">下</string>
     <string name="use_qstile_reso_switch">付属のクイック設定（qs）タイルを使用して、画面の解像度をすばやく切り替えます。</string>

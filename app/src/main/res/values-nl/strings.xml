@@ -10,8 +10,8 @@
     <string name="adaptive">Adaptieve</string>
     <string name="high">Hoge</string>
     <string name="refresh_rate_mon">Toon Real-time Vernieuwingsfrequentie</string>
-    <string name="left">Links</string>
-    <string name="right">Rechtsaf</string>
+<!--    <string name="left">Links</string>
+    <string name="right">Rechtsaf</string>-->
     <string name="top">Bovenkant</string>
     <string name="bottom">Onderkant</string>
     <string name="use_qstile_reso_switch">Gebruik de meegeleverde tegel voor snelle instellingen om snel te schakelen tussen resoluties.</string>

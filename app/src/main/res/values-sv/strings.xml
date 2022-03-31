@@ -11,8 +11,8 @@
     <string name="adaptive">"Adaptiv"</string>
     <string name="high">"Hög"</string>
     <string name="refresh_rate_mon">"Övervakare för uppdateringsfrekvens"</string>
-    <string name="left">"Vänster"</string>
-    <string name="right">"Höger"</string>
+<!--    <string name="left">"Vänster"</string>
+    <string name="right">"Höger"</string>-->
     <string name="top">"Topp"</string>
     <string name="bottom">"Botten"</string>
     <string name="use_qstile_reso_switch">"Använd den medföljande rutan för snabbinställningar (qs) för att snabbt växla skärmupplösning."</string>

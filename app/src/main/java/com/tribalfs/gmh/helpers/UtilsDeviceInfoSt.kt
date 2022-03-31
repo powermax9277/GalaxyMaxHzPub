@@ -86,6 +86,14 @@ class UtilsDeviceInfoSt private constructor(val appCtx: Context) {
             }
         }
 
+    /*internal val isGoogleMapsTrickDevice: Boolean
+        get() {
+            return when (deviceModel) {
+                S20, S205G, S20P_E, S20FE, S20FE5G, S20U, S20P_S, N20U5G -> true //TODO remove N20U
+                else -> false
+            }
+        }*/
+
     internal fun getCurrentDisplay(): Display  {
         synchronized(mLock) {
             return dm.getDisplay(displayId)

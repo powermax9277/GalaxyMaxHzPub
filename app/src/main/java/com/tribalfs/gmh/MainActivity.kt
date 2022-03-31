@@ -791,14 +791,14 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
         setupBrightnessSeekBar()
         setupMenuVisibility()
 
-        viewModel.isValidAdFree.observe(this, { adFree ->
-            isPremium.set( adFree)
+        viewModel.isValidAdFree.observe(this) { adFree ->
+            isPremium.set(adFree)
             updateNetSpeed(adFree)
             mBinding.premium = adFree
             initDozeMod(adFree)
             initDisableAutoSync(adFree)
             setupScreenOffSensorsOff(adFree) //New
-        })
+        }
 
         viewModel.setAdFreeCode(mUtilsPrefsAct.gmhPrefLicType)
 

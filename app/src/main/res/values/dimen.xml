@@ -3,7 +3,7 @@
     <dimen name="vertical_spacing">6dp</dimen>
     <dimen name="horizontal_spacing">8dp</dimen>
     <dimen name="seekbar_width">250dp</dimen>
-    <integer name="design_snackbar_text_max_lines" tools:keep="@integer/design_snackbar_text_max_lines">15</integer>
+    <integer name="design_snackbar_text_max_lines" tools:keep="@integer/design_snackbar_text_max_lines" tools:ignore="PrivateResource">15</integer>
     <dimen name="default_corner_radius">8dp</dimen>
     <dimen name="item_width">250dp</dimen>
 </resources>

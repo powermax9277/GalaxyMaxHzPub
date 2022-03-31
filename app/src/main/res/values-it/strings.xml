@@ -10,8 +10,8 @@
     <string name="adaptive">Adattiva</string>
     <string name="high">Alta</string>
     <string name="refresh_rate_mon">Mostra Frequenza Di Aggiornamento In Tempo reale</string>
-    <string name="left">Sinistra</string>
-    <string name="right">Destra</string>
+<!--    <string name="left">Sinistra</string>
+    <string name="right">Destra</string>-->
     <string name="top">Superiore</string>
     <string name="bottom">Inferiore</string>
     <string name="use_qstile_reso_switch">

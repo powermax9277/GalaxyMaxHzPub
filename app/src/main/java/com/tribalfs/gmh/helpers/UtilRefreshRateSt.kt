@@ -867,7 +867,7 @@ class UtilRefreshRateSt private constructor (val appCtx: Context) {
     }
 
 
-    internal fun getPeakRefreshRateFromSettings(): Int? {
+    private fun getPeakRefreshRateFromSettings(): Int? {
         return try {
             val prr =  Settings.System.getString(appCtx.contentResolver, PEAK_REFRESH_RATE)
             prr.toInt()
@@ -933,6 +933,7 @@ class UtilRefreshRateSt private constructor (val appCtx: Context) {
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.M)
     @ExperimentalCoroutinesApi
     internal fun applyMinHz(){
         val regMinHz = UtilsDeviceInfoSt.instance(appCtx).regularMinHz
@@ -949,6 +950,7 @@ class UtilRefreshRateSt private constructor (val appCtx: Context) {
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.M)
     @ExperimentalCoroutinesApi
     internal fun updateAdaptiveModCachedParams() {
         synchronized(mLock) {
@@ -966,6 +968,7 @@ class UtilRefreshRateSt private constructor (val appCtx: Context) {
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.M)
     @ExperimentalCoroutinesApi
     private fun canApplyFakeAdaptiveInt(): Boolean {
 
@@ -976,13 +979,11 @@ class UtilRefreshRateSt private constructor (val appCtx: Context) {
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.M)
     @ExperimentalCoroutinesApi
     private fun isFakeAdaptive(): Boolean {
         return (currentRefreshRateMode.get() == REFRESH_RATE_MODE_SEAMLESS)
-                && (hasWriteSecureSetPerm || gmhAccessInstance != null/*isAccessibilityEnabled(
-            appCtx,
-            GalaxyMaxHzAccess::class.java
-        )*/)
+                && (hasWriteSecureSetPerm || gmhAccessInstance != null)
                 && (if (isOfficialAdaptive) (UtilsPrefsGmhSt.instance(appCtx).gmhPrefMinHzAdapt < UtilsDeviceInfoSt.instance(appCtx).regularMinHz) else true)
     }
 

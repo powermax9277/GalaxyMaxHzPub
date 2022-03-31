@@ -11,8 +11,8 @@
     <string name="adaptive">Προσαρμόσιμος</string>
     <string name="high">Υψηλός</string>
     <string name="refresh_rate_mon">Μετρητής Ρυθμού Ανανέωσης</string>
-    <string name="left">Αριστερά</string>
-    <string name="right">Δεξιά</string>
+<!--    <string name="left">Αριστερά</string>
+    <string name="right">Δεξιά</string>-->
     <string name="top">Πάνω</string>
     <string name="bottom">Κάτω</string>
     <string name="use_qstile_reso_switch">Χρήση του εικονιδίου γρήγορης ρύθμισης για γρήγορη εναλλαγή ανάλυσης οθόνης.</string>

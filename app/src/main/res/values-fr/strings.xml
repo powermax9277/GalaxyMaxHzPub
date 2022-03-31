@@ -10,8 +10,8 @@
     <string name="adaptive">Adaptatif</string>
     <string name="high">Haut</string>
     <string name="refresh_rate_mon">Afficher le taux de rafraîchissement en temps réel</string>
-    <string name="left">La gauche</string>
-    <string name="right">À droite</string>
+<!--    <string name="left">La gauche</string>
+    <string name="right">À droite</string>-->
     <string name="top">Plus haut</string>
     <string name="bottom">En Bas</string>
     <string name="use_qstile_reso_switch">Utilisez la vignette des paramètres rapides (qs) incluse pour changer rapidement de résolution d\'écran.</string>
@@ -81,6 +81,7 @@
     <plurals name="aha">
         <item quantity="one">Essai Premium activé: %d jour restant</item>
         <item quantity="other">Essai Premium activé: %d jours restants</item>
+        <item quantity="many">Essai Premium activé: %d jours restants</item>
     </plurals>
     <string name="nlh">Aucune licence premium trouvée pour cet appareil: %s</string>
     <string name="edit">Éditer</string>
@@ -160,5 +161,6 @@
     <plurals name="access_notif">
         <item quantity="one">Accessibility service is required for the following - turn this off first to disable accessibility: %s</item>
         <item quantity="other">Accessibility service is required for the following - turn these off first to disable accessibility: %s</item>
+        <item quantity="many">Accessibility service is required for the following - turn these off first to disable accessibility: %s</item>
     </plurals>
 </resources>

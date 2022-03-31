@@ -10,8 +10,8 @@
     <string name="adaptive">Adaptativo</string>
     <string name="high">Alto</string>
     <string name="refresh_rate_mon">Mostrar frecuencia de actualización en tiempo real</string>
-    <string name="left">Izquierda</string>
-    <string name="right">Derecha</string>
+<!--    <string name="left">Izquierda</string>
+    <string name="right">Derecha</string>-->
     <string name="top">Cima</string>
     <string name="bottom">Abajo</string>
     <string name="use_qstile_reso_switch">Utilice el mosaico de configuración rápida incluido para cambiar rápidamente las resoluciones.</string>

@@ -22,10 +22,10 @@
 
 
     <style name="AlertDialogStyle" parent="ThemeOverlay.MaterialComponents.Dialog.Alert">
-        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay</item>
+        <item name="shapeAppearanceOverlay">@style/MyShapeAppearanceOverlay</item>
     </style>
 
-    <style name="ShapeAppearanceOverlay" parent="">
+    <style name="MyShapeAppearanceOverlay" parent="">
         <item name="cornerSize">12dp</item>
     </style>
 

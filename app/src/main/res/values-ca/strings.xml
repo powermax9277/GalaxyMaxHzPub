@@ -12,8 +12,8 @@
     <string name="adaptive">Adaptive</string>
     <string name="high">High</string>
     <string name="refresh_rate_mon">Monitor de velocitat d’actualització</string>
-    <string name="left">Esquerra</string>
-    <string name="right">Dret</string>
+<!--    <string name="left">Esquerra</string>
+    <string name="right">Dret</string>-->
     <string name="top">Part superior</string>
     <string name="bottom">Part inferior</string>
     <string name="use_qstile_reso_switch">Utilitzeu el mosaic de configuració ràpida (qs) inclòs per canviar ràpidament la resolució de la pantalla</string>
