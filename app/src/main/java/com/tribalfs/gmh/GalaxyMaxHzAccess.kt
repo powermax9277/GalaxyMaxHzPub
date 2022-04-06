@@ -118,7 +118,7 @@ private val useStockAdaptiveList = listOf(
     "browser",
     "samsung.android.app.appsedge",
     "com.opera",
-    "com.uc",
+    "com.uc.",
     "mozilla.firefox",
     "duckduckgo",
     "android.chrome",
@@ -128,7 +128,7 @@ private val useStockAdaptiveList = listOf(
     "com.nbaimd",
     "com.twitter",
     "com.instagram",
-    "ss.android.ugc" //tiktok
+    "ss.android.ugc." //tiktok
 )
 
 private val manualGameList = listOf(
@@ -141,7 +141,9 @@ private val manualGameList = listOf(
     "android.app.samsungapps:InstantPlaysGameActivity",
     "com.distractionware",
     "com.supercell",
-    "com.google.android.gms"
+    "com.google.android.gms",
+    "com.samsung.android.app.notes",
+    "com.epicgames"
 )
 
 
@@ -339,6 +341,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
             override fun onCameraAvailable(cameraId: String) {
                 super.onCameraAvailable(cameraId)
                 cameraOpen = false
+                makeAdaptive()
             }
 
             override fun onCameraUnavailable(cameraId: String) {
@@ -742,9 +745,19 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     private fun setTempIgnoreTwsc(){
         mHandler.removeCallbacks(ignoreRunnable)
         ignoreNextTWSC = true
-        mHandler.postDelayed(ignoreRunnable, 2000L)
+        mHandler.postDelayed(ignoreRunnable, 500L)
     }
 
+    private var ignoreNextAhh = true
+    private val ignoreAhhRunnable = Runnable {
+        ignoreNextAhh = true
+    }
+
+    private fun setTempDisableIgnoreAhh(){
+        mHandler.removeCallbacks(ignoreAhhRunnable)
+        ignoreNextAhh = false
+        mHandler.postDelayed(ignoreAhhRunnable, 1000L)
+    }
     // private val mediaSessionManager by lazy {(getSystemService(MEDIA_SESSION_SERVICE) as MediaSessionManager)}
     private var volumeJob: Job? = null
 
@@ -770,29 +783,31 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     @SuppressLint("SwitchIntDef")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
-        /*
-        Log.d(
-            "TESTEST",
-            "EVENT_TYPE ${event?.eventType} CHANGE_TYPE ${event?.contentChangeTypes} ${event?.packageName} Classname: ${event?.className}"
-        )*/
 
         if (!isScreenOn.get() || !applyAdaptiveMod.get()!!) return
 
-
+        /*Log.d(
+            "TESTEST",
+            "EVENT_TYPE ${event?.eventType} CHANGE_TYPE ${event?.contentChangeTypes} ${event?.packageName} Classname: ${event?.className}"
+        )*/
         when (event?.eventType) {
 
             TYPE_WINDOW_STATE_CHANGED -> {//32
+
+                if (event.contentChangeTypes != 0) return
+
                 if (ignoreNextTWSC) return
 
                 if (event.packageName != null && event.className != null) {
-
                     val componentName = ComponentName(
                         event.packageName.toString(),
                         event.className.toString()
                     )
                     val activityInfo = tryGetActivity(componentName)
+
                     val ai = packageManager.getApplicationInfo(componentName.packageName, 0)
                     if (activityInfo != null){
+
                         when {
                             (ai.category == CATEGORY_GAME || isPartOf(manualGameList, componentName)) -> {
                                 useStockAdaptive = true
@@ -800,6 +815,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                                 ignoreScrollForNonNative = false
                                 setTempIgnoreTwsc()
                                 makeAdaptive()
+                                //Log.d("TESTEST", "Game detected ${event.packageName}")
                                 return
                             }
 
@@ -807,17 +823,19 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                                 useMin60 = true
                                 ignoreScrollForNonNative = true
                                 useStockAdaptive = false
-                                setTempIgnoreTwsc()
+                               // setTempIgnoreTwsc()
                                 makeAdaptive()
+                               // Log.d("TESTEST", "Video detected ${event.packageName}")
                                 return
                             }
 
                             (ai.category == CATEGORY_SOCIAL || ai.category == CATEGORY_MAPS) ->{
+                                //Log.d("TESTEST", "Social detected ${event.packageName}")
                                 if (!isOfficialAdaptive) {
                                     useMin60 = true
                                     useStockAdaptive = false
                                     ignoreScrollForNonNative = false
-                                    setTempIgnoreTwsc()
+                                    //setTempIgnoreTwsc()
                                     makeAdaptive()
                                     return
                                 }else{
@@ -825,65 +843,69 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                                         useStockAdaptive = true
                                         useMin60 = false
                                         ignoreScrollForNonNative = false
-                                        setTempIgnoreTwsc()
+                                        //setTempIgnoreTwsc()
                                         makeAdaptive()
-                                        return
+                                           return
                                     }
                                 }
                             }
 
                             isPartOf(useStockAdaptiveList, componentName) -> {
+                                //Log.d("TESTEST", "UseStock detected ${event.packageName}")
                                 if (UtilsDeviceInfoSt.instance(applicationContext).isLowRefreshDevice){
                                     useStockAdaptive = true
                                     useMin60 = false
                                     ignoreScrollForNonNative = false
-                                    setTempIgnoreTwsc()
+                                    //setTempIgnoreTwsc()
                                     makeAdaptive()
                                     return
                                 }
                             }
 
-                            else ->{
+                            else -> {
                                 ignoreScrollForNonNative = false
                                 useStockAdaptive = false
                                 useMin60 = false
                                 for (window in windows) {
-                                    if (window.isInPictureInPictureMode || window.type == -1){
-                                        if (!isOfficialAdaptive) {
+                                    if (window.isInPictureInPictureMode
+                                        || (window.type == -1 && windows.indexOf(window) == 3 && UtilsDeviceInfoSt.instance(applicationContext).isLowRefreshDevice) ) {
+                                          if (!isOfficialAdaptive) {
                                             useMin60 = true
-                                            ignoreScrollForNonNative = true
                                             makeAdaptive()
                                             return
-                                        }else{
+                                        } else {
                                             useStockAdaptive = true
                                             makeAdaptive()
                                             return
                                         }
                                     }
                                 }
+                                makeAdaptive()//don't remove
                                 return
                             }
                         }
                     }else{
-                        if (ai.category == CATEGORY_VIDEO || isPartOf(manualVideoAppList, componentName)){
-                            useMin60 = true
-                            ignoreScrollForNonNative = true
-                            useStockAdaptive = false
-                            makeAdaptive()
-                            return
+                        when {
+                            (ai.category == CATEGORY_VIDEO || isPartOf(manualVideoAppList, componentName)) -> {
+                                //Log.d("TESTEST", "Game detected Alt ${event.packageName}")
+                                useMin60 = true
+                                ignoreScrollForNonNative = true
+                                useStockAdaptive = false
+                               // setTempIgnoreTwsc()
+                                makeAdaptive()
+                                return
+                            }
+
                         }
                     }
                 }
             }
 
             TYPE_VIEW_SCROLLED/*4096 */ -> {
-                if (isOfficialAdaptive){
-                    makeAdaptive()
-                }else{
-                    if (!ignoreScrollForNonNative){
+                if (isOfficialAdaptive || !ignoreScrollForNonNative){
                         makeAdaptive()
-                    }
                 }
+                return
             }
 
 
@@ -892,6 +914,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
                     CONTENT_CHANGE_TYPE_SUBTREE -> {//1
                         when (event.packageName?.toString()) {
+
                             BuildConfig.APPLICATION_ID ->{
                                 return
                             }
@@ -903,7 +926,8 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                                     }
                                     return
                                 }else{
-                                    if (isSamsung) {
+                                    //Notification Panel
+                                    if (UtilsDeviceInfoSt.instance(applicationContext).isLowRefreshDevice){
                                         makeAdaptive()
                                     }
                                     return
@@ -911,12 +935,32 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                             }
 
                             else -> {
-                                makeAdaptive()
-                                return
+                                if ((isOfficialAdaptive && useMin60) || UtilsDeviceInfoSt.instance(applicationContext).isLowRefreshDevice){
+                                    makeAdaptive()
+                                    return
+                                }
                             }
                         }
                     }
 
+                    CONTENT_CHANGE_TYPE_SUBTREE + CONTENT_CHANGE_TYPE_TEXT -> {//3
+                        //When expanding notification in some cases
+                        if (isOfficialAdaptive && event.packageName?.toString() == "com.android.systemui") {
+                            makeAdaptive()
+                            return
+                        }
+                    }
+                }
+            }
+
+            4194304 ->{
+                if (ignoreNextAhh) {
+                    setTempDisableIgnoreAhh()
+                    return
+                }
+                if (event.contentChangeTypes == 0){
+                    makeAdaptive()
+                    setTempDisableIgnoreAhh()
                 }
             }
         }

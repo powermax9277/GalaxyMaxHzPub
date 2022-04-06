@@ -8,4 +8,3 @@
         android:accessibilityFlags="flagRetrieveInteractiveWindows|flagIncludeNotImportantViews|flagRequestFilterKeyEvents"
         android:canRequestFilterKeyEvents="true"
         />
-    <!--TODO(review effect of flagRequestFilterKeyEvents)-->
