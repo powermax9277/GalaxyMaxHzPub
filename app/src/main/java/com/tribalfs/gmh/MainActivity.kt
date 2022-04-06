@@ -1553,15 +1553,13 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                     mBinding.sbMinHzAdapt.progress.let{
                         if (it <  regMinHz && isPremium.get() != true){
                             Toast.makeText(this@MainActivity, getString(R.string.is_prem_ft, "$it Hz"), Toast.LENGTH_SHORT).show()
-                            mBinding.sbMinHzAdapt.progress = regMinHz
-                            return
+                            seekBar.progress = regMinHz
                         }
                     }
 
                     if (isOfficialAdaptive && seekBar.progress < regMinHz) {
                         if (!checkAccessibilityPerm(true)) {
                             seekBar.progress = regMinHz
-                            return
                         }
                     }
 
