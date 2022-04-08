@@ -111,7 +111,8 @@ private val manualVideoAppList = listOf(
     "viki",
     "player",
     "koushikdutta.cast",
-    "xbmc.kodi"
+    "xbmc.kodi",
+    "com.teamseries.lotus"
 )
 
 private val useStockAdaptiveList = listOf(
@@ -170,6 +171,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     private var useStockAdaptive = false
     private var ignoreScrollForNonNative = false
     private var useMin60 = false
+    private var volumePressed = false
     private var cameraOpen: Boolean = false
     private val mUtilsPrefGmh by lazy { UtilsPrefsGmhSt.instance(applicationContext) }
     private val notificationManagerCompat by lazy { NotificationManagerCompat.from(applicationContext)}
@@ -764,16 +766,16 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     override fun onKeyEvent(event: KeyEvent?): Boolean {
         /*
          Log.d(
-             "TESTEST","${event?.keyCode}")*/
+             "TESTEST","${event?.keyCode}")
+             */
         volumeJob?.cancel()
         volumeJob = launch {
             if (event?.keyCode == KEYCODE_VOLUME_UP || event?.keyCode == KEYCODE_VOLUME_DOWN) {
-                useMin60 = true
+                volumePressed = true
                 makeAdaptive()
                 delay(5000)
-                useMin60 = false
+                volumePressed = false
                 makeAdaptive()
-
             }
         }
         volumeJob?.start()
@@ -815,7 +817,6 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                                 ignoreScrollForNonNative = false
                                 setTempIgnoreTwsc()
                                 makeAdaptive()
-                                //Log.d("TESTEST", "Game detected ${event.packageName}")
                                 return
                             }
 
@@ -823,19 +824,15 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                                 useMin60 = true
                                 ignoreScrollForNonNative = true
                                 useStockAdaptive = false
-                               // setTempIgnoreTwsc()
                                 makeAdaptive()
-                               // Log.d("TESTEST", "Video detected ${event.packageName}")
                                 return
                             }
 
                             (ai.category == CATEGORY_SOCIAL || ai.category == CATEGORY_MAPS) ->{
-                                //Log.d("TESTEST", "Social detected ${event.packageName}")
                                 if (!isOfficialAdaptive) {
                                     useMin60 = true
                                     useStockAdaptive = false
                                     ignoreScrollForNonNative = false
-                                    //setTempIgnoreTwsc()
                                     makeAdaptive()
                                     return
                                 }else{
@@ -856,7 +853,6 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                                     useStockAdaptive = true
                                     useMin60 = false
                                     ignoreScrollForNonNative = false
-                                    //setTempIgnoreTwsc()
                                     makeAdaptive()
                                     return
                                 }
@@ -887,11 +883,9 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                     }else{
                         when {
                             (ai.category == CATEGORY_VIDEO || isPartOf(manualVideoAppList, componentName)) -> {
-                                //Log.d("TESTEST", "Game detected Alt ${event.packageName}")
                                 useMin60 = true
                                 ignoreScrollForNonNative = true
                                 useStockAdaptive = false
-                               // setTempIgnoreTwsc()
                                 makeAdaptive()
                                 return
                             }
@@ -980,7 +974,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
             delay(adaptiveDelayMillis)
             if (applyAdaptiveMod.get()!! && isScreenOn.get() && !useStockAdaptive && !cameraOpen) {
                 mUtilsRefreshRate.setPeakRefreshRate(
-                    if (useMin60) max(60, lrrPref.get()!!) else lrrPref.get()!!
+                    if (useMin60 || volumePressed) max(60, lrrPref.get()!!) else lrrPref.get()!!
                 )
             }
         }
