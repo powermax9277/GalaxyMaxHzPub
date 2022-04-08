@@ -840,7 +840,6 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                                         useStockAdaptive = true
                                         useMin60 = false
                                         ignoreScrollForNonNative = false
-                                        //setTempIgnoreTwsc()
                                         makeAdaptive()
                                            return
                                     }
@@ -848,7 +847,6 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                             }
 
                             isPartOf(useStockAdaptiveList, componentName) -> {
-                                //Log.d("TESTEST", "UseStock detected ${event.packageName}")
                                 if (UtilsDeviceInfoSt.instance(applicationContext).isLowRefreshDevice){
                                     useStockAdaptive = true
                                     useMin60 = false
