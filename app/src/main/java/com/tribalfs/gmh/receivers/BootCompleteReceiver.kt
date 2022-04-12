@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.annotation.RequiresApi
+import com.tribalfs.gmh.helpers.PsmChangeHandler
 import com.tribalfs.gmh.helpers.UtilRefreshRateSt
 import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt
 import com.tribalfs.gmh.profiles.ProfilesObj.refreshRateModeMap
@@ -22,11 +23,14 @@ class BootCompleteReceiver : BroadcastReceiver() {
                     while (refreshRateModeMap.isEmpty()) {
                         delay(250)
                     }
-                    val appCtx = context.applicationContext
-                    val reso = UtilsDeviceInfoSt.instance(appCtx).getDisplayResolution()
-                    val resName = ResolutionChangeUtil(appCtx).getResName(null)
-                    if (resName == "CQHD+") ResolutionChangeUtil(appCtx).changeRes(reso)
-                    UtilRefreshRateSt.instance(appCtx).requestListeningAllTiles()
+                    val reso = UtilsDeviceInfoSt.instance(context.applicationContext).getDisplayResolution()
+                    val resName = ResolutionChangeUtil(context.applicationContext).getResName(null)
+                    if (resName == "CQHD+") ResolutionChangeUtil(context.applicationContext).changeRes(reso)
+                    UtilRefreshRateSt.instance(context.applicationContext).requestListeningAllTiles()
+                    if (UtilsDeviceInfoSt.instance(context.applicationContext).isPowerSavingsMode()) {
+                        delay(3000)
+                        PsmChangeHandler.instance(context.applicationContext).handle()
+                    }
                 }
             }
         }

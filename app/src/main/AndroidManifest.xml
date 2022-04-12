@@ -4,7 +4,10 @@
     package="com.tribalfs.gmh">
 
     <uses-sdk tools:overrideLibrary="androidx.security" />
+    <queries> <package android:name="com.google.android.apps.maps" /> </queries>
 
+ <!--   <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
+-->
     <uses-permission
         android:name="android.permission.WRITE_SETTINGS"
         tools:ignore="ProtectedPermissions" />

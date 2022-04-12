@@ -14,6 +14,13 @@ import android.util.Size
 import android.view.Display
 import androidx.annotation.RequiresApi
 import com.tribalfs.gmh.helpers.CacheSettings.displayId
+import com.tribalfs.gmh.profiles.ModelNumbers.S20
+import com.tribalfs.gmh.profiles.ModelNumbers.S205G
+import com.tribalfs.gmh.profiles.ModelNumbers.S20FE
+import com.tribalfs.gmh.profiles.ModelNumbers.S20FE5G
+import com.tribalfs.gmh.profiles.ModelNumbers.S20P_E
+import com.tribalfs.gmh.profiles.ModelNumbers.S20P_S
+import com.tribalfs.gmh.profiles.ModelNumbers.S20U
 import com.tribalfs.gmh.profiles.ModelNumbers.S22
 import com.tribalfs.gmh.profiles.ModelNumbers.S22P
 import com.tribalfs.gmh.profiles.ModelNumbers.S22U
@@ -86,13 +93,13 @@ class UtilsDeviceInfoSt private constructor(val appCtx: Context) {
             }
         }
 
-    /*internal val isGoogleMapsTrickDevice: Boolean
+    internal val isGoogleMapsTrickDevice: Boolean
         get() {
             return when (deviceModel) {
                 S20, S205G, S20P_E, S20FE, S20FE5G, S20U, S20P_S -> true
                 else -> false
             }
-        }*/
+        }
 
     internal fun getCurrentDisplay(): Display  {
         synchronized(mLock) {

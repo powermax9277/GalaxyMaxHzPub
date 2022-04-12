@@ -83,12 +83,13 @@ import kotlinx.coroutines.*
 import java.lang.Integer.max
 import java.lang.Runnable
 import kotlin.coroutines.CoroutineContext
+
+
 internal const val PLAYING = 1
 internal const val STOPPED = -1
 internal const val PAUSE = 0
 private const val MAX_TRY = 8
 
-//TODO (check notification affecting game)
 private val manualVideoAppList = listOf(
     "amazon.avod",
     "youtube",
@@ -353,7 +354,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         }
     }
 
-   // private val defaultLauncherName by lazy{DefaultApps.getLauncher(applicationContext)}
+    private val defaultLauncherName by lazy{DefaultApps.getLauncher(applicationContext)}
 
     private fun switchSensorsOff(on: Boolean) {
         triesA = 0
@@ -739,16 +740,6 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         }
     }
 
-    private var ignoreNextTWSC = false
-    private val ignoreRunnable = Runnable {
-        ignoreNextTWSC = false
-    }
-
-    private fun setTempIgnoreTwsc(){
-        mHandler.removeCallbacks(ignoreRunnable)
-        ignoreNextTWSC = true
-        mHandler.postDelayed(ignoreRunnable, 500L)
-    }
 
     private var ignoreNextAhh = true
     private val ignoreAhhRunnable = Runnable {
@@ -760,14 +751,24 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         ignoreNextAhh = false
         mHandler.postDelayed(ignoreAhhRunnable, 1000L)
     }
+
+    private var ignoreLauncher = true
+    private val ignoreLauncherRunnable = Runnable {
+        ignoreLauncher = true
+    }
+
+    private fun setNoIgnoreLauncher(){
+        mHandler.removeCallbacks(ignoreLauncherRunnable)
+        ignoreLauncher = false
+        mHandler.postDelayed(ignoreLauncherRunnable, 1000L)
+    }
+
     // private val mediaSessionManager by lazy {(getSystemService(MEDIA_SESSION_SERVICE) as MediaSessionManager)}
     private var volumeJob: Job? = null
 
+    private var isLauncher = false
+
     override fun onKeyEvent(event: KeyEvent?): Boolean {
-        /*
-         Log.d(
-             "TESTEST","${event?.keyCode}")
-             */
         volumeJob?.cancel()
         volumeJob = launch {
             if (event?.keyCode == KEYCODE_VOLUME_UP || event?.keyCode == KEYCODE_VOLUME_DOWN) {
@@ -782,25 +783,33 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         return super.onKeyEvent(event)
     }
 
+    private var lastOpen: String = ""
+
     @SuppressLint("SwitchIntDef")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
 
         if (!isScreenOn.get() || !applyAdaptiveMod.get()!!) return
 
-        /*Log.d(
-            "TESTEST",
-            "EVENT_TYPE ${event?.eventType} CHANGE_TYPE ${event?.contentChangeTypes} ${event?.packageName} Classname: ${event?.className}"
-        )*/
+        /* Log.d(
+             "TESTEST",
+             "EVENT_TYPE ${event?.eventType} CHANGE_TYPE ${event?.contentChangeTypes} ${event?.packageName} Classname: ${event?.className}"
+         )*/
         when (event?.eventType) {
 
             TYPE_WINDOW_STATE_CHANGED -> {//32
 
                 if (event.contentChangeTypes != 0) return
 
-                if (ignoreNextTWSC) return
-
                 if (event.packageName != null && event.className != null) {
+
+                    if (event.packageName == defaultLauncherName){
+                        if (ignoreLauncher){
+                            setNoIgnoreLauncher()
+                            return
+                        }
+                    }
+
                     val componentName = ComponentName(
                         event.packageName.toString(),
                         event.className.toString()
@@ -808,6 +817,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                     val activityInfo = tryGetActivity(componentName)
 
                     val ai = packageManager.getApplicationInfo(componentName.packageName, 0)
+
                     if (activityInfo != null){
 
                         when {
@@ -815,7 +825,6 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                                 useStockAdaptive = true
                                 useMin60 = false
                                 ignoreScrollForNonNative = false
-                                setTempIgnoreTwsc()
                                 makeAdaptive()
                                 return
                             }
@@ -841,7 +850,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                                         useMin60 = false
                                         ignoreScrollForNonNative = false
                                         makeAdaptive()
-                                           return
+                                        return
                                     }
                                 }
                             }
@@ -863,7 +872,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                                 for (window in windows) {
                                     if (window.isInPictureInPictureMode
                                         || (window.type == -1 && windows.indexOf(window) == 3 && UtilsDeviceInfoSt.instance(applicationContext).isLowRefreshDevice) ) {
-                                          if (!isOfficialAdaptive) {
+                                        if (!isOfficialAdaptive) {
                                             useMin60 = true
                                             makeAdaptive()
                                             return
@@ -895,7 +904,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
             TYPE_VIEW_SCROLLED/*4096 */ -> {
                 if (isOfficialAdaptive || !ignoreScrollForNonNative){
-                        makeAdaptive()
+                    makeAdaptive()
                 }
                 return
             }

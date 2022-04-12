@@ -10,7 +10,8 @@ import com.tribalfs.gmh.helpers.CacheSettings.isPremium
 import com.tribalfs.gmh.helpers.CacheSettings.keepModeOnPowerSaving
 import com.tribalfs.gmh.helpers.CacheSettings.prrActive
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.*
+
 
 internal class PsmChangeHandler private constructor(val appCtx: Context) {
 
@@ -33,7 +34,6 @@ internal class PsmChangeHandler private constructor(val appCtx: Context) {
 
                 prrActive.set( UtilsPrefsGmhSt.instance(appCtx).hzPrefMaxRefreshRatePsm)
                 UtilRefreshRateSt.instance(appCtx).setPrefOrAdaptOrHighRefreshRateMode(null)
-
                 startPipActivityIfS()
 
             } else {
@@ -56,9 +56,24 @@ internal class PsmChangeHandler private constructor(val appCtx: Context) {
 
     fun startPipActivityIfS(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && isPowerSaveMode.get() == true) {
+            if (UtilsDeviceInfoSt.instance(appCtx).isGoogleMapsTrickDevice){
+                CoroutineScope(Dispatchers.IO).launch {
+                    val intent = appCtx.packageManager.getLaunchIntentForPackage("com.google.android.apps.maps")
+                    if (intent != null) {
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        appCtx.startActivity(intent)
+                    }
+                    delay(1000)
+                    val startMain = Intent(Intent.ACTION_MAIN)
+                    startMain.addCategory(Intent.CATEGORY_HOME)
+                    startMain.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                    appCtx.startActivity(startMain)
+                }
+            }else {
                 val pipIntent = Intent(appCtx, PipActivity::class.java)
                 pipIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 appCtx.startActivity(pipIntent)
+            }
         }
     }
 
