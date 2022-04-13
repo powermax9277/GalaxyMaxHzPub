@@ -373,43 +373,43 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
 
     @RequiresApi(VERSION_CODES.M)
     fun onClickView(v: View) {
-        val mUtilsPrefsGmh = UtilsPrefsGmhSt.instance(applicationContext)
+        //val mUtilsPrefsGmh = UtilsPrefsGmhSt.instance(applicationContext)
         when(v.id){
             mBinding.tvBattOptimSettings.id -> {
                 startActivity(Intent(ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS))
             }
 
             mBinding.chBytes.id -> {
-                if (mUtilsPrefsGmh.gmhPrefSpeedUnit != BYTE_PER_SEC) {
-                    mUtilsPrefsGmh.gmhPrefSpeedUnit = BYTE_PER_SEC
+                if (UtilsPrefsGmhSt.instance(applicationContext).gmhPrefSpeedUnit != BYTE_PER_SEC) {
+                    UtilsPrefsGmhSt.instance(applicationContext).gmhPrefSpeedUnit = BYTE_PER_SEC
                     mNetspeedService.updateSpeedUnit()
                 }
             }
 
             mBinding.chBits.id -> {
-                if (mUtilsPrefsGmh.gmhPrefSpeedUnit != BIT_PER_SEC) {
-                    mUtilsPrefsGmh.gmhPrefSpeedUnit = BIT_PER_SEC
+                if (UtilsPrefsGmhSt.instance(applicationContext).gmhPrefSpeedUnit != BIT_PER_SEC) {
+                    UtilsPrefsGmhSt.instance(applicationContext).gmhPrefSpeedUnit = BIT_PER_SEC
                     mNetspeedService.updateSpeedUnit()
                 }
             }
 
             mBinding.chDownStream.id -> {
-                if (mUtilsPrefsGmh.gmhPrefSpeedToShow != DOWNLOAD_SPEED) {
-                    mUtilsPrefsGmh.gmhPrefSpeedToShow = DOWNLOAD_SPEED
+                if (UtilsPrefsGmhSt.instance(applicationContext).gmhPrefSpeedToShow != DOWNLOAD_SPEED) {
+                    UtilsPrefsGmhSt.instance(applicationContext).gmhPrefSpeedToShow = DOWNLOAD_SPEED
                     mNetspeedService.updateStreamType()
                 }
             }
 
             mBinding.chUpStream.id -> {
-                if (mUtilsPrefsGmh.gmhPrefSpeedToShow != UPLOAD_SPEED) {
-                    mUtilsPrefsGmh.gmhPrefSpeedToShow = UPLOAD_SPEED
+                if (UtilsPrefsGmhSt.instance(applicationContext).gmhPrefSpeedToShow != UPLOAD_SPEED) {
+                    UtilsPrefsGmhSt.instance(applicationContext).gmhPrefSpeedToShow = UPLOAD_SPEED
                     mNetspeedService.updateStreamType()
                 }
             }
 
             mBinding.chCombinedStream.id -> {
-                if (mUtilsPrefsGmh.gmhPrefSpeedToShow != TOTAL_SPEED) {
-                    mUtilsPrefsGmh.gmhPrefSpeedToShow = TOTAL_SPEED
+                if (UtilsPrefsGmhSt.instance(applicationContext).gmhPrefSpeedToShow != TOTAL_SPEED) {
+                    UtilsPrefsGmhSt.instance(applicationContext).gmhPrefSpeedToShow = TOTAL_SPEED
                     mNetspeedService.updateStreamType()
                 }
             }
@@ -440,7 +440,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
             }*/
 
             mBinding.chTopHz.id, mBinding.chBottomHz.id, mBinding.chCentHz.id -> {
-                mUtilsPrefsGmh.gmhPrefChipIdTb = v.id
+                UtilsPrefsGmhSt.instance(applicationContext).gmhPrefChipIdTb = v.id
                 HzServiceHelperStn.instance(applicationContext).updateHzGravity(
                     /*chIdsToGravity(v.id, mBinding.cgLeftCentRightHz.checkedChipId)*/
                     when (v.id){
@@ -456,7 +456,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                     if (checked && !checkAccessibilityPerm(true)) {
                         mBinding.swSoForceLowestHz.isChecked = false
                     } else {
-                        mUtilsPrefsGmh.gmhPrefForceLowestSoIsOn = checked
+                        UtilsPrefsGmhSt.instance(applicationContext).gmhPrefForceLowestSoIsOn = checked
                     }
                 }
             }
@@ -472,7 +472,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
 
                         when (UtilNotifBarSt.instance(applicationContext).checkQsTileInPlace()){
                             true -> {
-                                mUtilsPrefsGmh.gmhPrefSensorsOff = checked
+                                UtilsPrefsGmhSt.instance(applicationContext).gmhPrefSensorsOff = checked
                                 return
                             }
 
@@ -518,11 +518,11 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
 
                     } else {
                         turnOffAutoSensorsOff = false
-                        mUtilsPrefsGmh.gmhPrefSensorsOff = checked /*&&
+                        UtilsPrefsGmhSt.instance(applicationContext).gmhPrefSensorsOff = checked /*&&
                                 (CheckBlacklistApiSt.instance(applicationContext).isAllowed()
                                         || CheckBlacklistApiSt.instance(applicationContext).setAllowed())*/
-                        if (!mUtilsPrefsGmh.gmhPrefSensorOnKey.isNullOrEmpty()) {
-                            sensorOnKey = mUtilsPrefsGmh.gmhPrefSensorOnKey
+                        if (!UtilsPrefsGmhSt.instance(applicationContext).gmhPrefSensorOnKey.isNullOrEmpty()) {
+                            sensorOnKey = UtilsPrefsGmhSt.instance(applicationContext).gmhPrefSensorOnKey
                         }
 
                     }
@@ -534,7 +534,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                     mBinding.swSoPsm.isChecked = false
                 } else {
                     mBinding.swSoPsm.isChecked.let {isChecked ->
-                        mUtilsPrefsGmh.gmhPrefPsmOnSo = isChecked
+                        UtilsPrefsGmhSt.instance(applicationContext).gmhPrefPsmOnSo = isChecked
                     }
                 }
             }
@@ -546,10 +546,10 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
 
             mBinding.swScreenOffDoze.id -> {
                 mBinding.swScreenOffDoze.isChecked.let {
-                    mUtilsPrefsGmh.gmhPrefQuickDozeIsOn = it
+                    UtilsPrefsGmhSt.instance(applicationContext).gmhPrefQuickDozeIsOn = it
                     /*Keep this*/
                     mBinding.dozeIsOn = it
-                    applicationContext.updateDozValues(it, mUtilsPrefsGmh.gmhPrefGDozeModOpt)
+                    applicationContext.updateDozValues(it, UtilsPrefsGmhSt.instance(applicationContext).gmhPrefGDozeModOpt)
                     DozePSCChecker.check(applicationContext, it, true)
                 }
                 return
@@ -610,8 +610,8 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                         return
                     }
                     keepModeOnPowerSaving = checked
-                    mUtilsPrefsGmh.gmhPrefPsmIsOffCache = (isPowerSaveMode.get() != true)
-                    mUtilsPrefsGmh.gmhPrefKmsOnPsm = checked
+                    UtilsPrefsGmhSt.instance(applicationContext).gmhPrefPsmIsOffCache = (isPowerSaveMode.get() != true)
+                    UtilsPrefsGmhSt.instance(applicationContext).gmhPrefKmsOnPsm = checked
                     PsmChangeHandler.instance(applicationContext).handle()
                     return
                 }
@@ -717,11 +717,11 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
             mBinding.swAutoOffSync.id ->{
                 (v as Switch).isChecked.let { checked ->
                     if (!checkAccessibilityPerm(true)){
-                        mUtilsPrefsGmh.gmhPrefDisableSyncIsOn = false
+                        UtilsPrefsGmhSt.instance(applicationContext).gmhPrefDisableSyncIsOn = false
                         v.isChecked = false
                         return
                     }
-                    mUtilsPrefsGmh.gmhPrefDisableSyncIsOn = checked
+                    UtilsPrefsGmhSt.instance(applicationContext).gmhPrefDisableSyncIsOn = checked
                 }
             }
 
@@ -738,7 +738,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
             mBinding.swPreventHigh.id -> {
                 (v as Switch).isChecked.let { checked ->
                     preventHigh = checked
-                    mUtilsPrefsGmh.gmhPrefPreventHigh = checked
+                    UtilsPrefsGmhSt.instance(applicationContext).gmhPrefPreventHigh = checked
                 }
             }
 
@@ -816,7 +816,10 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
 
 
         if (!isOfficialAdaptive){
-            mBinding.swPreventHigh.isChecked = UtilsPrefsGmhSt.instance(applicationContext).gmhPrefPreventHigh
+            (UtilsPrefsGmhSt.instance(applicationContext).gmhPrefPreventHigh && isPremium.get() == true).let {
+                preventHigh = it
+                mBinding.swPreventHigh.isChecked = it
+            }
         }
 
 

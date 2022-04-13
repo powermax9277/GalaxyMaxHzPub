@@ -190,7 +190,7 @@ class MyApplication : Application() {
 
         isProfilesLoaded = withContext(Dispatchers.IO) { UtilRefreshRateSt.instance(applicationContext).initProfiles() }
 
-        preventHigh = UtilsPrefsGmhSt.instance(applicationContext).gmhPrefPreventHigh
+        preventHigh = UtilsPrefsGmhSt.instance(applicationContext).gmhPrefPreventHigh && isPremium.get() == true
 
         hzNotifOn.set (UtilsPrefsGmhSt.instance(applicationContext).gmhPrefHzIsOn
                 && UtilsPrefsGmhSt.instance(applicationContext).gmhPrefHzNotifIsOn)
