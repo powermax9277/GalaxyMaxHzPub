@@ -741,14 +741,14 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     }
 
 
-    private var ignoreNextAhh = true
+    private var ignoreNextWinChange = true
     private val ignoreAhhRunnable = Runnable {
-        ignoreNextAhh = true
+        ignoreNextWinChange = true
     }
 
-    private fun setTempDisableIgnoreAhh(){
+    private fun setTempIgnoreWinChange(){
         mHandler.removeCallbacks(ignoreAhhRunnable)
-        ignoreNextAhh = false
+        ignoreNextWinChange = false
         mHandler.postDelayed(ignoreAhhRunnable, 1000L)
     }
 
@@ -766,8 +766,6 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     // private val mediaSessionManager by lazy {(getSystemService(MEDIA_SESSION_SERVICE) as MediaSessionManager)}
     private var volumeJob: Job? = null
 
-    private var isLauncher = false
-
     override fun onKeyEvent(event: KeyEvent?): Boolean {
         volumeJob?.cancel()
         volumeJob = launch {
@@ -783,7 +781,8 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         return super.onKeyEvent(event)
     }
 
-    private var lastOpen: String = ""
+    private var logs = ""
+
 
     @SuppressLint("SwitchIntDef")
     @RequiresApi(Build.VERSION_CODES.O)
@@ -954,14 +953,14 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                 }
             }
 
-            4194304 ->{
-                if (ignoreNextAhh) {
-                    setTempDisableIgnoreAhh()
+            TYPE_WINDOWS_CHANGED ->{ // 4194304
+                if (ignoreNextWinChange) {
+                    setTempIgnoreWinChange()
                     return
                 }
                 if (event.contentChangeTypes == 0){
                     makeAdaptive()
-                    setTempDisableIgnoreAhh()
+                    setTempIgnoreWinChange()
                 }
             }
         }
