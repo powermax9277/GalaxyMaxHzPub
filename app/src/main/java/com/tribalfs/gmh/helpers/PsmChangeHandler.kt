@@ -10,7 +10,7 @@ import com.tribalfs.gmh.helpers.CacheSettings.isPremium
 import com.tribalfs.gmh.helpers.CacheSettings.keepModeOnPowerSaving
 import com.tribalfs.gmh.helpers.CacheSettings.prrActive
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.*
 
 
 internal class PsmChangeHandler private constructor(val appCtx: Context) {
@@ -54,7 +54,7 @@ internal class PsmChangeHandler private constructor(val appCtx: Context) {
         }
     }
 
-/*    fun startPipActivityIfS(){
+    fun startPipActivityIfS(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && isPowerSaveMode.get() == true) {
             if (UtilsDeviceInfoSt.instance(appCtx).isGoogleMapsTrickDevice){
                 CoroutineScope(Dispatchers.IO).launch {
@@ -75,14 +75,14 @@ internal class PsmChangeHandler private constructor(val appCtx: Context) {
                 appCtx.startActivity(pipIntent)
             }
         }
-    }*/
+    }
 
-    fun startPipActivityIfS(){
+    /*fun startPipActivityIfS(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && isPowerSaveMode.get() == true) {
                 val pipIntent = Intent(appCtx, PipActivity::class.java)
                 pipIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 appCtx.startActivity(pipIntent)
         }
-    }
+    }*/
 
 }
