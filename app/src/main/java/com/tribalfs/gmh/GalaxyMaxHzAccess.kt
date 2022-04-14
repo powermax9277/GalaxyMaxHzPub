@@ -848,6 +848,12 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                                         ignoreScrollForNonNative = false
                                         makeAdaptive()
                                         return
+                                    }else{
+                                        useStockAdaptive = false
+                                        useMin60 = false
+                                        ignoreScrollForNonNative = false
+                                        makeAdaptive()
+                                        return
                                     }
                                 }
                             }
@@ -925,7 +931,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                                     return
                                 }else{
                                     //Notification Panel
-                                    if (UtilsDeviceInfoSt.instance(applicationContext).isLowRefreshDevice){
+                                    if (isOfficialAdaptive/*UtilsDeviceInfoSt.instance(applicationContext).isLowRefreshDevice*/){
                                         makeAdaptive()
                                     }
                                     return
