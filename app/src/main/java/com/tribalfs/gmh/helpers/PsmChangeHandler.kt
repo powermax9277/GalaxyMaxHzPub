@@ -77,12 +77,4 @@ internal class PsmChangeHandler private constructor(val appCtx: Context) {
         }
     }
 
-    /*fun startPipActivityIfS(){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && isPowerSaveMode.get() == true) {
-                val pipIntent = Intent(appCtx, PipActivity::class.java)
-                pipIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                appCtx.startActivity(pipIntent)
-        }
-    }*/
-
 }

@@ -849,6 +849,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                                         makeAdaptive()
                                         return
                                     }else{
+                                        //TODO: effective 7.14.50
                                         useStockAdaptive = false
                                         useMin60 = false
                                         ignoreScrollForNonNative = false
@@ -873,6 +874,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                                 useStockAdaptive = false
                                 useMin60 = false
                                 for (window in windows) {
+                                    //TODO: effective 7.14.50
                                     if (window.isInPictureInPictureMode
                                         || (window.type == -1 && UtilsDeviceInfoSt.instance(applicationContext).isLowRefreshDevice) ) {
                                         if (!isOfficialAdaptive) {
@@ -931,6 +933,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                                     return
                                 }else{
                                     //Notification Panel
+                                    //TODO: effective 7.14.50
                                     if (isOfficialAdaptive/*UtilsDeviceInfoSt.instance(applicationContext).isLowRefreshDevice*/){
                                         makeAdaptive()
                                     }
