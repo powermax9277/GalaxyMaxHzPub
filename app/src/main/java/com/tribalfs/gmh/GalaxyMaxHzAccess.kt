@@ -142,7 +142,7 @@ private val manualGameList = listOf(
     "com.gameloft",
     "android.app.samsungapps:InstantPlaysGameActivity",
     "com.distractionware",
-    "com.supercell",
+    "supercell",
     "com.google.android.gms",
     "com.samsung.android.app.notes",
     "com.epicgames"
