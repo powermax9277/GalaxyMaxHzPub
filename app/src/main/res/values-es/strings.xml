@@ -11,11 +11,8 @@
     <string name="adaptive">Adaptable</string>
     <string name="high">Alto</string>
     <string name="refresh_rate_mon">Mostrar frecuencia de actualización en tiempo real</string>
-    <string name="left">Izquierda</string>
-    <string name="right">Derecha</string>
-
-    <!-- <string name="left">Left</string>
- <string name="right">Right</string> -->
+<!--    <string name="left">Izquierda</string>
+    <string name="right">Derecha</string>-->
     <string name="top">Arriba</string>
     <string name="bottom">Abajo</string>
     <string name="use_qstile_reso_switch">Utilice el botón incluído en el panel rápido para cambiar la resolución de la pantalla.</string>
@@ -89,11 +86,11 @@
     <string name="help">Ayuda</string>
     <string name="reload_profiles">Recargar Perfiles</string>
     <string name="options">Opciones</string>
-    <string name="data_usage">&lt;u>Uso de datos&lt;/u></string>
-    <string name="psm_options">&lt;u>Opciones del modo ahorro de energía&lt;/u></string>
+    <string name="data_usage"><u>Uso de datos</u></string>
+    <string name="psm_options"><u>Opciones del modo ahorro de energía</u></string>
     <string name="disable_sync_on_so">Desactiva automáticamente la sincronización cuando la pantalla está apagada</string>
-    <string name="autosync_settings">&lt;u>Ajustes de sincronización automática&lt;/u></string>
-    <string name="apps_bat_opt_settings">&lt;u>Ajustes de optimización de la batería&lt;/u></string>
+    <string name="autosync_settings"><u>Ajustes de sincronización automática</u></string>
+    <string name="apps_bat_opt_settings"><u>Ajustes de optimización de la batería</u></string>
     <string name="brightness_threshold">Umbral del brillo para el Modo Adaptable</string>
     <string name="sensor_off_info">Los sensores del dispositivo se apagarán automáticamente mientras la pantalla esté apagada y hasta que se desbloquea el dispositivo para ayudar al modo doze.</string>
     <string name="sensors_off_note">Nota importante: mientras los sensores estén desactivados, las cámaras, los micrófonos y otros sensores del dispositivo se vuelven inaccesibles. El desbloqueo facial, el audio en llamadas entre otros son afectados. Utilice esto solo si tiene claro los efectos de apagar los sensores.\n\nPuede no funcionar si no se utiliza un método de bloqueo en Android 12, puede utilizar la configuración de ADB en versiones previas de Android.</string>
@@ -113,4 +110,6 @@
     <string name="no_access_notif">Deshabilitar el servicio de accesibilidad provocará un comportamiento inesperado para las siguientes ajustes: %s</string>
     <string name="acces_req">Habilitar servicio de accesibilidad</string>
     <string name="is_prem_ft">%s es una opción premium</string>
+    <string name="bit">Bits/seg(b/s)</string>
+    <string name="byt">Bytes/seg(B/s)</string>
 </resources>
