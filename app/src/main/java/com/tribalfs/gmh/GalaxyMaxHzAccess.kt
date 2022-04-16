@@ -13,7 +13,9 @@ import android.content.Intent
 import android.content.Intent.*
 import android.content.IntentFilter
 import android.content.pm.ActivityInfo
-import android.content.pm.ApplicationInfo.*
+import android.content.pm.ApplicationInfo
+import android.content.pm.ApplicationInfo.CATEGORY_GAME
+import android.content.pm.ApplicationInfo.CATEGORY_VIDEO
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.PixelFormat
@@ -834,49 +836,43 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                                 return
                             }
 
-                            (ai.category == CATEGORY_SOCIAL || ai.category == CATEGORY_MAPS) ->{
-                                if (!isOfficialAdaptive) {
-                                    useMin60 = true
-                                    useStockAdaptive = false
-                                    ignoreScrollForNonNative = false
-                                    makeAdaptive()
-                                    return
-                                }else{
+                            else -> {
+                                if (isPartOf(useStockAdaptiveList, componentName))  {
                                     if (UtilsDeviceInfoSt.instance(applicationContext).isLowRefreshDevice){
                                         useStockAdaptive = true
                                         useMin60 = false
                                         ignoreScrollForNonNative = false
                                         makeAdaptive()
                                         return
-                                    }else{
-                                        //TODO: effective 7.14.50
+                                    }
+                                }
+
+                                if(ai.category == ApplicationInfo.CATEGORY_SOCIAL || ai.category == ApplicationInfo.CATEGORY_MAPS){
+                                    if (!isOfficialAdaptive) {
+                                        useMin60 = true
                                         useStockAdaptive = false
-                                        useMin60 = false
                                         ignoreScrollForNonNative = false
                                         makeAdaptive()
                                         return
+                                    }else{
+                                        if (UtilsDeviceInfoSt.instance(applicationContext).isLowRefreshDevice){
+                                            useStockAdaptive = true
+                                            useMin60 = false
+                                            ignoreScrollForNonNative = false
+                                            makeAdaptive()
+                                            return
+                                        }
                                     }
                                 }
-                            }
 
-                            isPartOf(useStockAdaptiveList, componentName) -> {
-                                if (UtilsDeviceInfoSt.instance(applicationContext).isLowRefreshDevice){
-                                    useStockAdaptive = true
-                                    useMin60 = false
-                                    ignoreScrollForNonNative = false
-                                    makeAdaptive()
-                                    return
-                                }
-                            }
-
-                            else -> {
                                 ignoreScrollForNonNative = false
                                 useStockAdaptive = false
                                 useMin60 = false
                                 for (window in windows) {
                                     //TODO: effective 7.14.50
                                     if (window.isInPictureInPictureMode
-                                        || (window.type == -1 && UtilsDeviceInfoSt.instance(applicationContext).isLowRefreshDevice) ) {
+                                        || (window.type == -1 && UtilsDeviceInfoSt.instance(applicationContext).isLowRefreshDevice)
+                                    ) {
                                         if (!isOfficialAdaptive) {
                                             useMin60 = true
                                             makeAdaptive()
