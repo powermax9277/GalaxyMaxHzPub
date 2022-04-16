@@ -28,7 +28,6 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.os.PowerManager.ACTION_POWER_SAVE_MODE_CHANGED
-import android.util.Log
 import android.view.KeyEvent
 import android.view.KeyEvent.KEYCODE_VOLUME_DOWN
 import android.view.KeyEvent.KEYCODE_VOLUME_UP
@@ -791,11 +790,10 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
         if (!isScreenOn.get() || !applyAdaptiveMod.get()!!) return
 
-        //TODO
-         Log.d(
+         /*Log.d(
              "TESTEST",
              "EVENT_TYPE ${event?.eventType} CHANGE_TYPE ${event?.contentChangeTypes} ${event?.packageName} Classname: ${event?.className}"
-         )
+         )*/
         when (event?.eventType) {
 
             TYPE_WINDOW_STATE_CHANGED -> {//32
