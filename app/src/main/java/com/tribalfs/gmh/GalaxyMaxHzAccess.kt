@@ -819,86 +819,89 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
                     if (activityInfo != null){
 
-                        when {
-                            (ai.category == CATEGORY_GAME || isPartOf(manualGameList, componentName)) -> {
+                        if(ai.category == CATEGORY_GAME || isPartOf(manualGameList, componentName)) {
+                            useStockAdaptive = true
+                            useMin60 = false
+                            ignoreScrollForNonNative = false
+                            makeAdaptive()
+                            return
+                        }
+
+                        if(ai.category == CATEGORY_VIDEO || isPartOf(manualVideoAppList, componentName)) {
+                            useMin60 = true
+                            ignoreScrollForNonNative = true
+                            useStockAdaptive = false
+                            makeAdaptive()
+                            return
+                        }
+
+
+                        if (isPartOf(useStockAdaptiveList, componentName))  {
+                            if (UtilsDeviceInfoSt.instance(applicationContext).isLowRefreshDevice){
                                 useStockAdaptive = true
                                 useMin60 = false
                                 ignoreScrollForNonNative = false
                                 makeAdaptive()
                                 return
                             }
+                        }
 
-                            (ai.category == CATEGORY_VIDEO || isPartOf(manualVideoAppList, componentName)) ->{
+                        if(ai.category == ApplicationInfo.CATEGORY_SOCIAL || ai.category == ApplicationInfo.CATEGORY_MAPS){
+                            if (!isOfficialAdaptive) {
                                 useMin60 = true
-                                ignoreScrollForNonNative = true
                                 useStockAdaptive = false
-                                makeAdaptive()
-                                return
-                            }
-
-                            else -> {
-                                if (isPartOf(useStockAdaptiveList, componentName))  {
-                                    if (UtilsDeviceInfoSt.instance(applicationContext).isLowRefreshDevice){
-                                        useStockAdaptive = true
-                                        useMin60 = false
-                                        ignoreScrollForNonNative = false
-                                        makeAdaptive()
-                                        return
-                                    }
-                                }
-
-                                if(ai.category == ApplicationInfo.CATEGORY_SOCIAL || ai.category == ApplicationInfo.CATEGORY_MAPS){
-                                    if (!isOfficialAdaptive) {
-                                        useMin60 = true
-                                        useStockAdaptive = false
-                                        ignoreScrollForNonNative = false
-                                        makeAdaptive()
-                                        return
-                                    }else{
-                                        if (UtilsDeviceInfoSt.instance(applicationContext).isLowRefreshDevice){
-                                            useStockAdaptive = true
-                                            useMin60 = false
-                                            ignoreScrollForNonNative = false
-                                            makeAdaptive()
-                                            return
-                                        }
-                                    }
-                                }
-
                                 ignoreScrollForNonNative = false
-                                useStockAdaptive = false
-                                useMin60 = false
-                                for (window in windows) {
-                                    //TODO: effective 7.14.50
-                                    if (window.isInPictureInPictureMode
-                                        || (window.type == -1 && UtilsDeviceInfoSt.instance(applicationContext).isLowRefreshDevice)
-                                    ) {
-                                        if (!isOfficialAdaptive) {
-                                            useMin60 = true
-                                            makeAdaptive()
-                                            return
-                                        } else {
-                                            useStockAdaptive = true
-                                            makeAdaptive()
-                                            return
-                                        }
-                                    }
-                                }
-                                makeAdaptive()//don't remove
-                                return
-                            }
-                        }
-                    }else{
-                        when {
-                            (ai.category == CATEGORY_VIDEO || isPartOf(manualVideoAppList, componentName)) -> {
-                                useMin60 = true
-                                ignoreScrollForNonNative = true
-                                useStockAdaptive = false
                                 makeAdaptive()
                                 return
+                            }else{
+                                if (UtilsDeviceInfoSt.instance(applicationContext).isLowRefreshDevice){
+                                    useStockAdaptive = true
+                                    useMin60 = false
+                                    ignoreScrollForNonNative = false
+                                    makeAdaptive()
+                                    return
+                                }
                             }
-
                         }
+
+                        for (window in windows) {
+                            //TODO: effective 7.14.50
+                            if (window.isInPictureInPictureMode
+                                || (window.type == -1 && UtilsDeviceInfoSt.instance(
+                                    applicationContext
+                                ).isLowRefreshDevice)
+                            ) {
+                                if (!isOfficialAdaptive) {
+                                    useMin60 = true
+                                    ignoreScrollForNonNative = false
+                                    useStockAdaptive = false
+                                    makeAdaptive()
+                                    return
+                                } else {
+                                    useStockAdaptive = true
+                                    ignoreScrollForNonNative = false
+                                    useMin60 = false
+                                    makeAdaptive()
+                                    return
+                                }
+                            }
+                        }
+
+                        ignoreScrollForNonNative = false
+                        useStockAdaptive = false
+                        useMin60 = false
+                        makeAdaptive()//don't remove
+                        return
+
+                    }else{
+                        if  (ai.category == CATEGORY_VIDEO || isPartOf(manualVideoAppList, componentName)) {
+                            useMin60 = true
+                            ignoreScrollForNonNative = true
+                            useStockAdaptive = false
+                            makeAdaptive()
+                            return
+                        }
+
                     }
                 }
             }
