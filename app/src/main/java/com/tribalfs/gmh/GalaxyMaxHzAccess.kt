@@ -28,6 +28,7 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.os.PowerManager.ACTION_POWER_SAVE_MODE_CHANGED
+import android.util.Log
 import android.view.KeyEvent
 import android.view.KeyEvent.KEYCODE_VOLUME_DOWN
 import android.view.KeyEvent.KEYCODE_VOLUME_UP
@@ -724,7 +725,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     private fun isPartOf(list: List<String>, cn: ComponentName): Boolean {
         list.forEach {item ->
             item.split(":").let{
-                if (cn.packageName.contains(it[0]) && (if (it.size == 2) it[1] == cn.className else true)){
+                if (cn.packageName.contains(it[0]) && (if (it.size != 2) true else cn.className.contains(it[1]) ) ){
                     return true
                 }
             }
@@ -790,10 +791,11 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
         if (!isScreenOn.get() || !applyAdaptiveMod.get()!!) return
 
-        /* Log.d(
+        //TODO
+         Log.d(
              "TESTEST",
              "EVENT_TYPE ${event?.eventType} CHANGE_TYPE ${event?.contentChangeTypes} ${event?.packageName} Classname: ${event?.className}"
-         )*/
+         )
         when (event?.eventType) {
 
             TYPE_WINDOW_STATE_CHANGED -> {//32
@@ -866,10 +868,9 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
                         for (window in windows) {
                             //TODO: effective 7.14.50
-                            if (window.isInPictureInPictureMode
-                                || (window.type == -1 && UtilsDeviceInfoSt.instance(
+                            if (window.isInPictureInPictureMode || /*(*/window.type == -1 /*&& UtilsDeviceInfoSt.instance(
                                     applicationContext
-                                ).isLowRefreshDevice)
+                                ).isLowRefreshDevice)*/
                             ) {
                                 if (!isOfficialAdaptive) {
                                     useMin60 = true
