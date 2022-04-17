@@ -87,7 +87,7 @@
         Doze mode will deactivate once the device is unlocked.
     </string>
     <string name="adp_min_hz">Adaptive Min Hz</string>
-    <string name="enable_as_inf">Click \'Installed services\' on the window that will appear, then enable Galaxy Max Hz service</string>
+    <string name="enable_as_inf">Click \'Installed apps\' or \'Installed services\' on the window that will appear, then enable Galaxy Max Hz service</string>
     <string name="kBps" translatable="false">kB/s</string>
     <string name="MBps" translatable="false">MB/s</string>
     <string name="kbps" translatable="false">kb/s</string>

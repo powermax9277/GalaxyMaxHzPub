@@ -13,6 +13,7 @@ import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt
 import kotlinx.coroutines.*
 
 
+@OptIn(ExperimentalCoroutinesApi::class)
 object UtilAccessibilityService {
 
     @SuppressLint("NewApi")

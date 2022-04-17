@@ -865,7 +865,6 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                         }
 
                         for (window in windows) {
-                            //TODO: effective 7.14.50
                             if (window.isInPictureInPictureMode || /*(*/window.type == -1 /*&& UtilsDeviceInfoSt.instance(
                                     applicationContext
                                 ).isLowRefreshDevice)*/
@@ -931,7 +930,6 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                                     return
                                 }else{
                                     //Notification Panel
-                                    //TODO: effective 7.14.50
                                     if (isOfficialAdaptive/*UtilsDeviceInfoSt.instance(applicationContext).isLowRefreshDevice*/){
                                         makeAdaptive()
                                     }
@@ -1072,5 +1070,6 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
             mTransfyHzJob?.start()
         }
     }
+
 
 }

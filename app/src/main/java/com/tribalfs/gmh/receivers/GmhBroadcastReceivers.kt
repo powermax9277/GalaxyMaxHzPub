@@ -183,12 +183,14 @@ open class GmhBroadcastReceivers(private val appCtx: Context,
         }
     }
 
+
     private fun isInternetConnected(): Boolean {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (connectivityManager.activeNetwork != null && connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork) != null) {
                     return  true
                 }
             } else {
+                @Suppress("DEPRECATION")
                 if (connectivityManager.activeNetworkInfo != null && connectivityManager.activeNetworkInfo!!.isConnectedOrConnecting) {
                     return true
                 }
