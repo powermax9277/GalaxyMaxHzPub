@@ -133,7 +133,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
     private val mUtilsRefreshRate by lazy{UtilRefreshRateSt.instance(applicationContext)}
     private val mNetspeedService by lazy {NetSpeedServiceHelperStn.instance(applicationContext)}
     private val hzOverlaySizes = listOf(10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40)
-    private val hzAdaptiveDelays = listOf(2, 3, 4, 5, 6, 7, 8, 9, 10)
+    private val hzAdaptiveDelays = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
     private var mList: Menu? = null
     private var ignoreUnblockHzNotifState = true
     private var ignoreUnblockNetSpeedNotifState = true

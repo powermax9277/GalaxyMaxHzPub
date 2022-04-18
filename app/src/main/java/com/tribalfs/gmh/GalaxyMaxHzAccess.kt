@@ -53,6 +53,7 @@ import com.tribalfs.gmh.helpers.*
 import com.tribalfs.gmh.helpers.CacheSettings.adaptiveAccessTimeout
 import com.tribalfs.gmh.helpers.CacheSettings.adaptiveDelayMillis
 import com.tribalfs.gmh.helpers.CacheSettings.applyAdaptiveMod
+import com.tribalfs.gmh.helpers.CacheSettings.currentBrightness
 import com.tribalfs.gmh.helpers.CacheSettings.currentRefreshRateMode
 import com.tribalfs.gmh.helpers.CacheSettings.disablePsm
 import com.tribalfs.gmh.helpers.CacheSettings.displayId
@@ -93,6 +94,7 @@ internal const val PLAYING = 1
 internal const val STOPPED = -1
 internal const val PAUSE = 0
 private const val MAX_TRY = 8
+private const val SYSTEM_UI = "com.android.systemui"
 
 private val manualVideoAppList = listOf(
     "amazon.avod",
@@ -806,8 +808,11 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
                 if (event.packageName != null && event.className != null) {
 
+                    isKeyboardOpen = false
+
                     if (event.packageName == defaultLauncherName){
                         if (ignoreLauncher){
+                            makeAdaptive()
                             setNoIgnoreLauncher()
                             return
                         }
@@ -925,7 +930,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                                 return
                             }
 
-                            "com.android.systemui" -> {
+                            SYSTEM_UI -> {
                                 if (mKeyguardManager.isDeviceLocked) {
                                     if (useStockAdaptive) {
                                         useStockAdaptive = false
@@ -946,7 +951,6 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                                     return
                                 }
 
-
                                 for (window in windows) {
                                     if (window.type == AccessibilityWindowInfo.TYPE_INPUT_METHOD) {
                                             isKeyboardOpen = true
@@ -963,7 +967,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                         //When expanding notification in some cases
                         if (isOfficialAdaptive) {
                             when(event.packageName?.toString()){
-                                "com.android.systemui" ->{
+                                SYSTEM_UI ->{
                                     makeAdaptive()
                                     return
                                 }
@@ -997,12 +1001,9 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     @RequiresApi(Build.VERSION_CODES.M)
     private fun makeAdaptive() {
         mUtilsRefreshRate.setPeakRefreshRate(prrActive.get()!!)
-        if (makeAdaptiveJob != null){
-            makeAdaptiveJob!!.cancel()
-            makeAdaptiveJob = null
-        }
+        makeAdaptiveJob?.cancel()
         makeAdaptiveJob = launch(Dispatchers.IO) {
-            delay(adaptiveDelayMillis)
+            delay(kotlin.math.max(adaptiveDelayMillis * 35/currentBrightness.get()!!.toLong(), 700L))//TODO
             if (applyAdaptiveMod.get()!! && isScreenOn.get() && !useStockAdaptive && !cameraOpen) {
                 mUtilsRefreshRate.setPeakRefreshRate(
                     if (useMin60 || volumePressed) max(60, lrrPref.get()!!) else lrrPref.get()!!
