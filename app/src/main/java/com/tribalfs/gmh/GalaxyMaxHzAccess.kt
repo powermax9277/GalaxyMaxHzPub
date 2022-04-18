@@ -28,6 +28,7 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.os.PowerManager.ACTION_POWER_SAVE_MODE_CHANGED
+import android.util.Log
 import android.view.KeyEvent
 import android.view.KeyEvent.KEYCODE_VOLUME_DOWN
 import android.view.KeyEvent.KEYCODE_VOLUME_UP
@@ -792,7 +793,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
         if (!isScreenOn.get() || !applyAdaptiveMod.get()!!) return
 
-        /*Log.d(
+       /* Log.d(
             "TESTEST",
             "EVENT_TYPE ${event?.eventType} CHANGE_TYPE ${event?.contentChangeTypes} ${event?.packageName} Classname: ${event?.className}"
         )*/
@@ -868,10 +869,9 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                         }
 
                         for (window in windows) {
-                            if (window.isInPictureInPictureMode || /*(*/window.type == -1 /*&& UtilsDeviceInfoSt.instance(
-                                    applicationContext
-                                ).isLowRefreshDevice)*/
-                            ) {
+                            //TODO
+                            Log.d("TESTEST", "window.type: ${window.type} ${window.root.packageName}")
+                            if (window.isInPictureInPictureMode || (window.type == -1 && window.root.packageName != "com.android.systemui")) {
                                 if (!isOfficialAdaptive) {
                                     useMin60 = true
                                     ignoreScrollForNonNative = false

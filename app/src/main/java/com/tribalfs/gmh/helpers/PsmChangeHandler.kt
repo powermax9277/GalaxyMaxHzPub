@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Build
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import com.tribalfs.gmh.MyApplication.Companion.applicationName
 import com.tribalfs.gmh.PipActivity
 import com.tribalfs.gmh.helpers.CacheSettings.isPowerSaveMode
 import com.tribalfs.gmh.helpers.CacheSettings.isPremium
@@ -77,7 +78,7 @@ internal class PsmChangeHandler private constructor(val appCtx: Context) {
                     pipIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     appCtx.startActivity(pipIntent)
                 }else{
-                    Toast.makeText(appCtx,"Allow picture-in-picture permission in the app info settings.", Toast.LENGTH_LONG).show()
+                    Toast.makeText(appCtx,"Allow picture-in-picture permission in $applicationName info settings.", Toast.LENGTH_LONG).show()
                 }
             }
         }
