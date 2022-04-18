@@ -72,6 +72,7 @@ import com.tribalfs.gmh.helpers.CacheSettings.restoreSync
 import com.tribalfs.gmh.helpers.CacheSettings.screenOffRefreshRateMode
 import com.tribalfs.gmh.helpers.CacheSettings.sensorOnKey
 import com.tribalfs.gmh.helpers.CacheSettings.turnOffAutoSensorsOff
+import com.tribalfs.gmh.helpers.CacheSettings.typingRefreshRate
 import com.tribalfs.gmh.hertz.HzGravity
 import com.tribalfs.gmh.hertz.HzNotifGlobal.CHANNEL_ID_HZ
 import com.tribalfs.gmh.hertz.HzNotifGlobal.NOTIFICATION_ID_HZ
@@ -793,10 +794,11 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
         if (!isScreenOn.get() || !applyAdaptiveMod.get()!!) return
 
-       /* Log.d(
+        //TODO
+        Log.d(
             "TESTEST",
             "EVENT_TYPE ${event?.eventType} CHANGE_TYPE ${event?.contentChangeTypes} ${event?.packageName} Classname: ${event?.className}"
-        )*/
+        )
 
         when (event?.eventType) {
 
@@ -869,9 +871,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                         }
 
                         for (window in windows) {
-                            //TODO
-                            Log.d("TESTEST", "window.type: ${window.type} ${window.root.packageName}")
-                            if (window.isInPictureInPictureMode || (window.type == -1 && window.root.packageName != "com.android.systemui")) {
+                            if (window.isInPictureInPictureMode || (window.type == -1 && window.root.packageName == "com.samsung.android.video")) {
                                 if (!isOfficialAdaptive) {
                                     useMin60 = true
                                     ignoreScrollForNonNative = false
@@ -1041,7 +1041,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     @SuppressLint("ClickableViewAccessibility")
     private val adaptiveEnhancer = View.OnTouchListener { _, _ ->
         if (isKeyboardOpen) {
-            mUtilsRefreshRate.setPeakRefreshRate(48)
+            mUtilsRefreshRate.setPeakRefreshRate(typingRefreshRate)
         }else {
             makeAdaptive()
         }

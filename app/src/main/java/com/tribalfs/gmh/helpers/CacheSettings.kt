@@ -40,6 +40,7 @@ object CacheSettings {
     internal var supportedHzIntCurMod: List<Int>? = null
     @Volatile
     internal var minHzListForAdp: List<Int>? = null
+    internal var typingRefreshRate = 60
     internal var highestHzForAllMode: Int = 60 //default
     internal val currentRefreshRateMode = ObservableField<String>()
     internal var lowestHzForAllMode: Int = 60 //default
