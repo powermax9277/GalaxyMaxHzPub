@@ -3,6 +3,7 @@ package com.tribalfs.gmh.helpers
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.tribalfs.gmh.PipActivity
 import com.tribalfs.gmh.helpers.CacheSettings.isPowerSaveMode
@@ -41,11 +42,11 @@ internal class PsmChangeHandler private constructor(val appCtx: Context) {
             }
         }else{
             if (isPremium.get()!!) {
-                //Change Max Hz back to Std Prr
                 if (!UtilPermSt.instance(appCtx).hasWriteSystemPerm()) {
                     UtilPermSt.instance(appCtx).requestWriteSettings()
                     return
                 }
+                //Change Max Hz back to Std Prr
                 UtilsPrefsGmhSt.instance(appCtx).hzPrefMaxRefreshRate.let {
                     prrActive.set(it)
                     UtilRefreshRateSt.instance(appCtx).setRefreshRate(it, UtilsPrefsGmhSt.instance(appCtx).gmhPrefMinHzAdapt)
@@ -70,9 +71,14 @@ internal class PsmChangeHandler private constructor(val appCtx: Context) {
                     appCtx.startActivity(startMain)
                 }
             }else {
-                val pipIntent = Intent(appCtx, PipActivity::class.java)
-                pipIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                appCtx.startActivity(pipIntent)
+                //TODO TEST
+                if (UtilPermSt.instance(appCtx).hasPipPermission()) {
+                    val pipIntent = Intent(appCtx, PipActivity::class.java)
+                    pipIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    appCtx.startActivity(pipIntent)
+                }else{
+                    Toast.makeText(appCtx,"Allow picture-in-picture permission in the app info settings.", Toast.LENGTH_LONG).show()
+                }
             }
         }
     }

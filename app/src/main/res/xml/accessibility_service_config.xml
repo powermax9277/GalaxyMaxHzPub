@@ -1,7 +1,7 @@
 <accessibility-service xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:description="@string/as_desc"
-        android:accessibilityEventTypes="typeViewScrolled|typeWindowStateChanged|typeWindowContentChanged|typeWindowsChanged"
+        android:accessibilityEventTypes="typeViewScrolled|typeWindowStateChanged|typeWindowContentChanged|typeWindowsChanged|typeViewTextChanged"
         android:accessibilityFeedbackType="feedbackGeneric"
         android:canRetrieveWindowContent="true"
         tools:targetApi="n"

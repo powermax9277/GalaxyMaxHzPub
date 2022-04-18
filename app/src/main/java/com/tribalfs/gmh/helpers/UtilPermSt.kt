@@ -2,6 +2,7 @@ package com.tribalfs.gmh.helpers
 
 import android.Manifest.permission.WRITE_SECURE_SETTINGS
 import android.annotation.SuppressLint
+import android.app.AppOpsManager
 import android.content.Context
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.content.pm.PackageManager.PERMISSION_DENIED
@@ -13,6 +14,7 @@ import android.provider.Settings
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.tribalfs.gmh.BuildConfig
+import com.tribalfs.gmh.BuildConfig.APPLICATION_ID
 import com.tribalfs.gmh.R
 import com.tribalfs.gmh.helpers.UtilSettingsIntents.changeSystemSettingsIntent
 
@@ -69,7 +71,11 @@ class UtilPermSt private constructor(val appCtx: Context){
         appCtx.startActivity(intent)
     }
 
-
+    @RequiresApi(Build.VERSION_CODES.Q)
+    fun hasPipPermission(): Boolean {
+        val appOps:AppOpsManager? = appCtx.getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager?
+        return appOps?.unsafeCheckOpNoThrow(AppOpsManager.OPSTR_PICTURE_IN_PICTURE, Process.myUid(), APPLICATION_ID) == AppOpsManager.MODE_ALLOWED
+    }
 
 }
 
