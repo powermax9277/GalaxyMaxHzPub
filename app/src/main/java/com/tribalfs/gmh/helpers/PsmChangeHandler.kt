@@ -56,6 +56,7 @@ internal class PsmChangeHandler private constructor(val appCtx: Context) {
         }
     }
 
+    @ExperimentalCoroutinesApi
     fun startPipActivityIfS(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && isPowerSaveMode.get() == true) {
             if (UtilsDeviceInfoSt.instance(appCtx).isGoogleMapsTrickDevice){
@@ -72,13 +73,12 @@ internal class PsmChangeHandler private constructor(val appCtx: Context) {
                     appCtx.startActivity(startMain)
                 }
             }else {
-                //TODO TEST
                 if (UtilPermSt.instance(appCtx).hasPipPermission()) {
                     val pipIntent = Intent(appCtx, PipActivity::class.java)
                     pipIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     appCtx.startActivity(pipIntent)
                 }else{
-                    Toast.makeText(appCtx,"Allow picture-in-picture permission in $applicationName info settings.", Toast.LENGTH_LONG).show()
+                    Toast.makeText(appCtx,"Allow picture-in-picture permission to $applicationName in app info settings.", Toast.LENGTH_LONG).show()
                 }
             }
         }
