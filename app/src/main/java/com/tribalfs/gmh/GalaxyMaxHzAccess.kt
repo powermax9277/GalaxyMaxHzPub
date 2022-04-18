@@ -1003,7 +1003,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         mUtilsRefreshRate.setPeakRefreshRate(prrActive.get()!!)
         makeAdaptiveJob?.cancel()
         makeAdaptiveJob = launch(Dispatchers.IO) {
-            delay(kotlin.math.max(adaptiveDelayMillis * 35/currentBrightness.get()!!.toLong(), 700L))//TODO
+            delay(kotlin.math.max(adaptiveDelayMillis * 35/currentBrightness.get()!!.toLong(), 720L))//TODO
             if (applyAdaptiveMod.get()!! && isScreenOn.get() && !useStockAdaptive && !cameraOpen) {
                 mUtilsRefreshRate.setPeakRefreshRate(
                     if (useMin60 || volumePressed) max(60, lrrPref.get()!!) else lrrPref.get()!!
