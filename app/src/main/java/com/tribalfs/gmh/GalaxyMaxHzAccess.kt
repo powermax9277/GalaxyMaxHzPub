@@ -865,9 +865,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                         }
 
                         for (window in windows) {
-                            if (window.isInPictureInPictureMode || /*(*/window.type == -1 /*&& UtilsDeviceInfoSt.instance(
-                                    applicationContext
-                                ).isLowRefreshDevice)*/
+                            if (window.isInPictureInPictureMode ||(window.type == -1 && window.root.packageName != "com.android.systemui")
                             ) {
                                 if (!isOfficialAdaptive) {
                                     useMin60 = true
