@@ -1099,6 +1099,9 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
         return when (item.itemId) {
             R.id.menuUpd -> {
                 checkUpdate(true)
+                if (isPremium.get() == true) {
+                    syncLicense(true, trial = false)
+                }
                 true
             }
             R.id.menuBuy -> {

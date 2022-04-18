@@ -23,7 +23,6 @@ import android.hardware.camera2.CameraManager
 import android.hardware.display.DisplayManager
 import android.net.ConnectivityManager
 import android.net.Network
-import android.os.BatteryManager
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
@@ -195,16 +194,18 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
             }
         }
     }
-    private val myBatteryManager by lazy {applicationContext.getSystemService(BATTERY_SERVICE) as BatteryManager}
+   /* private val myBatteryManager by lazy {applicationContext.getSystemService(BATTERY_SERVICE) as BatteryManager}
 
     private fun isCharging(): Boolean {
         return myBatteryManager.isCharging
-    }
+    }*/
 
     private val autoSensorsOffRunnable: Runnable by lazy {
         Runnable {
             if (UtilsPrefsGmhSt.instance(applicationContext).gmhPrefSensorsOff) {
-                if (isCharging()) return@Runnable
+                // if (isCharging()) return@Runnable
+                //TODO
+                if (Power.isConnected(applicationContext)) return@Runnable
                 switchSensorsOff(true)
                 //Workaround sensors off sometimes trigger action_SCREEN_ON
                 mHandler.postDelayed(forceLowestRunnable,1000)
@@ -795,10 +796,10 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
         if (!isScreenOn.get() || !applyAdaptiveMod.get()!!) return
 
-       /* Log.d(
-            "TESTEST",
-            "EVENT_TYPE ${event?.eventType} CHANGE_TYPE ${event?.contentChangeTypes} ${event?.packageName} Classname: ${event?.className}"
-        )*/
+        /* Log.d(
+             "TESTEST",
+             "EVENT_TYPE ${event?.eventType} CHANGE_TYPE ${event?.contentChangeTypes} ${event?.packageName} Classname: ${event?.className}"
+         )*/
 
         when (event?.eventType) {
 
@@ -953,8 +954,8 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
                                 for (window in windows) {
                                     if (window.type == AccessibilityWindowInfo.TYPE_INPUT_METHOD) {
-                                            isKeyboardOpen = true
-                                            return
+                                        isKeyboardOpen = true
+                                        return
                                     }
                                 }
                                 isKeyboardOpen = false
@@ -997,13 +998,14 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
     private var isKeyboardOpen = false
     private var makeAdaptiveJob: Job? = null
+    private var swithdownDelay = kotlin.math.max(adaptiveDelayMillis * 35/currentBrightness.get()!!, 750L)
 
     @RequiresApi(Build.VERSION_CODES.M)
     private fun makeAdaptive() {
         mUtilsRefreshRate.setPeakRefreshRate(prrActive.get()!!)
         makeAdaptiveJob?.cancel()
         makeAdaptiveJob = launch(Dispatchers.IO) {
-            delay(kotlin.math.max(adaptiveDelayMillis * 35/currentBrightness.get()!!.toLong(), 720L))//TODO
+            delay(swithdownDelay)//TODO
             if (applyAdaptiveMod.get()!! && isScreenOn.get() && !useStockAdaptive && !cameraOpen) {
                 mUtilsRefreshRate.setPeakRefreshRate(
                     if (useMin60 || volumePressed) max(60, lrrPref.get()!!) else lrrPref.get()!!
@@ -1048,6 +1050,12 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         true
     }
 
+    private val brightnessCallback =  object: OnPropertyChangedCallback() {
+        override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
+            swithdownDelay = kotlin.math.max(adaptiveDelayMillis * 35/currentBrightness.get()!!, 750L)
+        }
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     @RequiresApi(Build.VERSION_CODES.M)
     internal fun setupAdaptiveEnhancer(){
@@ -1058,6 +1066,8 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
             delay(300)
             launch(Dispatchers.Main){
                 if (isFakeAdaptiveValid.get()!!) {
+                    currentBrightness.addOnPropertyChangedCallback(brightnessCallback)
+
                     mLayout?.setOnTouchListener(adaptiveEnhancer)
                     //mLayout?.setOnGenericMotionListener()
                     if (isScreenOn.get()) {
@@ -1078,6 +1088,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                     }
                     mLayout?.setOnTouchListener(null)
                     unregisterCameraCallback()
+                    currentBrightness.removeOnPropertyChangedCallback(brightnessCallback)
                 }
             }
         }
