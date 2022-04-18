@@ -36,6 +36,7 @@ import com.tribalfs.gmh.helpers.CacheSettings.prrActive
 import com.tribalfs.gmh.helpers.CacheSettings.screenOffRefreshRateMode
 import com.tribalfs.gmh.helpers.CacheSettings.supportedHzIntAllMod
 import com.tribalfs.gmh.helpers.CacheSettings.supportedHzIntCurMod
+import com.tribalfs.gmh.helpers.CacheSettings.typingRefreshRate
 import com.tribalfs.gmh.profiles.*
 import com.tribalfs.gmh.profiles.ModelNumbers.S20FE
 import com.tribalfs.gmh.profiles.ModelNumbers.S20FE5G
@@ -116,6 +117,9 @@ class UtilRefreshRateSt private constructor (val appCtx: Context) {
             isOfficialAdaptive = isAdaptiveSupportedUpd()
             isMultiResolution = isMultiResolutionUpd()
             minHzListForAdp = getMinHzListForAdpUpd()
+            if (minHzListForAdp?.indexOf(48) != -1) {
+                 typingRefreshRate = 48
+            }
         }
         updateModeBasedVariables()
     }

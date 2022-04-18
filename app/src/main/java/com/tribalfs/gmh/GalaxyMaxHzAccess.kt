@@ -39,6 +39,7 @@ import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityEvent.*
 import android.view.accessibility.AccessibilityNodeInfo
 import android.view.accessibility.AccessibilityNodeInfo.ACTION_CLICK
+import android.view.accessibility.AccessibilityWindowInfo
 import android.widget.FrameLayout
 import android.widget.RemoteViews
 import android.widget.TextView
@@ -70,6 +71,7 @@ import com.tribalfs.gmh.helpers.CacheSettings.restoreSync
 import com.tribalfs.gmh.helpers.CacheSettings.screenOffRefreshRateMode
 import com.tribalfs.gmh.helpers.CacheSettings.sensorOnKey
 import com.tribalfs.gmh.helpers.CacheSettings.turnOffAutoSensorsOff
+import com.tribalfs.gmh.helpers.CacheSettings.typingRefreshRate
 import com.tribalfs.gmh.hertz.HzGravity
 import com.tribalfs.gmh.hertz.HzNotifGlobal.CHANNEL_ID_HZ
 import com.tribalfs.gmh.hertz.HzNotifGlobal.NOTIFICATION_ID_HZ
@@ -357,6 +359,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     }
 
     private val defaultLauncherName by lazy{DefaultApps.getLauncher(applicationContext)}
+    private val defaultKeyboardName by lazy{DefaultApps.getKeyboard(applicationContext)}
 
     private fun switchSensorsOff(on: Boolean) {
         triesA = 0
@@ -790,10 +793,11 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
         if (!isScreenOn.get() || !applyAdaptiveMod.get()!!) return
 
-         /*Log.d(
-             "TESTEST",
-             "EVENT_TYPE ${event?.eventType} CHANGE_TYPE ${event?.contentChangeTypes} ${event?.packageName} Classname: ${event?.className}"
-         )*/
+       /* Log.d(
+            "TESTEST",
+            "EVENT_TYPE ${event?.eventType} CHANGE_TYPE ${event?.contentChangeTypes} ${event?.packageName} Classname: ${event?.className}"
+        )*/
+
         when (event?.eventType) {
 
             TYPE_WINDOW_STATE_CHANGED -> {//32
@@ -865,8 +869,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                         }
 
                         for (window in windows) {
-                            if (window.isInPictureInPictureMode ||(window.type == -1 && window.root.packageName != "com.android.systemui")
-                            ) {
+                            if (window.isInPictureInPictureMode || (window.type == -1 && window.root.packageName == "com.samsung.android.video")) {
                                 if (!isOfficialAdaptive) {
                                     useMin60 = true
                                     ignoreScrollForNonNative = false
@@ -903,6 +906,8 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
             }
 
             TYPE_VIEW_SCROLLED/*4096 */ -> {
+                if (isKeyboardOpen) return
+
                 if (isOfficialAdaptive || !ignoreScrollForNonNative){
                     makeAdaptive()
                 }
@@ -936,19 +941,38 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                             }
 
                             else -> {
-                                if ((isOfficialAdaptive && useMin60) || UtilsDeviceInfoSt.instance(applicationContext).isLowRefreshDevice){
+                                if (event.packageName == defaultLauncherName || (isOfficialAdaptive && useMin60) || UtilsDeviceInfoSt.instance(applicationContext).isLowRefreshDevice){
                                     makeAdaptive()
                                     return
                                 }
+
+
+                                for (window in windows) {
+                                    if (window.type == AccessibilityWindowInfo.TYPE_INPUT_METHOD) {
+                                            isKeyboardOpen = true
+                                            return
+                                    }
+                                }
+                                isKeyboardOpen = false
+                                return
                             }
                         }
                     }
 
                     CONTENT_CHANGE_TYPE_SUBTREE + CONTENT_CHANGE_TYPE_TEXT -> {//3
                         //When expanding notification in some cases
-                        if (isOfficialAdaptive && event.packageName?.toString() == "com.android.systemui") {
-                            makeAdaptive()
-                            return
+                        if (isOfficialAdaptive) {
+                            when(event.packageName?.toString()){
+                                "com.android.systemui" ->{
+                                    makeAdaptive()
+                                    return
+                                }
+
+                                defaultKeyboardName ->{
+                                    return
+                                }
+                            }
+
                         }
                     }
                 }
@@ -967,7 +991,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         }
     }
 
-
+    private var isKeyboardOpen = false
     private var makeAdaptiveJob: Job? = null
 
     @RequiresApi(Build.VERSION_CODES.M)
@@ -1015,7 +1039,11 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
     @SuppressLint("ClickableViewAccessibility")
     private val adaptiveEnhancer = View.OnTouchListener { _, _ ->
-        makeAdaptive()
+        if (isKeyboardOpen) {
+            mUtilsRefreshRate.setPeakRefreshRate(typingRefreshRate)
+        }else {
+            makeAdaptive()
+        }
         true
     }
 
@@ -1030,6 +1058,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
             launch(Dispatchers.Main){
                 if (isFakeAdaptiveValid.get()!!) {
                     mLayout?.setOnTouchListener(adaptiveEnhancer)
+                    //mLayout?.setOnGenericMotionListener()
                     if (isScreenOn.get()) {
                         initialAdaptive()//initial trigger
                     }else{

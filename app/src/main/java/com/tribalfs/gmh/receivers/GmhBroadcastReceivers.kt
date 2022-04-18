@@ -26,7 +26,6 @@ import com.tribalfs.gmh.helpers.CacheSettings.offScreenRefreshRate
 import com.tribalfs.gmh.helpers.CacheSettings.restoreSync
 import com.tribalfs.gmh.helpers.CacheSettings.screenOffRefreshRateMode
 import com.tribalfs.gmh.helpers.CacheSettings.sensorOnKey
-import com.tribalfs.gmh.helpers.CacheSettings.turnOff5GOnPsm
 import com.tribalfs.gmh.netspeed.NetSpeedService.Companion.netSpeedService
 import com.tribalfs.gmh.netspeed.NetSpeedServiceHelperStn
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt
@@ -37,8 +36,8 @@ import kotlinx.coroutines.launch
 
 
 
-private const val PREF_NET_TYPE_LTE_GSM_WCDMA    = 9 /* LTE, GSM/WCDMA */
-private const val PREF_NET_TYPE_5G_LTE_GSM_WCDMA = 26
+//private const val PREF_NET_TYPE_LTE_GSM_WCDMA    = 9 /* LTE, GSM/WCDMA */
+//private const val PREF_NET_TYPE_5G_LTE_GSM_WCDMA = 26
 
 @ExperimentalCoroutinesApi
 open class GmhBroadcastReceivers(private val appCtx: Context,
@@ -211,7 +210,8 @@ open class GmhBroadcastReceivers(private val appCtx: Context,
             )
         }
 
-        if (turnOff5GOnPsm == true) {
+        //not working
+       /* if (turnOff5GOnPsm == true) {
             val pnm = (Settings.Global.getString(appCtx.contentResolver, PREFERRED_NETWORK_MODE)
                 ?: "$PREF_NET_TYPE_LTE_GSM_WCDMA,$PREF_NET_TYPE_LTE_GSM_WCDMA").split(",")
 
@@ -232,7 +232,7 @@ open class GmhBroadcastReceivers(private val appCtx: Context,
                 }
             }
 
-        }
+        }*/
     }
 
 
