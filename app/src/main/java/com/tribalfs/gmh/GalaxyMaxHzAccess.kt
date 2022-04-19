@@ -781,8 +781,8 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
         if (!(isScreenOn.get() && applyAdaptiveMod.get()!!)) return
 
-        /*//
-        Log.d(
+
+       /* Log.d(
             "TESTEST",
             "TIME: ${event?.eventTime} TYPE: ${event?.eventType} CHANGE: ${event?.contentChangeTypes} PN:${event?.packageName} CN: ${event?.className}"
         )*/
@@ -929,15 +929,15 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                                     makeAdaptive()
                                     return
                                 }
+
+
                                 /*Note: "android.view.ViewGroup" for expanded toolbar scrolling
                                 "android.widget.FrameLayout" launcher vertical scrolling*/
-                                if (event.packageName == defaultKeyboardName){
-                                    return
-                                }
-
                                 if (event.className == "android.widget.FrameLayout" || event.className == "android.view.ViewGroup" || (isOfficialAdaptive && useMin60)){
-                                    makeAdaptive()
-                                    return
+                                    if (event.packageName != defaultKeyboardName) {
+                                        makeAdaptive()
+                                        return
+                                    }
                                 }
 
                                 for (win in windows){
@@ -946,9 +946,9 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                                         return
                                     }
                                 }
-
                                 isKeyboardOpen = false
                                 return
+
                             }
                         }
                     }
@@ -957,15 +957,17 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                         when(event.packageName?.toString()){
                             SYSTEM_UI ->{
                                 //When expanding notification in some cases
-                                if (isOfficialAdaptive) {
-                                    makeAdaptive()
+                                if (!isKeyboardOpen) {
+                                    if (isOfficialAdaptive) {
+                                        makeAdaptive()
+                                    }
+                                    return
                                 }
-                                return
                             }
 
-                            /*defaultKeyboardName ->{
+                            defaultKeyboardName ->{
                                 return
-                            }*/
+                            }
                         }
                     }
                 }
