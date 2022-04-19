@@ -20,6 +20,7 @@ object CacheSettings {
     internal val isPowerSaveMode = ObservableField<Boolean>() //Reflects SCREEN ON status only
 
     internal var adaptiveDelayMillis = 1000L
+    internal var animatorAdj = 0L
     internal var adaptiveAccessTimeout: Long = max(1400L, adaptiveDelayMillis * TIMEOUT_FACTOR.toLong())
 
     internal var displayId: Int = DEFAULT_DISPLAY

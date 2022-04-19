@@ -27,6 +27,7 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.os.PowerManager.ACTION_POWER_SAVE_MODE_CHANGED
+import android.util.Log
 import android.view.KeyEvent
 import android.view.KeyEvent.KEYCODE_VOLUME_DOWN
 import android.view.KeyEvent.KEYCODE_VOLUME_UP
@@ -52,6 +53,7 @@ import com.tribalfs.gmh.callbacks.GmhBroadcastCallback
 import com.tribalfs.gmh.helpers.*
 import com.tribalfs.gmh.helpers.CacheSettings.adaptiveAccessTimeout
 import com.tribalfs.gmh.helpers.CacheSettings.adaptiveDelayMillis
+import com.tribalfs.gmh.helpers.CacheSettings.animatorAdj
 import com.tribalfs.gmh.helpers.CacheSettings.applyAdaptiveMod
 import com.tribalfs.gmh.helpers.CacheSettings.currentBrightness
 import com.tribalfs.gmh.helpers.CacheSettings.currentRefreshRateMode
@@ -780,11 +782,11 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
         if (!(isScreenOn.get() && applyAdaptiveMod.get()!!)) return
 
-
-        /*Log.d(
+        //TODO
+        Log.d(
             "TESTEST",
             "TIME: ${event?.eventTime} TYPE: ${event?.eventType} CHANGE: ${event?.contentChangeTypes} PN:${event?.packageName} CN: ${event?.className}"
-        )*/
+        )
 
 
         when (event?.eventType) {
@@ -993,7 +995,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         mUtilsRefreshRate.setPeakRefreshRate(prrActive.get()!!)
         makeAdaptiveJob?.cancel()
         makeAdaptiveJob = launch(Dispatchers.IO) {
-            delay(swithdownDelay)
+            delay(swithdownDelay + animatorAdj)
             if (applyAdaptiveMod.get()!! && isScreenOn.get() && !skipSwitchToMinHz && !cameraOpen) {
                 mUtilsRefreshRate.setPeakRefreshRate(
                     if (useMin60 || volumePressed) max(60, lrrPref.get()!!) else lrrPref.get()!!

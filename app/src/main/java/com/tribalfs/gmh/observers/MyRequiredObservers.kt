@@ -6,12 +6,17 @@ import android.net.Uri
 import android.os.Build
 import android.os.Handler
 import android.provider.Settings
+import android.provider.Settings.Global.ANIMATOR_DURATION_SCALE
+import android.provider.Settings.Global.DEVELOPMENT_SETTINGS_ENABLED
+import android.provider.Settings.Secure.DEFAULT_INPUT_METHOD
+import android.provider.Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.tribalfs.gmh.*
 import com.tribalfs.gmh.MyApplication.Companion.appScopeIO
 import com.tribalfs.gmh.UtilAccessibilityService.checkAccessibility
 import com.tribalfs.gmh.helpers.*
+import com.tribalfs.gmh.helpers.CacheSettings.animatorAdj
 import com.tribalfs.gmh.helpers.CacheSettings.defaultKeyboardName
 import com.tribalfs.gmh.helpers.CacheSettings.ignoreRrmChange
 import com.tribalfs.gmh.helpers.CacheSettings.isFakeAdaptive
@@ -28,9 +33,10 @@ private val deviceIdleConstantsUri = Settings.Global.getUriFor(DEVICE_IDLE_CONST
 private val batterySaverConstantsUri = Settings.Global.getUriFor(BATTERY_SAVER_CONSTANTS)
 private val sysuiQsTilesUri = Settings.Secure.getUriFor(SYSUI_QS_TILES)
 private val currentResolutionUri = Settings.Global.getUriFor(DISPLAY_SIZE_FORCED)
-private val devSettingsUri =  Settings.Global.getUriFor(Settings.Global.DEVELOPMENT_SETTINGS_ENABLED)
-private val accessibilityServiceUri =  Settings.Secure.getUriFor(Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES)
-private val inputMethodUri =  Settings.Secure.getUriFor(Settings.Secure.DEFAULT_INPUT_METHOD)
+private val devSettingsUri =  Settings.Global.getUriFor(DEVELOPMENT_SETTINGS_ENABLED)
+private val accessibilityServiceUri =  Settings.Secure.getUriFor(ENABLED_ACCESSIBILITY_SERVICES)
+private val inputMethodUri =  Settings.Secure.getUriFor(DEFAULT_INPUT_METHOD)
+private val animationScaleUri =  Settings.Global.getUriFor(ANIMATOR_DURATION_SCALE)
 
 @RequiresApi(Build.VERSION_CODES.M)
 @ExperimentalCoroutinesApi
@@ -142,7 +148,11 @@ internal class MyRequiredObservers(h: Handler?, private val appCtx: Context) : C
                 defaultKeyboardName = DefaultApps.getKeyboard(appCtx)
             }
 
-
+            animationScaleUri ->{
+                Settings.Global.getFloat(appCtx.contentResolver, ANIMATOR_DURATION_SCALE).let{
+                    animatorAdj = (it * 300 - 300).toLong()
+                }
+            }
         }
     }
 
@@ -157,7 +167,8 @@ internal class MyRequiredObservers(h: Handler?, private val appCtx: Context) : C
             devSettingsUri,
             accessibilityServiceUri,
             currentResolutionUri,
-            inputMethodUri
+            inputMethodUri,
+            animationScaleUri
         ).forEach {
             appCtx.contentResolver.registerContentObserver(
                 it, false, this
