@@ -179,7 +179,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     private val mNotifBar by lazy {UtilNotifBarSt.instance(applicationContext)}
     private var triesA: Int = 0
     private var triesB: Int = 0
-    private var useStockAdaptive = false
+    private var skipSwitchToMinHz = false
     private var ignoreScrollForNonNative = false
     private var useMin60 = false
     private var volumePressed = false
@@ -788,6 +788,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         return super.onKeyEvent(event)
     }
 
+    private lateinit var activePackage: CharSequence
 
     @SuppressLint("SwitchIntDef")
     @RequiresApi(Build.VERSION_CODES.O)
@@ -812,19 +813,15 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
                     isKeyboardOpen = false
 
-                    /*for (win in windows) {
-                        //TODO
-                        Log.d("TESTEST", "pn:${win.root.packageName} isActive:${win.isActive}" )
-                    }*/
 
-                    /*Navigation bar mode. 0 = 3 button 1 = 2 button 2 = fully gestural*/
+                    /*Navigation bar mode. 0 = 3 button 1 = 2 button 2 = fully gestural*//*
                     if (navMode == 2 && event.packageName == defaultLauncherName){
                         if (ignoreLauncher){
                             makeAdaptive()
                             setNoIgnoreLauncher()
                             return
                         }
-                    }
+                    }*/
 
                     val componentName = ComponentName(
                         event.packageName.toString(),
@@ -832,26 +829,42 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                     )
                     val actInfo = getActivityInfo(componentName)
 
-                    val appInfo = packageManager.getApplicationInfo(componentName.packageName, 0)
-
                     if (actInfo != null){
-                        //TODO
-                            Log.d(
-                                "TESTEST",
-                                "TIME: ${event.eventTime} TYPE: ${event.eventType} CHANGE: ${event.contentChangeTypes} PN:${event.packageName} CN: ${event.className}"
-                            )
+                        var hasPip = false
+                        var packChange = false
+
+                        for (win in windows) {
+                            //TODO
+                                try{
+                                Log.d("TESTEST", "package:${win.root.packageName} ")
+                            if (win.isInPictureInPictureMode || (win.type == -1 && win.root.packageName == "com.samsung.android.video")){
+                                hasPip = true
+                            }
+
+                            if (win.parent.isActive && win.root.packageName == event.packageName){
+                                if(event.packageName != activePackage) {
+                                    packChange = true
+                                }
+                            }
+                        }
+
+                        if (!packChange) return
+
+                        val appInfo = packageManager.getApplicationInfo(componentName.packageName, 0)
+
                         if(appInfo.category == CATEGORY_GAME || isPartOf(manualGameList, componentName)) {
-                            useStockAdaptive = true
+                            skipSwitchToMinHz = true
                             useMin60 = false
                             ignoreScrollForNonNative = false
                             makeAdaptive()
                             return
                         }
 
+
                         if(appInfo.category == CATEGORY_VIDEO || isPartOf(manualVideoAppList, componentName)) {
                             useMin60 = true
                             ignoreScrollForNonNative = true
-                            useStockAdaptive = false
+                            skipSwitchToMinHz = false
                             makeAdaptive()
                             return
                         }
@@ -863,7 +876,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                                 || isPartOf(useStockAdaptiveList, componentName)
                             ) {
                                 useMin60 = false
-                                useStockAdaptive = true
+                                skipSwitchToMinHz = true
                                 ignoreScrollForNonNative = false
                                 makeAdaptive()
                                 return
@@ -873,45 +886,36 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                                 || appInfo.category == ApplicationInfo.CATEGORY_MAPS
                             ){
                                 useMin60 = true
-                                useStockAdaptive = false
+                                skipSwitchToMinHz = false
                                 ignoreScrollForNonNative = false
                                 makeAdaptive()
                                 return
                             }
                         }
 
-                        for (win in windows) {
-                               if (win.isInPictureInPictureMode || (win.type == -1 && win.root.packageName == "com.samsung.android.video")) {
-                                if (isOfficialAdaptive) {
-                                    useStockAdaptive = true
-                                    ignoreScrollForNonNative = false
-                                    useMin60 = false
-                                    makeAdaptive()
-                                    return
-                                }else{
-                                    useMin60 = true
-                                    ignoreScrollForNonNative = false
-                                    useStockAdaptive = false
-                                    makeAdaptive()
-                                    return
-                                }
+                        if (hasPip){
+                            if (isOfficialAdaptive) {
+                                skipSwitchToMinHz = true
+                                ignoreScrollForNonNative = false
+                                useMin60 = false
+                                makeAdaptive()
+                                return
+                            }else {
+                                useMin60 = true
+                                ignoreScrollForNonNative = false
+                                skipSwitchToMinHz = false
+                                makeAdaptive()
+                                return
                             }
                         }
 
+
                         ignoreScrollForNonNative = false
-                        useStockAdaptive = false
+                        skipSwitchToMinHz = false
                         useMin60 = false
                         makeAdaptive()//don't remove
                         return
 
-                    }else{
-                        if (appInfo.category == CATEGORY_VIDEO || isPartOf(manualVideoAppList, componentName)) {
-                            useMin60 = true
-                            ignoreScrollForNonNative = true
-                            useStockAdaptive = false
-                            makeAdaptive()
-                            return
-                        }
                     }
                 }
             }
@@ -938,8 +942,8 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
                             SYSTEM_UI -> {
                                 if (mKeyguardManager.isDeviceLocked) {
-                                    if (useStockAdaptive) {
-                                        useStockAdaptive = false
+                                    if (skipSwitchToMinHz) {
+                                        skipSwitchToMinHz = false
                                     }
                                     return
                                 }else{
@@ -1021,7 +1025,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         makeAdaptiveJob?.cancel()
         makeAdaptiveJob = launch(Dispatchers.IO) {
             delay(swithdownDelay)
-            if (applyAdaptiveMod.get()!! && isScreenOn.get() && !useStockAdaptive && !cameraOpen) {
+            if (applyAdaptiveMod.get()!! && isScreenOn.get() && !skipSwitchToMinHz && !cameraOpen) {
                 mUtilsRefreshRate.setPeakRefreshRate(
                     if (useMin60 || volumePressed) max(60, lrrPref.get()!!) else lrrPref.get()!!
                 )
