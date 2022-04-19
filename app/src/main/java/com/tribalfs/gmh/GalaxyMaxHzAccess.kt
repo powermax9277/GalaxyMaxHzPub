@@ -27,8 +27,6 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.os.PowerManager.ACTION_POWER_SAVE_MODE_CHANGED
-import android.provider.Settings
-import android.util.Log
 import android.view.KeyEvent
 import android.view.KeyEvent.KEYCODE_VOLUME_DOWN
 import android.view.KeyEvent.KEYCODE_VOLUME_UP
@@ -57,6 +55,7 @@ import com.tribalfs.gmh.helpers.CacheSettings.adaptiveDelayMillis
 import com.tribalfs.gmh.helpers.CacheSettings.applyAdaptiveMod
 import com.tribalfs.gmh.helpers.CacheSettings.currentBrightness
 import com.tribalfs.gmh.helpers.CacheSettings.currentRefreshRateMode
+import com.tribalfs.gmh.helpers.CacheSettings.defaultKeyboardName
 import com.tribalfs.gmh.helpers.CacheSettings.disablePsm
 import com.tribalfs.gmh.helpers.CacheSettings.displayId
 import com.tribalfs.gmh.helpers.CacheSettings.hzNotifOn
@@ -69,7 +68,6 @@ import com.tribalfs.gmh.helpers.CacheSettings.isScreenOn
 import com.tribalfs.gmh.helpers.CacheSettings.lowestHzCurMode
 import com.tribalfs.gmh.helpers.CacheSettings.lowestHzForAllMode
 import com.tribalfs.gmh.helpers.CacheSettings.lrrPref
-import com.tribalfs.gmh.helpers.CacheSettings.navMode
 import com.tribalfs.gmh.helpers.CacheSettings.prrActive
 import com.tribalfs.gmh.helpers.CacheSettings.restoreSync
 import com.tribalfs.gmh.helpers.CacheSettings.screenOffRefreshRateMode
@@ -98,7 +96,8 @@ internal const val STOPPED = -1
 internal const val PAUSE = 0
 private const val MAX_TRY = 8
 private const val SYSTEM_UI = "com.android.systemui"
-
+private const val MIN_DELAY = 760L
+private const val DELAY_FACTOR = 32
 private val manualVideoAppList = listOf(
     "amazon.avod",
     "youtube",
@@ -259,7 +258,6 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                 ACTION_SCREEN_ON ->{
                     isScreenOn.set(true)
 
-                    //handler.removeCallbacks { autoSensorsOffRunnable }
                     mHandler.removeCallbacksAndMessages(null)
 
                     launch {
@@ -356,9 +354,6 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
             }
         }
     }
-
-    private val defaultLauncherName by lazy{DefaultApps.getLauncher(applicationContext)}
-    private val defaultKeyboardName by lazy{DefaultApps.getKeyboard(applicationContext)}
 
     private fun switchSensorsOff(on: Boolean) {
         triesA = 0
@@ -756,17 +751,6 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         mHandler.postDelayed(ignoreAhhRunnable, 1000L)
     }
 
-    private var ignoreLauncher = true
-    private val ignoreLauncherRunnable = Runnable {
-        ignoreLauncher = true
-    }
-
-    private fun setNoIgnoreLauncher(){
-        mHandler.removeCallbacks(ignoreLauncherRunnable)
-        ignoreLauncher = false
-        mHandler.postDelayed(ignoreLauncherRunnable, 200L)
-    }
-
     // private val mediaSessionManager by lazy {(getSystemService(MEDIA_SESSION_SERVICE) as MediaSessionManager)}
     private var volumeJob: Job? = null
 
@@ -788,7 +772,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         return super.onKeyEvent(event)
     }
 
-    private lateinit var activePackage: CharSequence
+    private var activePackage: CharSequence = ""
 
     @SuppressLint("SwitchIntDef")
     @RequiresApi(Build.VERSION_CODES.O)
@@ -796,12 +780,12 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
         if (!(isScreenOn.get() && applyAdaptiveMod.get()!!)) return
 
-        /*if (event?.eventType != null ) {
-            Log.d(
-                "TESTEST",
-                "TIME: ${event.eventTime} TYPE: ${event.eventType} CHANGE: ${event.contentChangeTypes} PN:${event.packageName} CN: ${event.className}"
-            )
-        }*/
+
+        /*Log.d(
+            "TESTEST",
+            "TIME: ${event?.eventTime} TYPE: ${event?.eventType} CHANGE: ${event?.contentChangeTypes} PN:${event?.packageName} CN: ${event?.className}"
+        )*/
+
 
         when (event?.eventType) {
 
@@ -810,18 +794,6 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                 if (event.contentChangeTypes != 0) return
 
                 if (event.packageName != null && event.className != null) {
-
-                    isKeyboardOpen = false
-
-
-                    /*Navigation bar mode. 0 = 3 button 1 = 2 button 2 = fully gestural*//*
-                    if (navMode == 2 && event.packageName == defaultLauncherName){
-                        if (ignoreLauncher){
-                            makeAdaptive()
-                            setNoIgnoreLauncher()
-                            return
-                        }
-                    }*/
 
                     val componentName = ComponentName(
                         event.packageName.toString(),
@@ -834,14 +806,11 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                         var packChange = false
 
                         for (win in windows) {
-                            //TODO
-                                try{
-                                Log.d("TESTEST", "package:${win.root.packageName} ")
-                            if (win.isInPictureInPictureMode || (win.type == -1 && win.root.packageName == "com.samsung.android.video")){
+                            if (win.isInPictureInPictureMode || (win.type == -1 && win.root.packageName == "com.samsung.android.video")) {
                                 hasPip = true
                             }
 
-                            if (win.parent.isActive && win.root.packageName == event.packageName){
+                            if (win.isActive && win.root.packageName == event.packageName){
                                 if(event.packageName != activePackage) {
                                     packChange = true
                                 }
@@ -908,7 +877,6 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                                 return
                             }
                         }
-
 
                         ignoreScrollForNonNative = false
                         skipSwitchToMinHz = false
@@ -1002,6 +970,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                 }
             }
 
+            //What's the use?
             TYPE_WINDOWS_CHANGED ->{ // 4194304
                 if (ignoreNextWinChange) {
                     setTempIgnoreWinChange()
@@ -1017,7 +986,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
     private var isKeyboardOpen = false
     private var makeAdaptiveJob: Job? = null
-    private var swithdownDelay = kotlin.math.max(adaptiveDelayMillis * 35/currentBrightness.get()!!, 750L)
+    private var swithdownDelay = kotlin.math.max(adaptiveDelayMillis * DELAY_FACTOR/currentBrightness.get()!!, MIN_DELAY)
 
     @RequiresApi(Build.VERSION_CODES.M)
     private fun makeAdaptive() {
@@ -1071,7 +1040,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
     private val brightnessCallback =  object: OnPropertyChangedCallback() {
         override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
-            swithdownDelay = kotlin.math.max(adaptiveDelayMillis * 35/currentBrightness.get()!!, 750L)
+            swithdownDelay = kotlin.math.max(adaptiveDelayMillis * DELAY_FACTOR/currentBrightness.get()!!, MIN_DELAY)
         }
     }
 
@@ -1087,7 +1056,6 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                 if (isFakeAdaptiveValid.get()!!) {
                     currentBrightness.addOnPropertyChangedCallback(brightnessCallback)
                     mLayout?.setOnTouchListener(adaptiveEnhancer)
-                    //mLayout?.setOnGenericMotionListener()
                     if (isScreenOn.get()) {
                         initialAdaptive()//initial trigger
                     }else{
@@ -1096,7 +1064,6 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                         }
                     }
                     registerCameraCallback()
-                    navMode = Settings.Secure.getInt(applicationContext.contentResolver, NAVIGATION_MODE)
                 } else {
                     currentBrightness.removeOnPropertyChangedCallback(brightnessCallback)
                     if (UtilPermSt.instance(applicationContext).hasWriteSystemPerm()) {

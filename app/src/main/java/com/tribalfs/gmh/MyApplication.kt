@@ -20,6 +20,7 @@ import com.tribalfs.gmh.helpers.CacheSettings.adaptiveDelayMillis
 import com.tribalfs.gmh.helpers.CacheSettings.brightnessThreshold
 import com.tribalfs.gmh.helpers.CacheSettings.currentBrightness
 import com.tribalfs.gmh.helpers.CacheSettings.currentRefreshRateMode
+import com.tribalfs.gmh.helpers.CacheSettings.defaultKeyboardName
 import com.tribalfs.gmh.helpers.CacheSettings.hasWriteSecureSetPerm
 import com.tribalfs.gmh.helpers.CacheSettings.hasWriteSystemSetPerm
 import com.tribalfs.gmh.helpers.CacheSettings.hzNotifOn
@@ -130,7 +131,7 @@ class MyApplication : Application() {
         appScopeIO.launch {
 
             Brand.set(UtilsDeviceInfoSt.instance(applicationContext).manufacturer)
-
+            defaultKeyboardName = DefaultApps.getKeyboard(applicationContext)
             /*while (!isProfilesLoaded) {
                 delay(250)
             }

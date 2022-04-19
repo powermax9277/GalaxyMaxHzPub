@@ -8,18 +8,15 @@ import android.os.Handler
 import android.provider.Settings
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import com.tribalfs.gmh.GalaxyMaxHzAccess
-import com.tribalfs.gmh.MyApplication
+import com.tribalfs.gmh.*
 import com.tribalfs.gmh.MyApplication.Companion.appScopeIO
-import com.tribalfs.gmh.R
-import com.tribalfs.gmh.UtilAccessibilityService
 import com.tribalfs.gmh.UtilAccessibilityService.checkAccessibility
 import com.tribalfs.gmh.helpers.*
+import com.tribalfs.gmh.helpers.CacheSettings.defaultKeyboardName
 import com.tribalfs.gmh.helpers.CacheSettings.ignoreRrmChange
 import com.tribalfs.gmh.helpers.CacheSettings.isFakeAdaptive
 import com.tribalfs.gmh.helpers.CacheSettings.isOfficialAdaptive
 import com.tribalfs.gmh.helpers.CacheSettings.lrrPref
-import com.tribalfs.gmh.helpers.CacheSettings.navMode
 import com.tribalfs.gmh.helpers.DozeUpdater.updateDozValues
 import com.tribalfs.gmh.profiles.ProfilesObj
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt
@@ -33,7 +30,7 @@ private val sysuiQsTilesUri = Settings.Secure.getUriFor(SYSUI_QS_TILES)
 private val currentResolutionUri = Settings.Global.getUriFor(DISPLAY_SIZE_FORCED)
 private val devSettingsUri =  Settings.Global.getUriFor(Settings.Global.DEVELOPMENT_SETTINGS_ENABLED)
 private val accessibilityServiceUri =  Settings.Secure.getUriFor(Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES)
-private val navModeUri =  Settings.Secure.getUriFor(NAVIGATION_MODE)
+private val inputMethodUri =  Settings.Secure.getUriFor(Settings.Secure.DEFAULT_INPUT_METHOD)
 
 @RequiresApi(Build.VERSION_CODES.M)
 @ExperimentalCoroutinesApi
@@ -141,9 +138,11 @@ internal class MyRequiredObservers(h: Handler?, private val appCtx: Context) : C
                 }
             }
 
-            navModeUri ->{
-                navMode = Settings.Secure.getInt(appCtx.contentResolver, NAVIGATION_MODE)
+            inputMethodUri ->{
+                defaultKeyboardName = DefaultApps.getKeyboard(appCtx)
             }
+
+
         }
     }
 
@@ -158,7 +157,7 @@ internal class MyRequiredObservers(h: Handler?, private val appCtx: Context) : C
             devSettingsUri,
             accessibilityServiceUri,
             currentResolutionUri,
-            navModeUri
+            inputMethodUri
         ).forEach {
             appCtx.contentResolver.registerContentObserver(
                 it, false, this

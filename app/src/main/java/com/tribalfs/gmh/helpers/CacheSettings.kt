@@ -33,7 +33,7 @@ object CacheSettings {
     internal var canApplyFakeAdaptive: Boolean = false
     internal val isFakeAdaptive = ObservableField(false)
     //internal var turnOff5GOnPsm: Boolean? = null
-    internal var navMode = 2
+   // internal var navMode = 2
 
     internal var isOfficialAdaptive: Boolean = false
     internal var isMultiResolution: Boolean = true
@@ -85,5 +85,6 @@ object CacheSettings {
     internal var preventHigh = false
     internal var sensorOnKey: CharSequence? = null
 
+    internal var defaultKeyboardName: String = ""
 
 }
