@@ -27,7 +27,6 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.os.PowerManager.ACTION_POWER_SAVE_MODE_CHANGED
-import android.util.Log
 import android.view.KeyEvent
 import android.view.KeyEvent.KEYCODE_VOLUME_DOWN
 import android.view.KeyEvent.KEYCODE_VOLUME_UP
@@ -195,18 +194,12 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
             }
         }
     }
-   /* private val myBatteryManager by lazy {applicationContext.getSystemService(BATTERY_SERVICE) as BatteryManager}
 
-    private fun isCharging(): Boolean {
-        return myBatteryManager.isCharging
-    }*/
 
     private val autoSensorsOffRunnable: Runnable by lazy {
         Runnable {
             if (UtilsPrefsGmhSt.instance(applicationContext).gmhPrefSensorsOff) {
-                // if (isCharging()) return@Runnable
-                //TODO
-                if (Power.isConnected(applicationContext)) return@Runnable
+                if (Power.isPlugged(applicationContext)) return@Runnable
                 switchSensorsOff(true)
                 //Workaround sensors off sometimes trigger action_SCREEN_ON
                 mHandler.postDelayed(forceLowestRunnable,1000)
@@ -797,11 +790,10 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
         if (!isScreenOn.get() || !applyAdaptiveMod.get()!!) return
 
-        //TODO
-         Log.d(
+         /*Log.d(
              "TESTEST",
              "EVENT_TYPE ${event?.eventType} CHANGE_TYPE ${event?.contentChangeTypes} ${event?.packageName} Classname: ${event?.className}"
-         )
+         )*/
 
         when (event?.eventType) {
 
@@ -1013,7 +1005,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         mUtilsRefreshRate.setPeakRefreshRate(prrActive.get()!!)
         makeAdaptiveJob?.cancel()
         makeAdaptiveJob = launch(Dispatchers.IO) {
-            delay(swithdownDelay)//TODO
+            delay(swithdownDelay)
             if (applyAdaptiveMod.get()!! && isScreenOn.get() && !useStockAdaptive && !cameraOpen) {
                 mUtilsRefreshRate.setPeakRefreshRate(
                     if (useMin60 || volumePressed) max(60, lrrPref.get()!!) else lrrPref.get()!!
