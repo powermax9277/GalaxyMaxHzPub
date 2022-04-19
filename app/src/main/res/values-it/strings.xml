@@ -11,9 +11,6 @@
     <string name="adaptive">Adattiva</string>
     <string name="high">Alta</string>
     <string name="refresh_rate_mon">Monitoraggio Frequenza Di Aggiornamento</string>
-    <string name="left">Sinistro</string>
-    <string name="right">Destro</string>
-
     <!-- <string name="left">Left</string>
  <string name="right">Right</string> -->
     <string name="top">Superiore</string>
@@ -89,11 +86,11 @@
     <string name="help">Aiuto</string>
     <string name="reload_profiles">Ricarica Profili</string>
     <string name="options">Opzioni</string>
-    <string name="data_usage">&lt;u>Utilizzo Dati&lt;/u></string>
-    <string name="psm_options">&lt;u>Opzioni modalità Risparmio Energetico&lt;/u></string>
+    <string name="data_usage"><u>Utilizzo Dati</u></string>
+    <string name="psm_options"><u>Opzioni modalità Risparmio Energetico</u></string>
     <string name="disable_sync_on_so">Disattivazione Automatica sincronizzazione</string>
-    <string name="autosync_settings">&lt;u>Impostazioni sincronizzazione Automatica&lt;/u></string>
-    <string name="apps_bat_opt_settings">&lt;u>Impostazioni Ottimizzazione Batteria App&lt;/u></string>
+    <string name="autosync_settings"><u>Impostazioni sincronizzazione Automatica</u></string>
+    <string name="apps_bat_opt_settings"><u>Impostazioni Ottimizzazione Batteria App</u></string>
     <string name="brightness_threshold">Soglia Luminosità - Adattiva</string>
     <string name="sensor_off_info">I sensori del dispositivo verranno disattivati automaticamente quando lo schermo sarà spento finché il dispositivo non verrà sbloccato.</string>
     <string name="sensors_off_note">Nota Importante: quando il riquadro SensorsOff è attivo, la fotocamera, il microfono e altri sensori saranno inaccessibili. Alcune delle funzionalità influenzate comprendono lo sblocco facciale, l\'udibilità delle chiamate vocali (solo alcune) e il rilevamento dell\'angolo della cerniera. Utilizza questa opzione solo se ne hai chiaramente compreso gli effetti.\n\nQuesta opzione potrebbe non funzionare su Android 12 in caso di schermata di blocco sprotetta; in alternativa, è possibile fornire l\'autorizzazione WRITE_SECURE_SETTINGS su versioni precedenti di Android.</string>
