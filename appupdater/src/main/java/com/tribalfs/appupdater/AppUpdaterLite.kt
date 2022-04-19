@@ -70,7 +70,7 @@ class AppUpdaterLite(private val context: Context) {
                         Log.d(TAG, "New update is available")
                         if (isForce){
                             Snackbar.make((context as Activity).findViewById(android.R.id.content),
-                                context.getString(R.string.appupdater_update_available_description_snackbar,
+                                context.getString(R.string.update_snackbar_desc,
                                     serverAppDetails.latestVersion
                                 ),
                                 Snackbar.LENGTH_LONG
@@ -90,14 +90,14 @@ class AppUpdaterLite(private val context: Context) {
                                     (context as Activity).runOnUiThread {
 
                                         AlertDialog.Builder(context)
-                                            .setTitle(context.getString(R.string.appupdater_app_update, getAppName(context)))
+                                            .setTitle(context.getString(R.string.app_update, getAppName(context)))
                                             .setMessage(
                                                 getDescriptionUpdate(
                                                     context, serverAppDetails
                                                 )
                                             )
                                             .setPositiveButton(
-                                                context.getString(R.string.appupdater_btn_update)
+                                                context.getString(R.string.btn_update)
                                             ) { _, _ ->
                                                onUpdateCheckedCallback?.onUpdateChecked(true)
                                                 context.startActivity(installIntent)
@@ -121,7 +121,7 @@ class AppUpdaterLite(private val context: Context) {
                         Log.d(TAG, "No update is available")
                         if (isForce){
                             Snackbar.make((context as Activity).findViewById(android.R.id.content),
-                                context.getString(R.string.appupdater_update_not_available),
+                                context.getString(R.string.update_na),
                                 Snackbar.LENGTH_LONG
                             ).show()}
 
@@ -146,7 +146,7 @@ class AppUpdaterLite(private val context: Context) {
 
 
     private fun getDescriptionUpdate(context: Context, appDetails: AppDetails): String {
-        return String.format(context.resources.getString(R.string.appupdater_update_available_description_dialog,
+        return String.format(context.resources.getString(R.string.update_dialog_desc,
             appDetails.latestVersion,
             appDetails.releaseNotes
             )

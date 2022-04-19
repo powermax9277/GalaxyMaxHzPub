@@ -43,8 +43,8 @@ internal const val REFRESH_RATE_MODE_COVER = "refresh_rate_mode_cover"
 internal const val ONEPLUS_SCREEN_REFRESH_RATE = "oneplus_screen_refresh_rate"
 internal const val PEAK_REFRESH_RATE = "peak_refresh_rate"
 internal const val USER_REFRESH_RATE = "user_refresh_rate"
-internal const val PSM_5G_MODE = "psm_5G_mode"
-internal const val PREFERRED_NETWORK_MODE = "preferred_network_mode"
+//internal const val PSM_5G_MODE = "psm_5G_mode"
+//internal const val PREFERRED_NETWORK_MODE = "preferred_network_mode"
 internal const val DEVICE_IDLE_CONSTANTS = "device_idle_constants"
 internal const val BATTERY_SAVER_CONSTANTS = "battery_saver_constants"
 internal const val MIN_REFRESH_RATE = "min_refresh_rate"
@@ -60,6 +60,7 @@ internal const val DISPLAY_SIZE_FORCED = "display_size_forced"
 internal const val POWER_SAVING_MODE = "low_power"
 internal const val POWER_SAVING_ON = "1"
 internal const val POWER_SAVING_OFF = "0"
+internal const val NAVIGATION_MODE = "navigation_mode"
 internal const val SYSTEM = "system"
 internal const val SECURE = "secure"
 internal const val GLOBAL = "global"
@@ -243,9 +244,9 @@ class UtilsDeviceInfoSt private constructor(val appCtx: Context) {
     }
     //set(on) { try{Settings.Global.putInt(appCtx.contentResolver, POWER_SAVING_MODE, if (on) 1 else 0) }catch(_:Exception){}}
 
-    internal fun isTurnOff5GOnPsm(): Boolean{
+    /*internal fun isTurnOff5GOnPsm(): Boolean{
         return (Settings.Global.getString(appCtx.contentResolver, PSM_5G_MODE)?:"0").split(",")[0] == "1"
-    }
+    }*/
 
     val oneUiVersion: Double?
         @SuppressLint("PrivateApi")

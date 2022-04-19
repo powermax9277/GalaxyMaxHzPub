@@ -19,21 +19,21 @@ import com.tribalfs.gmh.helpers.CacheSettings.ignoreRrmChange
 import com.tribalfs.gmh.helpers.CacheSettings.isFakeAdaptive
 import com.tribalfs.gmh.helpers.CacheSettings.isOfficialAdaptive
 import com.tribalfs.gmh.helpers.CacheSettings.lrrPref
-import com.tribalfs.gmh.helpers.CacheSettings.turnOff5GOnPsm
+import com.tribalfs.gmh.helpers.CacheSettings.navMode
 import com.tribalfs.gmh.helpers.DozeUpdater.updateDozValues
 import com.tribalfs.gmh.profiles.ProfilesObj
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt
 import kotlinx.coroutines.*
 
 internal val refreshRateModeUri = Settings.Secure.getUriFor(REFRESH_RATE_MODE)
-private val psm5gModeUri = Settings.Global.getUriFor(PSM_5G_MODE)
+//private val psm5gModeUri = Settings.Global.getUriFor(PSM_5G_MODE)
 private val deviceIdleConstantsUri = Settings.Global.getUriFor(DEVICE_IDLE_CONSTANTS)
 private val batterySaverConstantsUri = Settings.Global.getUriFor(BATTERY_SAVER_CONSTANTS)
 private val sysuiQsTilesUri = Settings.Secure.getUriFor(SYSUI_QS_TILES)
 private val currentResolutionUri = Settings.Global.getUriFor(DISPLAY_SIZE_FORCED)
 private val devSettingsUri =  Settings.Global.getUriFor(Settings.Global.DEVELOPMENT_SETTINGS_ENABLED)
 private val accessibilityServiceUri =  Settings.Secure.getUriFor(Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES)
-
+private val navModeUri =  Settings.Secure.getUriFor(NAVIGATION_MODE)
 
 @RequiresApi(Build.VERSION_CODES.M)
 @ExperimentalCoroutinesApi
@@ -61,9 +61,9 @@ internal class MyRequiredObservers(h: Handler?, private val appCtx: Context) : C
 
             }
 
-            psm5gModeUri -> {
+            /*psm5gModeUri -> {
                 turnOff5GOnPsm = UtilsDeviceInfoSt.instance(appCtx).isTurnOff5GOnPsm()
-            }
+            }*/
 
 
             deviceIdleConstantsUri -> {
@@ -140,6 +140,10 @@ internal class MyRequiredObservers(h: Handler?, private val appCtx: Context) : C
                     UtilRefreshRateSt.instance(appCtx).requestListeningAllTiles()
                 }
             }
+
+            navModeUri ->{
+                navMode = Settings.Secure.getInt(appCtx.contentResolver, NAVIGATION_MODE)
+            }
         }
     }
 
@@ -147,13 +151,14 @@ internal class MyRequiredObservers(h: Handler?, private val appCtx: Context) : C
     fun start(){
         listOf(
             refreshRateModeUri,
-            psm5gModeUri,
+           // psm5gModeUri,
             deviceIdleConstantsUri,
             batterySaverConstantsUri,
             sysuiQsTilesUri,
             devSettingsUri,
             accessibilityServiceUri,
-            currentResolutionUri
+            currentResolutionUri,
+            navModeUri
         ).forEach {
             appCtx.contentResolver.registerContentObserver(
                 it, false, this

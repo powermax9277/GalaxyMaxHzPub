@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="appupdater_app_update">%1$s更新</string>
-    <string name="appupdater_update_available_description_dialog">v%1$s 的變化：\n%2$s</string>
-    <string name="appupdater_update_available_description_snackbar">更新v%1$s的可用！</string>
-    <string name="appupdater_update_not_available">沒有可用的更新</string>
-    <string name="appupdater_btn_update">安裝</string>
+    <string name="app_update">%1$s更新</string>
+    <string name="update_dialog_desc">v%1$s 的變化：\n%2$s</string>
+    <string name="update_snackbar_desc">更新v%1$s的可用！</string>
+    <string name="update_na">沒有可用的更新</string>
+    <string name="btn_update">安裝</string>
 </resources>

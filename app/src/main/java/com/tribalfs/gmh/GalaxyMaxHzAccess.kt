@@ -27,6 +27,8 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.os.PowerManager.ACTION_POWER_SAVE_MODE_CHANGED
+import android.provider.Settings
+import android.util.Log
 import android.view.KeyEvent
 import android.view.KeyEvent.KEYCODE_VOLUME_DOWN
 import android.view.KeyEvent.KEYCODE_VOLUME_UP
@@ -46,6 +48,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationManagerCompat
 import androidx.databinding.Observable
 import androidx.databinding.Observable.OnPropertyChangedCallback
+import com.tribalfs.gmh.BuildConfig.APPLICATION_ID
 import com.tribalfs.gmh.callbacks.DisplayChangedCallback
 import com.tribalfs.gmh.callbacks.GmhBroadcastCallback
 import com.tribalfs.gmh.helpers.*
@@ -66,6 +69,7 @@ import com.tribalfs.gmh.helpers.CacheSettings.isScreenOn
 import com.tribalfs.gmh.helpers.CacheSettings.lowestHzCurMode
 import com.tribalfs.gmh.helpers.CacheSettings.lowestHzForAllMode
 import com.tribalfs.gmh.helpers.CacheSettings.lrrPref
+import com.tribalfs.gmh.helpers.CacheSettings.navMode
 import com.tribalfs.gmh.helpers.CacheSettings.prrActive
 import com.tribalfs.gmh.helpers.CacheSettings.restoreSync
 import com.tribalfs.gmh.helpers.CacheSettings.screenOffRefreshRateMode
@@ -139,6 +143,7 @@ private val useStockAdaptiveList = listOf(
 )
 
 private val manualGameList = listOf(
+    "gametools",
     "com.google.stadia",
     "steamlink",
     "android.steam",
@@ -222,8 +227,6 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
             }
         }
     }
-
-
 
     private val mGmhBroadcastCallback = object: GmhBroadcastCallback {
         override fun onIntentReceived(intent: String) {
@@ -320,7 +323,6 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                 updateRefreshRateViews(newHz)
             }
         }
-
     }}
 
     private val displayListener by lazy { MyDisplayListener(mDisplayChangeCallback) }
@@ -734,7 +736,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
 
 
-    private fun tryGetActivity(componentName: ComponentName): ActivityInfo? {
+    private fun getActivityInfo(componentName: ComponentName): ActivityInfo? {
         return try {
             packageManager.getActivityInfo(componentName, 0)
         } catch (_: PackageManager.NameNotFoundException) {
@@ -762,7 +764,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     private fun setNoIgnoreLauncher(){
         mHandler.removeCallbacks(ignoreLauncherRunnable)
         ignoreLauncher = false
-        mHandler.postDelayed(ignoreLauncherRunnable, 1000L)
+        mHandler.postDelayed(ignoreLauncherRunnable, 200L)
     }
 
     // private val mediaSessionManager by lazy {(getSystemService(MEDIA_SESSION_SERVICE) as MediaSessionManager)}
@@ -771,14 +773,17 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     override fun onKeyEvent(event: KeyEvent?): Boolean {
         volumeJob?.cancel()
         volumeJob = launch {
-            if (event?.keyCode == KEYCODE_VOLUME_UP || event?.keyCode == KEYCODE_VOLUME_DOWN) {
-                volumePressed = true
-                makeAdaptive()
-                delay(5000)
-                volumePressed = false
-                makeAdaptive()
+            when(event?.keyCode){
+                KEYCODE_VOLUME_UP, KEYCODE_VOLUME_DOWN -> {
+                    volumePressed = true
+                    makeAdaptive()
+                    delay(5000)
+                    volumePressed = false
+                    makeAdaptive()
+                }
             }
         }
+
         volumeJob?.start()
         return super.onKeyEvent(event)
     }
@@ -788,12 +793,14 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
 
-        if (!isScreenOn.get() || !applyAdaptiveMod.get()!!) return
+        if (!(isScreenOn.get() && applyAdaptiveMod.get()!!)) return
 
-         /*Log.d(
-             "TESTEST",
-             "EVENT_TYPE ${event?.eventType} CHANGE_TYPE ${event?.contentChangeTypes} ${event?.packageName} Classname: ${event?.className}"
-         )*/
+        /*if (event?.eventType != null ) {
+            Log.d(
+                "TESTEST",
+                "TIME: ${event.eventTime} TYPE: ${event.eventType} CHANGE: ${event.contentChangeTypes} PN:${event.packageName} CN: ${event.className}"
+            )
+        }*/
 
         when (event?.eventType) {
 
@@ -805,7 +812,13 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
                     isKeyboardOpen = false
 
-                    if (event.packageName == defaultLauncherName){
+                    /*for (win in windows) {
+                        //TODO
+                        Log.d("TESTEST", "pn:${win.root.packageName} isActive:${win.isActive}" )
+                    }*/
+
+                    /*Navigation bar mode. 0 = 3 button 1 = 2 button 2 = fully gestural*/
+                    if (navMode == 2 && event.packageName == defaultLauncherName){
                         if (ignoreLauncher){
                             makeAdaptive()
                             setNoIgnoreLauncher()
@@ -817,13 +830,17 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                         event.packageName.toString(),
                         event.className.toString()
                     )
-                    val activityInfo = tryGetActivity(componentName)
+                    val actInfo = getActivityInfo(componentName)
 
-                    val ai = packageManager.getApplicationInfo(componentName.packageName, 0)
+                    val appInfo = packageManager.getApplicationInfo(componentName.packageName, 0)
 
-                    if (activityInfo != null){
-
-                        if(ai.category == CATEGORY_GAME || isPartOf(manualGameList, componentName)) {
+                    if (actInfo != null){
+                        //TODO
+                            Log.d(
+                                "TESTEST",
+                                "TIME: ${event.eventTime} TYPE: ${event.eventType} CHANGE: ${event.contentChangeTypes} PN:${event.packageName} CN: ${event.className}"
+                            )
+                        if(appInfo.category == CATEGORY_GAME || isPartOf(manualGameList, componentName)) {
                             useStockAdaptive = true
                             useMin60 = false
                             ignoreScrollForNonNative = false
@@ -831,7 +848,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                             return
                         }
 
-                        if(ai.category == CATEGORY_VIDEO || isPartOf(manualVideoAppList, componentName)) {
+                        if(appInfo.category == CATEGORY_VIDEO || isPartOf(manualVideoAppList, componentName)) {
                             useMin60 = true
                             ignoreScrollForNonNative = true
                             useStockAdaptive = false
@@ -840,46 +857,41 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                         }
 
 
-                        if (isPartOf(useStockAdaptiveList, componentName))  {
-                            if (UtilsDeviceInfoSt.instance(applicationContext).isLowRefreshDevice){
-                                useStockAdaptive = true
+                        if (UtilsDeviceInfoSt.instance(applicationContext).isLowRefreshDevice) {
+                            if (appInfo.category == ApplicationInfo.CATEGORY_SOCIAL
+                                || appInfo.category == ApplicationInfo.CATEGORY_MAPS
+                                || isPartOf(useStockAdaptiveList, componentName)
+                            ) {
                                 useMin60 = false
+                                useStockAdaptive = true
                                 ignoreScrollForNonNative = false
                                 makeAdaptive()
                                 return
                             }
-                        }
-
-                        if(ai.category == ApplicationInfo.CATEGORY_SOCIAL || ai.category == ApplicationInfo.CATEGORY_MAPS){
-                            if (!isOfficialAdaptive) {
+                        }else if (!isOfficialAdaptive) {
+                            if(appInfo.category == ApplicationInfo.CATEGORY_SOCIAL
+                                || appInfo.category == ApplicationInfo.CATEGORY_MAPS
+                            ){
                                 useMin60 = true
                                 useStockAdaptive = false
                                 ignoreScrollForNonNative = false
                                 makeAdaptive()
                                 return
-                            }else{
-                                if (UtilsDeviceInfoSt.instance(applicationContext).isLowRefreshDevice){
-                                    useStockAdaptive = true
-                                    useMin60 = false
-                                    ignoreScrollForNonNative = false
-                                    makeAdaptive()
-                                    return
-                                }
                             }
                         }
 
-                        for (window in windows) {
-                            if (window.isInPictureInPictureMode || (window.type == -1 && window.root.packageName == "com.samsung.android.video")) {
-                                if (!isOfficialAdaptive) {
-                                    useMin60 = true
-                                    ignoreScrollForNonNative = false
-                                    useStockAdaptive = false
-                                    makeAdaptive()
-                                    return
-                                } else {
+                        for (win in windows) {
+                               if (win.isInPictureInPictureMode || (win.type == -1 && win.root.packageName == "com.samsung.android.video")) {
+                                if (isOfficialAdaptive) {
                                     useStockAdaptive = true
                                     ignoreScrollForNonNative = false
                                     useMin60 = false
+                                    makeAdaptive()
+                                    return
+                                }else{
+                                    useMin60 = true
+                                    ignoreScrollForNonNative = false
+                                    useStockAdaptive = false
                                     makeAdaptive()
                                     return
                                 }
@@ -893,14 +905,13 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                         return
 
                     }else{
-                        if  (ai.category == CATEGORY_VIDEO || isPartOf(manualVideoAppList, componentName)) {
+                        if (appInfo.category == CATEGORY_VIDEO || isPartOf(manualVideoAppList, componentName)) {
                             useMin60 = true
                             ignoreScrollForNonNative = true
                             useStockAdaptive = false
                             makeAdaptive()
                             return
                         }
-
                     }
                 }
             }
@@ -921,7 +932,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                     CONTENT_CHANGE_TYPE_SUBTREE -> {//1
                         when (event.packageName?.toString()) {
 
-                            BuildConfig.APPLICATION_ID ->{
+                            APPLICATION_ID ->{
                                 return
                             }
 
@@ -947,17 +958,22 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                                 }
                                 /*Note: "android.view.ViewGroup" for expanded toolbar scrolling
                                 "android.widget.FrameLayout" launcher vertical scrolling*/
+                                if (event.packageName == defaultKeyboardName){
+                                    return
+                                }
+
                                 if (event.className == "android.widget.FrameLayout" || event.className == "android.view.ViewGroup" || (isOfficialAdaptive && useMin60)){
                                     makeAdaptive()
                                     return
                                 }
 
-                                for (window in windows) {
-                                    if (window.type == AccessibilityWindowInfo.TYPE_INPUT_METHOD) {
+                                for (win in windows){
+                                    if (win.type == AccessibilityWindowInfo.TYPE_INPUT_METHOD) {
                                         isKeyboardOpen = true
                                         return
                                     }
                                 }
+
                                 isKeyboardOpen = false
                                 return
                             }
@@ -965,19 +981,18 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                     }
 
                     CONTENT_CHANGE_TYPE_SUBTREE + CONTENT_CHANGE_TYPE_TEXT -> {//3
-                        //When expanding notification in some cases
-                        if (isOfficialAdaptive) {
-                            when(event.packageName?.toString()){
-                                SYSTEM_UI ->{
+                        when(event.packageName?.toString()){
+                            SYSTEM_UI ->{
+                                //When expanding notification in some cases
+                                if (isOfficialAdaptive) {
                                     makeAdaptive()
-                                    return
                                 }
-
-                                defaultKeyboardName ->{
-                                    return
-                                }
+                                return
                             }
 
+                            /*defaultKeyboardName ->{
+                                return
+                            }*/
                         }
                     }
                 }
@@ -1067,7 +1082,6 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
             launch(Dispatchers.Main){
                 if (isFakeAdaptiveValid.get()!!) {
                     currentBrightness.addOnPropertyChangedCallback(brightnessCallback)
-
                     mLayout?.setOnTouchListener(adaptiveEnhancer)
                     //mLayout?.setOnGenericMotionListener()
                     if (isScreenOn.get()) {
@@ -1078,7 +1092,9 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                         }
                     }
                     registerCameraCallback()
+                    navMode = Settings.Secure.getInt(applicationContext.contentResolver, NAVIGATION_MODE)
                 } else {
+                    currentBrightness.removeOnPropertyChangedCallback(brightnessCallback)
                     if (UtilPermSt.instance(applicationContext).hasWriteSystemPerm()) {
                         if (UtilsPrefsGmhSt.instance(applicationContext).gmhPrefMinHzAdapt > UtilsDeviceInfoSt.instance(applicationContext).regularMinHz) {
                             mUtilsRefreshRate.setRefreshRate(prrActive.get()!!, UtilsPrefsGmhSt.instance(applicationContext).gmhPrefMinHzAdapt)
@@ -1088,7 +1104,6 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                     }
                     mLayout?.setOnTouchListener(null)
                     unregisterCameraCallback()
-                    currentBrightness.removeOnPropertyChangedCallback(brightnessCallback)
                 }
             }
         }

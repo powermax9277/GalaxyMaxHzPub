@@ -29,7 +29,6 @@ import com.tribalfs.gmh.helpers.CacheSettings.isPowerSaveMode
 import com.tribalfs.gmh.helpers.CacheSettings.isPremium
 import com.tribalfs.gmh.helpers.CacheSettings.keepModeOnPowerSaving
 import com.tribalfs.gmh.helpers.CacheSettings.preventHigh
-import com.tribalfs.gmh.helpers.CacheSettings.turnOff5GOnPsm
 import com.tribalfs.gmh.hertz.HzServiceHelperStn
 import com.tribalfs.gmh.netspeed.NetSpeedServiceHelperStn
 import com.tribalfs.gmh.observers.MyBrightnessObserver
@@ -160,7 +159,7 @@ class MyApplication : Application() {
                 UtilsDeviceInfoSt.instance(applicationContext).isPowerSavingsMode()
         )
 
-        turnOff5GOnPsm = UtilsDeviceInfoSt.instance(applicationContext).isTurnOff5GOnPsm()
+        //turnOff5GOnPsm = UtilsDeviceInfoSt.instance(applicationContext).isTurnOff5GOnPsm()
 
         UtilPermSt.instance(applicationContext).apply{
             hasWriteSecureSetPerm = this.hasWriteSecurePerm()

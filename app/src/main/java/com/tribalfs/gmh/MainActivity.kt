@@ -19,6 +19,8 @@ import android.net.Uri
 import android.os.Build.VERSION.SDK_INT
 import android.os.Build.VERSION_CODES
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.os.PowerManager.ACTION_POWER_SAVE_MODE_CHANGED
 import android.provider.Settings.*
 import android.provider.Settings.Global.DEVELOPMENT_SETTINGS_ENABLED
@@ -59,7 +61,6 @@ import com.tribalfs.gmh.callbacks.LvlSbMsgCallback
 import com.tribalfs.gmh.databinding.ActivityMainBinding
 import com.tribalfs.gmh.dialogs.DialogActCode
 import com.tribalfs.gmh.dialogs.InfoDialog
-import com.tribalfs.gmh.dialogs.InfoDialog.Companion.ADB_PERM_INFO
 import com.tribalfs.gmh.dialogs.InfoDialog.Companion.CHANGE_RES_INFO
 import com.tribalfs.gmh.dialogs.InfoDialog.Companion.QDM_INFO
 import com.tribalfs.gmh.dialogs.InfoDialog.Companion.SENSORS_OFF_INFO
@@ -699,18 +700,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                         if (mBinding.hasWssPerm == false) mBinding.hasWssPerm = true
                     }
                 } else {
-                    if (!UtilPermSt.instance(applicationContext).hasWriteSecurePerm()) {
-                        InfoDialog.newInstance(ADB_PERM_INFO).show(supportFragmentManager, null)
-                    } else {
-                        hasWriteSecureSetPerm = true
-                        if (mBinding.hasWssPerm == false) mBinding.hasWssPerm = true
-                        Toast.makeText(
-                            this@MainActivity,
-                            "WRITE_SECURE_SETTINGS permission already granted.",
-                            Toast.LENGTH_SHORT
-                        ).show()
-
-                    }
+                    checkWssPermission(true)
                 }
             }
 
@@ -742,6 +732,20 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                 }
             }
 
+        }
+    }
+
+    private fun checkWssPermission(showDialog: Boolean){
+        if (UtilPermSt.instance(applicationContext).hasWriteSecurePerm()) {
+            hasWriteSecureSetPerm = true
+            if (mBinding.hasWssPerm == false) mBinding.hasWssPerm = true
+            Toast.makeText(
+                this@MainActivity,
+                "WRITE_SECURE_SETTINGS permission already granted.",
+                Toast.LENGTH_SHORT
+            ).show()
+        }else{
+            if (showDialog) InfoDialog.newInstance(InfoDialog.ADB_PERM_INFO).show(supportFragmentManager, null)
         }
     }
 
@@ -1068,6 +1072,8 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
         }
     }
 
+    private var mHandler: Handler? = null
+    private var wssCheckerRunnable: Runnable? = null
 
     override fun onResume() {
         super.onResume()
@@ -1078,6 +1084,27 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
         )
         //viewModel.isValidAdFree.value?.let { loadBannerAd(it) }
         //checkOffAppRefreshRateChange()
+
+        if (!hasWriteSecureSetPerm) {
+            mHandler =  Handler(Looper.getMainLooper())
+            wssCheckerRunnable = object : Runnable {
+                override fun run() {
+                    checkWssPermission(false)
+                    if (!hasWriteSecureSetPerm) {
+                        mHandler?.postDelayed(
+                            this,
+                            1000 * 10
+                        )
+                    }
+                }
+            }
+            mHandler!!.post(wssCheckerRunnable!!)
+        }
+    }
+
+    override fun onPause() {
+        mHandler?.removeCallbacks(wssCheckerRunnable!!)
+        super.onPause()
     }
 
 
@@ -1982,6 +2009,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                         mBinding.hasWssPerm = rootGranted
                         hasWriteSecureSetPerm = rootGranted
                         hasWriteSystemSetPerm = rootGranted || UtilPermSt.instance(applicationContext).hasWriteSystemPerm()
+
                     }
                 }
             }

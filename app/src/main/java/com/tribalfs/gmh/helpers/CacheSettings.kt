@@ -32,7 +32,8 @@ object CacheSettings {
     internal var hasWriteSystemSetPerm: Boolean = false
     internal var canApplyFakeAdaptive: Boolean = false
     internal val isFakeAdaptive = ObservableField(false)
-    internal var turnOff5GOnPsm: Boolean? = null
+    //internal var turnOff5GOnPsm: Boolean? = null
+    internal var navMode = 2
 
     internal var isOfficialAdaptive: Boolean = false
     internal var isMultiResolution: Boolean = true

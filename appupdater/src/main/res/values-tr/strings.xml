@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="appupdater_app_update">%1$s Güncelleme</string>
-    <string name="appupdater_update_available_description_dialog">v%1$s Alterar:\n%2$s</string>
-    <string name="appupdater_update_available_description_snackbar">Güncelleme v%1$s mevcut!</string>
-    <string name="appupdater_update_not_available">Güncelleme yok</string>
-    <string name="appupdater_btn_update">Güncelle</string>
+    <string name="app_update">%1$s Güncelleme</string>
+    <string name="update_dialog_desc">v%1$s Alterar:\n%2$s</string>
+    <string name="update_snackbar_desc">Güncelleme v%1$s mevcut!</string>
+    <string name="update_na">Güncelleme yok</string>
+    <string name="btn_update">Güncelle</string>
 </resources>

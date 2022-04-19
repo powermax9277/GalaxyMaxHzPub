@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="appupdater_app_update">%1$s Обновить</string>
-    <string name="appupdater_update_available_description_dialog">v%1$s Изменения:\n%2$s</string>
-    <string name="appupdater_update_available_description_snackbar">Доступна версия v%1$s!</string>
-    <string name="appupdater_update_not_available">Обновлений нет</string>
-    <string name="appupdater_btn_update">Установить</string>
+    <string name="app_update">%1$s Обновить</string>
+    <string name="update_dialog_desc">v%1$s Изменения:\n%2$s</string>
+    <string name="update_snackbar_desc">Доступна версия v%1$s!</string>
+    <string name="update_na">Обновлений нет</string>
+    <string name="btn_update">Установить</string>
 </resources>
