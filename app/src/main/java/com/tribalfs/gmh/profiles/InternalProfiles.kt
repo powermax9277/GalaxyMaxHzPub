@@ -4,13 +4,18 @@ import android.content.ContentResolver
 import android.content.Context
 import android.provider.Settings
 import com.google.gson.Gson
-import com.tribalfs.gmh.helpers.*
 import com.tribalfs.gmh.helpers.CacheSettings.displayId
 import com.tribalfs.gmh.helpers.CacheSettings.hasWriteSecureSetPerm
 import com.tribalfs.gmh.helpers.CacheSettings.ignoreRrmChange
+import com.tribalfs.gmh.helpers.REFRESH_RATE_MODE
+import com.tribalfs.gmh.helpers.UtilRefreshRateSt
+import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt
 import com.tribalfs.gmh.helpers.UtilsReso.getName
+import com.tribalfs.gmh.helpers.refreshRateModes
 import com.tribalfs.gmh.profiles.ProfilesObj.refreshRateModeMap
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 import org.json.JSONObject
 
 object InternalProfiles {
@@ -64,7 +69,6 @@ object InternalProfiles {
 
             //restore user refresh rate mode
             if (originalRefreshRateMode != endingRefreshRateMode) {
-                //assert(hasWriteSecureSetPerm)
                 UtilRefreshRateSt.instance(appCtx).setRefreshRateMode(originalRefreshRateMode)
             }
 

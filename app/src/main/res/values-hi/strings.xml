@@ -6,13 +6,10 @@
     <string name="act">प्रीमियम सक्षम गर्नुहोस्|परीक्षण</string>
     <string name="max_hz">मैक्स हर्ट्ज</string>
     <string name="feat_n_a" tools:keep="@string/feat_n_a">बदलें संकल्प नहीं समर्थित</string>
-    <!--    <string name="qs_active">त्वरित सेटिंग्स टाइलें सफलतापूर्वक सक्रिय</string>-->
     <string name="min_hz_for_toggle">टॉगल की निम्न सीमा (हर्ट्ज)</string>
     <string name="adaptive">अनुकूली</string>
     <string name="high">उच्च</string>
     <string name="refresh_rate_mon">दिखाएँ वास्तविक समय ताज़ा दर</string>
-<!--    <string name="left">बाईं तरफ</string>
-    <string name="right">दाईं ओर</string>-->
     <string name="top">ऊपरी ओर</string>
     <string name="bottom">नीचे की ओर</string>
     <string name="use_qstile_reso_switch">त्वरित रूप से स्विच प्रस्तावों और गति चिकनाई मोड करने के लिए शामिल त्वरित सेटिंग्स टाइल का प्रयोग करें।</string>

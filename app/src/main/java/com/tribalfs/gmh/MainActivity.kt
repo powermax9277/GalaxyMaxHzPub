@@ -92,6 +92,7 @@ import com.tribalfs.gmh.helpers.CacheSettings.sensorOnKey
 import com.tribalfs.gmh.helpers.CacheSettings.supportedHzIntAllMod
 import com.tribalfs.gmh.helpers.CacheSettings.supportedHzIntCurMod
 import com.tribalfs.gmh.helpers.CacheSettings.turnOffAutoSensorsOff
+import com.tribalfs.gmh.helpers.CacheSettings.updateSwitchDown
 import com.tribalfs.gmh.helpers.DozeUpdater.getDozeVal
 import com.tribalfs.gmh.helpers.DozeUpdater.mwInterval
 import com.tribalfs.gmh.helpers.DozeUpdater.updateDozValues
@@ -125,6 +126,7 @@ private const val REQUEST_LATEST_UPDATE = 0x5
 private const val KEY_JSON_PAYPAL_BUY_URL = "0x12"
 private const val KEY_JSON_HELP_URL = "0x24"
 
+//TODO keep standard mode on reboot, touch and hold detection
 @ExperimentalCoroutinesApi
 class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickHandler*/, CoroutineScope {
 
@@ -433,12 +435,12 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                 }
             }
 
-           /* mBinding.chLeftHz.id, mBinding.chRightHz.id, mBinding.chCentHz.id -> {
-                mUtilsPrefsGmh.gmhPrefChipIdLrc = v.id
-                HzServiceHelperStn.instance(applicationContext).updateHzGravity(
-                    chIdsToGravity(mBinding.cgTopBottom.checkedChipId, v.id)
-                )
-            }*/
+            /* mBinding.chLeftHz.id, mBinding.chRightHz.id, mBinding.chCentHz.id -> {
+                 mUtilsPrefsGmh.gmhPrefChipIdLrc = v.id
+                 HzServiceHelperStn.instance(applicationContext).updateHzGravity(
+                     chIdsToGravity(mBinding.cgTopBottom.checkedChipId, v.id)
+                 )
+             }*/
 
             mBinding.chTopHz.id, mBinding.chBottomHz.id, mBinding.chCentHz.id -> {
                 UtilsPrefsGmhSt.instance(applicationContext).gmhPrefChipIdTb = v.id
@@ -604,15 +606,15 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
             }
 
             mBinding.swKeepMode.id -> {
-                (v as Switch).isChecked.let { checked ->
-                    if (checked && !checkAccessibilityPerm(hasWriteSecureSetPerm)) {
+                (v as Switch).isChecked.let { isOn ->
+                    if (isOn && !checkAccessibilityPerm(hasWriteSecureSetPerm)) {
                         keepModeOnPowerSaving = false
                         mBinding.swKeepMode.isChecked = false
                         return
                     }
-                    keepModeOnPowerSaving = checked
+                    keepModeOnPowerSaving = isOn
                     UtilsPrefsGmhSt.instance(applicationContext).gmhPrefPsmIsOffCache = (isPowerSaveMode.get() != true)
-                    UtilsPrefsGmhSt.instance(applicationContext).gmhPrefKmsOnPsm = checked
+                    UtilsPrefsGmhSt.instance(applicationContext).gmhPrefKmsOnPsm = isOn
                     PsmChangeHandler.instance(applicationContext).handle()
                     return
                 }
@@ -649,6 +651,28 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                     return
                 }
 
+                if(!isOfficialAdaptive && isPremium.get() != true){
+                    Toast.makeText(applicationContext,
+                        getString(R.string.is_prem_ft,
+                            "${UtilsDeviceInfoSt.instance(applicationContext).deviceModelVariant} ${getString(R.string.adp_mode)}"),
+                        Toast.LENGTH_LONG).show()
+                }
+
+                if (isPowerSaveMode.get() == true
+                    && SDK_INT >= VERSION_CODES.S
+                    && !UtilPermSt.instance(applicationContext).hasPipPermission()
+                ) {
+                    mBinding.chStandard.isChecked = true
+                    showSbMsg("Picture-in-Picture in $applicationName info settings needs to be enabled.",
+                        Snackbar.LENGTH_INDEFINITE, android.R.string.ok){
+                        val i = Intent(ACTION_APPLICATION_DETAILS_SETTINGS)
+                        i.data = Uri.parse("package:$packageName")
+                        i.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                        startActivity(i)
+                    }
+                    return
+                }
+
                 if (!isOfficialAdaptive && !checkAccessibilityPerm(hasWriteSecureSetPerm)) {
                     mBinding.chAdaptive.isChecked = false
                     when (currentRefreshRateMode.get()){
@@ -661,6 +685,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                     }
                     return
                 }
+
 
                 if (!mUtilsRefreshRate.tryThisRrm(REFRESH_RATE_MODE_SEAMLESS, null)){
                     v.isChecked = false
@@ -892,8 +917,8 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                     findItem(R.id.menuNs).isVisible = it >= LIC_TYPE_ADFREE/ 2
                     findItem(R.id.menuPrem).isVisible = it < LIC_TYPE_ADFREE/ 2
                     findItem(R.id.menuNs).isChecked = UtilsPrefsGmhSt.instance(applicationContext).gmhPrefShowNetSpeedTool
-                   /* findItem(R.id.menuUsingSpay).isVisible = isSpayInstalled == true
-                    findItem(R.id.menuUsingSpay).isChecked = UtilsPrefsGmhSt.instance(applicationContext).hzPrefSPayUsage == USING*/
+                    /* findItem(R.id.menuUsingSpay).isVisible = isSpayInstalled == true
+                     findItem(R.id.menuUsingSpay).isChecked = UtilsPrefsGmhSt.instance(applicationContext).hzPrefSPayUsage == USING*/
                 }
             }
         }
@@ -1163,13 +1188,13 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                 }
                 true
             }
-           /* R.id.menuUsingSpay ->{
-                item.isChecked.let { checked ->
-                    item.isChecked = !checked
-                    UtilsPrefsGmhSt.instance(applicationContext).hzPrefSPayUsage = if (!checked) USING else NOT_USING
-                }
-                true
-            }*/
+            /* R.id.menuUsingSpay ->{
+                 item.isChecked.let { checked ->
+                     item.isChecked = !checked
+                     UtilsPrefsGmhSt.instance(applicationContext).hzPrefSPayUsage = if (!checked) USING else NOT_USING
+                 }
+                 true
+             }*/
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -1305,6 +1330,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                     adaptiveDelayMillis = it
                     adaptiveAccessTimeout = it* TIMEOUT_FACTOR.toLong()
                     UtilsPrefsGmhSt.instance(applicationContext).hzPrefAdaptiveDelay = it
+                    updateSwitchDown()
                 }
             }
         })
@@ -1348,36 +1374,36 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
     }
 
 
-   /* private fun chIdsToGravity(topBotId: Int?, lcrId: Int?): Int {
-        return when (lcrId) {
-            mBinding.chLeftHz.id -> {
-                when (topBotId) {
-                    mBinding.chBottomHz.id -> HzGravity.BOTTOM_LEFT
-                    else -> HzGravity.TOP_LEFT
-                }
-            }
-            mBinding.chCentHz.id -> {
-                when (topBotId) {
-                    mBinding.chBottomHz.id -> HzGravity.BOTTOM_CENTER
-                    else -> HzGravity.TOP_CENTER
-                }
-            }
-            else -> {
-                when (topBotId) {
-                    mBinding.chBottomHz.id -> HzGravity.BOTTOM_RIGHT
-                    else -> HzGravity.TOP_RIGHT
-                }
-            }
-        }
-    }
-*/
+    /* private fun chIdsToGravity(topBotId: Int?, lcrId: Int?): Int {
+         return when (lcrId) {
+             mBinding.chLeftHz.id -> {
+                 when (topBotId) {
+                     mBinding.chBottomHz.id -> HzGravity.BOTTOM_LEFT
+                     else -> HzGravity.TOP_LEFT
+                 }
+             }
+             mBinding.chCentHz.id -> {
+                 when (topBotId) {
+                     mBinding.chBottomHz.id -> HzGravity.BOTTOM_CENTER
+                     else -> HzGravity.TOP_CENTER
+                 }
+             }
+             else -> {
+                 when (topBotId) {
+                     mBinding.chBottomHz.id -> HzGravity.BOTTOM_RIGHT
+                     else -> HzGravity.TOP_RIGHT
+                 }
+             }
+         }
+     }
+ */
 
     @RequiresApi(VERSION_CODES.M)
     @Synchronized
     private fun checkAccessibilityPerm(showRequest: Boolean): Boolean{
         return if (gmhAccessInstance == null){
             if (hasWriteSecureSetPerm) {
-            //if (hasWriteSecureSetPerm && (isSpayInstalled == false ||  UtilsPrefsGmhSt.instance(applicationContext).hzPrefSPayUsage == NOT_USING)) {
+                //if (hasWriteSecureSetPerm && (isSpayInstalled == false ||  UtilsPrefsGmhSt.instance(applicationContext).hzPrefSPayUsage == NOT_USING)) {
                 allowAccessibility(applicationContext, true)
                 true
             }else{
@@ -2046,7 +2072,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
         mBinding.chNotifHz.isChecked = UtilsPrefsGmhSt.instance(applicationContext).gmhPrefHzNotifIsOn && isHzNotificationEnabled()
         mBinding.swHzOn.isChecked = UtilsPrefsGmhSt.instance(applicationContext).gmhPrefHzIsOn
         mBinding.cgTopBottom.check(UtilsPrefsGmhSt.instance(applicationContext).gmhPrefChipIdTb)
-       // mBinding.cgLeftCentRightHz.check(UtilsPrefsGmhSt.instance(applicationContext).gmhPrefChipIdLrc)
+        // mBinding.cgLeftCentRightHz.check(UtilsPrefsGmhSt.instance(applicationContext).gmhPrefChipIdLrc)
 
     }
 

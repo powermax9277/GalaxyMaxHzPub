@@ -45,10 +45,14 @@ import com.tribalfs.gmh.profiles.ModelNumbers.S21_U
 import com.tribalfs.gmh.profiles.ModelNumbers.S22
 import com.tribalfs.gmh.profiles.ModelNumbers.S22P
 import com.tribalfs.gmh.profiles.ModelNumbers.S22U
+import com.tribalfs.gmh.profiles.ModelNumbers.TS75G
 import com.tribalfs.gmh.profiles.ModelNumbers.TS7L
 import com.tribalfs.gmh.profiles.ModelNumbers.TS7LW
 import com.tribalfs.gmh.profiles.ModelNumbers.TS7P
 import com.tribalfs.gmh.profiles.ModelNumbers.TS7W
+import com.tribalfs.gmh.profiles.ModelNumbers.TS8
+import com.tribalfs.gmh.profiles.ModelNumbers.TS8P
+import com.tribalfs.gmh.profiles.ModelNumbers.TS8U
 import com.tribalfs.gmh.profiles.ModelNumbers.ZF3
 import com.tribalfs.gmh.profiles.ModelNumbers.ZFp3
 import com.tribalfs.gmh.profiles.ModelNumbers.adaptiveModelsLocal
@@ -73,7 +77,7 @@ class UtilRefreshRateSt private constructor (val appCtx: Context) {
     private val _listedHighestHz: Float?
         get() {
             return when (UtilsDeviceInfoSt.instance(appCtx).deviceModel) {
-                S20FE5G, S20FE, S21_U, TS7P, TS7W, TS7L, TS7LW, ZF3, ZFp3, S22, S22P, S22U, S21FE -> 120f
+                S20FE5G, S20FE, S21_U, TS7P, TS7W, TS7L, TS75G, TS7LW, ZF3, ZFp3, S22, S22P, S22U, S21FE, TS8, TS8P, TS8U -> 120f
                 else -> null
             }
         }
@@ -254,23 +258,23 @@ class UtilRefreshRateSt private constructor (val appCtx: Context) {
     @ExperimentalCoroutinesApi
     private suspend fun readAndLoadProfileFromPhone(): Boolean = withContext(Dispatchers.IO) {
 
-        val isStandardMode =
+       val isStandardMode =
             (UtilsDeviceInfoSt.instance(appCtx).manufacturer == "SAMSUNG") && getRefreshRateMode() == REFRESH_RATE_MODE_STANDARD
 
-        if (isStandardMode) {
-            launch(Dispatchers.Main) {
-                var x = 3
-                while (x > 0) {
-                    delay(1000)
-                    Toast.makeText(
+        /*if (isStandardMode) {
+           launch(Dispatchers.Main) {
+               var x = 3
+               while (x > 0) {
+                   delay(1000)
+                   *//*Toast.makeText(
                         appCtx,
                         "If profiles are not loaded properly, turn ON 'High' or 'Adaptive' refresh rate in this phone's settings and try to 'Reload Profiles'.",
                         Toast.LENGTH_LONG
-                    ).show()
+                    ).show()*//*
                     x--
                 }
             }
-        }
+        }*/
 
         val internalProfilesJson = InternalProfiles.loadToProfilesObj(
             currentModeOnly = false,

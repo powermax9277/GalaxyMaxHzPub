@@ -3,9 +3,7 @@ package com.tribalfs.gmh.helpers
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.widget.Toast
 import androidx.annotation.RequiresApi
-import com.tribalfs.gmh.MyApplication.Companion.applicationName
 import com.tribalfs.gmh.PipActivity
 import com.tribalfs.gmh.helpers.CacheSettings.isPowerSaveMode
 import com.tribalfs.gmh.helpers.CacheSettings.isPremium
@@ -23,21 +21,11 @@ internal class PsmChangeHandler private constructor(val appCtx: Context) {
     @Synchronized
     @RequiresApi(Build.VERSION_CODES.M)
     fun handle() {
-        // Log.d(TAG, "execute called $isPowerSaveModeOn")
         if (isPowerSaveMode.get() == true) {
             if (keepModeOnPowerSaving && isPremium.get()!!) {
-
-                //Use Psm Max Hz
-                /*try {
-                    UtilDisplayMod.updateVote(appCtx)
-                }catch (e: Exception){
-                    e.printStackTrace()
-                }*/
-
                 prrActive.set( UtilsPrefsGmhSt.instance(appCtx).hzPrefMaxRefreshRatePsm)
                 UtilRefreshRateSt.instance(appCtx).setPrefOrAdaptOrHighRefreshRateMode(null)
                 startPipActivityIfS()
-
             } else {
                 UtilRefreshRateSt.instance(appCtx).setRefreshRateMode(REFRESH_RATE_MODE_STANDARD)
             }
@@ -77,8 +65,6 @@ internal class PsmChangeHandler private constructor(val appCtx: Context) {
                     val pipIntent = Intent(appCtx, PipActivity::class.java)
                     pipIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     appCtx.startActivity(pipIntent)
-                }else{
-                    Toast.makeText(appCtx,"Allow picture-in-picture permission to $applicationName in app info settings.", Toast.LENGTH_LONG).show()
                 }
             }
         }

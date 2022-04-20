@@ -37,6 +37,7 @@ internal object ModelNumbers {
     const val TS7W = "SM-T870"
     const val TS7L = "SM-T875"
     const val TS7LW = "SM-T876"
+    const val TS75G = "SM-T878"
 
     const val TS7PL = "SM-T975"
     const val TS7P = "SM-T976"
@@ -72,6 +73,7 @@ internal object ModelNumbers {
         ZF3_JP,
         TS7L,
         TS7LW,
+        TS75G,
         ZFp3,
         ZFp3_JP,
         S22,

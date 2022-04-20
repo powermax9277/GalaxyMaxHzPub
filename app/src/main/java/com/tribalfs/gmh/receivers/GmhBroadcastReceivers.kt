@@ -46,7 +46,7 @@ open class GmhBroadcastReceivers(private val appCtx: Context,
                                  private val handler: Handler): BroadcastReceiver() {
 
    // private val handler by lazy { Handler(Looper.getMainLooper()) }
-    private val connectivityManager by  lazy { appCtx.getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager}
+    private val connectivityManager by lazy { appCtx.getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager}
 
     init{
         UtilsDeviceInfoSt.instance(appCtx).isDisplayOn().let { screenOn ->
@@ -57,7 +57,9 @@ open class GmhBroadcastReceivers(private val appCtx: Context,
                 if (prefRrm != currentRefreshRateMode.get()) {
                     scope.launch {
                         if (screenOn) {
-                            UtilRefreshRateSt.instance(appCtx).setRefreshRateMode(UtilsPrefsGmhSt.instance(appCtx).gmhPrefRefreshRateModePref!!)
+                            UtilRefreshRateSt.instance(appCtx).setRefreshRateMode(
+                                UtilsPrefsGmhSt.instance(appCtx).gmhPrefRefreshRateModePref!!
+                            )
                         }else {//= Screen-off
                             //delay(250)
                             ignoreRrmChange.set(true)

@@ -6,7 +6,7 @@
         android:accessibilityFeedbackType="feedbackGeneric"
         android:canRetrieveWindowContent="true"
         tools:targetApi="n"
-        android:accessibilityFlags="flagRetrieveInteractiveWindows|flagIncludeNotImportantViews|flagRequestFilterKeyEvents|flagDefault"
+        android:accessibilityFlags="flagRetrieveInteractiveWindows|flagIncludeNotImportantViews|flagRequestFilterKeyEvents"
         android:canRequestFilterKeyEvents="true"
         />
 

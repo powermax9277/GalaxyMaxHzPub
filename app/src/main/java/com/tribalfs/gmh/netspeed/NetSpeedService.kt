@@ -34,7 +34,7 @@ import kotlin.coroutines.CoroutineContext
 
 internal const val CHANNEL_ID_NET_SPEED = "NSI"
 private const val NOTIFICATION_ID_NET_SPEED = 7
-private const val UPDATE_INTERVAL = 1000L
+private const val UPDATE_INTERVAL = 1200L
 internal const val EXTRA_STREAM = "es"
 internal const val EXTRA_SPEED_UNIT = "eu"
 

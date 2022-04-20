@@ -65,7 +65,7 @@ class UtilPermSt private constructor(val appCtx: Context){
         Toast.makeText(appCtx, appCtx.getString(R.string.enable_write_settings), Toast.LENGTH_LONG).show()
         val intent = changeSystemSettingsIntent.apply {
             flags = FLAG_ACTIVITY_NEW_TASK
-            data = Uri.parse("package:" + APPLICATION_ID)
+            data = Uri.parse("package:$APPLICATION_ID")
         }
         appCtx.startActivity(intent)
     }

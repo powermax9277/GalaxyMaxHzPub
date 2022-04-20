@@ -18,7 +18,7 @@ class PipActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
 
-  /*      val params = window.attributes
+        /* val params = window.attributes
         params.preferredRefreshRate = 120f
         window.attributes = params*/
 

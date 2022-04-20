@@ -27,6 +27,7 @@ import com.tribalfs.gmh.profiles.ModelNumbers.S21_U
 import com.tribalfs.gmh.profiles.ModelNumbers.S22
 import com.tribalfs.gmh.profiles.ModelNumbers.S22P
 import com.tribalfs.gmh.profiles.ModelNumbers.S22U
+import com.tribalfs.gmh.profiles.ModelNumbers.TS75G
 import com.tribalfs.gmh.profiles.ModelNumbers.TS7L
 import com.tribalfs.gmh.profiles.ModelNumbers.TS7LW
 import com.tribalfs.gmh.profiles.ModelNumbers.TS7P
@@ -96,7 +97,7 @@ internal object PredefinedProfiles {
                 raw = context.resources.openRawResource(R.raw.x2800_1752_60_120)
             }
 
-            TS7W, TS7L, TS7LW, TS8 -> {
+            TS7W, TS7L, TS7LW, TS75G, TS8 -> {
                 raw = context.resources.openRawResource(R.raw.x2560_1600_48_60_96_120)
             }
 

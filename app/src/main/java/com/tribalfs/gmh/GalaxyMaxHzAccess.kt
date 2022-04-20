@@ -51,8 +51,6 @@ import com.tribalfs.gmh.callbacks.DisplayChangedCallback
 import com.tribalfs.gmh.callbacks.GmhBroadcastCallback
 import com.tribalfs.gmh.helpers.*
 import com.tribalfs.gmh.helpers.CacheSettings.adaptiveAccessTimeout
-import com.tribalfs.gmh.helpers.CacheSettings.adaptiveDelayMillis
-import com.tribalfs.gmh.helpers.CacheSettings.animatorAdj
 import com.tribalfs.gmh.helpers.CacheSettings.applyAdaptiveMod
 import com.tribalfs.gmh.helpers.CacheSettings.currentBrightness
 import com.tribalfs.gmh.helpers.CacheSettings.currentRefreshRateMode
@@ -73,8 +71,10 @@ import com.tribalfs.gmh.helpers.CacheSettings.prrActive
 import com.tribalfs.gmh.helpers.CacheSettings.restoreSync
 import com.tribalfs.gmh.helpers.CacheSettings.screenOffRefreshRateMode
 import com.tribalfs.gmh.helpers.CacheSettings.sensorOnKey
+import com.tribalfs.gmh.helpers.CacheSettings.swithdownDelay
 import com.tribalfs.gmh.helpers.CacheSettings.turnOffAutoSensorsOff
 import com.tribalfs.gmh.helpers.CacheSettings.typingRefreshRate
+import com.tribalfs.gmh.helpers.CacheSettings.updateSwitchDown
 import com.tribalfs.gmh.hertz.HzGravity
 import com.tribalfs.gmh.hertz.HzNotifGlobal.CHANNEL_ID_HZ
 import com.tribalfs.gmh.hertz.HzNotifGlobal.NOTIFICATION_ID_HZ
@@ -97,8 +97,6 @@ internal const val STOPPED = -1
 internal const val PAUSE = 0
 private const val MAX_TRY = 8
 private const val SYSTEM_UI = "com.android.systemui"
-private const val MIN_DELAY = 800L
-private const val DELAY_FACTOR = 32
 private val manualVideoAppList = listOf(
     "amazon.avod",
     "youtube",
@@ -239,7 +237,9 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                     // Workaround for AOD Bug on some device????
                     mUtilsRefreshRate.clearPeakAndMinRefreshRate()
 
-                    if (UtilsPrefsGmhSt.instance(applicationContext).gmhPrefForceLowestSoIsOn) { mHandler.postDelayed(forceLowestRunnable,2000) }
+                    if (UtilsPrefsGmhSt.instance(applicationContext).gmhPrefForceLowestSoIsOn) {
+                        mHandler.postDelayed(forceLowestRunnable,1500)
+                    }
 
                     mHandler.postDelayed(autoSensorsOffRunnable, 20000)
 
@@ -751,7 +751,6 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         mHandler.postDelayed(ignoreNextWinChangeRunnable, 1000L)
     }
 
-
     // private val mediaSessionManager by lazy {(getSystemService(MEDIA_SESSION_SERVICE) as MediaSessionManager)}
     private var volumeJob: Job? = null
 
@@ -773,7 +772,8 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         return super.onKeyEvent(event)
     }
 
-    private var activePackage: CharSequence = ""
+    //  private var activePackage: CharSequence = ""
+
 
     @SuppressLint("SwitchIntDef")
     @RequiresApi(Build.VERSION_CODES.O)
@@ -781,12 +781,10 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
         if (!(isScreenOn.get() && applyAdaptiveMod.get()!!)) return
 
-       /* Log.d(
+        /*Log.d(
             "TESTEST",
             "TIME: ${event?.eventTime} TYPE: ${event?.eventType} CHANGE: ${event?.contentChangeTypes} PN:${event?.packageName} CN: ${event?.className}"
         )*/
-
-
 
         when (event?.eventType) {
 
@@ -809,7 +807,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                         isKeyboardOpen = false
 
                         var hasPip = false
-                        var packChange = false
+                        var processEvent = false
 
                         for (win in windows) {
                             if (win.isInPictureInPictureMode || (win.type == -1 && win.root.packageName == "com.samsung.android.video")) {
@@ -817,82 +815,75 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                             }
 
                             if (win.isActive && win.root.packageName == event.packageName){
-                                if(event.packageName != activePackage) {
-                                    packChange = true
-                                }
+                                processEvent = true
                             }
                         }
 
-                        if (!packChange) {
+
+                        if (!processEvent) {
+                            makeAdaptive()
                             return
                         }
-
-                        activePackage = event.packageName
 
                         val appInfo = packageManager.getApplicationInfo(componentName.packageName, 0)
 
-                        if(appInfo.category == CATEGORY_GAME || isPartOf(manualGameList, componentName)) {
-                            skipSwitchToMinHz = true
-                            useMin60 = false
-                            ignoreScrollForNonNative = false
-                            makeAdaptive()
-                            return
-                        }
-
-
-                        if(appInfo.category == CATEGORY_VIDEO || isPartOf(manualVideoAppList, componentName)) {
-                            useMin60 = true
-                            ignoreScrollForNonNative = true
-                            skipSwitchToMinHz = false
-                            makeAdaptive()
-                            return
-                        }
-
-
-                        if (UtilsDeviceInfoSt.instance(applicationContext).isLowRefreshDevice) {
-                            if (appInfo.category == ApplicationInfo.CATEGORY_SOCIAL
-                                || appInfo.category == ApplicationInfo.CATEGORY_MAPS
-                                || isPartOf(useStockAdaptiveList, componentName)
+                        if (isOfficialAdaptive){
+                            if(hasPip
+                                || appInfo.category == CATEGORY_GAME
+                                || appInfo.category == CATEGORY_VIDEO
+                                || isPartOf(manualGameList, componentName)
+                                || isPartOf(manualVideoAppList, componentName)
+                                || (UtilsDeviceInfoSt.instance(applicationContext).isLowRefreshDevice
+                                        && (appInfo.category == ApplicationInfo.CATEGORY_SOCIAL
+                                        || appInfo.category == ApplicationInfo.CATEGORY_MAPS
+                                        || isPartOf(useStockAdaptiveList, componentName)))
                             ) {
-                                useMin60 = false
                                 skipSwitchToMinHz = true
-                                ignoreScrollForNonNative = false
-                                makeAdaptive()
-                                return
-                            }
-                        }else if (!isOfficialAdaptive) {
-                            if(appInfo.category == ApplicationInfo.CATEGORY_SOCIAL
-                                || appInfo.category == ApplicationInfo.CATEGORY_MAPS
-                            ){
-                                useMin60 = true
-                                skipSwitchToMinHz = false
-                                ignoreScrollForNonNative = false
-                                makeAdaptive()
-                                return
-                            }
-                        }
-
-                        if (hasPip){
-                            if (isOfficialAdaptive) {
-                                skipSwitchToMinHz = true
-                                ignoreScrollForNonNative = false
                                 useMin60 = false
+                                ignoreScrollForNonNative = false
                                 makeAdaptive()
                                 return
-                            }else {
+                            }
+
+                            ignoreScrollForNonNative = false
+                            skipSwitchToMinHz = false
+                            useMin60 = false
+                            makeAdaptive()//don't remove
+                            return
+
+                        }else{
+                            if(appInfo.category == CATEGORY_GAME || isPartOf(manualGameList, componentName)) {
+                                skipSwitchToMinHz = true
+                                useMin60 = false
+                                ignoreScrollForNonNative = false
+                                makeAdaptive()
+                                return
+                            }
+
+                            if(appInfo.category == CATEGORY_VIDEO
+                                || isPartOf(manualVideoAppList, componentName)
+                            ) {
+                                useMin60 = true
+                                ignoreScrollForNonNative = true
+                                skipSwitchToMinHz = false
+                                makeAdaptive()
+                                return
+                            }
+
+                            if(hasPip) {
                                 useMin60 = true
                                 ignoreScrollForNonNative = false
                                 skipSwitchToMinHz = false
                                 makeAdaptive()
                                 return
                             }
-                        }
 
-                        ignoreScrollForNonNative = false
-                        skipSwitchToMinHz = false
-                        useMin60 = false
-                        makeAdaptive()//don't remove
-                        return
+                            ignoreScrollForNonNative = false
+                            skipSwitchToMinHz = false
+                            useMin60 = false
+                            makeAdaptive()//don't remove
+                            return
+                        }
 
                     }
                 }
@@ -903,7 +894,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                     makeAdaptive2()
                     return
                 }
-*/
+                */
                 if (isOfficialAdaptive || !ignoreScrollForNonNative){
                     makeAdaptive()
                 }
@@ -929,7 +920,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                                     return
                                 }else{
                                     //Notification Panel
-                                    if (isOfficialAdaptive/*UtilsDeviceInfoSt.instance(applicationContext).isLowRefreshDevice*/){
+                                    if (isSamsung/*isOfficialAdaptive*//*UtilsDeviceInfoSt.instance(applicationContext).isLowRefreshDevice*/){
                                         makeAdaptive()
                                     }
                                     return
@@ -950,6 +941,9 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                                         makeAdaptive()
                                         return
                                     }
+                                }else{
+                                    isKeyboardOpen = true
+                                    return
                                 }
 
                                 for (win in windows){
@@ -1002,14 +996,13 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
     private var isKeyboardOpen = false
     private var makeAdaptiveJob: Job? = null
-    private var swithdownDelay = kotlin.math.max(adaptiveDelayMillis * DELAY_FACTOR/currentBrightness.get()!!, MIN_DELAY)
 
     @RequiresApi(Build.VERSION_CODES.M)
     private fun makeAdaptive() {
         mUtilsRefreshRate.setPeakRefreshRate(prrActive.get()!!)
         makeAdaptiveJob?.cancel()
         makeAdaptiveJob = launch(Dispatchers.IO) {
-            delay(swithdownDelay + animatorAdj)
+            delay(swithdownDelay)
             if (applyAdaptiveMod.get()!! && isScreenOn.get() && !skipSwitchToMinHz && !cameraOpen) {
                 mUtilsRefreshRate.setPeakRefreshRate(
                     if (useMin60 || volumePressed) max(60, lrrPref.get()!!) else lrrPref.get()!!
@@ -1019,22 +1012,22 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         makeAdaptiveJob!!.start()
     }
 
-   /* @RequiresApi(Build.VERSION_CODES.M)
-    private fun makeAdaptive2() {
-        mUtilsRefreshRate.setPeakRefreshRate(prrActive.get()!!)
-        mUtilsRefreshRate.setMinRefreshRate(prrActive.get()!!)
-        makeAdaptiveJob?.cancel()
-        makeAdaptiveJob = launch(Dispatchers.IO) {
-            delay(swithdownDelay + animatorAdj)
-            if (applyAdaptiveMod.get()!! && isScreenOn.get() && !skipSwitchToMinHz && !cameraOpen) {
-                mUtilsRefreshRate.setMinRefreshRate(0)
-                mUtilsRefreshRate.setPeakRefreshRate(
-                    if (useMin60 || volumePressed) max(60, lrrPref.get()!!) else lrrPref.get()!!
-                )
-            }
-        }
-        makeAdaptiveJob!!.start()
-    }*/
+    /* @RequiresApi(Build.VERSION_CODES.M)
+     private fun makeAdaptive2() {
+         mUtilsRefreshRate.setPeakRefreshRate(prrActive.get()!!)
+         mUtilsRefreshRate.setMinRefreshRate(prrActive.get()!!)
+         makeAdaptiveJob?.cancel()
+         makeAdaptiveJob = launch(Dispatchers.IO) {
+             delay(swithdownDelay + animatorAdj)
+             if (applyAdaptiveMod.get()!! && isScreenOn.get() && !skipSwitchToMinHz && !cameraOpen) {
+                 mUtilsRefreshRate.setMinRefreshRate(0)
+                 mUtilsRefreshRate.setPeakRefreshRate(
+                     if (useMin60 || volumePressed) max(60, lrrPref.get()!!) else lrrPref.get()!!
+                 )
+             }
+         }
+         makeAdaptiveJob!!.start()
+     }*/
 
     private fun initialAdaptive() {
         mUtilsRefreshRate.setRefreshRate(prrActive.get()!!, UtilsPrefsGmhSt.instance(applicationContext).gmhPrefMinHzAdapt)
@@ -1072,7 +1065,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
     private val brightnessCallback =  object: OnPropertyChangedCallback() {
         override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
-            swithdownDelay = kotlin.math.max(adaptiveDelayMillis * DELAY_FACTOR/currentBrightness.get()!!, MIN_DELAY)
+            updateSwitchDown()
         }
     }
 
@@ -1096,6 +1089,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                         }
                     }
                     registerCameraCallback()
+                    updateSwitchDown()
                 } else {
                     currentBrightness.removeOnPropertyChangedCallback(brightnessCallback)
                     if (UtilPermSt.instance(applicationContext).hasWriteSystemPerm()) {

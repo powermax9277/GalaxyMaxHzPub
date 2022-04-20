@@ -17,11 +17,13 @@ import com.tribalfs.gmh.MyApplication.Companion.appScopeIO
 import com.tribalfs.gmh.UtilAccessibilityService.checkAccessibility
 import com.tribalfs.gmh.helpers.*
 import com.tribalfs.gmh.helpers.CacheSettings.animatorAdj
+import com.tribalfs.gmh.helpers.CacheSettings.currentRefreshRateMode
 import com.tribalfs.gmh.helpers.CacheSettings.defaultKeyboardName
 import com.tribalfs.gmh.helpers.CacheSettings.ignoreRrmChange
 import com.tribalfs.gmh.helpers.CacheSettings.isFakeAdaptive
 import com.tribalfs.gmh.helpers.CacheSettings.isOfficialAdaptive
 import com.tribalfs.gmh.helpers.CacheSettings.lrrPref
+import com.tribalfs.gmh.helpers.CacheSettings.updateSwitchDown
 import com.tribalfs.gmh.helpers.DozeUpdater.updateDozValues
 import com.tribalfs.gmh.profiles.ProfilesObj
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt
@@ -54,7 +56,7 @@ internal class MyRequiredObservers(h: Handler?, private val appCtx: Context) : C
                         UtilRefreshRateSt.instance(appCtx).updateAdaptiveModCachedParams()
                         GalaxyMaxHzAccess.gmhAccessInstance?.setupAdaptiveEnhancer()
 
-                        CacheSettings.currentRefreshRateMode.get().let{
+                        currentRefreshRateMode.get().let{
                             if (it != REFRESH_RATE_MODE_STANDARD) {
                                 UtilsPrefsGmhSt.instance(appCtx).gmhPrefRefreshRateModePref = it
                             }
@@ -151,6 +153,7 @@ internal class MyRequiredObservers(h: Handler?, private val appCtx: Context) : C
             animationScaleUri ->{
                 Settings.Global.getFloat(appCtx.contentResolver, ANIMATOR_DURATION_SCALE).let{
                     animatorAdj = (it * 300 - 300).toLong()
+                    updateSwitchDown()
                 }
             }
         }
