@@ -27,6 +27,7 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.os.PowerManager.ACTION_POWER_SAVE_MODE_CHANGED
+import android.util.Log
 import android.view.KeyEvent
 import android.view.KeyEvent.KEYCODE_VOLUME_DOWN
 import android.view.KeyEvent.KEYCODE_VOLUME_UP
@@ -581,7 +582,8 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         mLayout =  FrameLayout(this)
         params =    WindowManager.LayoutParams()
         params!!.type = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            WindowManager.LayoutParams.TYPE_ACCESSIBILITY_OVERLAY
+            WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY
+        //WindowManager.LayoutParams.TYPE_ACCESSIBILITY_OVERLAY
         }else{
             @Suppress("DEPRECATION")
             WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY
@@ -1055,6 +1057,8 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
     @SuppressLint("ClickableViewAccessibility")
     private val adaptiveEnhancer = View.OnTouchListener { _, _ ->
+        //TODO
+        Log.d("TESTEST","TATATTATAT")
         if (isKeyboardOpen) {
             mUtilsRefreshRate.setPeakRefreshRate(typingRefreshRate)
         }else {
