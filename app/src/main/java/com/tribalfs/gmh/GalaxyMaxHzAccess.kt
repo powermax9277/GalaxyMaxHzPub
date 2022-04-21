@@ -782,16 +782,16 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
                         for (win in windows) {
                             if (win.isActive && win.root.packageName == componentName.packageName) {
-                                idActiveWindow(componentName)
+                                val measure = measureNanoTime {
+                                    idActiveWindow(componentName)
+                                }
+                                //TODO
+                                Log.d("TEST","measure: $measure")
                                 break
                             }
                         }
 
-                        val measure = measureNanoTime {
-                            makeAdaptive()
-                        }
-                        //TODO
-                        Log.d("TEST","measure: $measure")
+                        makeAdaptive()
                         return
 
                         /*val appInfo = packageManager.getApplicationInfo(componentName.packageName, 0)
