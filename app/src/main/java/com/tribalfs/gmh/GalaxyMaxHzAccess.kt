@@ -91,6 +91,7 @@ import kotlinx.coroutines.*
 import java.lang.Integer.max
 import java.lang.Runnable
 import kotlin.coroutines.CoroutineContext
+import kotlin.system.measureNanoTime
 
 
 internal const val PLAYING = 1
@@ -342,12 +343,14 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
             override fun onCameraAvailable(cameraId: String) {
                 super.onCameraAvailable(cameraId)
                 cameraOpen = false
+                updateAdaptiveFactors()
                 makeAdaptive()
             }
 
             override fun onCameraUnavailable(cameraId: String) {
                 super.onCameraUnavailable(cameraId)
                 cameraOpen = true
+                updateAdaptiveFactors()
             }
         }
     }
@@ -766,33 +769,32 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                 if (event.contentChangeTypes != 0) return
 
                 if (event.packageName != null && event.className != null) {
-
                     makeAdaptive()
-
                     val componentName = ComponentName(
                         event.packageName.toString(),
                         event.className.toString()
                     )
                     val actInfo = getActivityInfo(componentName)
 
-                    if (actInfo != null){
+                    if (actInfo != null) {
 
                         isKeyboardOpen = false
-                        var processEvent = false
 
                         for (win in windows) {
                             if (win.isActive && win.root.packageName == componentName.packageName) {
-                                processEvent = true
+                                idActiveWindow(componentName)
                                 break
                             }
                         }
 
-                        if (!processEvent){
+                        val measure = measureNanoTime {
                             makeAdaptive()
-                            return
                         }
+                        //TODO
+                        Log.d("TEST","measure: $measure")
+                        return
 
-                        val appInfo = packageManager.getApplicationInfo(componentName.packageName, 0)
+                        /*val appInfo = packageManager.getApplicationInfo(componentName.packageName, 0)
 
                         if (isOfficialAdaptive){
                             if(appInfo.category == CATEGORY_GAME
@@ -845,7 +847,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                             makeAdaptive()//don't remove
                             return
                         }
-
+*/
                     }
                 }
             }
@@ -937,71 +939,13 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                 }
             }
 
-            //What's the use?
+
             TYPE_WINDOWS_CHANGED ->{ // 4194304
-                /*when (event.windowChanges) {
-                    WINDOWS_CHANGE_ADDED -> { Log.d(
-                        "TESTEST",
-                        "TYPE: ${event.eventType} CHANGE: WINDOWS_CHANGE_ADDED"
-                    )}
-                    WINDOWS_CHANGE_REMOVED -> { Log.d(
-                        "TESTEST",
-                        "TYPE: ${event.eventType} CHANGE: WINDOWS_CHANGE_ADDED"
-                    )}
-                    WINDOWS_CHANGE_TITLE -> { Log.d(
-                        "TESTEST",
-                        "TYPE: ${event.eventType} CHANGE: WINDOWS_CHANGE_ADDED"
-                    )}
-                    WINDOWS_CHANGE_BOUNDS -> { Log.d(
-                        "TESTEST",
-                        "TYPE: ${event.eventType} CHANGE: WINDOWS_CHANGE_ADDED"
-                    )}
-                    WINDOWS_CHANGE_LAYER -> { Log.d(
-                        "TESTEST",
-                        "TYPE: ${event.eventType} CHANGE: WINDOWS_CHANGE_ADDED"
-                    )}
-                    WINDOWS_CHANGE_ACTIVE -> { Log.d(
-                        "TESTEST",
-                        "TYPE: ${event.eventType} CHANGE: WINDOWS_CHANGE_ACTIVE"
-                    )}
-                    WINDOWS_CHANGE_FOCUSED -> { Log.d(
-                        "TESTEST",
-                        "TYPE: ${event.eventType} CHANGE: WINDOWS_CHANGE_FOCUSED"
-                    )}
-                    WINDOWS_CHANGE_ACCESSIBILITY_FOCUSED -> { Log.d(
-                        "TESTEST",
-                        "TYPE: ${event.eventType} CHANGE: WINDOWS_CHANGE_ACCESSIBILITY_FOCUSED"
-                    )}
-                    WINDOWS_CHANGE_PARENT -> { Log.d(
-                        "TESTEST",
-                        "TYPE: ${event.eventType} CHANGE: WINDOWS_CHANGE_PARENT"
-                    )}
-                    WINDOWS_CHANGE_CHILDREN -> { Log.d(
-                        "TESTEST",
-                        "TYPE: ${event.eventType} CHANGE: WINDOWS_CHANGE_CHILDREN"
-                    )}
-                    WINDOWS_CHANGE_PIP -> { Log.d(
-                        "TESTEST",
-                        "TYPE: ${event.eventType} CHANGE: WINDOWS_CHANGE_PIP"
-                    )}
-                }*/
-
-
-
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                    Log.d(
-                        "TESTEST",
-                        "$event"
-                    )
                     when(event.windowChanges){
                         //For dragging pop-up windows
                         WINDOWS_CHANGE_BOUNDS -> {
-                            /*if (ignoreNextWinChange) {
-                                setTempIgnoreWinChange()
-                                return
-                            }*/
                             makeAdaptive()
-                            //setTempIgnoreWinChange()
                         }
 
                         WINDOWS_CHANGE_REMOVED, WINDOWS_CHANGE_ADDED, WINDOWS_CHANGE_PIP -> {
@@ -1064,6 +1008,63 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
             updateAdaptiveFactors()
         }
         windowsScannerJob?.start()
+    }
+
+    private var idActiveWindowJob: Job? = null
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun idActiveWindow(componentName: ComponentName){
+        idActiveWindowJob?.cancel()
+        idActiveWindowJob = launch {
+            val appInfo = packageManager.getApplicationInfo(componentName.packageName, 0)
+            if (isOfficialAdaptive){
+                if(appInfo.category == CATEGORY_GAME
+                    || appInfo.category == CATEGORY_VIDEO
+                    || isPartOf(manualGameList, componentName)
+                    || isPartOf(manualVideoAppList, componentName)
+                    || (UtilsDeviceInfoSt.instance(applicationContext).isLowRefreshDevice
+                            && (appInfo.category == ApplicationInfo.CATEGORY_SOCIAL
+                            || appInfo.category == ApplicationInfo.CATEGORY_MAPS
+                            || isPartOf(useStockAdaptiveList, componentName)))
+                ) {
+                    pauseMinHz = true
+                    min60 = false
+                    updateAdaptiveFactors()
+                    return@launch
+                }
+
+                pauseMinHz = false
+                min60 = false
+                updateAdaptiveFactors()
+                return@launch
+
+            }else{ //!isOfficialAdaptive
+                if(appInfo.category == CATEGORY_GAME || isPartOf(manualGameList, componentName)) {
+                    pauseMinHz = true
+                    min60 = false
+                    ignoreScrollOnNonNative = false
+                    updateAdaptiveFactors()
+                    return@launch
+                }
+
+                if(appInfo.category == CATEGORY_VIDEO
+                    || isPartOf(manualVideoAppList, componentName)
+                ) {
+                    min60 = true
+                    ignoreScrollOnNonNative = true
+                    pauseMinHz = false
+                    updateAdaptiveFactors()
+                    return@launch
+                }
+
+                ignoreScrollOnNonNative = false
+                pauseMinHz = false
+                min60 = false
+                updateAdaptiveFactors()
+                return@launch
+            }
+
+        }
+        idActiveWindowJob?.start()
     }
     // private val mediaSessionManager by lazy {(getSystemService(MEDIA_SESSION_SERVICE) as MediaSessionManager)}
     private var volumeHandlerJob: Job? = null
