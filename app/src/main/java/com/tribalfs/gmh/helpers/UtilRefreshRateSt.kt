@@ -434,7 +434,6 @@ class UtilRefreshRateSt private constructor (val appCtx: Context) {
 
 
     fun isAdaptiveSupportedUpd(): Boolean {
-        // if (BuildConfig.DEBUG) return false
         return UtilsDeviceInfoSt.instance(appCtx).deviceModel.let { model ->
             ProfilesObj.adaptiveModelsObj.run {
                 if (isNotEmpty()) {

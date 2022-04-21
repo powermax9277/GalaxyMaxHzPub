@@ -88,10 +88,11 @@ object CacheSettings {
 
     internal var defaultKeyboardName: String = ""
     internal var swithdownDelay = adaptiveDelayMillis
-    
-    private const val MIN_DELAY = 800L
-    private const val DELAY_FACTOR = 32
+
     internal fun updateSwitchDown(){
-        swithdownDelay = kotlin.math.max(adaptiveDelayMillis * DELAY_FACTOR /currentBrightness.get()!!.coerceAtLeast(2), MIN_DELAY) + animatorAdj
+        swithdownDelay = (((adaptiveDelayMillis * 0.70) +
+                (adaptiveDelayMillis * 0.30 * 25 / currentBrightness.get()!!.coerceAtLeast(5)))
+                   .coerceAtMost(10000.0)
+                + animatorAdj).toLong()
     }
 }

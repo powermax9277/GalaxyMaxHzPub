@@ -70,7 +70,7 @@ class UtilsDeviceInfoSt private constructor(val appCtx: Context) {
     companion object : SingletonMaker<UtilsDeviceInfoSt, Context>(::UtilsDeviceInfoSt)
 
     private val mLock = Object()
-    internal val deviceModelVariant: String = /*if (BuildConfig.DEBUG) "SM-TEST" else */Build.MODEL
+    internal val deviceModelVariant: String = Build.MODEL
     internal val androidVersion: String = Build.VERSION.RELEASE
     internal val manufacturer: String = Build.MANUFACTURER.uppercase(Locale.ROOT)
     internal val deviceModel: String = if (manufacturer == "SAMSUNG") {
