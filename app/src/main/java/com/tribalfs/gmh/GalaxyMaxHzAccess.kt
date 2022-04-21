@@ -1052,8 +1052,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
     @SuppressLint("ClickableViewAccessibility")
     private val adaptiveEnhancer = View.OnTouchListener { _, _ ->
-        //Log.d("TESTEST","TATATTATATS")
-        if (isKeyboardOpen) {
+        if (isKeyboardOpen && applyAdaptiveFactor2) {
             mUtilsRefreshRate.setPeakRefreshRate(typingRefreshRate)
         }else {
             makeAdaptive()
