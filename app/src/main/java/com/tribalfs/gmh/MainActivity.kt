@@ -1451,68 +1451,6 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
 
     @SuppressLint("NewApi")
     private fun setupMaxHzSeekBar() {
-        /*      var oldProgMax: Float? = null
-              var oldProgMin: Float? = null
-              mBinding.sbPeakHz.addOnSliderTouchListener(object : RangeSlider.OnSliderTouchListener{
-
-                  override fun onStartTrackingTouch(slider: RangeSlider) {
-                    oldProgMax = slider.valueTo
-                oldProgMin = slider.valueFrom
-            }
-            override fun onStopTrackingTouch(slider: RangeSlider) {
-                if (!UtilsPermSt.instance(applicationContext).hasWriteSystemPerm()) {
-                    try {
-                        oldProgMin?.let { slider.valueFrom = it }
-                        oldProgMax?.let { slider.valueTo = it }
-                    }catch(_: Exception){
-                    UtilsPermSt.instance(applicationContext).requestWriteSettings()
-                    return
-                }
-
-                UtilsPrefsGmhSt.instance(applicationContext).hzPrefMaxRefreshRate = slider.valueTo.toInt()
-
-                UtilsPrefsGmhSt.instance(applicationContext).hzPrefMaxRefreshRate.let{
-                        prrActive.set( it)
-                        mUtilsRefreshRate.setRefreshRate(it, UtilsPrefsGmhSt.instance(applicationContext).gmhPrefMinHzAdapt)
-                    }
-
-                if (isOfficialAdaptive && slider.valueFrom < STANDARD_REFRESH_RATE_HZ) {
-                    if (!checkAccessibilityPerm(true)) {
-                        slider.valueFrom = STANDARD_REFRESH_RATE_HZ.toFloat()
-                        return
-                    }
-                }
-
-                UtilsPrefsGmhSt.instance(applicationContext).gmhPrefMinHzAdapt = slider.valueFrom.toInt()
-                mBinding.minHzAdaptive = slider.valueFrom.toInt()
-
-                mUtilsRefreshRate.applyMinHz()
-
-                if (isFakeAdaptive.get() == true) {
-                    (UtilsPermSt.instance(applicationContext)
-                        .hasOverlayPerm()).let { hasPerm ->
-                            if (!hasPerm) {
-                                showSbMsg(
-                                    getString(R.string.aot_perm_inf),
-                                    Snackbar.LENGTH_INDEFINITE,
-                                    android.R.string.ok
-                                ) {
-                                    showAppearOnTopRequest()
-                                }
-                            }
-                        }
-                }
-
-                applicationContext.startService(
-                    Intent(applicationContext,GalaxyMaxHzAccess::class.java).apply {
-                        putExtra(SETUP_ADAPTIVE, true)
-                    }
-                )
-
-            }
-        })
-        */
-
         var oldProg = 60
         mBinding.sbPeakHz.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
@@ -1549,20 +1487,6 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
 
 
     private fun updateMaxHzSbMinMax() {
-        /* launch {
-             delay(500)
-             //Log.d(TAG,"forceLowestHz $forceLowestHz vs ${mUtilsPrefsGmh.hzPrefMaxRefreshRate}")
-
-             mBinding.sbPeakHz.values =  supportedHzIntAllMod!!.map{i -> i.toFloat()} //lowestHzCurMode highestHzForAllMode
-             //initial value
-            try {
-                mBinding.sbPeakHz.valueTo =
-                    UtilsPrefsGmhSt.instance(applicationContext).hzPrefMaxRefreshRate.toFloat()
-                mBinding.sbPeakHz.valueFrom =
-                    UtilsPrefsGmhSt.instance(applicationContext).gmhPrefMinHzAdapt.toFloat()
-            }catch (_: Exception){}
-        }*/
-
         launch {
             delay(500)
             //Log.d(TAG,"forceLowestHz $forceLowestHz vs ${mUtilsPrefsGmh.hzPrefMaxRefreshRate}")
@@ -1585,7 +1509,6 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
 
         mBinding.hasMinHzOptions = true
 
-        //Log.d(TAG, "setupMinHzAdaptSeekBar() called")
         mBinding.sbMinHzAdapt.setOnSeekBarChangeListener(
             object : OnSeekBarChangeListener {
 

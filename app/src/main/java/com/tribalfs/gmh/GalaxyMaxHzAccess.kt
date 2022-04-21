@@ -28,9 +28,6 @@ import android.os.Handler
 import android.os.Looper
 import android.os.PowerManager.ACTION_POWER_SAVE_MODE_CHANGED
 import android.util.Log
-import android.view.KeyEvent
-import android.view.KeyEvent.KEYCODE_VOLUME_DOWN
-import android.view.KeyEvent.KEYCODE_VOLUME_UP
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
@@ -52,6 +49,7 @@ import com.tribalfs.gmh.callbacks.DisplayChangedCallback
 import com.tribalfs.gmh.callbacks.GmhBroadcastCallback
 import com.tribalfs.gmh.helpers.*
 import com.tribalfs.gmh.helpers.CacheSettings.adaptiveAccessTimeout
+import com.tribalfs.gmh.helpers.CacheSettings.animatorAdj
 import com.tribalfs.gmh.helpers.CacheSettings.applyAdaptiveMod
 import com.tribalfs.gmh.helpers.CacheSettings.currentBrightness
 import com.tribalfs.gmh.helpers.CacheSettings.currentRefreshRateMode
@@ -91,7 +89,6 @@ import kotlinx.coroutines.*
 import java.lang.Integer.max
 import java.lang.Runnable
 import kotlin.coroutines.CoroutineContext
-import kotlin.system.measureNanoTime
 
 
 internal const val PLAYING = 1
@@ -293,6 +290,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                         UtilsPrefsGmhSt.instance(applicationContext).gmhPrefSensorsOff = false
                         turnOffAutoSensorsOff = false
                     }
+
                 }
 
             }
@@ -670,6 +668,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         updateOverlay(newHz)
     }
 
+    private var ignoreSysUI = false
     private fun updateNotif(hzStr: String) = launch(Dispatchers.Main) {
         if (hzNotifOn.get()!!) {
             hznotificationBuilder?.apply {
@@ -684,7 +683,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                                             getString(R.string.adp_mode)+ ": " + lrrPref.get()+"-"+prrActive.get()
                                         }
                                         REFRESH_RATE_MODE_ALWAYS ->{
-                                            getString(R.string.high_mode)
+                                            getString(R.string.high_mode)+":"+prrActive.get()
                                         }
                                         else ->{
                                             getString(R.string.std_mode)
@@ -696,10 +695,9 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                         }
                     )
                 }
-                notificationManagerCompat.notify(
-                    NOTIFICATION_ID_HZ,
-                    build()
-                )
+                ignoreSysUI = false
+                notificationManagerCompat.notify(NOTIFICATION_ID_HZ, build())
+                ignoreSysUI = true
             }
         }
     }
@@ -742,14 +740,14 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     }
 
 
-    override fun onKeyEvent(event: KeyEvent?): Boolean {
+    /*override fun onKeyEvent(event: KeyEvent?): Boolean {
         when (event?.keyCode) {
             KEYCODE_VOLUME_UP, KEYCODE_VOLUME_DOWN -> {
                 handleVolumePressedJob()
             }
         }
         return super.onKeyEvent(event)
-    }
+    }*/
 
     @SuppressLint("SwitchIntDef")
     @RequiresApi(Build.VERSION_CODES.O)
@@ -757,23 +755,28 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
         if (!(isScreenOn.get() && applyAdaptiveMod.get()!!)) return
 
-        /*Log.d(
-            "TESTEST",
-            "TIME: ${event?.eventTime} TYPE: ${event?.eventType} CHANGE: ${event?.contentChangeTypes} PN:${event?.packageName} CN: ${event?.className}"
-        )*/
-
         when (event?.eventType) {
 
             TYPE_WINDOW_STATE_CHANGED -> {//32
 
-                if (event.contentChangeTypes != 0) return
+                if (event.contentChangeTypes != CONTENT_CHANGE_TYPE_UNDEFINED) return
 
                 if (event.packageName != null && event.className != null) {
+
+                    if (event.packageName == SYSTEM_UI && event.className == "com.android.systemui.volume.view.VolumePanelView"){
+                        handleVolumePressedJob()
+                        //TODO
+                        Log.d("TESTEST", "$event")
+                        return
+                    }
+
                     makeAdaptive()
+
                     val componentName = ComponentName(
                         event.packageName.toString(),
                         event.className.toString()
                     )
+
                     val actInfo = getActivityInfo(componentName)
 
                     if (actInfo != null) {
@@ -781,83 +784,21 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                         isKeyboardOpen = false
 
                         for (win in windows) {
-                            if (win.isActive && win.root.packageName == componentName.packageName) {
-                                val measure = measureNanoTime {
+                            try {
+                                if (win.isActive && win.root.packageName == componentName.packageName) {
                                     idActiveWindow(componentName)
+                                    break
                                 }
-                                //TODO
-                                Log.d("TEST","measure: $measure")
-                                break
-                            }
+                            }catch (_: Exception){}
                         }
 
                         makeAdaptive()
                         return
-
-                        /*val appInfo = packageManager.getApplicationInfo(componentName.packageName, 0)
-
-                        if (isOfficialAdaptive){
-                            if(appInfo.category == CATEGORY_GAME
-                                || appInfo.category == CATEGORY_VIDEO
-                                || isPartOf(manualGameList, componentName)
-                                || isPartOf(manualVideoAppList, componentName)
-                                || (UtilsDeviceInfoSt.instance(applicationContext).isLowRefreshDevice
-                                        && (appInfo.category == ApplicationInfo.CATEGORY_SOCIAL
-                                        || appInfo.category == ApplicationInfo.CATEGORY_MAPS
-                                        || isPartOf(useStockAdaptiveList, componentName)))
-                            ) {
-                                pauseMinHz = true
-                                min60 = false
-                                updateAdaptiveFactors()
-                                makeAdaptive()
-                                return
-                            }
-
-                            pauseMinHz = false
-                            min60 = false
-                            updateAdaptiveFactors()
-                            makeAdaptive()//don't remove
-                            return
-
-                        }else{ //!isOfficialAdaptive
-                            if(appInfo.category == CATEGORY_GAME || isPartOf(manualGameList, componentName)) {
-                                pauseMinHz = true
-                                min60 = false
-                                ignoreScrollOnNonNative = false
-                                updateAdaptiveFactors()
-                                makeAdaptive()
-                                return
-                            }
-
-                            if(appInfo.category == CATEGORY_VIDEO
-                                || isPartOf(manualVideoAppList, componentName)
-                            ) {
-                                min60 = true
-                                ignoreScrollOnNonNative = true
-                                pauseMinHz = false
-                                updateAdaptiveFactors()
-                                makeAdaptive()
-                                return
-                            }
-
-                            ignoreScrollOnNonNative = false
-                            pauseMinHz = false
-                            min60 = false
-                            updateAdaptiveFactors()
-                            makeAdaptive()//don't remove
-                            return
-                        }
-*/
                     }
                 }
             }
 
             TYPE_VIEW_SCROLLED/*4096 */ -> {
-                /*if (event.packageName == defaultKeyboardName) {
-                    makeAdaptive2()
-                    return
-                }
-                */
                 if (isOfficialAdaptive || !ignoreScrollOnNonNative){
                     makeAdaptive()
                 }
@@ -866,6 +807,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
 
             TYPE_WINDOW_CONTENT_CHANGED -> {//2048
+
                 when (event.contentChangeTypes) {
 
                     CONTENT_CHANGE_TYPE_SUBTREE -> {//1
@@ -883,15 +825,14 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                                     return
                                 }else{
                                     //Notification Panel
-                                    if (isSamsung/*isOfficialAdaptive*//*UtilsDeviceInfoSt.instance(applicationContext).isLowRefreshDevice*/){
-                                        makeAdaptive()
-                                        //TODO disable detection on expanded notification
-                                        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                                            Log.d(
-                                                "TESTEST",
-                                                "TYPE: ${event.eventType} action: ${event.action} isScrollable: ${event.isScrollable} PN:${event.packageName} CN: ${event.className}"
-                                            )
-                                        }*/
+                                    if (isSamsung){
+                                        if (volumePressed) {
+                                            handleVolumePressedJob()
+                                        }else{
+                                            if (!ignoreSysUI) {
+                                                makeAdaptive()
+                                            }
+                                        }
                                     }
                                     return
                                 }
@@ -942,6 +883,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
             TYPE_WINDOWS_CHANGED ->{ // 4194304
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+
                     when(event.windowChanges){
                         //For dragging pop-up windows
                         WINDOWS_CHANGE_BOUNDS -> {
@@ -990,6 +932,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         makeAdaptiveJob!!.start()
     }
 
+
     private var windowsScannerJob: Job? = null
     @RequiresApi(Build.VERSION_CODES.O)
     private fun scanWindows(){
@@ -998,9 +941,12 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
             hasPip = false
             isKeyboardOpen = false
             for (win in windows) {
-                if (win.isInPictureInPictureMode || (win.type == -1 && win.root.packageName != SYSTEM_UI/*win.root.packageName == "com.samsung.android.video"*/)) {
-                    hasPip = true
-                }
+                try {
+                    if (win.isInPictureInPictureMode || (win.type == -1 && win.root.packageName != SYSTEM_UI/*win.root.packageName == "com.samsung.android.video"*/)) {
+                        hasPip = true
+                    }
+                }catch (_: Exception){}
+
                 if (win.type == AccessibilityWindowInfo.TYPE_INPUT_METHOD) {
                     isKeyboardOpen = true
                 }
@@ -1074,23 +1020,13 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
             volumePressed = true
             updateAdaptiveFactors()
             makeAdaptive()
-            delay(5000)
+            delay(3000 + animatorAdj)
             volumePressed = false
             updateAdaptiveFactors()
             makeAdaptive()
         }
         volumeHandlerJob?.start()
     }
-
-    /*private var ignoreNextWinChange = true
-    private val ignoreNextWinChangeRunnable = Runnable {
-        ignoreNextWinChange = true
-    }
-    private fun setTempIgnoreWinChange(){
-        mHandler.removeCallbacks(ignoreNextWinChangeRunnable)
-        ignoreNextWinChange = false
-        mHandler.postDelayed(ignoreNextWinChangeRunnable, 1000L)
-    }*/
 
     private fun initialAdaptive() {
         mUtilsRefreshRate.setRefreshRate(prrActive.get()!!, UtilsPrefsGmhSt.instance(applicationContext).gmhPrefMinHzAdapt)
@@ -1177,7 +1113,6 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
             hzText?.alpha = 0.85f
             hzText?.text = newHz.toString()
 
-            //Log.d("TESTEST", "hZ WIDTH:${hzText?.width} framewidth:${mLayout?.measuredWidth}")
             mTransfyHzJob = null
             mTransfyHzJob = launch{
                 delay(4000)
