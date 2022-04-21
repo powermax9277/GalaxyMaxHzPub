@@ -882,7 +882,6 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
             TYPE_WINDOWS_CHANGED ->{ // 4194304
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-
                     when(event.windowChanges){
                         //For dragging pop-up windows
                         WINDOWS_CHANGE_BOUNDS -> {
@@ -1019,7 +1018,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
             volumePressed = true
             updateAdaptiveFactors()
             makeAdaptive()
-            delay(3000 + animatorAdj)
+            delay(5000 + animatorAdj)
             volumePressed = false
             updateAdaptiveFactors()
             makeAdaptive()
