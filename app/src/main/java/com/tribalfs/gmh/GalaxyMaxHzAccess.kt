@@ -583,7 +583,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         params =    WindowManager.LayoutParams()
         params!!.type = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY
-        //WindowManager.LayoutParams.TYPE_ACCESSIBILITY_OVERLAY
+            //WindowManager.LayoutParams.TYPE_ACCESSIBILITY_OVERLAY
         }else{
             @Suppress("DEPRECATION")
             WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY
@@ -924,6 +924,13 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                                     //Notification Panel
                                     if (isSamsung/*isOfficialAdaptive*//*UtilsDeviceInfoSt.instance(applicationContext).isLowRefreshDevice*/){
                                         makeAdaptive()
+                                        //TODO
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                                            Log.d(
+                                                "TESTEST",
+                                                "TYPE: ${event.eventType} action: ${event.action} isScrollable: ${event.isScrollable} PN:${event.packageName} CN: ${event.className}"
+                                            )
+                                        }
                                     }
                                     return
                                 }
@@ -984,13 +991,73 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
             //What's the use?
             TYPE_WINDOWS_CHANGED ->{ // 4194304
-                if (ignoreNextWinChange) {
+                    /*when (event.windowChanges) {
+                        WINDOWS_CHANGE_ADDED -> { Log.d(
+                            "TESTEST",
+                            "TYPE: ${event.eventType} CHANGE: WINDOWS_CHANGE_ADDED"
+                        )}
+                        WINDOWS_CHANGE_REMOVED -> { Log.d(
+                            "TESTEST",
+                            "TYPE: ${event.eventType} CHANGE: WINDOWS_CHANGE_ADDED"
+                        )}
+                        WINDOWS_CHANGE_TITLE -> { Log.d(
+                            "TESTEST",
+                            "TYPE: ${event.eventType} CHANGE: WINDOWS_CHANGE_ADDED"
+                        )}
+                        WINDOWS_CHANGE_BOUNDS -> { Log.d(
+                            "TESTEST",
+                            "TYPE: ${event.eventType} CHANGE: WINDOWS_CHANGE_ADDED"
+                        )}
+                        WINDOWS_CHANGE_LAYER -> { Log.d(
+                            "TESTEST",
+                            "TYPE: ${event.eventType} CHANGE: WINDOWS_CHANGE_ADDED"
+                        )}
+                        WINDOWS_CHANGE_ACTIVE -> { Log.d(
+                            "TESTEST",
+                            "TYPE: ${event.eventType} CHANGE: WINDOWS_CHANGE_ACTIVE"
+                        )}
+                        WINDOWS_CHANGE_FOCUSED -> { Log.d(
+                            "TESTEST",
+                            "TYPE: ${event.eventType} CHANGE: WINDOWS_CHANGE_FOCUSED"
+                        )}
+                        WINDOWS_CHANGE_ACCESSIBILITY_FOCUSED -> { Log.d(
+                            "TESTEST",
+                            "TYPE: ${event.eventType} CHANGE: WINDOWS_CHANGE_ACCESSIBILITY_FOCUSED"
+                        )}
+                        WINDOWS_CHANGE_PARENT -> { Log.d(
+                            "TESTEST",
+                            "TYPE: ${event.eventType} CHANGE: WINDOWS_CHANGE_PARENT"
+                        )}
+                        WINDOWS_CHANGE_CHILDREN -> { Log.d(
+                            "TESTEST",
+                            "TYPE: ${event.eventType} CHANGE: WINDOWS_CHANGE_CHILDREN"
+                        )}
+                        WINDOWS_CHANGE_PIP -> { Log.d(
+                            "TESTEST",
+                            "TYPE: ${event.eventType} CHANGE: WINDOWS_CHANGE_PIP"
+                        )}
+                    }*/
+
+
+                /*if (ignoreNextWinChange) {
                     setTempIgnoreWinChange()
                     return
                 }
                 if (event.contentChangeTypes == 0){
                     makeAdaptive()
                     setTempIgnoreWinChange()
+                }*/
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                    when(event.windowChanges){
+                        //For dragging pop-up windows
+                        WINDOWS_CHANGE_BOUNDS -> {
+                            makeAdaptive()
+                        }
+                    }
+                    Log.d(
+                        "TESTEST",
+                        "TYPE: ${event.eventType} CHANGE: ${event.windowChanges}"
+                    )
                 }
             }
         }
@@ -1057,8 +1124,8 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
     @SuppressLint("ClickableViewAccessibility")
     private val adaptiveEnhancer = View.OnTouchListener { _, _ ->
-        //TODO
-        Log.d("TESTEST","TATATTATAT")
+        /*//TODO
+        Log.d("TESTEST","TATATTATAT")*/
         if (isKeyboardOpen) {
             mUtilsRefreshRate.setPeakRefreshRate(typingRefreshRate)
         }else {
