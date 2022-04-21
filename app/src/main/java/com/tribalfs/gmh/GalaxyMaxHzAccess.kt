@@ -780,14 +780,12 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
                     if (actInfo != null){
 
-                        if (activePackage == componentName.packageName) return
-
                         isKeyboardOpen = false
 
                         for (win in windows) {
                             if (win.isActive){
                                 if (win.root.packageName == componentName.packageName) {
-                                    activePackage = componentName.packageName
+                                        activePackage = componentName.packageName
                                 }else{
                                     makeAdaptive()
                                     return
@@ -810,13 +808,11 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                             ) {
                                 pauseMinHz = true
                                 min60 = false
-                                ignoreScrollOnNonNative = false
                                 updateAdaptiveFactors()
                                 makeAdaptive()
                                 return
                             }
 
-                            ignoreScrollOnNonNative = false
                             pauseMinHz = false
                             min60 = false
                             updateAdaptiveFactors()
@@ -1053,7 +1049,6 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     }
 
     private var windowsScannerJob: Job? = null
-
     @RequiresApi(Build.VERSION_CODES.O)
     private fun scanWindows(){
         windowsScannerJob?.cancel()
