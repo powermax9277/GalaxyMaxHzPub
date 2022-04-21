@@ -27,7 +27,6 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.os.PowerManager.ACTION_POWER_SAVE_MODE_CHANGED
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
@@ -96,6 +95,8 @@ internal const val STOPPED = -1
 internal const val PAUSE = 0
 private const val MAX_TRY = 8
 private const val SYSTEM_UI = "com.android.systemui"
+private const val SAMSUNG_VIDEO = "com.samsung.android.video"
+private const val VOLUME_PANEL = "com.android.systemui.volume.view.VolumePanelView"
 private val manualVideoAppList = listOf(
     "amazon.avod",
     "youtube",
@@ -763,10 +764,8 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
                 if (event.packageName != null && event.className != null) {
 
-                    if (event.packageName == SYSTEM_UI && event.className == "com.android.systemui.volume.view.VolumePanelView"){
+                    if (event.packageName == SYSTEM_UI && event.className == VOLUME_PANEL){
                         handleVolumePressedJob()
-                        //TODO
-                        Log.d("TESTEST", "$event")
                         return
                     }
 
@@ -942,7 +941,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
             isKeyboardOpen = false
             for (win in windows) {
                 try {
-                    if (win.isInPictureInPictureMode || (win.type == -1 && win.root.packageName != SYSTEM_UI/*win.root.packageName == "com.samsung.android.video"*/)) {
+                    if (win.isInPictureInPictureMode || (win.type == -1 && win.root.packageName == SAMSUNG_VIDEO)) {
                         hasPip = true
                     }
                 }catch (_: Exception){}
