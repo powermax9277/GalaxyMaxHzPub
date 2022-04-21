@@ -229,6 +229,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                     restoreSync.set(false)
                     disablePsm.set(false)
 
+                    makeAdaptiveJob?.cancel()
                     // Workaround for AOD Bug on some device????
                     mUtilsRefreshRate.clearPeakAndMinRefreshRate()
 
