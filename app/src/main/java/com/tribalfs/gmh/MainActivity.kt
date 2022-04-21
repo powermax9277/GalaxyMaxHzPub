@@ -456,10 +456,11 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
 
             mBinding.swSoForceLowestHz.id -> {
                 mBinding.swSoForceLowestHz.isChecked.let { checked ->
-                    if (checked && !checkAccessibilityPerm(true)) {
+                    if (!checked || !checkAccessibilityPerm(true)) {
+                        UtilsPrefsGmhSt.instance(applicationContext).gmhPrefForceLowestSoIsOn = false
                         mBinding.swSoForceLowestHz.isChecked = false
                     } else {
-                        UtilsPrefsGmhSt.instance(applicationContext).gmhPrefForceLowestSoIsOn = checked
+                        UtilsPrefsGmhSt.instance(applicationContext).gmhPrefForceLowestSoIsOn = true
                     }
                 }
             }
