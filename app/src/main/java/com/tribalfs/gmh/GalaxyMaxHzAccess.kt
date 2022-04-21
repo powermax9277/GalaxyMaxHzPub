@@ -748,9 +748,6 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         return super.onKeyEvent(event)
     }
 
-    private var activePackage: CharSequence = ""
-
-
     @SuppressLint("SwitchIntDef")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
