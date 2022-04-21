@@ -781,17 +781,18 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                     if (actInfo != null){
 
                         isKeyboardOpen = false
+                        var processEvent = false
 
                         for (win in windows) {
-                            if (win.isActive){
-                                if (win.root.packageName == componentName.packageName) {
-                                        activePackage = componentName.packageName
-                                }else{
-                                    makeAdaptive()
-                                    return
-                                }
+                            if (win.isActive && win.root.packageName == componentName.packageName) {
+                                processEvent = true
                                 break
                             }
+                        }
+
+                        if (!processEvent){
+                            makeAdaptive()
+                            return
                         }
 
                         val appInfo = packageManager.getApplicationInfo(componentName.packageName, 0)
