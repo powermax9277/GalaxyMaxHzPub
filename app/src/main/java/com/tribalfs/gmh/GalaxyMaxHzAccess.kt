@@ -12,11 +12,9 @@ import android.content.Context
 import android.content.Intent
 import android.content.Intent.*
 import android.content.IntentFilter
-import android.content.pm.ActivityInfo
 import android.content.pm.ApplicationInfo
 import android.content.pm.ApplicationInfo.CATEGORY_GAME
 import android.content.pm.ApplicationInfo.CATEGORY_VIDEO
-import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.PixelFormat
 import android.hardware.camera2.CameraManager
@@ -374,7 +372,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                     if (sensorState != targetState) {
                         while (childs == null && triesB < MAX_TRY) {
                             performGlobalAction(GLOBAL_ACTION_NOTIFICATIONS)
-                            try {
+                            try{
                                 childs = rootInActiveWindow?.findAccessibilityNodeInfosByText("sensors off")
                             } catch (_: Exception) {
                                 triesB += 1
@@ -385,7 +383,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                         childs?.forEach {
                             val contDesc = it.contentDescription
                             if (contDesc != null && it.isClickable) {
-                                try {
+                                try{
                                     it.performAction(ACTION_CLICK)
                                     UtilNotifBarSt.instance(applicationContext)
                                         .collapseNotificationBar()
@@ -403,7 +401,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                     //Workaround if sensor state can't be read from isSensorsOff())
                     while (childs == null && triesB < MAX_TRY) {
                         performGlobalAction(GLOBAL_ACTION_NOTIFICATIONS)
-                        try {
+                        try{
                             childs = rootInActiveWindow?.findAccessibilityNodeInfosByText("sensors off")
                         } catch (_: Exception) {
                             triesB += 1
@@ -417,7 +415,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                         if (initDesc != null && it.isClickable) {
 
                             if (mKeyguardManager.isKeyguardLocked) {
-                                try {
+                                try{
                                     it.apply{
                                         performAction(ACTION_CLICK)
                                         delay(600)
@@ -477,19 +475,16 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     }
 
     private fun disableNetworkCallback(){
-        try{
-            mConnectivityManager.unregisterNetworkCallback(networkCallback)
-        }catch (_: java.lang.Exception){}
+        mConnectivityManager.unregisterNetworkCallback(networkCallback)
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
     internal fun setupNetworkCallback(enable: Boolean){
-        disableNetworkCallback()
+        try {
+            disableNetworkCallback()
+        }catch (_: Exception){}
         if (enable){
-            try {
-                mConnectivityManager.registerDefaultNetworkCallback(networkCallback)
-            } catch (_: Exception) {
-            }
+            mConnectivityManager.registerDefaultNetworkCallback(networkCallback)
         }
     }
 
@@ -596,11 +591,11 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         stageView = LayoutInflater.from(this).inflate(R.layout.hz_overlay, mLayout)
         hzText = stageView!!.findViewById(R.id.tvHzBeatMain)
 
-        try {
+        try{
             mWindowsManager!!.removeView(mLayout)
         }catch(_:Exception){ }
 
-        try {
+        try{
             mWindowsManager!!.addView(mLayout, params)
         }catch(_:Exception){ }
     }
@@ -623,10 +618,9 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
             if (hzOverlayOn == true) {
                 if (params?.gravity != mUtilsPrefGmh.gmhPrefHzPosition) {
                     params?.gravity = mUtilsPrefGmh.gmhPrefHzPosition
-                    try {
+                    try{
                         mWindowsManager?.updateViewLayout(mLayout, params)
-                    } catch (_: Exception) {
-                    }
+                    } catch (_: Exception) { }
                 }
                 hzText?.visibility = View.VISIBLE
                 hzText?.textSize = mUtilsPrefGmh.gmhPrefHzOverlaySize
@@ -733,13 +727,13 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
 
 
-    private fun getActivityInfo(componentName: ComponentName): ActivityInfo? {
-        return try {
-            packageManager.getActivityInfo(componentName, 0)
-        } catch (_: PackageManager.NameNotFoundException) {
-            null
-        }
-    }
+    /* private fun getActivityInfo(componentName: ComponentName): ActivityInfo? {
+         return try{
+             packageManager.getActivityInfo(componentName, 0)
+         } catch (_: PackageManager.NameNotFoundException) {
+             null
+         }
+     }*/
 
 
     /*override fun onKeyEvent(event: KeyEvent?): Boolean {
@@ -750,6 +744,8 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         }
         return super.onKeyEvent(event)
     }*/
+
+    @Volatile private var activePackage: CharSequence = ""
 
     @SuppressLint("SwitchIntDef")
     @RequiresApi(Build.VERSION_CODES.O)
@@ -772,29 +768,18 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
                     makeAdaptive()
 
+                    if (activePackage == event.packageName) return
+
+                    isKeyboardOpen = false
+
                     val componentName = ComponentName(
                         event.packageName.toString(),
                         event.className.toString()
                     )
 
-                    val actInfo = getActivityInfo(componentName)
-
-                    if (actInfo != null) {
-
-                        isKeyboardOpen = false
-
-                        for (win in windows) {
-                            try {
-                                if (win.isActive && win.root.packageName == componentName.packageName) {
-                                    idActiveWindow(componentName)
-                                    break
-                                }
-                            }catch (_: Exception){}
-                        }
-
-                        makeAdaptive()
-                        return
-                    }
+                    idActiveWindow(componentName)
+                    makeAdaptive()
+                    return
                 }
             }
 
@@ -862,6 +847,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
                     CONTENT_CHANGE_TYPE_SUBTREE + CONTENT_CHANGE_TYPE_TEXT -> {//3
                         when(event.packageName?.toString()){
+
                             SYSTEM_UI ->{
                                 //When expanding notification in some cases
                                 if (!isKeyboardOpen) {
@@ -940,11 +926,9 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
             hasPip = false
             isKeyboardOpen = false
             for (win in windows) {
-                try {
-                    if (win.isInPictureInPictureMode || (win.type == -1 && win.root.packageName == SAMSUNG_VIDEO)) {
-                        hasPip = true
-                    }
-                }catch (_: Exception){}
+                if (win.isInPictureInPictureMode || (win.root?.packageName == SAMSUNG_VIDEO)) {
+                    hasPip = true
+                }
 
                 if (win.type == AccessibilityWindowInfo.TYPE_INPUT_METHOD) {
                     isKeyboardOpen = true
@@ -960,6 +944,15 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     private fun idActiveWindow(componentName: ComponentName){
         idActiveWindowJob?.cancel()
         idActiveWindowJob = launch {
+            for (win in windows) {
+                if (win.isActive) {
+                    if (activePackage == componentName.packageName) {
+                        return@launch
+                    }
+                    break
+                }
+            }
+
             val appInfo = packageManager.getApplicationInfo(componentName.packageName, 0)
             if (isOfficialAdaptive){
                 if(appInfo.category == CATEGORY_GAME
@@ -974,12 +967,14 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                     pauseMinHz = true
                     min60 = false
                     updateAdaptiveFactors()
+                    activePackage = componentName.packageName
                     return@launch
                 }
 
                 pauseMinHz = false
                 min60 = false
                 updateAdaptiveFactors()
+                activePackage = componentName.packageName
                 return@launch
 
             }else{ //!isOfficialAdaptive
@@ -988,6 +983,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                     min60 = false
                     ignoreScrollOnNonNative = false
                     updateAdaptiveFactors()
+                    activePackage = componentName.packageName
                     return@launch
                 }
 
@@ -998,6 +994,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                     ignoreScrollOnNonNative = true
                     pauseMinHz = false
                     updateAdaptiveFactors()
+                    activePackage = componentName.packageName
                     return@launch
                 }
 
@@ -1005,12 +1002,13 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                 pauseMinHz = false
                 min60 = false
                 updateAdaptiveFactors()
+                activePackage = componentName.packageName
                 return@launch
             }
-
         }
         idActiveWindowJob?.start()
     }
+
     // private val mediaSessionManager by lazy {(getSystemService(MEDIA_SESSION_SERVICE) as MediaSessionManager)}
     private var volumeHandlerJob: Job? = null
     private fun handleVolumePressedJob(){
@@ -1036,12 +1034,15 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     override fun onDestroy() {
         stopHz()
         hzStatus.set(STOPPED)
-        try {
+        try{
             mWindowsManager!!.removeView(mLayout)
-        } catch (_: java.lang.Exception) {
-        }
-        unregisterReceiver(mScreenStatusReceiver)
-        disableNetworkCallback()
+        } catch (_: Exception) { }
+        try {
+            unregisterReceiver(mScreenStatusReceiver)
+        } catch (_: Exception) { }
+        try {
+            disableNetworkCallback()
+        }catch (_: Exception){}
         makeAdaptiveJob?.cancel()
         masterJob.cancel()
         super.onDestroy()
