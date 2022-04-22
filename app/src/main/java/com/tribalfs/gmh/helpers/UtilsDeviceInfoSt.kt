@@ -201,7 +201,7 @@ class UtilsDeviceInfoSt private constructor(val appCtx: Context) {
             val br = Settings.System.getFloat(appCtx.contentResolver, SCREEN_BRIGHTNESS_FLOAT, 0.5f)
             return@withContext (br * BRIGHTNESS_RESOLUTION).toInt()
         }else {
-            return@withContext Settings.System.getInt(appCtx.contentResolver, SCREEN_BRIGHTNESS, 50)
+            return@withContext Settings.System.getInt(appCtx.contentResolver, SCREEN_BRIGHTNESS, 125)
         }
     }
 
