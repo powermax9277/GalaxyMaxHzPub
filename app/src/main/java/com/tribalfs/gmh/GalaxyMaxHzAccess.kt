@@ -858,7 +858,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                                 }
                             }
 
-                            defaultKeyboardName ->{
+                            else ->{
                                 return
                             }
                         }
@@ -873,6 +873,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                         //For dragging pop-up windows
                         WINDOWS_CHANGE_BOUNDS -> {
                             makeAdaptive()
+                            return
                         }
 
                         WINDOWS_CHANGE_REMOVED, WINDOWS_CHANGE_ADDED, WINDOWS_CHANGE_PIP -> {
