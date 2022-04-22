@@ -185,6 +185,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         object : OnPropertyChangedCallback() {
             override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
                 launch {
+                    updateAdaptiveFactors()
                     updateNotif(mDisplay.refreshRate.toInt().toString())
                 }
             }
@@ -227,7 +228,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                     restoreSync.set(false)
                     disablePsm.set(false)
 
-                    makeAdaptiveJob?.cancel()
+                    doAdaptiveJob?.cancel()
                     // Workaround for AOD Bug on some device????
                     mUtilsRefreshRate.clearPeakAndMinRefreshRate()
 
@@ -282,7 +283,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                 }
 
                 ACTION_USER_PRESENT -> {
-                    if (isFakeAdaptiveValid.get()!!) makeAdaptive()
+                    if (isFakeAdaptiveValid.get()!!) doAdaptive()
                     if (UtilsPrefsGmhSt.instance(applicationContext).gmhPrefSensorsOff || turnOffAutoSensorsOff) {
                         switchSensorsOff(false)
                     }
@@ -342,7 +343,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                 super.onCameraAvailable(cameraId)
                 cameraOpen = false
                 updateAdaptiveFactors()
-                makeAdaptive()
+                doAdaptive()
             }
 
             override fun onCameraUnavailable(cameraId: String) {
@@ -766,7 +767,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                         return
                     }
 
-                    makeAdaptive()
+                    doAdaptive()
 
                     if (activePackage == event.packageName) return
 
@@ -777,15 +778,15 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                         event.className.toString()
                     )
 
-                    idActiveWindow(componentName)
-                    makeAdaptive()
+                    updateActiveWindow(componentName)
+                    doAdaptive()
                     return
                 }
             }
 
             TYPE_VIEW_SCROLLED/*4096 */ -> {
                 if (isOfficialAdaptive || !ignoreScrollOnNonNative){
-                    makeAdaptive()
+                    doAdaptive()
                 }
                 return
             }
@@ -815,7 +816,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                                             handleVolumePressedJob()
                                         }else{
                                             if (!ignoreSysUI) {
-                                                makeAdaptive()
+                                                doAdaptive()
                                             }
                                         }
                                     }
@@ -825,7 +826,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
                             else -> {
                                 if (UtilsDeviceInfoSt.instance(applicationContext).isLowRefreshDevice){
-                                    makeAdaptive()
+                                    doAdaptive()
                                     return
                                 }
 
@@ -833,7 +834,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                                 "android.widget.FrameLayout" launcher vertical scrolling*/
                                 if (event.packageName != defaultKeyboardName) {
                                     if (event.className == "android.widget.FrameLayout" || event.className == "android.view.ViewGroup" || (isOfficialAdaptive && min60)){
-                                        makeAdaptive()
+                                        doAdaptive()
                                         return
                                     }
                                 }else{
@@ -852,7 +853,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                                 //When expanding notification in some cases
                                 if (!isKeyboardOpen) {
                                     if (isOfficialAdaptive) {
-                                        makeAdaptive()
+                                        doAdaptive()
                                     }
                                     return
                                 }
@@ -872,7 +873,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                     when(event.windowChanges){
                         //For dragging pop-up windows
                         WINDOWS_CHANGE_BOUNDS -> {
-                            makeAdaptive()
+                            doAdaptive()
                             return
                         }
 
@@ -889,33 +890,31 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
     private var pauseMinHz = false
     private var ignoreScrollOnNonNative = false
-    private var apply60 = false
+    private var currentMinHz = 60
     private var min60 = false
     private var volumePressed = false
     private var cameraOpen: Boolean = false
     private var isKeyboardOpen = false
     private var hasPip = false
-    private var makeAdaptiveJob: Job? = null
+    private var doAdaptiveJob: Job? = null
 
-    private var applyAdaptiveFactor2 = false
+    private var keepAdaptiveMod = false
     private fun updateAdaptiveFactors(){
-        applyAdaptiveFactor2 = isScreenOn.get() && !pauseMinHz && !cameraOpen && !volumePressed && ((isOfficialAdaptive && !hasPip)|| !isOfficialAdaptive)
-        apply60 = min60 || (hasPip && !isOfficialAdaptive)
+        keepAdaptiveMod = isScreenOn.get() && !pauseMinHz && !cameraOpen && !volumePressed && ((isOfficialAdaptive && !hasPip)|| !isOfficialAdaptive)
+        currentMinHz = if (min60 || (hasPip && !isOfficialAdaptive)) max(60, lrrPref.get()!!) else lrrPref.get()!!
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
-    private fun makeAdaptive() {
+    private fun doAdaptive() {
         mUtilsRefreshRate.setPeakRefreshRate(prrActive.get()!!)
-        makeAdaptiveJob?.cancel()
-        makeAdaptiveJob = launch(Dispatchers.IO) {
+        doAdaptiveJob?.cancel()
+        doAdaptiveJob = launch(Dispatchers.IO) {
             delay(swithdownDelay)
-            if (applyAdaptiveMod.get()!! && applyAdaptiveFactor2) {
-                mUtilsRefreshRate.setPeakRefreshRate(
-                    if (apply60) max(60, lrrPref.get()!!) else lrrPref.get()!!
-                )
+            if (applyAdaptiveMod.get()!! && keepAdaptiveMod) {
+                mUtilsRefreshRate.setPeakRefreshRate(currentMinHz)
             }
         }
-        makeAdaptiveJob!!.start()
+        doAdaptiveJob!!.start()
     }
 
 
@@ -942,7 +941,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
     private var idActiveWindowJob: Job? = null
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun idActiveWindow(componentName: ComponentName){
+    private fun updateActiveWindow(componentName: ComponentName){
         idActiveWindowJob?.cancel()
         idActiveWindowJob = launch {
             for (win in windows) {
@@ -1017,18 +1016,18 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         volumeHandlerJob = launch {
             volumePressed = true
             updateAdaptiveFactors()
-            makeAdaptive()
+            doAdaptive()
             delay(5000 + animatorAdj)
             volumePressed = false
             updateAdaptiveFactors()
-            makeAdaptive()
+            doAdaptive()
         }
         volumeHandlerJob?.start()
     }
 
     private fun initialAdaptive() {
         mUtilsRefreshRate.setRefreshRate(prrActive.get()!!, UtilsPrefsGmhSt.instance(applicationContext).gmhPrefMinHzAdapt)
-        makeAdaptive()
+        doAdaptive()
     }
 
 
@@ -1044,7 +1043,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         try {
             disableNetworkCallback()
         }catch (_: Exception){}
-        makeAdaptiveJob?.cancel()
+        doAdaptiveJob?.cancel()
         masterJob.cancel()
         super.onDestroy()
     }
@@ -1055,10 +1054,10 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
     @SuppressLint("ClickableViewAccessibility")
     private val adaptiveEnhancer = View.OnTouchListener { _, _ ->
-        if (isKeyboardOpen && applyAdaptiveFactor2) {
+        if (isKeyboardOpen && keepAdaptiveMod) {
             mUtilsRefreshRate.setPeakRefreshRate(typingRefreshRate)
         }else {
-            makeAdaptive()
+            doAdaptive()
         }
         true
     }
