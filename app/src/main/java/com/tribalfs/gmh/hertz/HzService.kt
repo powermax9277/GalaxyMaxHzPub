@@ -123,8 +123,9 @@ internal class HzService : Service(), CoroutineScope{
                             if (!isScreenOn.get()) {
                                 pauseHz()
                             }
+                            mPauseHzJob = null
                         }
-                        mPauseHzJob?.start()
+
                     }
                 }
             }
@@ -309,12 +310,12 @@ internal class HzService : Service(), CoroutineScope{
                 hzText.setTextColor(if (newHz <= 60.05) Color.RED else Color.rgb(44,255,29))
                 hzText.alpha = 0.85f
                 hzText.text = newHz.toString()
-                mTransfyHzJob = null
                 mTransfyHzJob = launch(Dispatchers.Main) {
                     delay(4000)
                     hzText.alpha = 0.25f
+                    mTransfyHzJob = null
                 }
-                mTransfyHzJob?.start()
+
             }
         }
     }

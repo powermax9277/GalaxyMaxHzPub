@@ -17,6 +17,7 @@ import com.tribalfs.gmh.helpers.CacheSettings.canApplyFakeAdaptive
 import com.tribalfs.gmh.helpers.CacheSettings.currentRefreshRateMode
 import com.tribalfs.gmh.helpers.CacheSettings.displayId
 import com.tribalfs.gmh.helpers.CacheSettings.hasWriteSecureSetPerm
+import com.tribalfs.gmh.helpers.CacheSettings.hasWriteSystemSetPerm
 import com.tribalfs.gmh.helpers.CacheSettings.highestHzForAllMode
 import com.tribalfs.gmh.helpers.CacheSettings.isFakeAdaptive
 import com.tribalfs.gmh.helpers.CacheSettings.isMultiResolution
@@ -673,7 +674,7 @@ class UtilRefreshRateSt private constructor (val appCtx: Context) {
 
     //Note: Don't add requestListening here - always called by makeAdaptive
     fun setPeakRefreshRate(refreshRate: Int){
-        try {
+        if (hasWriteSystemSetPerm){
             Settings.System.putString(appCtx.contentResolver, PEAK_REFRESH_RATE, refreshRate.toString())
             if (isXiaomi) {
                 Settings.System.putString(
@@ -682,7 +683,7 @@ class UtilRefreshRateSt private constructor (val appCtx: Context) {
                     refreshRate.toString()
                 )
             }
-        }catch(_:Exception){
+        }else{
            CoroutineScope(Dispatchers.Main).launch {
                 Toast.makeText(
                     appCtx,
@@ -694,9 +695,9 @@ class UtilRefreshRateSt private constructor (val appCtx: Context) {
     }
 
     internal fun setMinRefreshRate(refreshRate: Int){
-        try {
+        if (hasWriteSystemSetPerm){
             Settings.System.putString(appCtx.contentResolver, MIN_REFRESH_RATE, refreshRate.toString())
-        }catch(_:Exception){
+        }else{
             CoroutineScope(Dispatchers.Main).launch {
                 Toast.makeText(
                     appCtx,
@@ -709,22 +710,21 @@ class UtilRefreshRateSt private constructor (val appCtx: Context) {
 
 
     private fun deleteRefreshRate(name: String){
-        try {
             appCtx.contentResolver.delete(
                 Uri.parse("content://settings/system"), "name = ?", arrayOf(
                     name
                 )
             )
-        } catch (_: Exception) {
-        }
     }
 
 
     internal fun clearPeakAndMinRefreshRate() {
-        deleteRefreshRate(PEAK_REFRESH_RATE)
-        deleteRefreshRate(MIN_REFRESH_RATE)
-        if (isXiaomi){
-            deleteRefreshRate(USER_REFRESH_RATE)
+        if (hasWriteSystemSetPerm) {
+            deleteRefreshRate(PEAK_REFRESH_RATE)
+            deleteRefreshRate(MIN_REFRESH_RATE)
+            if (isXiaomi) {
+                deleteRefreshRate(USER_REFRESH_RATE)
+            }
         }
     }
 
@@ -874,14 +874,9 @@ class UtilRefreshRateSt private constructor (val appCtx: Context) {
     }
 
 
-    private fun getPeakRefreshRateFromSettings(): Int? {
-        return try {
-            val prr =  Settings.System.getString(appCtx.contentResolver, PEAK_REFRESH_RATE)
-            prr.toInt()
-        } catch (_: Exception) {
-            //No choice
-            UtilsDeviceInfoSt.instance(appCtx).getCurrentDisplay().refreshRate.toInt()
-        }
+    internal fun getPeakRefreshRateFromSettings(): Int {
+        val prr = Settings.System.getString(appCtx.contentResolver, PEAK_REFRESH_RATE)
+        return prr?.toInt() ?: UtilsDeviceInfoSt.instance(appCtx).getCurrentDisplay().refreshRate.toInt()
     }
 
     @ExperimentalCoroutinesApi
