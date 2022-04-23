@@ -910,7 +910,6 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
             //For efficiency of cancel()
             doAdaptiveJob = null
         }
-
     }
 
 
@@ -938,7 +937,6 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                     updateFactors(it.toString())
                 }
             }
-
             updateAdaptiveFactors()
             windowsScannerJob = null
         }

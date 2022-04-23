@@ -836,7 +836,7 @@ class UtilRefreshRateSt private constructor (val appCtx: Context) {
                             true
                         }
                         )
-            } catch (_: java.lang.Exception) {
+            } catch (_: Exception) {
                 false
             }
         }
@@ -877,7 +877,8 @@ class UtilRefreshRateSt private constructor (val appCtx: Context) {
 
     internal fun getPeakRefreshRateFromSettings(): Int {
         val prr = Settings.System.getString(appCtx.contentResolver, PEAK_REFRESH_RATE)
-        return prr?.toInt() ?: UtilsDeviceInfoSt.instance(appCtx).getCurrentDisplay().refreshRate.toInt()
+        return prr?.toIntOrNull() ?: UtilsDeviceInfoSt.instance(appCtx)
+                .getCurrentDisplay().refreshRate.toInt()
     }
 
     @ExperimentalCoroutinesApi
