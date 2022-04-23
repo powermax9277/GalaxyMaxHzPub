@@ -114,7 +114,6 @@ import com.tribalfs.gmh.profiles.ProfilesObj.isProfilesLoaded
 import com.tribalfs.gmh.sharedprefs.*
 import com.tribalfs.gmh.viewmodels.MyViewModel
 import kotlinx.coroutines.*
-import java.lang.Integer.min
 import kotlin.coroutines.CoroutineContext
 
 internal const val GMH_WEB_APP ="https://script.google.com/macros/s/AKfycbzlRKh4-YXyXLufXZfDqAs1xJEJK7BF8zmhEDGDpbP1luu97trI/exec"
@@ -1517,7 +1516,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                     progress: Int,
                     fromUser: Boolean
                 ) {
-                    val newProgress = min(prrActive.get()!!, supportedHzIntCurMod?.closestValue(progress)!!)
+                    val newProgress = (supportedHzIntCurMod?.closestValue(progress)!!).coerceAtMost(prrActive.get()!!)
                     seekBar.progress = newProgress
                     seekBar.thumb = getThumb(newProgress)
                 }

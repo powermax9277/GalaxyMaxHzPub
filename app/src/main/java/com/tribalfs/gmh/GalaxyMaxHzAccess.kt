@@ -83,7 +83,6 @@ import com.tribalfs.gmh.profiles.ProfilesObj.isProfilesLoaded
 import com.tribalfs.gmh.receivers.GmhBroadcastReceivers
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt
 import kotlinx.coroutines.*
-import java.lang.Integer.max
 import java.lang.Runnable
 import kotlin.coroutines.CoroutineContext
 
@@ -713,11 +712,9 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
 
     private fun isPartOf(list: List<String>, packageName: String): Boolean {
-        list.forEach {item ->
-            item.split(":").let{
-                if (packageName.contains(it[0])){
-                    return true
-                }
+         list.forEach {item ->
+            if (packageName.indexOf(item) >= 0){
+                return true
             }
         }
         return false
@@ -892,7 +889,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     private var keepAdaptiveMod = false
     private fun updateAdaptiveFactors(){
         keepAdaptiveMod = isScreenOn.get() && !pauseMinHz && !cameraOpen && !volumePressed && ((isOfficialAdaptive && !hasPip)|| !isOfficialAdaptive)
-        currentMinHz = if (min60 || (hasPip && !isOfficialAdaptive)) max(60, lrrPref.get()!!) else lrrPref.get()!!
+        currentMinHz = if (min60 || (hasPip && !isOfficialAdaptive)) lrrPref.get()!!.coerceAtLeast(60) else lrrPref.get()!!
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
@@ -925,7 +922,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
             pauseMinHz = false
             min60 = false
             ignoreScrollOnNonNative = false
-            for (win in windows) {
+            windows.forEach {win ->
                 if (win.isInPictureInPictureMode) {
                     hasPip = true
                 }
@@ -938,6 +935,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                     updateFactors(it.toString())
                 }
             }
+
             updateAdaptiveFactors()
             windowsScannerJob = null
         }
@@ -946,31 +944,32 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun updateFactors(packageName: String){
         //try catch required for Secure Folder apps
-        val appInfo = try{
-            packageManager.getApplicationInfo(packageName, 0)
+        val category = try{
+            packageManager.getApplicationInfo(packageName, 0).category
         }catch (_: PackageManager.NameNotFoundException){
             null
         }
+
         if (isOfficialAdaptive){
-            if(appInfo?.category == CATEGORY_GAME
-                || appInfo?.category == CATEGORY_VIDEO
+            if(category == CATEGORY_GAME
+                || category == CATEGORY_VIDEO
                 || isPartOf(manualGameList, packageName)
                 || isPartOf(manualVideoAppList, packageName)
                 || (UtilsDeviceInfoSt.instance(applicationContext).isLowRefreshDevice
-                        && (appInfo?.category == ApplicationInfo.CATEGORY_SOCIAL
-                        || appInfo?.category == ApplicationInfo.CATEGORY_MAPS
+                        && (category == ApplicationInfo.CATEGORY_SOCIAL
+                        || category == ApplicationInfo.CATEGORY_MAPS
                         || isPartOf(useStockAdaptiveList, packageName)))
             ) {
                 pauseMinHz = true
                 return
             }
         }else{ //!isOfficialAdaptive
-            if(appInfo?.category == CATEGORY_GAME || isPartOf(manualGameList, packageName)) {
+            if(category == CATEGORY_GAME || isPartOf(manualGameList, packageName)) {
                 pauseMinHz = true
                 return
             }
 
-            if(appInfo?.category == CATEGORY_VIDEO
+            if(category == CATEGORY_VIDEO
                 || isPartOf(manualVideoAppList, packageName)
             ) {
                 min60 = true

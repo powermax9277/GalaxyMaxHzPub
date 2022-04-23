@@ -15,8 +15,10 @@ import com.tribalfs.gmh.helpers.UtilPermSt.Companion.CHANGE_SETTINGS
 import com.tribalfs.gmh.profiles.InternalProfiles
 import com.tribalfs.gmh.profiles.ProfilesObj.loadComplete
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt
-import kotlinx.coroutines.*
-import kotlin.math.max
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 
 
 class UtilChangeMaxHz (private val appCtx: Context) {
@@ -29,7 +31,7 @@ class UtilChangeMaxHz (private val appCtx: Context) {
     }
 
     private var isModeUpdated = false
-    
+
     @ExperimentalCoroutinesApi
     @RequiresApi(Build.VERSION_CODES.M)
     suspend fun changeMaxHz(maxHzToApply: Int?): Int = withContext(Dispatchers.IO){
@@ -125,8 +127,11 @@ class UtilChangeMaxHz (private val appCtx: Context) {
             val maxHzToApplyFinal :Int =
                 if (maxHzToApply == null) {
                     val idx = supportedHzIntCurMod!!.indexOfFirst { it == UtilRefreshRateSt.instance(appCtx).getPeakRefreshRate() }
-                    max(if (idx >= supportedHzIntCurMod!!.size - 1) { supportedHzIntCurMod!![0] } else { supportedHzIntCurMod!![idx + 1]},
-                        UtilsPrefsGmhSt.instance(appCtx).gmhPrefMinHzForToggle)
+                    (if (idx >= supportedHzIntCurMod!!.size - 1) {
+                        supportedHzIntCurMod!![0]
+                    } else {
+                        supportedHzIntCurMod!![idx + 1]
+                    }).coerceAtLeast(UtilsPrefsGmhSt.instance(appCtx).gmhPrefMinHzForToggle)
                 } else {
                     if (supportedHzIntCurMod!!.indexOfFirst { it == maxHzToApply } != -1) {
                         maxHzToApply

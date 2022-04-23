@@ -3,7 +3,6 @@ package com.tribalfs.gmh.helpers
 import android.view.Display.DEFAULT_DISPLAY
 import androidx.databinding.ObservableField
 import com.tribalfs.gmh.STOPPED
-import java.lang.Long.max
 import java.util.concurrent.atomic.AtomicBoolean
 
 
@@ -21,7 +20,7 @@ object CacheSettings {
 
     internal var adaptiveDelayMillis = 900L
     internal var animatorAdj = 0L
-    internal var adaptiveAccessTimeout: Long = max(1400L, adaptiveDelayMillis * TIMEOUT_FACTOR.toLong())
+    internal var adaptiveAccessTimeout: Long = (adaptiveDelayMillis * TIMEOUT_FACTOR.toLong()).coerceAtLeast(1400L)
 
     internal var displayId: Int = DEFAULT_DISPLAY
 
