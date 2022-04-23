@@ -26,9 +26,11 @@ internal object ModelNumbers {
     const val S21_P_JP = "SCG10"
     const val S21_U = "SM-G998"
 
+
     const val S22 = "SM-S901"
     const val S22P = "SM-S906"
     const val S22U = "SM-S908"
+    const val S22U_JP = "SCG14"
 
     const val ZF2 = "SM-F916"
     const val ZF2_JP = "SCG05"
@@ -79,6 +81,7 @@ internal object ModelNumbers {
         S22,
         S22P,
         S22U,
+        S22U_JP,
         TS8
     )
 }
