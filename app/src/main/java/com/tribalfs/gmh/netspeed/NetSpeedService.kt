@@ -186,7 +186,7 @@ class NetSpeedService : Service(), CoroutineScope {
             setLocalOnly(true)
             if (!isOnePlus) {setContentIntent(pendingIntent)}
             setAutoCancel(false)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 setCustomContentView(mNotificationContentView)
             }
         }

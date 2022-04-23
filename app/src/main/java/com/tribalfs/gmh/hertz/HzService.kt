@@ -72,7 +72,7 @@ internal class HzService : Service(), CoroutineScope{
             WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
         }else{
             WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY
-             },
+        },
         WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
                 or WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
                 or WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
@@ -198,7 +198,9 @@ internal class HzService : Service(), CoroutineScope{
                     .setCategory(Notification.CATEGORY_STATUS)
                     .setVisibility(Notification.VISIBILITY_PRIVATE)
                     .setLocalOnly(true)
-                    .setCustomContentView(mNotificationContentView)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                hznotificationBuilder!!.setCustomContentView(mNotificationContentView)
+            }
         }
     }
 
@@ -269,7 +271,7 @@ internal class HzService : Service(), CoroutineScope{
                         }
                     )
                 }
-                    notificationManagerCompat.notify(
+                notificationManagerCompat.notify(
                     NOTIFICATION_ID_HZ,
                     build()
                 )

@@ -531,7 +531,10 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                     .setCategory(Notification.CATEGORY_STATUS)
                     .setVisibility(VISIBILITY_PRIVATE)
                     .setLocalOnly(true)
-                    .setCustomContentView(mNotificationContentView)
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                hznotificationBuilder!!.setCustomContentView(mNotificationContentView)
+            }
         }
     }
 
@@ -712,7 +715,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
 
     private fun isPartOf(list: List<String>, packageName: String): Boolean {
-         list.forEach {item ->
+        list.forEach {item ->
             if (packageName.indexOf(item) >= 0){
                 return true
             }
