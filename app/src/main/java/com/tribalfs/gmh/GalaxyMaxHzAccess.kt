@@ -750,6 +750,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
         if (!(isScreenOn.get() && applyAdaptiveMod.get()!!)) return
 
+
         when (event?.eventType) {
 
             TYPE_WINDOW_STATE_CHANGED -> {//32
