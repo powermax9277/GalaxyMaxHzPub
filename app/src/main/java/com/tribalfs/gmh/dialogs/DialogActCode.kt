@@ -14,7 +14,7 @@ import com.tribalfs.gmh.MainActivity
 import com.tribalfs.gmh.R
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
-@ExperimentalCoroutinesApi
+@OptIn(ExperimentalCoroutinesApi::class)
 class DialogActCode : DialogFragment()  {
 
     companion object {
