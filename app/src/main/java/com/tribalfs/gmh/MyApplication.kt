@@ -132,6 +132,7 @@ class MyApplication : Application() {
 
             Brand.set(UtilsDeviceInfoSt.instance(applicationContext).manufacturer)
             defaultKeyboardName = DefaultApps.getKeyboard(applicationContext)
+
             /*while (!isProfilesLoaded) {
                 delay(250)
             }
@@ -141,7 +142,7 @@ class MyApplication : Application() {
                 && !UtilsPrefsGmhSt.instance(applicationContext).gmhPrefSettingListDone
                 && UtilsDeviceInfoSt.instance(applicationContext).oneUiVersion != null
                 &&  UtilsDeviceInfoSt.instance(applicationContext).oneUiVersion!!  >= 4.1
-            *//*   && highestHzForAllMode > REFRESH_RATE_MODE_STANDARD.toInt()*//*
+               && highestHzForAllMode > REFRESH_RATE_MODE_STANDARD.toInt()
             ) {
                 UtilRefreshRateSt.instance(applicationContext).mSyncer.postSettingsList()
                 UtilsPrefsGmhSt.instance(applicationContext).gmhPrefSettingListDone = true

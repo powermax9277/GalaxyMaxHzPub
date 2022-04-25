@@ -562,6 +562,8 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     override fun onUnbind(intent: Intent?): Boolean {
         gmhAccessInstance = null
         HzServiceHelperStn.instance(applicationContext).switchHz()
+        doAdaptiveJob?.cancel()
+        mUtilsRefreshRate.setPeakRefreshRate(prrActive.get()!!)
         return super.onUnbind(intent)
     }
 
