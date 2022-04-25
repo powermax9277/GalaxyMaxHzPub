@@ -8,6 +8,8 @@ object ProfilesObj: Serializable {
     @Volatile
     var refreshRateModeMap = mutableMapOf<String, List<Map<String, ResolutionDetails>>>()
 
+    var refreshRateModeMap2 = mutableListOf<DisplayModeData>()
+
     var adaptiveModelsObj = mutableListOf<String>()
 
     @Volatile

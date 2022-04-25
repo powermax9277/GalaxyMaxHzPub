@@ -30,7 +30,6 @@ import com.tribalfs.gmh.PAUSE
 import com.tribalfs.gmh.PLAYING
 import com.tribalfs.gmh.R
 import com.tribalfs.gmh.STOPPED
-import com.tribalfs.gmh.callbacks.DisplayChangedCallback
 import com.tribalfs.gmh.helpers.CacheSettings.displayId
 import com.tribalfs.gmh.helpers.CacheSettings.hzNotifOn
 import com.tribalfs.gmh.helpers.CacheSettings.hzStatus
@@ -82,17 +81,18 @@ internal class HzService : Service(), CoroutineScope{
     private val dm by lazy { applicationContext.getSystemService(DISPLAY_SERVICE) as DisplayManager}
     private val mDisplay by lazy { dm.getDisplay(displayId) }
 
-    private val mDisplayChangeCallback by lazy{ object: DisplayChangedCallback {
-        override fun onDisplayChanged() {
+    private val displayListener by lazy{ object: DisplayManager.DisplayListener  {
+        override fun onDisplayAdded(displayId: Int) {}
+        override fun onDisplayRemoved(displayId: Int) {}
+        override fun onDisplayChanged(arg0: Int) {
             launch(Dispatchers.Main) {
                 val newHz = mDisplay.refreshRate.toInt()
                 updateRefreshRateViews(newHz)
             }
         }
-
     }}
 
-    private val displayListener by lazy { MyDisplayListener(mDisplayChangeCallback)}
+   // private val displayListener by lazy { MyDisplayListener(mDisplayChangeCallback)}
 
     private val stageView by lazy {LayoutInflater.from(application).inflate(
         R.layout.hz_overlay, RelativeLayout(application)

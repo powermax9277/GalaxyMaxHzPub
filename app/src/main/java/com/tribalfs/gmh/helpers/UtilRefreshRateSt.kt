@@ -263,21 +263,6 @@ class UtilRefreshRateSt private constructor (val appCtx: Context) {
        val isStandardMode =
             (UtilsDeviceInfoSt.instance(appCtx).manufacturer == "SAMSUNG") && getRefreshRateMode() == REFRESH_RATE_MODE_STANDARD
 
-        /*if (isStandardMode) {
-           launch(Dispatchers.Main) {
-               var x = 3
-               while (x > 0) {
-                   delay(1000)
-                   *//*Toast.makeText(
-                        appCtx,
-                        "If profiles are not loaded properly, turn ON 'High' or 'Adaptive' refresh rate in this phone's settings and try to 'Reload Profiles'.",
-                        Toast.LENGTH_LONG
-                    ).show()*//*
-                    x--
-                }
-            }
-        }*/
-
         val internalProfilesJson = InternalProfiles.loadToProfilesObj(
             currentModeOnly = false,
             overwriteExisting = true,

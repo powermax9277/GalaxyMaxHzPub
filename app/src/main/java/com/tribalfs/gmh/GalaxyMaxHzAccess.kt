@@ -42,7 +42,6 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.databinding.Observable
 import androidx.databinding.Observable.OnPropertyChangedCallback
 import com.tribalfs.gmh.BuildConfig.APPLICATION_ID
-import com.tribalfs.gmh.callbacks.DisplayChangedCallback
 import com.tribalfs.gmh.callbacks.GmhBroadcastCallback
 import com.tribalfs.gmh.helpers.*
 import com.tribalfs.gmh.helpers.CacheSettings.adaptiveAccessTimeout
@@ -77,7 +76,6 @@ import com.tribalfs.gmh.hertz.HzNotifGlobal.NOTIFICATION_ID_HZ
 import com.tribalfs.gmh.hertz.HzNotifGlobal.hznotificationBuilder
 import com.tribalfs.gmh.hertz.HzNotifGlobal.hznotificationChannel
 import com.tribalfs.gmh.hertz.HzServiceHelperStn
-import com.tribalfs.gmh.hertz.MyDisplayListener
 import com.tribalfs.gmh.netspeed.NetSpeedServiceHelperStn
 import com.tribalfs.gmh.profiles.ProfilesObj.isProfilesLoaded
 import com.tribalfs.gmh.receivers.GmhBroadcastReceivers
@@ -308,8 +306,10 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     private var hzText: TextView? = null
     private var hzOverlayOn: Boolean? = null
 
-    private val mDisplayChangeCallback by lazy{ object: DisplayChangedCallback {
-        override fun onDisplayChanged() {
+    private val displayListener by lazy{ object: DisplayManager.DisplayListener  {
+        override fun onDisplayAdded(displayId: Int) {}
+        override fun onDisplayRemoved(displayId: Int) {}
+        override fun onDisplayChanged(arg0: Int) {
             launch(Dispatchers.Main) {
                 val newHz = mDisplay.refreshRate.toInt()
                 updateRefreshRateViews(newHz)
@@ -317,7 +317,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         }
     }}
 
-    private val displayListener by lazy { MyDisplayListener(mDisplayChangeCallback) }
+   // private val displayListener by lazy { MyDisplayListener(mDisplayChangeCallback) }
 
     private val networkCallback by lazy {
         object : ConnectivityManager.NetworkCallback() {
