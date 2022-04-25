@@ -811,7 +811,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
         setupSizeSeekBar()
         setupAdaptDelaySeekBar()
         setupBrightnessSeekBar()
-       // setupMenuVisibility()//TODO
+        // setupMenuVisibility()//TODO
 
         viewModel.isValidAdFree.observe(this) { adFree ->
             isPremium.set(adFree)
@@ -901,20 +901,15 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
 
     private fun setupMenuVisibility(menu: Menu) {
         viewModel.hideBuyActMenu.observe(this){
-            launch {
-                /*while (mList == null) {
-                    delay(250)
-                }*/
-                menu.apply {
-                    findItem(R.id.menuBuy).isVisible = it != LIC_TYPE_ADFREE/ 2
-                    findItem(R.id.menuAct).isVisible = (it != LIC_TYPE_ADFREE/ 2 && it != LIC_TYPE_TRIAL_ACTIVE/ 2)
-                    findItem(R.id.menuAc).isVisible = it != LIC_TYPE_ADFREE/ 2
-                    findItem(R.id.menuNs).isVisible = it >= LIC_TYPE_ADFREE/ 2
-                    findItem(R.id.menuPrem).isVisible = it < LIC_TYPE_ADFREE/ 2
-                    findItem(R.id.menuNs).isChecked = UtilsPrefsGmhSt.instance(applicationContext).gmhPrefShowNetSpeedTool
-                    /* findItem(R.id.menuUsingSpay).isVisible = isSpayInstalled == true
-                     findItem(R.id.menuUsingSpay).isChecked = UtilsPrefsGmhSt.instance(applicationContext).hzPrefSPayUsage == USING*/
-                }
+            menu.apply {
+                findItem(R.id.menuBuy).isVisible = it != LIC_TYPE_ADFREE/ 2
+                findItem(R.id.menuAct).isVisible = (it != LIC_TYPE_ADFREE/ 2 && it != LIC_TYPE_TRIAL_ACTIVE/ 2)
+                findItem(R.id.menuAc).isVisible = it != LIC_TYPE_ADFREE/ 2
+                findItem(R.id.menuNs).isVisible = it >= LIC_TYPE_ADFREE/ 2
+                findItem(R.id.menuPrem).isVisible = it < LIC_TYPE_ADFREE/ 2
+                findItem(R.id.menuNs).isChecked = UtilsPrefsGmhSt.instance(applicationContext).gmhPrefShowNetSpeedTool
+                /* findItem(R.id.menuUsingSpay).isVisible = isSpayInstalled == true
+                 findItem(R.id.menuUsingSpay).isChecked = UtilsPrefsGmhSt.instance(applicationContext).hzPrefSPayUsage == USING*/
             }
         }
     }
@@ -1136,7 +1131,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.appbar_menu, menu)
-       // mList = menu
+        // mList = menu
         setupMenuVisibility(menu)
         return true
     }
