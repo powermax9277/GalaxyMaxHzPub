@@ -32,7 +32,7 @@ class UtilChangeMaxHz (private val appCtx: Context) {
 
     private var isModeUpdated = false
 
-    @ExperimentalCoroutinesApi
+    @OptIn(ExperimentalCoroutinesApi::class)
     @RequiresApi(Build.VERSION_CODES.M)
     suspend fun changeMaxHz(maxHzToApply: Int?): Int = withContext(Dispatchers.IO){
 

@@ -17,7 +17,7 @@ internal class PsmChangeHandler private constructor(val appCtx: Context) {
 
     companion object: SingletonMaker<PsmChangeHandler, Context>(::PsmChangeHandler)
 
-    @ExperimentalCoroutinesApi
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Synchronized
     @RequiresApi(Build.VERSION_CODES.M)
     fun handle() {
@@ -44,7 +44,7 @@ internal class PsmChangeHandler private constructor(val appCtx: Context) {
         }
     }
 
-    @ExperimentalCoroutinesApi
+    @OptIn(ExperimentalCoroutinesApi::class)
     fun startPipActivityIfS(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && isPowerSaveMode.get() == true) {
             if (UtilsDeviceInfoSt.instance(appCtx).isGoogleMapsTrickDevice){
