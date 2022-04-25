@@ -206,7 +206,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
     }
 
 
-    private val listener = OnSharedPreferenceChangeListener { _, key ->
+    private val gmhPrefChngListener = OnSharedPreferenceChangeListener { _, key ->
         val mUtilsPrefsGmh = UtilsPrefsGmhSt.instance(applicationContext)
         when (key){
             KEEP_RRM -> {
@@ -231,11 +231,6 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                         mBinding.sbPeakHz.progress = mrr
                     }
                 }
-                /*mUtilsPrefsGmh.hzPrefMaxRefreshRate.let{mrr ->
-                    if (mBinding.sbPeakHz.valueTo != mrr.toFloat() && mrr.toFloat() > mBinding.sbPeakHz.valueFrom) {
-                        mBinding.sbPeakHz.valueTo = mrr.toFloat()
-                    }
-                }*/
             }
 
             //Trigger with ChangeMaxHz function
@@ -253,12 +248,6 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                         }
                     }
                 }
-                /*mUtilsPrefsGmh.hzPrefMaxRefreshRate.let{mnrr ->
-                    if (mBinding.sbPeakHz.valueFrom != mnrr.toFloat() && mnrr.toFloat() < mBinding.sbPeakHz.valueTo) {
-                        mBinding.sbPeakHz.valueFrom = mnrr.toFloat()
-                        mBinding.minHzAdaptive = mnrr
-                    }
-                }*/
             }
 
             PREF_MAX_REFRESH_RATE_PSM -> {
@@ -318,28 +307,32 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
     }
 
 
-    private val rrmChangeCallback: OnPropertyChangedCallback = object : OnPropertyChangedCallback() {
+    private val mPropertyChangeCallback: OnPropertyChangedCallback = object : OnPropertyChangedCallback() {
         override fun onPropertyChanged(sender: Observable, propertyId: Int) {
             when (sender) {
                 currentRefreshRateMode -> { //triggered by MyContentObserver -> updateCacheSettings()
-                    currentRefreshRateMode.get().let {
-                        if (!isOfficialAdaptive && !isPremium.get()!! && it == REFRESH_RATE_MODE_SEAMLESS ) {
-                            if (highestHzForAllMode > SIXTY_HZ){
-                                mUtilsRefreshRate.setRefreshRateMode(REFRESH_RATE_MODE_ALWAYS)
-                                return
-                            }else{
-                                if (ProfilesObj.loadComplete) {
-                                    mUtilsRefreshRate.setRefreshRateMode(REFRESH_RATE_MODE_STANDARD)
+                    if (SDK_INT >= VERSION_CODES.M) {
+                        currentRefreshRateMode.get().let {
+                            if (!isOfficialAdaptive && !isPremium.get()!! && it == REFRESH_RATE_MODE_SEAMLESS) {
+                                if (highestHzForAllMode > SIXTY_HZ) {
+                                    mUtilsRefreshRate.setRefreshRateMode(REFRESH_RATE_MODE_ALWAYS)
                                     return
+                                } else {
+                                    if (ProfilesObj.loadComplete) {
+                                        mUtilsRefreshRate.setRefreshRateMode(
+                                            REFRESH_RATE_MODE_STANDARD
+                                        )
+                                        return
+                                    }
                                 }
                             }
+                            mBinding.refreshRateMode = it
+                            updateRefreshRateLabels()
+                            updateMinHzSbMinMax()
+                            updateAdaptMinHzSbMinMax()
+                            updateMaxHzSbMinMax()
+                            updatePsmMaxHzSbMinMax()
                         }
-                        mBinding.refreshRateMode = it
-                        updateRefreshRateLabels()
-                        updateMinHzSbMinMax()
-                        updateAdaptMinHzSbMinMax()
-                        updateMaxHzSbMinMax()
-                        updatePsmMaxHzSbMinMax()
                     }
                 }
 
@@ -818,7 +811,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
         setupSizeSeekBar()
         setupAdaptDelaySeekBar()
         setupBrightnessSeekBar()
-        setupMenuVisibility()
+       // setupMenuVisibility()//TODO
 
         viewModel.isValidAdFree.observe(this) { adFree ->
             isPremium.set(adFree)
@@ -833,8 +826,8 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
 
         updateDynamicViews()
         mBinding.powerSavingIsOn = isPowerSaveMode.get()
-        currentRefreshRateMode.addOnPropertyChangedCallback(rrmChangeCallback)
-        isPowerSaveMode.addOnPropertyChangedCallback(rrmChangeCallback)
+        currentRefreshRateMode.addOnPropertyChangedCallback(mPropertyChangeCallback)
+        isPowerSaveMode.addOnPropertyChangedCallback(mPropertyChangeCallback)
 
         setupBroadcastReceiver()
         checkIfAllowedBackgroundTask()
@@ -861,22 +854,24 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
 
     private fun updateDynamicViews(){
         /*Wait for loadDone to Update Dynamic Views*/
-        launch {
-            while(!isProfilesLoaded) delay(300)
-            mBinding.hasMotionSmoothness = highestHzForAllMode > SIXTY_HZ
-            mBinding.isMultiRes = isMultiResolution
-            mBinding.adaptiveSupported = isOfficialAdaptive
-            mBinding.refreshRateMode = currentRefreshRateMode.get()
-            updateRefreshRateLabels()
-            setupMinHzSeekBar()
-            updateMinHzSbMinMax()
-            setupAdaptMinHzSeekBar()
-            updateAdaptMinHzSbMinMax()
-            setupMaxHzSeekBar()
-            updateMaxHzSbMinMax()
-            setupPsmMaxHzSeekBar()
-            updatePsmMaxHzSbMinMax()
-            setupResoSwitcherFilter()
+        if (SDK_INT >= VERSION_CODES.M) {
+            launch {
+                while(!isProfilesLoaded) delay(300)
+                mBinding.hasMotionSmoothness = highestHzForAllMode > SIXTY_HZ
+                mBinding.isMultiRes = isMultiResolution
+                mBinding.adaptiveSupported = isOfficialAdaptive
+                mBinding.refreshRateMode = currentRefreshRateMode.get()
+                updateRefreshRateLabels()
+                setupMinHzSeekBar()
+                updateMinHzSbMinMax()
+                setupAdaptMinHzSeekBar()
+                updateAdaptMinHzSbMinMax()
+                setupMaxHzSeekBar()
+                updateMaxHzSbMinMax()
+                setupPsmMaxHzSeekBar()
+                updatePsmMaxHzSbMinMax()
+                setupResoSwitcherFilter()
+            }
         }
     }
 
@@ -904,13 +899,13 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
 
 
 
-    private fun setupMenuVisibility() {
+    private fun setupMenuVisibility(menu: Menu) {
         viewModel.hideBuyActMenu.observe(this){
             launch {
-                while (mList == null) {
+                /*while (mList == null) {
                     delay(250)
-                }
-                mList!!.apply {
+                }*/
+                menu.apply {
                     findItem(R.id.menuBuy).isVisible = it != LIC_TYPE_ADFREE/ 2
                     findItem(R.id.menuAct).isVisible = (it != LIC_TYPE_ADFREE/ 2 && it != LIC_TYPE_TRIAL_ACTIVE/ 2)
                     findItem(R.id.menuAc).isVisible = it != LIC_TYPE_ADFREE/ 2
@@ -1141,7 +1136,8 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.appbar_menu, menu)
-        mList = menu
+       // mList = menu
+        setupMenuVisibility(menu)
         return true
     }
 
@@ -1558,6 +1554,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
     }
 
 
+    @RequiresApi(VERSION_CODES.M)
     private fun updateAdaptMinHzSbMinMax() {
         if (minHzListForAdp?.size?:0 < 2) {
             return
@@ -1570,9 +1567,15 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                 if (SDK_INT >= VERSION_CODES.O) {
                     mBinding.sbMinHzAdapt.min = minHzListForAdp!!.minOrNull()!!
                 }
+
                 UtilsPrefsGmhSt.instance(applicationContext).gmhPrefMinHzAdapt.let {
-                    mBinding.sbMinHzAdapt.progress = it
-                    mBinding.minHzAdaptive = it
+                    if (gmhAccessInstance != null) {
+                        mBinding.sbMinHzAdapt.progress = it
+                        mBinding.minHzAdaptive = it
+                    }else{
+                        mBinding.sbMinHzAdapt.progress = it.coerceAtLeast(UtilsDeviceInfoSt.instance(applicationContext).regularMinHz)
+                        mBinding.minHzAdaptive = it.coerceAtLeast(UtilsDeviceInfoSt.instance(applicationContext).regularMinHz)
+                    }
                 }
             }
         }
@@ -1794,14 +1797,12 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                         )
                     }
 
-                    try {
-                        //Needed
-                        if (SDK_INT >= VERSION_CODES.M) {
-                            gmhAccessInstance?.setupAdaptiveEnhancer()
-                            // mNetspeedService.setupNetworkCallback()
-                        }
-                    } catch (_: Exception) {
+                    //Needed
+                    if (SDK_INT >= VERSION_CODES.M) {
+                        gmhAccessInstance?.setupAdaptiveEnhancer()
+                        // mNetspeedService.setupNetworkCallback()
                     }
+
                     showLoading(false)
                 }
             }
@@ -1982,7 +1983,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
 
     @RequiresApi(VERSION_CODES.M)
     private fun registerSharedPrefListener() {
-        UtilsPrefsGmhSt.instance(applicationContext).hzSharedPref.registerOnSharedPreferenceChangeListener(listener)
+        UtilsPrefsGmhSt.instance(applicationContext).hzSharedPref.registerOnSharedPreferenceChangeListener(gmhPrefChngListener)
     }
 
     @RequiresApi(VERSION_CODES.M)
@@ -2064,9 +2065,9 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
     @RequiresApi(VERSION_CODES.M)
     override fun onDestroy() {
         // Log.d(TAG, "onDestroy() called")
-        UtilsPrefsGmhSt.instance(applicationContext).hzSharedPref.unregisterOnSharedPreferenceChangeListener(listener)
-        currentRefreshRateMode.removeOnPropertyChangedCallback(rrmChangeCallback)
-        isPowerSaveMode.removeOnPropertyChangedCallback(rrmChangeCallback)
+        UtilsPrefsGmhSt.instance(applicationContext).hzSharedPref.unregisterOnSharedPreferenceChangeListener(gmhPrefChngListener)
+        currentRefreshRateMode.removeOnPropertyChangedCallback(mPropertyChangeCallback)
+        isPowerSaveMode.removeOnPropertyChangedCallback(mPropertyChangeCallback)
         unregisterReceiver(mReceiver)
         sensorOnKey?.let{UtilsPrefsGmhSt.instance(applicationContext).gmhPrefSensorOnKey = it}
         masterJob.cancel()

@@ -158,6 +158,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
     companion object{
         internal var gmhAccessInstance: GalaxyMaxHzAccess? = null
+        private set
     }
 
     private val masterJob = SupervisorJob()
@@ -561,9 +562,9 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
     override fun onUnbind(intent: Intent?): Boolean {
         gmhAccessInstance = null
-        HzServiceHelperStn.instance(applicationContext).switchHz()
         doAdaptiveJob?.cancel()
         mUtilsRefreshRate.setPeakRefreshRate(prrActive.get()!!)
+        HzServiceHelperStn.instance(applicationContext).switchHz()
         return super.onUnbind(intent)
     }
 

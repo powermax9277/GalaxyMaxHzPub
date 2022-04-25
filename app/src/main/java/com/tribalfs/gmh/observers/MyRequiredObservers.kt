@@ -12,8 +12,12 @@ import android.provider.Settings.Secure.DEFAULT_INPUT_METHOD
 import android.provider.Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import com.tribalfs.gmh.*
+import com.tribalfs.gmh.DefaultApps
+import com.tribalfs.gmh.GalaxyMaxHzAccess.Companion.gmhAccessInstance
+import com.tribalfs.gmh.MyApplication
 import com.tribalfs.gmh.MyApplication.Companion.appScopeIO
+import com.tribalfs.gmh.R
+import com.tribalfs.gmh.UtilAccessibilityService
 import com.tribalfs.gmh.UtilAccessibilityService.checkAccessibility
 import com.tribalfs.gmh.helpers.*
 import com.tribalfs.gmh.helpers.CacheSettings.animatorAdj
@@ -54,7 +58,7 @@ internal class MyRequiredObservers(h: Handler?, private val appCtx: Context) : C
                         while (!ProfilesObj.isProfilesLoaded) { delay(200) }
                         UtilRefreshRateSt.instance(appCtx).updateModeBasedVariables()
                         UtilRefreshRateSt.instance(appCtx).updateAdaptiveModCachedParams()
-                        GalaxyMaxHzAccess.gmhAccessInstance?.setupAdaptiveEnhancer()
+                        gmhAccessInstance?.setupAdaptiveEnhancer()
 
                         currentRefreshRateMode.get().let{
                             if (it != REFRESH_RATE_MODE_STANDARD) {

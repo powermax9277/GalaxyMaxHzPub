@@ -102,6 +102,7 @@ class MyApplication : Application() {
                     } else {
                         myBrightnessObserver.stop()
                     }
+                    gmhAccessInstance?.setupAdaptiveEnhancer()
                 }
             }
         )
@@ -111,7 +112,7 @@ class MyApplication : Application() {
         appScopeIO.launch {
             withContext(Dispatchers.IO){ cacheSettings()} //suspend function
 
-            var waited = 0
+/*            var waited = 0
             var gmhInstanceCreated = gmhAccessInstance != null
             while (waited <= 5000 && !gmhInstanceCreated) {
                 delay(500)
@@ -119,7 +120,7 @@ class MyApplication : Application() {
                 gmhInstanceCreated = gmhAccessInstance != null
             }
 
-            gmhAccessInstance?.setupAdaptiveEnhancer()
+            gmhAccessInstance?.setupAdaptiveEnhancer()*/
 
             HzServiceHelperStn.instance(applicationContext).switchHz()
 
