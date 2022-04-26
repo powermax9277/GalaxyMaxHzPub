@@ -155,8 +155,11 @@ private val manualGameList = listOf(
 class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
     companion object{
+        init {
+            System.loadLibrary("native-lib");
+        }
         internal var gmhAccessInstance: GalaxyMaxHzAccess? = null
-        private set
+            private set
     }
 
     private val masterJob = SupervisorJob()
@@ -187,6 +190,8 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
             }
         }
     }
+
+
 
 
     private val autoSensorsOffRunnable: Runnable by lazy {
@@ -306,18 +311,16 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     private var hzText: TextView? = null
     private var hzOverlayOn: Boolean? = null
 
-    private val displayListener by lazy{ object: DisplayManager.DisplayListener  {
-        override fun onDisplayAdded(displayId: Int) {}
-        override fun onDisplayRemoved(displayId: Int) {}
-        override fun onDisplayChanged(arg0: Int) {
-            launch(Dispatchers.Main) {
-                val newHz = mDisplay.refreshRate.toInt()
-                updateRefreshRateViews(newHz)
-            }
-        }
-    }}
+     private val displayListener by lazy{ object: DisplayManager.DisplayListener  {
+         override fun onDisplayAdded(displayId: Int) {}
+         override fun onDisplayRemoved(displayId: Int) {}
+         override fun onDisplayChanged(displayId: Int) {
+             launch(Dispatchers.Main) {
+                 updateRefreshRateViews(mDisplay.refreshRate.toInt())
+             }
+         }
+     }}
 
-   // private val displayListener by lazy { MyDisplayListener(mDisplayChangeCallback) }
 
     private val networkCallback by lazy {
         object : ConnectivityManager.NetworkCallback() {
@@ -603,6 +606,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         }catch(_:Exception){ }
     }
 
+
     internal fun startHz() {
         hzStatus.set(PLAYING)
         hzNotifOn.set(mUtilsPrefGmh.gmhPrefHzNotifIsOn)
@@ -662,9 +666,9 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         lrrPref.removeOnPropertyChangedCallback(refreshRateModeChangeCallback)
     }
 
-    private fun updateRefreshRateViews(newHz: Int){
-        updateNotif(newHz.toString())
-        updateOverlay(newHz)
+    private fun updateRefreshRateViews(newHz: Int) {
+            updateOverlay(newHz)
+            updateNotif(newHz.toString())
     }
 
     private var ignoreSysUI = false
@@ -1085,18 +1089,19 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
     private fun updateOverlay(newHz: Int){
         launch(Dispatchers.Main) {
+            if (hzText == null) return@launch
             mTransfyHzJob?.cancel()
-            hzText?.setTextColor(if (newHz <= 60.05) Color.RED else getColor(R.color.refresh_rate))
-            hzText?.alpha = 0.85f
-            hzText?.text = newHz.toString()
+            hzText!!.setTextColor(if (newHz <= 60.05) Color.RED else getColor(R.color.refresh_rate))
+            hzText!!.alpha = 0.85f
+            hzText!!.text = newHz.toString()
 
-            mTransfyHzJob = launch{
+            mTransfyHzJob = launch {
                 delay(4000)
-                hzText?.alpha = 0.25f
+                hzText!!.alpha = 0.25f
                 mTransfyHzJob = null
             }
         }
     }
 
-
 }
+

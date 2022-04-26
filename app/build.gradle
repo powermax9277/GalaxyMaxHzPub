@@ -66,6 +66,13 @@ android {
   /*      freeCompilerArgs += [
                 "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi"]*/
     }
+
+    externalNativeBuild {
+        cmake {
+            path file('src/main/cpp/CMakeLists.txt')
+            version '3.18.1'
+        }
+    }
 }
 
 
