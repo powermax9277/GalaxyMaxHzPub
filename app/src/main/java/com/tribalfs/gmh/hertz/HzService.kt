@@ -80,14 +80,18 @@ internal class HzService : Service(), CoroutineScope{
 
     private val dm by lazy { applicationContext.getSystemService(DISPLAY_SERVICE) as DisplayManager}
     private val mDisplay by lazy { dm.getDisplay(displayId) }
+    private var prevHz = 0;
 
     private val displayListener by lazy{ object: DisplayManager.DisplayListener  {
         override fun onDisplayAdded(displayId: Int) {}
         override fun onDisplayRemoved(displayId: Int) {}
         override fun onDisplayChanged(displayId: Int) {
             launch(Dispatchers.Main) {
-                val newHz = mDisplay.refreshRate.toInt()
-                updateRefreshRateViews(newHz)
+                val curHz = mDisplay.refreshRate.toInt()
+                if (prevHz != curHz) {
+                    prevHz = curHz
+                    updateRefreshRateViews(curHz)
+                }
             }
         }
     }}

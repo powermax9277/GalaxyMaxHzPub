@@ -307,16 +307,22 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     private val mDisplay by lazy { dm.getDisplay(displayId) }
     private var hzText: TextView? = null
     private var hzOverlayOn: Boolean? = null
+    private var prevHz = 0;
 
-     private val displayListener by lazy{ object: DisplayManager.DisplayListener  {
-         override fun onDisplayAdded(displayId: Int) {}
-         override fun onDisplayRemoved(displayId: Int) {}
-         override fun onDisplayChanged(displayId: Int) {
-             launch(Dispatchers.Main) {
-                 updateRefreshRateViews(mDisplay.refreshRate.toInt())
-             }
-         }
-     }}
+    private val displayListener by lazy{ object: DisplayManager.DisplayListener  {
+        override fun onDisplayAdded(displayId: Int) {}
+        override fun onDisplayRemoved(displayId: Int) {}
+        override fun onDisplayChanged(displayId: Int) {
+            launch(Dispatchers.Main) {
+                val curHz = mDisplay.refreshRate.toInt()
+                if (prevHz != curHz) {
+                    prevHz = curHz
+                    updateRefreshRateViews(curHz)
+                }
+            }
+        }
+    }
+    }
 
 
     private val networkCallback by lazy {
@@ -664,8 +670,8 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     }
 
     private fun updateRefreshRateViews(newHz: Int) {
-            updateOverlay(newHz)
-            updateNotif(newHz.toString())
+        updateOverlay(newHz)
+        updateNotif(newHz.toString())
     }
 
     private var ignoreSysUI = false
@@ -738,14 +744,14 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
      }*/
 
 
-    /*override fun onKeyEvent(event: KeyEvent?): Boolean {
-        when (event?.keyCode) {
-            KEYCODE_VOLUME_UP, KEYCODE_VOLUME_DOWN -> {
-                handleVolumePressedJob()
-            }
+/*override fun onKeyEvent(event: KeyEvent?): Boolean {
+    when (event?.keyCode) {
+        KEYCODE_VOLUME_UP, KEYCODE_VOLUME_DOWN -> {
+            handleVolumePressedJob()
         }
-        return super.onKeyEvent(event)
-    }*/
+    }
+    return super.onKeyEvent(event)
+}*/
 
 
     @SuppressLint("SwitchIntDef")

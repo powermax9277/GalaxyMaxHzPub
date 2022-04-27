@@ -123,9 +123,6 @@ class UtilRefreshRateSt private constructor (val appCtx: Context) {
             isOfficialAdaptive = isAdaptiveSupportedUpd()
             isMultiResolution = isMultiResolutionUpd()
             minHzListForAdp = getMinHzListForAdpUpd()
-            if (minHzListForAdp?.indexOf(48) != -1) {
-                 typingRefreshRate = 48
-            }
         }
         updateModeBasedVariables()
     }
@@ -955,7 +952,10 @@ class UtilRefreshRateSt private constructor (val appCtx: Context) {
                     UtilsPrefsGmhSt.instance(appCtx).hzPrefMaxRefreshRate
                 }
             )
-            lrrPref.set(UtilsPrefsGmhSt.instance(appCtx).gmhPrefMinHzAdapt)
+            UtilsPrefsGmhSt.instance(appCtx).gmhPrefMinHzAdapt.let{
+                lrrPref.set(it)
+                typingRefreshRate = it.coerceAtLeast(if(minHzListForAdp?.indexOf(48) != -1) {48} else{ 60})
+            }
         }
     }
 
