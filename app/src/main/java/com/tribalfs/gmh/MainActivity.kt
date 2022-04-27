@@ -811,7 +811,6 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
         setupSizeSeekBar()
         setupAdaptDelaySeekBar()
         setupBrightnessSeekBar()
-        // setupMenuVisibility()//TODO
 
         viewModel.isValidAdFree.observe(this) { adFree ->
             isPremium.set(adFree)
