@@ -155,9 +155,6 @@ private val manualGameList = listOf(
 class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
     companion object{
-        init {
-            System.loadLibrary("native-lib");
-        }
         internal var gmhAccessInstance: GalaxyMaxHzAccess? = null
             private set
     }

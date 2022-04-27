@@ -931,7 +931,10 @@ class UtilRefreshRateSt private constructor (val appCtx: Context) {
         }else{
             setMinRefreshRate(0)
         }
-        lrrPref.set(UtilsPrefsGmhSt.instance(appCtx).gmhPrefMinHzAdapt)
+        UtilsPrefsGmhSt.instance(appCtx).gmhPrefMinHzAdapt.let{
+            lrrPref.set(it)
+            typingRefreshRate = it.coerceAtLeast(if(minHzListForAdp?.indexOf(48) != -1) {48} else{ 60})
+        }
         isFakeAdaptive.set(isFakeAdaptive())//don't interchange
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             TileService.requestListeningState(appCtx, ComponentName(appCtx, QSTileMinHz::class.java))
