@@ -307,7 +307,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     private val mDisplay by lazy { dm.getDisplay(displayId) }
     private var hzText: TextView? = null
     private var hzOverlayOn: Boolean? = null
-    private var prevHz = 0;
+    private var prevHz = 0
 
     private val displayListener by lazy{ object: DisplayManager.DisplayListener  {
         override fun onDisplayAdded(displayId: Int) {}
@@ -757,25 +757,17 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     @SuppressLint("SwitchIntDef")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
-
         if (!(isScreenOn.get() && applyAdaptiveMod.get()!!)) return
 
-
         when (event?.eventType) {
-
             TYPE_WINDOW_STATE_CHANGED -> {//32
-
                 if (event.contentChangeTypes != CONTENT_CHANGE_TYPE_UNDEFINED) return
-
                 if (event.packageName != null && event.className != null) {
-
                     if (event.packageName == SYSTEM_UI && event.className == VOLUME_PANEL){
                         handleVolumePressedJob()
                         return
                     }
                     doAdaptive()
-                    /* scanWindows()
-                     doAdaptive()*/
                     return
                 }
             }
@@ -789,16 +781,10 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
 
             TYPE_WINDOW_CONTENT_CHANGED -> {//2048
-
                 when (event.contentChangeTypes) {
-
                     CONTENT_CHANGE_TYPE_SUBTREE -> {//1
                         when (event.packageName?.toString()) {
-
-                            APPLICATION_ID ->{
-                                return
-                            }
-
+                            APPLICATION_ID ->{ return }
                             SYSTEM_UI -> {
                                 if (mKeyguardManager.isDeviceLocked) {
                                     if (pauseMinHz) {
@@ -830,10 +816,15 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
                                 /*Note: "android.view.ViewGroup" for expanded toolbar scrolling
                                 "android.widget.FrameLayout" launcher vertical scrolling*/
-                                if (!pauseMinHz && event.packageName != defaultKeyboardName) {
-                                    if (event.className == "android.widget.FrameLayout" || event.className == "android.view.ViewGroup" || (isOfficialAdaptive && min60)){
-                                        doAdaptive()
-                                        return
+                                if (event.packageName != defaultKeyboardName) {
+                                    if (!pauseMinHz ) {
+                                        if (event.className == "android.widget.FrameLayout"
+                                            || event.className == "android.view.ViewGroup"
+                                            || (isOfficialAdaptive && min60)
+                                        ) {
+                                            doAdaptive()
+                                            return
+                                        }
                                     }
                                 }else{
                                     isKeyboardOpen = true
@@ -868,7 +859,6 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
             TYPE_WINDOWS_CHANGED ->{ // 4194304
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-
                     when(event.windowChanges){
                         //For dragging pop-up windows
                         WINDOWS_CHANGE_BOUNDS -> {
@@ -883,7 +873,6 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                             return
                         }
                     }
-
                 }
             }
         }

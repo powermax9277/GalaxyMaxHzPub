@@ -8,7 +8,7 @@ object ProfilesObj: Serializable {
     @Volatile
     var refreshRateModeMap = mutableMapOf<String, List<Map<String, ResolutionDetails>>>()
 
-    var refreshRateModeMap2 = mutableListOf<DisplayModeData>()
+    //var refreshRateModeMap2 = mutableListOf<DisplayModeData>()
 
     var adaptiveModelsObj = mutableListOf<String>()
 
@@ -19,6 +19,7 @@ object ProfilesObj: Serializable {
     var loadComplete: Boolean = false// means all modes completely loaded
 }
 
+/*
 
 class DisplayModeData(
     val displayModeKey: String,
@@ -28,4 +29,4 @@ class DisplayModeData(
 class ResoData(
     val resoKey: String,
     val resosList: ResolutionDetails
-)
+)*/
