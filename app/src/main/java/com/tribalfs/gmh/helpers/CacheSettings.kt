@@ -12,15 +12,18 @@ object CacheSettings {
     internal var isXiaomi: Boolean = false
     internal var isOnePlus: Boolean = false
 
-    internal const val TIMEOUT_FACTOR = 1.5
+   // internal const val TIMEOUT_FACTOR = 1.5
     internal var isScreenOn = AtomicBoolean(true)
     internal var offScreenRefreshRate:String? = null
 
     internal val isPowerSaveMode = ObservableField<Boolean>() //Reflects SCREEN ON status only
 
-    internal var adaptiveDelayMillis = 900L
+    internal var adaptiveDelayMillis = 850L
     internal var animatorAdj = 0L
-    internal var adaptiveAccessTimeout: Long = (adaptiveDelayMillis * TIMEOUT_FACTOR.toLong()).coerceAtLeast(1400L)
+    /*internal var adaptiveAccessTimeout: Long = 1400L
+    internal fun updateAdaptiveAccessTimeOut(){
+        adaptiveAccessTimeout = (adaptiveDelayMillis * TIMEOUT_FACTOR.toLong()).coerceAtLeast(1400L)
+    }*/
 
     internal var displayId: Int = DEFAULT_DISPLAY
 

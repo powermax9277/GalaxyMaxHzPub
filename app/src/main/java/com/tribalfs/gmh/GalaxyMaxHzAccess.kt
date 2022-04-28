@@ -44,7 +44,6 @@ import androidx.databinding.Observable.OnPropertyChangedCallback
 import com.tribalfs.gmh.BuildConfig.APPLICATION_ID
 import com.tribalfs.gmh.callbacks.GmhBroadcastCallback
 import com.tribalfs.gmh.helpers.*
-import com.tribalfs.gmh.helpers.CacheSettings.adaptiveAccessTimeout
 import com.tribalfs.gmh.helpers.CacheSettings.animatorAdj
 import com.tribalfs.gmh.helpers.CacheSettings.applyAdaptiveMod
 import com.tribalfs.gmh.helpers.CacheSettings.currentBrightness
@@ -132,7 +131,9 @@ private val useStockAdaptiveList = listOf(
     "com.nbaimd",
     "com.twitter",
     "com.instagram",
-    "ss.android.ugc." //tiktok
+    "ss.android.ugc.", //tiktok
+    "com.sec.android.mimage.photoretouching",
+    "com.niksoftware.snapseed"
 )
 
 private val manualGameList = listOf(
@@ -366,13 +367,10 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
 
     private fun switchSensorsOffInner(targetState: Boolean) {
-
         if ( triesA < MAX_TRY) {
             launch {
                 var childs: List<AccessibilityNodeInfo>? = null
-
                 val sensorState = mNotifBar.isSensorsOff()
-
                 if (sensorState != null){
                     if (sensorState != targetState) {
                         while (childs == null && triesB < MAX_TRY) {
@@ -429,7 +427,6 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                                     }
                                 }catch (_: java.lang.Exception) { }
                             }
-
                             if (sensorOnKey != null){
                                 if ((sensorOnKey == initDesc) != targetState) {
                                     it.performAction(ACTION_CLICK)
@@ -442,7 +439,6 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                                     "On.","已开启。","Til.","פועל.","Включено","ON","Activé","Activado" -> {
                                         sensorOnKey = initDesc
                                     }
-
                                     else ->{
                                         UtilNotifBarSt.instance(applicationContext)
                                             .collapseNotificationBar()
@@ -551,7 +547,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         setupOverlay()
         setupAdaptiveEnhancer()
         this.serviceInfo.apply {
-            notificationTimeout = adaptiveAccessTimeout
+            notificationTimeout = 1400L
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 /*Set the recommended time that interactive controls
                 need to remain on the screen to support the user.*/
@@ -758,6 +754,8 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
         if (!(isScreenOn.get() && applyAdaptiveMod.get()!!)) return
 
+        /*
+        Log.d("TESTEST", "$event")*/
         when (event?.eventType) {
             TYPE_WINDOW_STATE_CHANGED -> {//32
                 if (event.contentChangeTypes != CONTENT_CHANGE_TYPE_UNDEFINED) return
@@ -950,6 +948,12 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         }
 
         if (isOfficialAdaptive){
+
+            /*if (packageName == "com.sec.android.mimage.photoretouching" ||
+            "com.niksoftware.snapseed" == packageName){
+                Log.d("TESTEST", "Catergory:$category")
+            }*/
+
             if(category == CATEGORY_GAME
                 || category == CATEGORY_VIDEO
                 || isPartOf(manualGameList, packageName)

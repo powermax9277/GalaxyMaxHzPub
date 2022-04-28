@@ -66,8 +66,6 @@ import com.tribalfs.gmh.dialogs.InfoDialog.Companion.QDM_INFO
 import com.tribalfs.gmh.dialogs.InfoDialog.Companion.SENSORS_OFF_INFO
 import com.tribalfs.gmh.dialogs.QSDialogs.getOverlaySettingIntent
 import com.tribalfs.gmh.helpers.*
-import com.tribalfs.gmh.helpers.CacheSettings.TIMEOUT_FACTOR
-import com.tribalfs.gmh.helpers.CacheSettings.adaptiveAccessTimeout
 import com.tribalfs.gmh.helpers.CacheSettings.adaptiveDelayMillis
 import com.tribalfs.gmh.helpers.CacheSettings.brightnessThreshold
 import com.tribalfs.gmh.helpers.CacheSettings.currentRefreshRateMode
@@ -1318,7 +1316,8 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                 seekBar.thumb = getThumb(seekBar.progress)
                 (seekBar.progress.toLong() * 1000).let {
                     adaptiveDelayMillis = it
-                    adaptiveAccessTimeout = it* TIMEOUT_FACTOR.toLong()
+                    //adaptiveAccessTimeout = it* TIMEOUT_FACTOR.toLong()
+                    //updateAdaptiveAccessTimeOut()
                     UtilsPrefsGmhSt.instance(applicationContext).hzPrefAdaptiveDelay = it
                     updateSwitchDown()
                 }

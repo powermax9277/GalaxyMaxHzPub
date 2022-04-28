@@ -14,8 +14,6 @@ import androidx.databinding.Observable.OnPropertyChangedCallback
 import com.tribalfs.gmh.GalaxyMaxHzAccess.Companion.gmhAccessInstance
 import com.tribalfs.gmh.UtilAccessibilityService.checkAccessibility
 import com.tribalfs.gmh.helpers.*
-import com.tribalfs.gmh.helpers.CacheSettings.TIMEOUT_FACTOR
-import com.tribalfs.gmh.helpers.CacheSettings.adaptiveAccessTimeout
 import com.tribalfs.gmh.helpers.CacheSettings.adaptiveDelayMillis
 import com.tribalfs.gmh.helpers.CacheSettings.brightnessThreshold
 import com.tribalfs.gmh.helpers.CacheSettings.currentBrightness
@@ -183,7 +181,8 @@ class MyApplication : Application() {
 
         UtilsPrefsGmhSt.instance(applicationContext).hzPrefAdaptiveDelay.let {
             adaptiveDelayMillis = it
-            adaptiveAccessTimeout = it * TIMEOUT_FACTOR.toLong()
+           // updateAdaptiveAccessTimeOut()
+            //adaptiveAccessTimeout = it * TIMEOUT_FACTOR.toLong()
         }
 
         isPremium.set((mUtilsPrefsAct.gmhPrefLicType == LIC_TYPE_ADFREE
