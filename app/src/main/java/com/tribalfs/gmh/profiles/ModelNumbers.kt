@@ -26,8 +26,8 @@ internal object ModelNumbers {
     const val S21_P_JP = "SCG10"
     const val S21_U = "SM-G998"
 
-
     const val S22 = "SM-S901"
+    const val S22_JP = "SCG13"
     const val S22P = "SM-S906"
     const val S22U = "SM-S908"
     const val S22U_JP = "SCG14"

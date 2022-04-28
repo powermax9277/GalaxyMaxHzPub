@@ -353,6 +353,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                 super.onCameraUnavailable(cameraId)
                 cameraOpen = true
                 updateAdaptiveFactors()
+                doAdaptive()
             }
         }
     }
@@ -493,9 +494,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     }
 
     private fun registerCameraCallback(){
-        try{
-            unregisterCameraCallback()
-        }catch (_: Exception){}
+        unregisterCameraCallback()
         mCameraManager.registerAvailabilityCallback(cameraCallback, mHandler)
     }
 

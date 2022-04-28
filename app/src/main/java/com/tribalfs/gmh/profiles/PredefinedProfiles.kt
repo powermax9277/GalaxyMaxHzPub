@@ -27,6 +27,8 @@ import com.tribalfs.gmh.profiles.ModelNumbers.S21_U
 import com.tribalfs.gmh.profiles.ModelNumbers.S22
 import com.tribalfs.gmh.profiles.ModelNumbers.S22P
 import com.tribalfs.gmh.profiles.ModelNumbers.S22U
+import com.tribalfs.gmh.profiles.ModelNumbers.S22U_JP
+import com.tribalfs.gmh.profiles.ModelNumbers.S22_JP
 import com.tribalfs.gmh.profiles.ModelNumbers.TS75G
 import com.tribalfs.gmh.profiles.ModelNumbers.TS7L
 import com.tribalfs.gmh.profiles.ModelNumbers.TS7LW
@@ -53,11 +55,11 @@ internal object PredefinedProfiles {
     fun get(context: Context, sevenCharModel: String): JSONObject? {
         val raw: InputStream
         when (sevenCharModel){
-            S22, S22P  -> {
+            S22, S22P, S22_JP  -> {
                 raw = context.resources.openRawResource(R.raw.x2340_1080_10_24_30_48_60_96_120)
             }
 
-            S22U  -> {
+            S22U, S22U_JP  -> {
                 raw = context.resources.openRawResource(R.raw.x3088_1440_10_24_30_48_60_96_120)
             }
 

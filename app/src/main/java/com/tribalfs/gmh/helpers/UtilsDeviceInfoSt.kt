@@ -29,6 +29,7 @@ import com.tribalfs.gmh.profiles.ModelNumbers.S22
 import com.tribalfs.gmh.profiles.ModelNumbers.S22P
 import com.tribalfs.gmh.profiles.ModelNumbers.S22U
 import com.tribalfs.gmh.profiles.ModelNumbers.S22U_JP
+import com.tribalfs.gmh.profiles.ModelNumbers.S22_JP
 import com.tribalfs.gmh.resochanger.SizeDensity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -93,7 +94,7 @@ class UtilsDeviceInfoSt private constructor(val appCtx: Context) {
     internal val isLowRefreshDevice: Boolean
         get() {
             return when (deviceModel) {
-                S22,S22P,S22U,S22U_JP -> true
+                S22,S22P,S22U,S22U_JP, S22_JP -> true
                 else -> false
             }
         }
