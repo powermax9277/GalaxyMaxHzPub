@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="lbl_enable_msm">Povolit plynulý pohyb</string>
-    <string name="buy_adfree">Koupit Premium</string>
+    <string name="buy_adfree">Koupit Premium verzi</string>
     <string name="resolution">Přepínač rozlišení a plynulosti pohybu</string>
     <string name="act">Aktivace Premium|Trial</string>
     <string name="max_hz">Max. frekvence</string>
@@ -11,6 +11,11 @@
     <string name="adaptive">Adaptivní</string>
     <string name="high">Vysoký</string>
     <string name="refresh_rate_mon">Monitor obnovovací frekvence</string>
+    <string name="left">Vlevo</string>
+    <string name="right">Vpravo</string>
+
+    <!-- <string name="left">Left</string>
+ <string name="right">Right</string> -->
     <string name="top">Nahoře</string>
     <string name="bottom">Dole</string>
     <string name="use_qstile_reso_switch">Pomocí přepínačů rychlého nastavení můžete snadno přepínat rozlišení obrazovky a měnit plynulost pohybu displeje.</string>
@@ -24,7 +29,7 @@
     <string name="chng_res_qs">%s aktuální rozlišení displeje nepodporuje nastavení vysoké / adaptivní obnovovací frekvence. Rozlišení můžete změnit pomocí přepínače v rychlém nastavení.</string>
     <string name="psm_on_inf">Během úsporného režimu je plynulost pohybu displeje standardně omezena na 60hz. Nejprve toto vypněte v nastavení a poté v aplikaci nastavte režim obnovovací frekvence na adaptivní / vysoká.\n\nAplikace může nastavení obejít po udělení speciálního oprávnění WRITE_SECURE_SETTINGS přes ADB.</string>
     <string name="rrm_std_inf">Plynulost pohybu displeje je aktuálně nastavena na Standardní. Nejdříve ji změňte v nastavení.\n\nTato aplikace může změnit plynulost pohybu displeje snadno na adaptivní či vysokou po provedení příkazu s pomocí ADB. Toto nastavení poté funguje i v režimu úspory energie.</string>
-    <string name="input_ac_inf">Pokud ztratíte prémiovou verzi aplikace v důsledku resetování tohoto zařízení, můžete ji znovu aktivovat zadáním aktivačního kódu zaslaného na váš e-mail.</string>
+    <string name="input_ac_inf">Pokud ztratíte premiovou verzi aplikace v důsledku resetování tohoto zařízení, můžete ji znovu aktivovat zadáním aktivačního kódu zaslaného na váš e-mail.</string>
     <string name="show_ns">Měřič rychlosti internetu</string>
     <string name="combined">Kombinovaný</string>
     <string name="upload">Nahrávání</string>
@@ -33,7 +38,7 @@
     <string name="overlay_pos">Umístění překrytí</string>
     <string name="overlay">Překrytí</string>
     <string name="statusbar">Stavový řádek</string>
-    <string name="perm_appx">Pokud udělíte speciální oprávnění přes ADB, tak můžete rozšířit možnosti aplikace:\n- Rychle přepínat rozlišení obrazovky\n- Použít adaptivní nebo vysokou plynulost pohybu obrazovky v úsporném režimu\n- Když je obrazovka vypnutá, tak se automaticky aktivuje režim úspory energie\n- Využít rychlého spánkového režimu (prémium verze)\n- Aplikovat režim adaptivní obnovovací frekvence i na zařízení, která nejsou podporována nativně (prémium verze)\n- Vypnutí automatických sensorů (prémium verze)</string>
+    <string name="perm_appx">Pokud udělíte speciální oprávnění přes ADB, tak můžete rozšířit možnosti aplikace:\n- Rychle přepínat rozlišení obrazovky\n- Použít adaptivní nebo vysokou plynulost pohybu obrazovky v úsporném režimu\n- Když je obrazovka vypnutá, tak se automaticky aktivuje režim úspory energie\n- Využít rychlého spánkového režimu (premium verze)\n- Aplikovat režim adaptivní obnovovací frekvence i na zařízení, která nejsou podporována nativně (premium verze)\n- Vypnutí automatických sensorů (premium verze)</string>
     <string name="ac_none">Nezadali jste aktivační kód</string>
     <string name="in_bd">Vložte aktivační kód</string>
     <string name="apply">Potvrdit</string>
@@ -46,15 +51,14 @@
     <string name="sot_no_perm">Oprávnění pro zobrazení nebylo uděleno!</string>
     <string name="cie">Chyba! Zkontrolujte prosím připojení k internetu a zkuste to znovu.</string>
     <string name="aca">Neplatný aktivační kód.</string>
-    <string name="afa">Prémiová verze byla úspěšně aktivována!</string>
-    <string name="afu">Prémiová zkušební verze již byla využita a její platnost vypršela.</string>
+    <string name="afa">Premiová verze byla úspěšně aktivována!</string>
+    <string name="afu">Premiová zkušební verze již byla využita a její platnost vypršela.</string>
     <plurals name="aha">
-        <item quantity="one">Prémiová zkušební verze aktivována: %d den zbývá.</item>
+        <item quantity="one">Premiová zkušební verze aktivována: %d den zbývá.</item>
         <item quantity="few">Prémiová zkušební verze aktivována: %d dny zbývají.</item>
-        <item quantity="many">Prémiová zkušební verze aktivována: %d dny zbývají.</item>
         <item quantity="other">Prémiová zkušební verze aktivována: %d dny zbývají.</item>
     </plurals>
-    <string name="nlh">Na tomto zařízení nebyla nalezena žádná prémiová licence:%s</string>
+    <string name="nlh">Na tomto zařízení nebyla nalezena žádná premiová licence:%s</string>
     <string name="edit">Upravit</string>
     <string name="quick_doz_mod">Rychlý spánkový režim</string>
     <string name="quick_mod_inf">Tato funkce přepne zařízení s vypnutým displejem rychleji do spánkového režimu, aby se zvýšila výdrž zařízení.</string>
@@ -73,7 +77,7 @@
     <string name="requires_ws_perm_h">%1$s k provedení této funkce je potřeba zvláštní povolení. Postup pro nastavení  přes ADB se dozvíte po kliknutí níže.\n\nTLDR: Run \'adb shell pm grant %2$s android.permission.WRITE_SECURE_SETTINGS\'\n\nToto je jednorázový postup.</string>
     <string name="std">Standardní</string>
     <string name="lbl_profiles_h">%sProfily pro rozlišení obrazovky a obnovovací frekvenci</string>
-    <string name="aot_perm_inf">This app needs permission to appear on top in order to work properly. You can disable the notification by long-pressing it and turning off the toggle that will appear.</string>
+    <string name="aot_perm_inf">Aby tato aplikace fungovala správně, tak potřebuje oprávnění k zobrazení v oznamovacím centru. Upozornění můžete deaktivovat dlouhým stisknutím a vypnutím v nabídce, která se zobrazí.</string>
     <string name="high_mode">Vysoká frekvence</string>
     <string name="std_mode">Standardní frekvence</string>
     <string name="adp_mode">Adaptivní režim</string>
@@ -81,35 +85,34 @@
     <string name="adb_setup">Nastavení ADB</string>
     <string name="dismiss">Zamítnout</string>
     <string name="allow">Povolit</string>
-    <string name="allow_aot">Povolit zobrazit nahoře</string>
-    <string name="allow_bg_act">Pro stabilní běh této aplikace povolte \'Povolit aktivitu na pozadí\' nebo deaktivujte \'Optimalizovat využití baterie\'.</string>
+    <string name="allow_aot">Povolit zobrazení v oznam. centru.</string>
+    <string name="allow_bg_act">Pro stabilní běh této aplikace povolte \'Povolit aktivitu na pozadí\' nebo deaktivujte \'Optimalizovat využití baterie\' pro tuto aplikaci.</string>
     <string name="help">Pomoc</string>
     <string name="reload_profiles">Znovu načíst profily</string>
     <string name="options">Možnosti</string>
-    <string name="data_usage"><u>Data Usage</u></string>
-    <string name="psm_options"><u>Možnosti režimu úspory energie</u></string>
-    <string name="disable_sync_on_so">Zakázat automatickou sync, když je obrazovka vypnutá</string>
-    <string name="autosync_settings"><u>Nastavení automatické sync</u></string>
-    <string name="apps_bat_opt_settings"><u>Nastavení optimalizace baterie</u></string>
-    <string name="brightness_threshold">Minimální jas pro adaptivní</string>
-    <string name="sensor_off_info">Senzory zařízení se automaticky vypnou, když je obrazovka vypnutá, dokud se zařízení neodemkne. To pomáhá minimalizovat pohybem vyvolané probuzení, které vybíjí baterii.</string>
-    <string name="sensors_off_note">Důležitá poznámka: Když je dlaždice SensorsOff zapnutá, kamera a mikrofon zařízení a další senzory jsou nepřístupné. Mezi ovlivněné funkce patří mimo jiné odemykání obličejem, slyšitelnost hlasových hovorů a detekce úhlu závěsu. Používejte to pouze tehdy, pokud jasně rozumíte účinku vypnutí senzorů.</string>
+    <string name="data_usage">&lt;u>Využití dat&lt;/u></string>
+    <string name="psm_options">&lt;u>Možnosti režimu úspory energie&lt;/u></string>
+    <string name="disable_sync_on_so">Zakázat automatickou synchronizaci, když je obrazovka vypnutá</string>
+    <string name="autosync_settings">&lt;u>Nastavení automatické synchronizace&lt;/u></string>
+    <string name="apps_bat_opt_settings">&lt;u>Nastavení optimalizace baterie&lt;/u></string>
+    <string name="brightness_threshold">Minimální jas pro adaptivní režim</string>
+    <string name="sensor_off_info">Senzory zařízení se automaticky deaktivují, když je obrazovka vypnutá. Toto trvá do doby odemčení zařízení.</string>
+    <string name="sensors_off_note">Důležitá poznámka: Když je zástupce SensorsOff v rychlém nastavení aktivován, tak jsou kamera, mikrofon zařízení a další senzory nedostupné. Mezi ovlivněné funkce patří např. odemykání obličejem, hlasové hovory, zapnutí oprazovky telefonu zvednutím apod. Funkci používejte pouze s vědomím rizik uvedených výše.\n\nFunkce nemusí být funkční v případě, že používáte nezabezpečenou obrazovku  v systému Android 12; alternativně lze oprávnění WRITE_SECURE_SETTINGS udělit u předchozích verzí systému Android.</string>
     <string name="auto_sensors_off_exp">Auto SENSORS OFF</string>
-    <string name="sensor_off_setup_info">Do this first: Enable \'Sensors Off\' tile in Settings > Developer options > Quick settings developer tiles. ></string>
-    <string name="dev_opt_setup_info">To enable Developer options, go to Settings > About phone > Software info and tap \'Build number\' 7x.</string>
-    <string name="so_location_info">Ensure to put the SENSOR Off tile within the first 4 quick settings slots.</string>
-    <string name="enable_write_settings">Enable Galaxy Max Hz change/write system settings permission.</string>
-    <string name="as_desc">This service is required for galaxy max hz mods to work.</string>
-    <string name="enable">Umožnit</string>
-    <string name="premium_features">Prémiové funkce</string>
-    <string name="prevent_high">Zabraňte přepnutí do vysokého režimu</string>
+    <string name="sensor_off_setup_info">Nejprve: Povolte dlaždici \'Sensors Off\' v Nastavení > Vývojářské možnosti > Dlaždice vývojáře s rych. nast. ></string>
+    <string name="dev_opt_setup_info">Chcete-li povolit možnosti vývojáře, tak přejděte do Nastavení > O telefonu > Informace o softwaru a 7x klepněte na „Číslo sestavení“.</string>
+    <string name="so_location_info">Ujistěte se, že je zástupce SENSOR Off vložen do jeddoho z prvních čtyř slotů pro rychlé nastavení.</string>
+    <string name="enable_write_settings">Povolte aplikaci Galaxy Max Hz oprávnění ke změně nastavení systému.</string>
+    <string name="as_desc">Tato služba je vyžadována pro správné fungování aplikace Galaxy Max Hz.</string>
+    <string name="enable">Povolit</string>
+    <string name="premium_features">Premiové funkce</string>
+    <string name="prevent_high">Zabránění přepnutí vysoké frekvence displeje</string>
     <plurals name="access_notif">
-        <item quantity="one">Accessibility service is required for the following - turn this off first to disable accessibility: %s</item>
-        <item quantity="few">Accessibility service is required for the following - turn these off first to disable accessibility: %s</item>
-        <item quantity="many">Accessibility service is required for the following - turn these off first to disable accessibility: %s</item>
-        <item quantity="other">Accessibility service is required for the following - turn these off first to disable accessibility: %s</item>
+        <item quantity="one">Služba usnadnění přístupu je vyžadována pro následující – pokud chcete přístupnost deaktivovat, nejprve ji vypněte:: %s</item>
+        <item quantity="few">Služby usnadnění přístupu jsou vyžadovány pro následující – pokud chcete přístupnost deaktivovat, nejprve ji vypněte: %s</item>
+        <item quantity="other">Služby usnadnění přístupu jsou vyžadovány pro následující – pokud chcete přístupnost deaktivovat, nejprve ji vypněte: %s</item>
     </plurals>
-    <string name="no_access_notif">Disabling accessibility service will cause unexpected behavior for the following enabled feature(s): %s</string>
-    <string name="acces_req">Enable Accessibility Service</string>
-    <string name="is_prem_ft">%s is premium feature</string>
+    <string name="no_access_notif">Zakázání služby usnadnění přístupu způsobí neočekávané chování pro následující povolené funkce: %s</string>
+    <string name="acces_req">Povolit službu usnadnění přístupu</string>
+    <string name="is_prem_ft">%s je premiová funkce</string>
 </resources>
