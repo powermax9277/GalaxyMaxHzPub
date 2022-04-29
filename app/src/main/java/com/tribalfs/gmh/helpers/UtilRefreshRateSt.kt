@@ -46,7 +46,9 @@ import com.tribalfs.gmh.profiles.ModelNumbers.S21_U
 import com.tribalfs.gmh.profiles.ModelNumbers.S22
 import com.tribalfs.gmh.profiles.ModelNumbers.S22P
 import com.tribalfs.gmh.profiles.ModelNumbers.S22U
+import com.tribalfs.gmh.profiles.ModelNumbers.S22U_D
 import com.tribalfs.gmh.profiles.ModelNumbers.S22U_JP
+import com.tribalfs.gmh.profiles.ModelNumbers.S22_D
 import com.tribalfs.gmh.profiles.ModelNumbers.S22_JP
 import com.tribalfs.gmh.profiles.ModelNumbers.TS75G
 import com.tribalfs.gmh.profiles.ModelNumbers.TS7L
@@ -80,7 +82,7 @@ class UtilRefreshRateSt private constructor (val appCtx: Context) {
     private val _listedHighestHz: Float?
         get() {
             return when (UtilsDeviceInfoSt.instance(appCtx).deviceModel) {
-                S20FE5G, S20FE, S21_U, TS7P, TS7W, TS7L, TS75G, TS7LW, ZF3, ZFp3, S22, S22_JP, S22P, S22U, S22U_JP, S21FE, TS8, TS8P, TS8U -> 120f
+                S20FE5G, S20FE, S21_U, TS7P, TS7W, TS7L, TS75G, TS7LW, ZF3, ZFp3, S22, S22_JP, S22P, S22U, S22U_JP, S22U_D, S21FE, TS8, TS8P, TS8U,S22_D -> 120f
                 else -> null
             }
         }

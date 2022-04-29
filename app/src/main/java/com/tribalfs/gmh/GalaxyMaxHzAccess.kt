@@ -948,6 +948,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
             null
         }
 
+
         if (isOfficialAdaptive){
 
             /*if (packageName == "com.sec.android.mimage.photoretouching" ||
@@ -955,7 +956,8 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                 Log.d("TESTEST", "Catergory:$category")
             }*/
 
-            if(category == CATEGORY_GAME
+            if(category == null
+                || category == CATEGORY_GAME
                 || category == CATEGORY_VIDEO
                 || isPartOf(manualGameList, packageName)
                 || isPartOf(manualVideoAppList, packageName)
@@ -968,7 +970,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                 return
             }
         }else{ //!isOfficialAdaptive
-            if(category == CATEGORY_GAME || isPartOf(manualGameList, packageName)) {
+            if(category == null || category == CATEGORY_GAME || isPartOf(manualGameList, packageName)) {
                 pauseMinHz = true
                 return
             }

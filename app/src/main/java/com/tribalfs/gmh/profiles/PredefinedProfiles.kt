@@ -5,11 +5,13 @@ import androidx.annotation.Keep
 import com.tribalfs.gmh.R
 import com.tribalfs.gmh.profiles.ModelNumbers.A525G
 import com.tribalfs.gmh.profiles.ModelNumbers.A52S5G
+import com.tribalfs.gmh.profiles.ModelNumbers.A52_D
+import com.tribalfs.gmh.profiles.ModelNumbers.A53
 import com.tribalfs.gmh.profiles.ModelNumbers.A725G
 import com.tribalfs.gmh.profiles.ModelNumbers.M25G
 import com.tribalfs.gmh.profiles.ModelNumbers.N20U
 import com.tribalfs.gmh.profiles.ModelNumbers.N20U5G
-import com.tribalfs.gmh.profiles.ModelNumbers.N20U5G_NTT
+import com.tribalfs.gmh.profiles.ModelNumbers.N20U5G_D
 import com.tribalfs.gmh.profiles.ModelNumbers.N20U_JP
 import com.tribalfs.gmh.profiles.ModelNumbers.S20
 import com.tribalfs.gmh.profiles.ModelNumbers.S205G
@@ -21,6 +23,7 @@ import com.tribalfs.gmh.profiles.ModelNumbers.S20U
 import com.tribalfs.gmh.profiles.ModelNumbers.S21
 import com.tribalfs.gmh.profiles.ModelNumbers.S21FE
 import com.tribalfs.gmh.profiles.ModelNumbers.S21_JP
+import com.tribalfs.gmh.profiles.ModelNumbers.S21_O
 import com.tribalfs.gmh.profiles.ModelNumbers.S21_P
 import com.tribalfs.gmh.profiles.ModelNumbers.S21_P_JP
 import com.tribalfs.gmh.profiles.ModelNumbers.S21_U
@@ -28,6 +31,7 @@ import com.tribalfs.gmh.profiles.ModelNumbers.S22
 import com.tribalfs.gmh.profiles.ModelNumbers.S22P
 import com.tribalfs.gmh.profiles.ModelNumbers.S22U
 import com.tribalfs.gmh.profiles.ModelNumbers.S22U_JP
+import com.tribalfs.gmh.profiles.ModelNumbers.S22_D
 import com.tribalfs.gmh.profiles.ModelNumbers.S22_JP
 import com.tribalfs.gmh.profiles.ModelNumbers.TS75G
 import com.tribalfs.gmh.profiles.ModelNumbers.TS7L
@@ -55,7 +59,7 @@ internal object PredefinedProfiles {
     fun get(context: Context, sevenCharModel: String): JSONObject? {
         val raw: InputStream
         when (sevenCharModel){
-            S22, S22P, S22_JP  -> {
+            S22, S22P, S22_JP, S22_D  -> {
                 raw = context.resources.openRawResource(R.raw.x2340_1080_10_24_30_48_60_96_120)
             }
 
@@ -63,7 +67,7 @@ internal object PredefinedProfiles {
                 raw = context.resources.openRawResource(R.raw.x3088_1440_10_24_30_48_60_96_120)
             }
 
-            S20FE5G, S20FE, A725G, A525G, A52S5G, M25G -> {
+            S20FE5G, S20FE, A725G, A525G, A52S5G, M25G, A53, A52_D -> {
                 raw = context.resources.openRawResource(R.raw.x2400_1080_60_120)
             }
 
@@ -75,7 +79,7 @@ internal object PredefinedProfiles {
                 raw = context.resources.openRawResource(R.raw.x3200_1440_60_96_120)
             }
 
-            S21, S21_P, S21_JP, S21_P_JP -> {
+            S21, S21_P, S21_JP, S21_P_JP, S21_O -> {
                 raw = context.resources.openRawResource(R.raw.x2400_1080_48_60_96_120)
             }
 
@@ -87,7 +91,7 @@ internal object PredefinedProfiles {
                 raw = context.resources.openRawResource(R.raw.x2640_1080_48_60_96_120)
             }
 
-            N20U, N20U5G, N20U_JP, N20U5G_NTT -> {
+            N20U, N20U5G, N20U_JP, N20U5G_D -> {
                 raw = context.resources.openRawResource(R.raw.x3088_1440_48_60_96_120)
             }
 

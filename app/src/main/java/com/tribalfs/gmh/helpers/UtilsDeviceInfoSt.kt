@@ -16,6 +16,8 @@ import androidx.annotation.RequiresApi
 import com.tribalfs.gmh.helpers.CacheSettings.displayId
 import com.tribalfs.gmh.profiles.ModelNumbers.A525G
 import com.tribalfs.gmh.profiles.ModelNumbers.A52S5G
+import com.tribalfs.gmh.profiles.ModelNumbers.A52_D
+import com.tribalfs.gmh.profiles.ModelNumbers.A53
 import com.tribalfs.gmh.profiles.ModelNumbers.A725G
 import com.tribalfs.gmh.profiles.ModelNumbers.M25G
 import com.tribalfs.gmh.profiles.ModelNumbers.S20
@@ -28,7 +30,9 @@ import com.tribalfs.gmh.profiles.ModelNumbers.S20U
 import com.tribalfs.gmh.profiles.ModelNumbers.S22
 import com.tribalfs.gmh.profiles.ModelNumbers.S22P
 import com.tribalfs.gmh.profiles.ModelNumbers.S22U
+import com.tribalfs.gmh.profiles.ModelNumbers.S22U_D
 import com.tribalfs.gmh.profiles.ModelNumbers.S22U_JP
+import com.tribalfs.gmh.profiles.ModelNumbers.S22_D
 import com.tribalfs.gmh.profiles.ModelNumbers.S22_JP
 import com.tribalfs.gmh.resochanger.SizeDensity
 import kotlinx.coroutines.Dispatchers
@@ -85,8 +89,8 @@ class UtilsDeviceInfoSt private constructor(val appCtx: Context) {
     internal val regularMinHz: Int
         get() {
             return when (deviceModel) {
-                S22, S22P -> 48
-                S22U, S22U_JP -> 24
+                S22, S22P, S22_JP, S22_D -> 48
+                S22U, S22U_JP, S22U_D -> 24
                 else -> SIXTY_HZ
             }
         }
@@ -94,7 +98,7 @@ class UtilsDeviceInfoSt private constructor(val appCtx: Context) {
     internal val isLowRefreshDevice: Boolean
         get() {
             return when (deviceModel) {
-                S22,S22P,S22U,S22U_JP, S22_JP -> true
+                S22,S22P,S22U,S22U_JP,S22_JP,S22_D,S22U_D -> true
                 else -> false
             }
         }
@@ -102,7 +106,7 @@ class UtilsDeviceInfoSt private constructor(val appCtx: Context) {
     internal val isGoogleMapsTrickDevice: Boolean
         get() {
             return when (deviceModel) {
-                S20, S205G, S20P_E, S20FE, S20FE5G, S20U, S20P_S, A525G, A52S5G, A725G, M25G -> true
+                S20, S205G, S20P_E, S20FE, S20FE5G, S20U, S20P_S, A525G, A52S5G, A725G, M25G, A52_D, A53 -> true
                 else -> false
             }
         }
