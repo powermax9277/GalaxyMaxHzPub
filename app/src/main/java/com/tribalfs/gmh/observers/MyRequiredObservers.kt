@@ -221,9 +221,10 @@ internal class MyRequiredObservers(h: Handler?, private val appCtx: Context) : C
             } else  {
                 UtilsPrefsGmhSt.instance(appCtx).gmhPrefForceLowestSoIsOn = false
                 UtilsPrefsGmhSt.instance(appCtx).gmhPrefDisableSyncIsOn = false
+                //IsFakeAdaptive mean lower than regularMinHz
                 if (isFakeAdaptive.get() == true && isOfficialAdaptive) {
-                    lrrPref.set(UtilsDeviceInfoSt.instance(appCtx).regularMinHz)
-                    UtilsPrefsGmhSt.instance(appCtx).gmhPrefMinHzAdapt = UtilsDeviceInfoSt.instance(appCtx).regularMinHz
+                    lrrPref.set( UtilsDeviceInfoSt.instance(appCtx).regularMinHz)
+                // UtilsPrefsGmhSt.instance(appCtx).gmhPrefMinHzAdapt = regMinHz
                 }
                 UtilsPrefsGmhSt.instance(appCtx).gmhPrefSensorsOff = false
 

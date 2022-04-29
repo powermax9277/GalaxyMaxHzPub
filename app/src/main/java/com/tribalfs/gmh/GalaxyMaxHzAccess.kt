@@ -133,7 +133,8 @@ private val useStockAdaptiveList = listOf(
     "com.instagram",
     "ss.android.ugc.", //tiktok
     "com.sec.android.mimage.photoretouching",
-    "com.niksoftware.snapseed"
+    "com.niksoftware.snapseed",
+    "com.google.android.googlequicksearchbox"
 )
 
 private val manualGameList = listOf(
@@ -228,8 +229,9 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                     disablePsm.set(false)
 
                     doAdaptiveJob?.cancel()
+
                     // Workaround for AOD Bug on some device????
-                    mUtilsRefreshRate.clearPeakAndMinRefreshRate()
+                    //mUtilsRefreshRate.clearPeakAndMinRefreshRate()//TODO check removal
 
                     if (UtilsPrefsGmhSt.instance(applicationContext).gmhPrefForceLowestSoIsOn) {
                         mHandler.postDelayed(forceLowestRunnable,800)
@@ -265,7 +267,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                             UtilsPrefsGmhSt.instance(applicationContext).gmhPrefMinHzAdapt
                         }
 
-                        mUtilsRefreshRate.setRefreshRate(prrActive.get()!!, mHz)
+                        mUtilsRefreshRate.setRefreshRate(prrActive.get()!!, null)
                         currentRefreshRateMode.get()?.let {
                             if (screenOffRefreshRateMode != it) {
                                 mUtilsRefreshRate.setRefreshRateMode(it)
@@ -754,8 +756,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
         if (!(isScreenOn.get() && applyAdaptiveMod.get()!!)) return
 
-        /*
-        Log.d("TESTEST", "$event")*/
+        /*Log.d("TESTEST", "$event")*/
         when (event?.eventType) {
             TYPE_WINDOW_STATE_CHANGED -> {//32
                 if (event.contentChangeTypes != CONTENT_CHANGE_TYPE_UNDEFINED) return
@@ -999,7 +1000,12 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     }
 
     private fun initialAdaptive() {
-        mUtilsRefreshRate.setRefreshRate(prrActive.get()!!, UtilsPrefsGmhSt.instance(applicationContext).gmhPrefMinHzAdapt)
+        val minHz =  if (UtilsPrefsGmhSt.instance(applicationContext).gmhPrefMinHzAdapt > UtilsDeviceInfoSt.instance(applicationContext).regularMinHz) {
+            UtilsPrefsGmhSt.instance(applicationContext).gmhPrefMinHzAdapt
+        }else{
+            0
+        }
+        mUtilsRefreshRate.setRefreshRate(prrActive.get()!!, minHz)
         doAdaptive()
     }
 
@@ -1072,7 +1078,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                         if (UtilsPrefsGmhSt.instance(applicationContext).gmhPrefMinHzAdapt > UtilsDeviceInfoSt.instance(applicationContext).regularMinHz) {
                             mUtilsRefreshRate.setRefreshRate(prrActive.get()!!, UtilsPrefsGmhSt.instance(applicationContext).gmhPrefMinHzAdapt)
                         }else{
-                            mUtilsRefreshRate.setRefreshRate(prrActive.get()!!, lowestHzForAllMode)
+                            mUtilsRefreshRate.setRefreshRate(prrActive.get()!!, 0)
                         }
                     }
                     mLayout?.setOnTouchListener(null)

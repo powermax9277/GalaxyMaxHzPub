@@ -1,6 +1,6 @@
 package com.tribalfs.gmh.taskerplugin
 
-import android.accessibilityservice.AccessibilityService.*
+import android.accessibilityservice.AccessibilityService.KEYGUARD_SERVICE
 import android.app.KeyguardManager
 import android.content.Context
 import android.content.Intent
@@ -350,6 +350,8 @@ class DynamicInputRunner : TaskerPluginRunnerActionNoOutputOrInput() {
                                     }
                                     if (minHz >= prrActive.get()!!) return@launch
 
+
+                                    //Log.d("TESTEST", "gmhPrefMinHzAdapt3 to:$minHz")
                                     UtilsPrefsGmhSt.instance(appCtx).gmhPrefMinHzAdapt = minHz
 
                                     UtilRefreshRateSt.instance(appCtx).applyMinHz()

@@ -124,7 +124,8 @@ private const val KEY_JSON_PAYPAL_BUY_URL = "0x12"
 private const val KEY_JSON_HELP_URL = "0x24"
 
 //TODO keep standard mode on reboot, touch and hold detection
-@ExperimentalCoroutinesApi
+
+@OptIn(ExperimentalCoroutinesApi::class)
 class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickHandler*/, CoroutineScope {
 
     private val viewModel: MyViewModel by viewModels()
@@ -134,7 +135,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
     private val mNetspeedService by lazy {NetSpeedServiceHelperStn.instance(applicationContext)}
     private val hzOverlaySizes = listOf(10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40)
     private val hzAdaptiveDelays = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
-   // private var mList: Menu? = null
+    // private var mList: Menu? = null
     private var ignoreUnblockHzNotifState = true
     private var ignoreUnblockNetSpeedNotifState = true
     private lateinit var thumbView : View
@@ -1464,7 +1465,11 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                     if (isPowerSaveMode.get() != true || !isPremium.get()!!) {
                         UtilsPrefsGmhSt.instance(applicationContext).hzPrefMaxRefreshRate.let{
                             prrActive.set( it)
-                            mUtilsRefreshRate.setRefreshRate(it, UtilsPrefsGmhSt.instance(applicationContext).gmhPrefMinHzAdapt)
+                            if (UtilsPrefsGmhSt.instance(applicationContext).gmhPrefMinHzAdapt > UtilsDeviceInfoSt.instance(applicationContext).regularMinHz) {
+                                mUtilsRefreshRate.setRefreshRate(it, UtilsPrefsGmhSt.instance(applicationContext).gmhPrefMinHzAdapt)
+                            }else{
+                                mUtilsRefreshRate.setRefreshRate(it, 0)
+                            }
                         }
                     }
 
@@ -1488,6 +1493,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
     }
 
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @SuppressLint("NewApi")
     private fun setupAdaptMinHzSeekBar() {
         if (minHzListForAdp?.size?:0 < 2) {
@@ -1534,6 +1540,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                         }//dont return
                     }
 
+                   // Log.d("TESTEST", "gmhPrefMinHzAdapt2 to:${seekBar.progress}")
                     UtilsPrefsGmhSt.instance(applicationContext).gmhPrefMinHzAdapt = seekBar.progress
 
                     mBinding.minHzAdaptive = seekBar.progress

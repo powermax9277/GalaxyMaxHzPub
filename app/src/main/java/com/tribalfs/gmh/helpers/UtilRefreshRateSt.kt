@@ -713,11 +713,11 @@ class UtilRefreshRateSt private constructor (val appCtx: Context) {
     }
 
 
-    @ExperimentalCoroutinesApi
+    @OptIn(ExperimentalCoroutinesApi::class)
     internal fun setRefreshRate(refreshRate: Int, minHz: Int?): Boolean {
         if (refreshRate > 0) {
             setPeakRefreshRate(refreshRate)
-            if(currentRefreshRateMode.get() == REFRESH_RATE_MODE_ALWAYS && isOfficialAdaptive) {
+            if(currentRefreshRateMode.get() == REFRESH_RATE_MODE_ALWAYS/*&& isOfficialAdaptive*/) {
                 setMinRefreshRate(refreshRate)
             } else {
                 minHz?.let{setMinRefreshRate(it)}
@@ -905,7 +905,8 @@ class UtilRefreshRateSt private constructor (val appCtx: Context) {
             return if (rrm != REFRESH_RATE_MODE_STANDARD) {
                 val highest = getThisRrmAndResoHighestHz(resStrLxw, rrm)
                 if (highest > SIXTY_HZ) {
-                    setRefreshRateMode(rrm) && setRefreshRate(prrActive.get()!!, null)
+                    UtilsDeviceInfoSt.instance(appCtx).regularMinHz
+                    setRefreshRateMode(rrm) && setRefreshRate(prrActive.get()!!, 0)
                 } else {
                     if (autoApplyStandard) {
                         setRefreshRateMode(REFRESH_RATE_MODE_STANDARD)
@@ -945,6 +946,10 @@ class UtilRefreshRateSt private constructor (val appCtx: Context) {
     internal fun updateAdaptiveModCachedParams() {
         synchronized(mLock) {
             canApplyFakeAdaptive = canApplyFakeAdaptiveInt()//don't interchange
+            UtilsPrefsGmhSt.instance(appCtx).gmhPrefMinHzAdapt.let{
+                lrrPref.set(it)
+                typingRefreshRate = it.coerceAtLeast(if(minHzListForAdp?.indexOf(48) != -1) {48} else{ 60})
+            }
             isFakeAdaptive.set(isFakeAdaptive())//don't interchange
             prrActive.set(
                 if (isPowerSaveMode.get() == true && isPremium.get()!!) {
@@ -953,10 +958,7 @@ class UtilRefreshRateSt private constructor (val appCtx: Context) {
                     UtilsPrefsGmhSt.instance(appCtx).hzPrefMaxRefreshRate
                 }
             )
-            UtilsPrefsGmhSt.instance(appCtx).gmhPrefMinHzAdapt.let{
-                lrrPref.set(it)
-                typingRefreshRate = it.coerceAtLeast(if(minHzListForAdp?.indexOf(48) != -1) {48} else{ 60})
-            }
+
         }
     }
 
@@ -976,8 +978,9 @@ class UtilRefreshRateSt private constructor (val appCtx: Context) {
     @ExperimentalCoroutinesApi
     private fun isFakeAdaptive(): Boolean {
         return (currentRefreshRateMode.get() == REFRESH_RATE_MODE_SEAMLESS)
-                && (hasWriteSecureSetPerm || gmhAccessInstance != null)
+                && (hasWriteSystemSetPerm || gmhAccessInstance != null)
                 && (if (isOfficialAdaptive) (UtilsPrefsGmhSt.instance(appCtx).gmhPrefMinHzAdapt < UtilsDeviceInfoSt.instance(appCtx).regularMinHz) else true)
+                && (if (isOfficialAdaptive) (lrrPref.get()!! < UtilsDeviceInfoSt.instance(appCtx).regularMinHz) else true)
     }
 
 

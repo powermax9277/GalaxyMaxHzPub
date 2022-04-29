@@ -38,7 +38,12 @@ internal class PsmChangeHandler private constructor(val appCtx: Context) {
                 //Change Max Hz back to Std Prr
                 UtilsPrefsGmhSt.instance(appCtx).hzPrefMaxRefreshRate.let {
                     prrActive.set(it)
-                    UtilRefreshRateSt.instance(appCtx).setRefreshRate(it, UtilsPrefsGmhSt.instance(appCtx).gmhPrefMinHzAdapt)
+                    if (UtilsPrefsGmhSt.instance(appCtx).gmhPrefMinHzAdapt > UtilsDeviceInfoSt.instance(appCtx).regularMinHz) {
+                        UtilRefreshRateSt.instance(appCtx)
+                            .setRefreshRate(it, UtilsPrefsGmhSt.instance(appCtx).gmhPrefMinHzAdapt)
+                    }else{
+                        UtilRefreshRateSt.instance(appCtx).setRefreshRate(it,0)
+                    }
                 }
             }
         }
