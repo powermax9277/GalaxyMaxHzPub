@@ -11,11 +11,8 @@
     <string name="adaptive">Adaptiv</string>
     <string name="high">Hoch</string>
     <string name="refresh_rate_mon">Bildwiederholrate überwachen</string>
-    <string name="left">Links</string>
-    <string name="right">Rechts</string>
-
-    <!-- <string name="left">Left</string>
- <string name="right">Right</string> -->
+  <!--  <string name="left">Links</string>
+    <string name="right">Rechts</string>-->
     <string name="top">Oben</string>
     <string name="bottom">Unten</string>
     <string name="use_qstile_reso_switch">Verwenden Sie die Schnelleinstellungskachel, um zwischen Auflösungen zu wechseln.</string>
@@ -89,11 +86,11 @@
     <string name="help">Hilfe</string>
     <string name="reload_profiles">Profile neu laden</string>
     <string name="options">Optionen</string>
-    <string name="data_usage">&lt;u>Datennutzung&lt;/u></string>
-    <string name="psm_options">&lt;u>Optionen für den Energiesparmodus&lt;/u></string>
+    <string name="data_usage"><u>Datennutzung</u></string>
+    <string name="psm_options"><u>Optionen für den Energiesparmodus</u></string>
     <string name="disable_sync_on_so">Automatische Synchronisation deaktivieren, wenn der Bildschirm ausgeschaltet ist.</string>
-    <string name="autosync_settings">&lt;u>Einstellungen zur automatischen Synchronisation&lt;/u></string>
-    <string name="apps_bat_opt_settings">&lt;u>Einstellungen zur Akkuoptimierung&lt;/u></string>
+    <string name="autosync_settings"><u>Einstellungen zur automatischen Synchronisation</u></string>
+    <string name="apps_bat_opt_settings"><u>Einstellungen zur Akkuoptimierung</u></string>
     <string name="brightness_threshold">Mindesthelligkeit bei Adaptiv</string>
     <string name="sensor_off_info">Die Gerätesensoren werden beim Ausschalten des Bildschirms automatisch ausgeschaltet, bis das Gerät entsperrt wird. Dies trägt dazu bei, bewegungsinduzierte Bildschirmeinschaltungen zu minimieren, was den Akkuverbrauch reduziert.</string>
     <string name="sensors_off_note">Wichtiger Hinweis: Während die Kachel Sensors Off aktiviert ist, sind die Kamera und das Mikrofon des Geräts sowie andere Sensoren nicht zugänglich. Zu den betroffenen Funktionen gehören unter anderem Gesichtsentsperrung, Hörbarkeit bei Sprachanrufen und Scharnierwinkelerkennung. Verwenden Sie dies nur, wenn Sie die Auswirkungen der Aktivierung von Sensoren klar verstehen.</string>
