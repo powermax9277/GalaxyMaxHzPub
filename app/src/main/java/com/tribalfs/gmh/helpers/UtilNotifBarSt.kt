@@ -91,13 +91,6 @@ internal class UtilNotifBarSt private constructor (val appCtx: Context) {
             sensorPrivacyManager.getDeclaredMethod("isSensorPrivacyEnabled").invoke(sensorPrivacyService) as Boolean
         }catch(_: Exception){
             (CheckBlacklistApiSt.instance(appCtx).setAllowed())
-            /*launch(Dispatchers.Main) {
-                Toast.makeText(
-                    applicationContext,
-                    "Error reading device sensors state. Reboot this device and try again.",
-                    Toast.LENGTH_LONG
-                ).show()
-            }*/
             null
         }
     }
@@ -118,34 +111,6 @@ internal class UtilNotifBarSt private constructor (val appCtx: Context) {
         }
     }
 
-    /*
-    @SuppressLint("PrivateApi", "BlockedPrivateApi")
-    private fun isSensorOff(): Boolean {
-        @SuppressLint("WrongConstant")
-        val sensorPrivacyService: Any? = appCtx.getSystemService("sensor_privacy")
-        return Class.forName("android.hardware.SensorPrivacyManager")
-            .getDeclaredMethod("isSensorPrivacyEnabled")
-            .invoke(sensorPrivacyService) as Boolean
-    }
-
-    private fun isDevModeEnabled():Boolean{
-        return UtilsSettingsSt.get(appCtx).getConfig(
-            GLOBAL,
-            DEVELOPMENT_SETTINGS_ENABLED
-        ) == "1"
-
-        val classes = Class.forName("com.android.settings.development.qstile.DevelopmentTiles").declaredClasses
-
-                var sensorTile: Class<*>? = null
-                for (cls in classes){
-                    if (cls.simpleName == "SensorsOff"){
-                        sensorTile = cls
-                        break
-                    }
-                }
-                sensorTile?.getDeclaredMethod("setIsEnabled", Boolean::class.java)?.invoke(null, true)
-
-    }*/
 
 
 }

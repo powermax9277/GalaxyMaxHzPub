@@ -21,8 +21,7 @@ class ResolutionChangeApi (val context: Context) {
         if (d != null) {
             try {
                 val serviceManager = Class.forName("android.os.ServiceManager")
-                val service: Method =
-                    serviceManager.getDeclaredMethod("getService", String::class.java)
+                val service: Method = serviceManager.getDeclaredMethod("getService", String::class.java)
                 val binder = service.invoke(null, "window") as IBinder
                 val windowManagerStub = Class.forName("android.view.IWindowManager").classes[0]
                 val serviceObj = windowManagerStub.getMethod("asInterface", IBinder::class.java)
