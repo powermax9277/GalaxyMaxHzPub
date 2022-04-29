@@ -23,7 +23,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-@ExperimentalCoroutinesApi
 @RequiresApi(Build.VERSION_CODES.N)
 class QSTileResSw : TileService() {
 
@@ -45,6 +44,7 @@ class QSTileResSw : TileService() {
 
 
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     override fun onClick() {
         super.onClick()
 

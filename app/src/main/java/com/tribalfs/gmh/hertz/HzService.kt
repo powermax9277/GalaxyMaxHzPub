@@ -1,6 +1,5 @@
 package com.tribalfs.gmh.hertz
 
-import android.annotation.SuppressLint
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -44,7 +43,6 @@ import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
 
-@SuppressLint("InlinedApi")
 internal class HzService : Service(), CoroutineScope{
 
     companion object {
@@ -70,6 +68,7 @@ internal class HzService : Service(), CoroutineScope{
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
         }else{
+            @Suppress("DEPRECATION")
             WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY
         },
         WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE

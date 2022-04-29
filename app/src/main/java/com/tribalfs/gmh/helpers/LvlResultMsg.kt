@@ -7,15 +7,13 @@ import com.tribalfs.gmh.R
 import com.tribalfs.gmh.callbacks.LvlSbMsgCallback
 import com.tribalfs.gmh.dialogs.DialogActCode
 import com.tribalfs.gmh.sharedprefs.*
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 internal class LvlResultMsg(
     private val appCompatActivity: AppCompatActivity,
     private val mUtilsPrefsAct: UtilsPrefsAct,
     private val modelVariant: String) {
 
-    
-   @ExperimentalCoroutinesApi
+
    fun showMsg(lvlSbMsgCallback: LvlSbMsgCallback, licType: Int?){
 
         when (licType?:mUtilsPrefsAct.gmhPrefLicType){

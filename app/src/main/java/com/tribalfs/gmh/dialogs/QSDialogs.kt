@@ -11,9 +11,11 @@ import com.tribalfs.gmh.BuildConfig
 import com.tribalfs.gmh.MyApplication
 import com.tribalfs.gmh.R
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 
 object QSDialogs {
+    @OptIn(ExperimentalCoroutinesApi::class)
     fun getPermissionDialog(context: Context): AlertDialog {
         val appCtx = context.applicationContext
         val builder = getDialog(context)

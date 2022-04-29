@@ -1,6 +1,5 @@
 package com.tribalfs.gmh
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import android.provider.Settings
@@ -16,11 +15,11 @@ import kotlinx.coroutines.*
 @OptIn(ExperimentalCoroutinesApi::class)
 object UtilAccessibilityService {
 
-    @SuppressLint("NewApi")
-    @ExperimentalCoroutinesApi
+    @RequiresApi(Build.VERSION_CODES.M)
     private val serviceName = GalaxyMaxHzAccess::class.java.name
 
     private val mLock = Any()
+    @RequiresApi(Build.VERSION_CODES.M)
     internal fun isAccessibilityEnabled(appCtx: Context): Boolean {
         synchronized(mLock) {
             val mContentResolver = appCtx.contentResolver
@@ -30,6 +29,7 @@ object UtilAccessibilityService {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     internal fun allowAccessibility(appCtx: Context, add: Boolean) {
         synchronized(mLock) {
             CoroutineScope(Dispatchers.IO).launch {

@@ -9,7 +9,6 @@ import com.tribalfs.gmh.MyApplication.Companion.appScopeIO
 import com.tribalfs.gmh.R
 import com.tribalfs.gmh.UtilAccessibilityService.allowAccessibility
 import com.tribalfs.gmh.dialogs.QSDialogs
-import com.tribalfs.gmh.helpers.*
 import com.tribalfs.gmh.helpers.CacheSettings.currentRefreshRateMode
 import com.tribalfs.gmh.helpers.CacheSettings.hasWriteSecureSetPerm
 import com.tribalfs.gmh.helpers.CacheSettings.isOfficialAdaptive
@@ -17,6 +16,10 @@ import com.tribalfs.gmh.helpers.CacheSettings.isPremium
 import com.tribalfs.gmh.helpers.CacheSettings.lrrPref
 import com.tribalfs.gmh.helpers.CacheSettings.minHzListForAdp
 import com.tribalfs.gmh.helpers.CacheSettings.prrActive
+import com.tribalfs.gmh.helpers.REFRESH_RATE_MODE_SEAMLESS
+import com.tribalfs.gmh.helpers.UtilRefreshRateSt
+import com.tribalfs.gmh.helpers.UtilTileIcon
+import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -24,7 +27,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 
 
-@ExperimentalCoroutinesApi
 @RequiresApi(Build.VERSION_CODES.N)
 class QSTileMinHz : TileService() {
 
@@ -70,6 +72,7 @@ class QSTileMinHz : TileService() {
 
 
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     override fun onClick() {
         super.onClick()
 
@@ -121,6 +124,7 @@ class QSTileMinHz : TileService() {
     }
 
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     private fun checkAccessibilityPerm(): Boolean{
         return if (
             gmhAccessInstance == null

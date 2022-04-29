@@ -14,12 +14,13 @@ import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 
-@ExperimentalCoroutinesApi
+
 internal class MyBrightnessObserver(h: Handler?, private val appCtx: Context) : ContentObserver(h) {
 
     private val brightnessFloatUri = Settings.System.getUriFor(SCREEN_BRIGHTNESS_FLOAT)
     private val brightnessUri = Settings.System.getUriFor(Settings.System.SCREEN_BRIGHTNESS)
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     override fun onChange(selfChange: Boolean, uri: Uri?) {
         when (uri) {
             brightnessFloatUri, brightnessUri -> {

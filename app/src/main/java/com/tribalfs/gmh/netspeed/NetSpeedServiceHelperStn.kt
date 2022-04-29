@@ -3,10 +3,12 @@ package com.tribalfs.gmh.netspeed
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import androidx.annotation.RequiresApi
 import com.tribalfs.gmh.GalaxyMaxHzAccess.Companion.gmhAccessInstance
 import com.tribalfs.gmh.helpers.SingletonMaker
 import com.tribalfs.gmh.netspeed.NetSpeedService.Companion.netSpeedService
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 
 internal class NetSpeedServiceHelperStn private constructor(context: Context)  {
@@ -27,10 +29,13 @@ internal class NetSpeedServiceHelperStn private constructor(context: Context)  {
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.M)
     fun updateNetSpeed(){
         runNetSpeed(null)
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
+    @OptIn(ExperimentalCoroutinesApi::class)
     fun runNetSpeed(enable: Boolean?){
         mUtilsPrefGmh.gmhPrefNetSpeedIsOn = enable ?: mUtilsPrefGmh.gmhPrefNetSpeedIsOn
         if (mUtilsPrefGmh.gmhPrefNetSpeedIsOn ) {

@@ -25,8 +25,9 @@ class HzServiceHelperStn private constructor(context: Context) {
     private val appCtx = context.applicationContext
     private val mHzSharePref by lazy {UtilsPrefsGmhSt.instance(appCtx)}
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @RequiresApi(Build.VERSION_CODES.M)
-    @ExperimentalCoroutinesApi
+
     fun updateHzSize(size: Int?) {
         size?.let{
             mHzSharePref.gmhPrefHzOverlaySize = it.toFloat()
@@ -40,8 +41,8 @@ class HzServiceHelperStn private constructor(context: Context) {
         }
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @RequiresApi(Build.VERSION_CODES.M)
-    @ExperimentalCoroutinesApi
     fun updateHzGravity(gravity: Int){
         mHzSharePref.gmhPrefHzPosition = gravity
         if (mHzSharePref.gmhPrefHzIsOn) {
@@ -54,8 +55,8 @@ class HzServiceHelperStn private constructor(context: Context) {
     }
 
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @RequiresApi(Build.VERSION_CODES.M)
-    @ExperimentalCoroutinesApi
     fun switchOverlay(showOverlayHz: Boolean) {
       //  Log.d(TAG, "switchOverlay() called $showOverlayHz")
         mHzSharePref.gmhPrefHzOverlayIsOn = showOverlayHz
@@ -70,15 +71,14 @@ class HzServiceHelperStn private constructor(context: Context) {
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
-    @ExperimentalCoroutinesApi
-    internal fun switchHz() {
+   internal fun switchHz() {
         try {
             switchHz(null, null, null)
         }catch (_: Exception){}
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @RequiresApi(Build.VERSION_CODES.M)
-    @ExperimentalCoroutinesApi
     internal fun switchHz(isSwOn: Boolean?, showOverlayHz: Boolean?, showNotifHz: Boolean?) {
         isSwOn?.let{mHzSharePref.gmhPrefHzIsOn = it}
         showOverlayHz?.let{mHzSharePref.gmhPrefHzOverlayIsOn = showOverlayHz}

@@ -110,9 +110,7 @@ class UtilRefreshRateSt private constructor (val appCtx: Context) {
 
     }
 
-
-    @ExperimentalCoroutinesApi
-    //@Synchronized
+    @OptIn(ExperimentalCoroutinesApi::class)
     private fun updateCacheSettings() {
         synchronized(mLock) {
             supportedHzIntAllMod = getSupportedHzIntAllModUpd()
@@ -128,7 +126,8 @@ class UtilRefreshRateSt private constructor (val appCtx: Context) {
         updateModeBasedVariables()
     }
 
-    @ExperimentalCoroutinesApi
+
+    @OptIn(ExperimentalCoroutinesApi::class)
     fun updateModeBasedVariables() {
         synchronized(mLock) {
             supportedHzIntCurMod = getSupportedHzIntCurModUpd()
@@ -154,7 +153,8 @@ class UtilRefreshRateSt private constructor (val appCtx: Context) {
         }
     }
 
-    @ExperimentalCoroutinesApi
+
+    @OptIn(ExperimentalCoroutinesApi::class)
     internal fun requestListeningAllTiles() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             TileService.requestListeningState(
@@ -172,7 +172,8 @@ class UtilRefreshRateSt private constructor (val appCtx: Context) {
         }
     }
 
-    @ExperimentalCoroutinesApi
+
+    @OptIn(ExperimentalCoroutinesApi::class)
     private fun requestListeningHzTiles() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             TileService.requestListeningState(
@@ -186,7 +187,7 @@ class UtilRefreshRateSt private constructor (val appCtx: Context) {
         }
     }
 
-    @ExperimentalCoroutinesApi
+
     private suspend fun loadProfilesFromBackEnd(): Boolean = withContext(Dispatchers.IO) {
 
         if (UtilsPrefsGmhSt.instance(appCtx).gmhRefetchProfile) {//Forced or Scheduled Refetch
@@ -222,7 +223,7 @@ class UtilRefreshRateSt private constructor (val appCtx: Context) {
     }
 
 
-    @ExperimentalCoroutinesApi
+
     private suspend fun loadFromPredefinedProfiles(): Boolean = withContext(Dispatchers.IO){
         // Log.d(TAG, "isLocalProfileSaved: called")
         val isLocalProfileSaved =
@@ -240,22 +241,10 @@ class UtilRefreshRateSt private constructor (val appCtx: Context) {
         } else {
              return@withContext false
         }
-       /* return if (isLocalProfileSaved != null) {
-            UtilsPrefsGmhSt.instance(appCtx).gmhPrefDisplayModesObjectInJson = isLocalProfileSaved
-            if (loadProfilesFromPref()) {
-                updateCacheSettings()
-                ProfilesObj.loadComplete = true
-                true
-            } else {
-                false
-            }
-        } else {
-            false
-        }*/
+
     }
 
 
-    @ExperimentalCoroutinesApi
     private suspend fun readAndLoadProfileFromPhone(): Boolean = withContext(Dispatchers.IO) {
 
        val isStandardMode =
@@ -336,11 +325,9 @@ class UtilRefreshRateSt private constructor (val appCtx: Context) {
                 }
                 refreshRateModeMap[key] = resMapList
             }
-           // return true
             return@withContext true
         } else {
-            //  Log.d(TAG, "No saved refresh rate profiles found.")
-            //return false
+
             return@withContext false
         }
     }
@@ -702,7 +689,7 @@ class UtilRefreshRateSt private constructor (val appCtx: Context) {
     }
 
 
-    internal fun clearPeakAndMinRefreshRate() {
+    private fun clearPeakAndMinRefreshRate() {
         if (hasWriteSystemSetPerm) {
             deleteRefreshRate(PEAK_REFRESH_RATE)
             deleteRefreshRate(MIN_REFRESH_RATE)
@@ -729,22 +716,6 @@ class UtilRefreshRateSt private constructor (val appCtx: Context) {
         return true
     }
 
-
-/*    internal fun getResoAndRefRateModeArr(currentRefreshRateMode: String?): ResoNameMode{
-        val reso = UtilDeviceInfoSt.instance(appCtx).getDisplayResolution()
-        val resoCat = UtilsResoName.getName(
-            reso.height,
-            reso.width
-        )
-
-        val mode = when (currentRefreshRateMode ?: samRefreshRateMode) {
-            REFRESH_RATE_MODE_SEAMLESS -> appCtx.getString(R.string.adp_mode)
-            REFRESH_RATE_MODE_STANDARD -> appCtx.getString(R.string.std_mode)
-            REFRESH_RATE_MODE_ALWAYS -> appCtx.getString(R.string.high_mode)
-            else -> "?"
-        }
-        return ResoNameMode(resoCat, mode)
-    }*/
 
     private val mLock = Object()
 
@@ -864,13 +835,14 @@ class UtilRefreshRateSt private constructor (val appCtx: Context) {
                 .getCurrentDisplay().refreshRate.toInt()
     }
 
-    @ExperimentalCoroutinesApi
+
     @RequiresApi(Build.VERSION_CODES.M)
     internal fun setPrefOrAdaptOrHighRefreshRateMode(resStrLxw: String?): Boolean{
         return setPrefOrAdaptOrHighRefreshRateMode(resStrLxw, false)
     }
 
-    @ExperimentalCoroutinesApi
+
+    @OptIn(ExperimentalCoroutinesApi::class)
     @RequiresApi(Build.VERSION_CODES.M)
     internal fun setPrefOrAdaptOrHighRefreshRateMode(resStrLxw: String?, autoApplyStandard: Boolean): Boolean{
         return try {
@@ -891,7 +863,8 @@ class UtilRefreshRateSt private constructor (val appCtx: Context) {
     }
 
 
-    @ExperimentalCoroutinesApi
+
+    @OptIn(ExperimentalCoroutinesApi::class)
     @RequiresApi(Build.VERSION_CODES.M)
     internal fun tryThisRrm(rrm: String, resStrLxw: String?) : Boolean {
         return tryThisRrm(rrm, resStrLxw, false)

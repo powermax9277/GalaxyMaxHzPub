@@ -1,6 +1,5 @@
 package com.tribalfs.gmh.netspeed
 
-import android.annotation.SuppressLint
 import android.app.*
 import android.app.PendingIntent.FLAG_IMMUTABLE
 import android.content.BroadcastReceiver
@@ -37,6 +36,7 @@ private const val NOTIFICATION_ID_NET_SPEED = 7
 private const val UPDATE_INTERVAL = 1200L
 internal const val EXTRA_STREAM = "es"
 internal const val EXTRA_SPEED_UNIT = "eu"
+
 
 class NetSpeedService : Service(), CoroutineScope {
 
@@ -77,11 +77,13 @@ class NetSpeedService : Service(), CoroutineScope {
 
                 if ((usedRxdHBytes > 10 || usedRxdHBytes > 10) && usedTime > 0) {
                     SpeedCalculator.instance(applicationContext).apply {
-                        updateNotification(
-                            getSpeed(usedTime,usedTxdHBytes)/*up*/,
-                            getSpeed(usedTime,usedRxdHBytes)/*down*/,
-                            getSpeed(usedTime,usedRxdHBytes + usedTxdHBytes)
-                        )
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            updateNotification(
+                                getSpeed(usedTime,usedTxdHBytes)/*up*/,
+                                getSpeed(usedTime,usedRxdHBytes)/*down*/,
+                                getSpeed(usedTime,usedRxdHBytes + usedTxdHBytes)
+                            )
+                        }
                     }
                     mLastRxBytes = currentRxBytes
                     mLastTxBytes = currentTxBytes
@@ -91,6 +93,7 @@ class NetSpeedService : Service(), CoroutineScope {
                 delay(UPDATE_INTERVAL)
             }
         }
+
 
     private fun startNetStatInternal(){
         continueMeasureNetStat = true
@@ -102,6 +105,7 @@ class NetSpeedService : Service(), CoroutineScope {
         continueMeasureNetStat = false
         measureNetStat.cancel()
     }
+
 
     private val pauseNetStatRunnable = Runnable {
         if (!isScreenOn.get()) {
@@ -116,7 +120,6 @@ class NetSpeedService : Service(), CoroutineScope {
 
     private val mScreenStatusReceiver by lazy {
         object : BroadcastReceiver() {
-            @RequiresApi(Build.VERSION_CODES.M)
             override fun onReceive(context: Context?, intent: Intent?) {
                 when (intent?.action) {
                     Intent.ACTION_SCREEN_ON -> {
@@ -148,7 +151,6 @@ class NetSpeedService : Service(), CoroutineScope {
     }
 
 
-    @RequiresApi(Build.VERSION_CODES.M)
     private fun setupNotification() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             (NotificationChannel(
@@ -168,8 +170,12 @@ class NetSpeedService : Service(), CoroutineScope {
             }
         }
 
+        val pendingIntent: PendingIntent? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            PendingIntent.getActivity(applicationContext, 0, dataUsageSettingsIntent, FLAG_IMMUTABLE)
+        } else {
+            null
+        }
 
-        val pendingIntent: PendingIntent = PendingIntent.getActivity(applicationContext, 0, dataUsageSettingsIntent, FLAG_IMMUTABLE)
 
         notificationBuilderInstance = (if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             Notification.Builder(applicationContext, CHANNEL_ID_NET_SPEED)
@@ -184,7 +190,7 @@ class NetSpeedService : Service(), CoroutineScope {
             setCategory(Notification.CATEGORY_STATUS)
             setVisibility(Notification.VISIBILITY_PRIVATE)
             setLocalOnly(true)
-            if (!isOnePlus) {setContentIntent(pendingIntent)}
+            pendingIntent?.let{if (!isOnePlus) {setContentIntent(it)}}
             setAutoCancel(false)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 setCustomContentView(mNotificationContentView)
@@ -194,7 +200,6 @@ class NetSpeedService : Service(), CoroutineScope {
     }
 
 
-    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate() {
         super.onCreate()
         netSpeedService = this
@@ -228,7 +233,7 @@ class NetSpeedService : Service(), CoroutineScope {
         super.onDestroy()
     }
 
-    @SuppressLint("NewApi")
+    @RequiresApi(Build.VERSION_CODES.M)
     private suspend fun updateNotification(
         up: SpeedCalculator.Speed.SpeedDetails,
         down: SpeedCalculator.Speed.SpeedDetails,
@@ -263,7 +268,7 @@ class NetSpeedService : Service(), CoroutineScope {
                 }
             }
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                 setCustomContentView(RemoteViews(mNotificationContentView).apply {
                     setTextViewText(
                         R.id.notificationTextDl,

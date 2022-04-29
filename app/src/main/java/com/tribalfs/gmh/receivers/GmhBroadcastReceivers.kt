@@ -30,16 +30,14 @@ import com.tribalfs.gmh.netspeed.NetSpeedService.Companion.netSpeedService
 import com.tribalfs.gmh.netspeed.NetSpeedServiceHelperStn
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Runnable
 import kotlinx.coroutines.launch
-
 
 
 //private const val PREF_NET_TYPE_LTE_GSM_WCDMA    = 9 /* LTE, GSM/WCDMA */
 //private const val PREF_NET_TYPE_5G_LTE_GSM_WCDMA = 26
 
-@ExperimentalCoroutinesApi
+
 open class GmhBroadcastReceivers(private val appCtx: Context,
                                  private val gmhBroadcastCallback: GmhBroadcastCallback,
                                  private val scope: CoroutineScope,

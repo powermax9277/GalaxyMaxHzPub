@@ -22,7 +22,7 @@ class ResolutionChangeUtil (context: Context) {
     private val appCtx = context.applicationContext
     //internal val UtilRefreshRateSt.instance(appCtx) by lazy { UtilRefreshRateSt.instance(appCtx) }
 
-    @ExperimentalCoroutinesApi
+    @OptIn(ExperimentalCoroutinesApi::class)
     suspend fun changeRes(reso: Size?): Int? {
         return if (hasWriteSecureSetPerm || UtilPermSt.instance(appCtx).hasWriteSecurePerm()) {
             if (changeResInternal(reso)) {
@@ -84,7 +84,7 @@ class ResolutionChangeUtil (context: Context) {
         return SizeDensity(nextReso!!.w, nextReso!!.h, newDen)
     }
 
-    @ExperimentalCoroutinesApi
+
     private suspend fun changeResInternal(providedNextReso: Size?): Boolean = withContext(Dispatchers.IO) {
 
 

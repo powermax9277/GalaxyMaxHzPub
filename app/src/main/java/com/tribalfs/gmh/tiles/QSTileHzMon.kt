@@ -14,7 +14,6 @@ import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @RequiresApi(Build.VERSION_CODES.N)
-@ExperimentalCoroutinesApi
 class QSTileHzMon : TileService() {
 
     override fun onStartListening() {
@@ -31,6 +30,7 @@ class QSTileHzMon : TileService() {
     }
 
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     override fun onClick() {
         super.onClick()
         if (gmhAccessInstance == null && !UtilPermSt.instance(applicationContext).hasOverlayPerm()

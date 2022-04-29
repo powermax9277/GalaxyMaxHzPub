@@ -32,7 +32,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 
-@ExperimentalCoroutinesApi
 @RequiresApi(Build.VERSION_CODES.N)
 class QSTileMaxHz : TileService() {
 
@@ -91,6 +90,7 @@ class QSTileMaxHz : TileService() {
 
 
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     override fun onClick() {
         super.onClick()
 

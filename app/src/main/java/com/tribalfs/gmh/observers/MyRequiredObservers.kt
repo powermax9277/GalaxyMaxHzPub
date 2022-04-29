@@ -45,11 +45,11 @@ private val inputMethodUri =  Settings.Secure.getUriFor(DEFAULT_INPUT_METHOD)
 private val animationScaleUri =  Settings.Global.getUriFor(ANIMATOR_DURATION_SCALE)
 
 @RequiresApi(Build.VERSION_CODES.M)
-@ExperimentalCoroutinesApi
 internal class MyRequiredObservers(h: Handler?, private val appCtx: Context) : ContentObserver(h) {
     private var dozeConfCtr = 0
     private var dozeConflictChecker: Job? = null
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     override fun onChange(selfChange: Boolean, uri: Uri?) {
         when (uri) {
             refreshRateModeUri -> {
@@ -183,6 +183,7 @@ internal class MyRequiredObservers(h: Handler?, private val appCtx: Context) : C
         }
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     private fun notifyAccessibilityNeed() = appScopeIO.launch{
 
         val featuresOn = UtilsPrefsGmhSt.instance(appCtx).getEnabledAccessibilityFeatures()

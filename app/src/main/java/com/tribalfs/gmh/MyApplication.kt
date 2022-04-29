@@ -46,7 +46,7 @@ import org.acra.data.StringFormat
 import org.acra.sender.HttpSender
 
 
-@ExperimentalCoroutinesApi
+
 @AcraCore(reportFormat= StringFormat.JSON)
 @AcraHttpSender(uri = "https://script.google.com/macros/s/AKfycbybr-F6rCLr8fTk0jYvz_ohCOcNLwsSPCNxhYUlX-KtvLE9JT0/exec",
     httpMethod = HttpSender.Method.POST,
@@ -68,6 +68,7 @@ class MyApplication : Application() {
 
 
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate() {
         //Log.d(TAG, "onCreate called")
@@ -151,6 +152,7 @@ class MyApplication : Application() {
     }
 
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     private suspend fun cacheSettings() {
 
         isPowerSaveMode.set(

@@ -147,6 +147,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
 
     private val mReceiver = object: BroadcastReceiver() {
         @SuppressLint("InlinedApi")
+        @RequiresApi(VERSION_CODES.M)
         override fun onReceive(context: Context, intent: Intent) {
             when (intent.action){
                 ACTION_NOTIFICATION_CHANNEL_BLOCK_STATE_CHANGED -> {
@@ -986,6 +987,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
     }
 
 
+    @RequiresApi(VERSION_CODES.M)
     private fun switchNetSpeed(bool: Boolean) {
 
         if ((netSpeedService != null) == bool) return
@@ -1883,6 +1885,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
     }
 
 
+    @RequiresApi(VERSION_CODES.M)
     private fun updateNetSpeed(addFree: Boolean){
         if (!addFree){
             if (UtilsPrefsGmhSt.instance(applicationContext).gmhPrefNetSpeedIsOn) {
