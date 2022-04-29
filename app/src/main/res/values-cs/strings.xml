@@ -11,11 +11,6 @@
     <string name="adaptive">Adaptivní</string>
     <string name="high">Vysoký</string>
     <string name="refresh_rate_mon">Monitor obnovovací frekvence</string>
-    <string name="left">Vlevo</string>
-    <string name="right">Vpravo</string>
-
-    <!-- <string name="left">Left</string>
- <string name="right">Right</string> -->
     <string name="top">Nahoře</string>
     <string name="bottom">Dole</string>
     <string name="use_qstile_reso_switch">Pomocí přepínačů rychlého nastavení můžete snadno přepínat rozlišení obrazovky a měnit plynulost pohybu displeje.</string>
@@ -56,6 +51,7 @@
     <plurals name="aha">
         <item quantity="one">Prémiová zkušební verze aktivována: %d den zbývá.</item>
         <item quantity="few">Prémiová zkušební verze aktivována: %d dny zbývají.</item>
+        <item quantity="many">Prémiová zkušební verze aktivována: %d dny zbývají.</item>
         <item quantity="other">Prémiová zkušební verze aktivována: %d dny zbývají.</item>
     </plurals>
     <string name="nlh">Na tomto zařízení nebyla nalezena žádná prémiová licence:%s</string>
@@ -90,11 +86,11 @@
     <string name="help">Pomoc</string>
     <string name="reload_profiles">Znovu načíst profily</string>
     <string name="options">Možnosti</string>
-    <string name="data_usage">&lt;u>Data Usage&lt;/u></string>
-    <string name="psm_options">&lt;u>Možnosti režimu úspory energie&lt;/u></string>
+    <string name="data_usage"><u>Data Usage</u></string>
+    <string name="psm_options"><u>Možnosti režimu úspory energie</u></string>
     <string name="disable_sync_on_so">Zakázat automatickou sync, když je obrazovka vypnutá</string>
-    <string name="autosync_settings">&lt;u>Nastavení automatické sync&lt;/u></string>
-    <string name="apps_bat_opt_settings">&lt;u>Nastavení optimalizace baterie&lt;/u></string>
+    <string name="autosync_settings"><u>Nastavení automatické sync</u></string>
+    <string name="apps_bat_opt_settings"><u>Nastavení optimalizace baterie</u></string>
     <string name="brightness_threshold">Minimální jas pro adaptivní</string>
     <string name="sensor_off_info">Senzory zařízení se automaticky vypnou, když je obrazovka vypnutá, dokud se zařízení neodemkne. To pomáhá minimalizovat pohybem vyvolané probuzení, které vybíjí baterii.</string>
     <string name="sensors_off_note">Důležitá poznámka: Když je dlaždice SensorsOff zapnutá, kamera a mikrofon zařízení a další senzory jsou nepřístupné. Mezi ovlivněné funkce patří mimo jiné odemykání obličejem, slyšitelnost hlasových hovorů a detekce úhlu závěsu. Používejte to pouze tehdy, pokud jasně rozumíte účinku vypnutí senzorů.</string>
@@ -110,6 +106,7 @@
     <plurals name="access_notif">
         <item quantity="one">Accessibility service is required for the following - turn this off first to disable accessibility: %s</item>
         <item quantity="few">Accessibility service is required for the following - turn these off first to disable accessibility: %s</item>
+        <item quantity="many">Accessibility service is required for the following - turn these off first to disable accessibility: %s</item>
         <item quantity="other">Accessibility service is required for the following - turn these off first to disable accessibility: %s</item>
     </plurals>
     <string name="no_access_notif">Disabling accessibility service will cause unexpected behavior for the following enabled feature(s): %s</string>
