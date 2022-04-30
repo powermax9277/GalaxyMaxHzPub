@@ -4,10 +4,10 @@
     <string name="buy_adfree">Koupit Premium verzi</string>
     <string name="resolution">Přepínač rozlišení a plynulosti pohybu</string>
     <string name="act">Aktivace Premium|Trial</string>
-    <string name="max_hz">Max. frekvence</string>
+    <string name="max_hz">Adaptivní Max.</string>
     <string name="max_hz_for_psm">Max. frekvence v úsporném režimu</string>
     <string name="feat_n_a">Změna rozlišení není podporována</string>
-    <string name="min_hz_for_toggle">Spodní hranice frekvence</string>
+    <string name="min_hz_for_toggle">Spodní hranice frekvence pro zástupce</string>
     <string name="adaptive">Adaptivní</string>
     <string name="high">Vysoký</string>
     <string name="refresh_rate_mon">Monitor obnovovací frekvence</string>
@@ -17,9 +17,9 @@
 -->
     <string name="top">Nahoře</string>
     <string name="bottom">Dole</string>
-    <string name="use_qstile_reso_switch">Pomocí přepínačů rychlého nastavení můžete snadno přepínat rozlišení obrazovky a měnit plynulost pohybu displeje.</string>
+    <string name="use_qstile_reso_switch">Pomocí přepínačů rychlého nastavení můžete snadno měnit rozlišení a obnovovací frekvenci displeje.</string>
     <string name="center">Střed</string>
-    <string name="info_qs_max_hz">Zahrnuje přepínače rychlého nastavení pro min. a max. frekvenci.</string>
+    <string name="info_qs_max_hz">Nastavení hodnoty přepínače rychlého nastavení pro Min. a Max. frekvenci.</string>
     <string name="info_qs_rtrr">Zahrnuje přepínač rychlého nastavení pro zapnutí sledování obnovovací frekvence.</string>
     <string name="s_off_mod">Režimy vypnutého displeje</string>
     <string name="force_hz_mod">Vynutit nejnižší frekvenci</string>
@@ -30,7 +30,7 @@
     <string name="rrm_std_inf">Plynulost pohybu displeje je aktuálně nastavena na Standardní. Nejdříve ji změňte v nastavení.\n\nTato aplikace může změnit plynulost pohybu displeje snadno na adaptivní či vysokou po provedení příkazu s pomocí ADB. Toto nastavení poté funguje i v režimu úspory energie.</string>
     <string name="input_ac_inf">Pokud ztratíte premiovou verzi aplikace v důsledku resetování tohoto zařízení, můžete ji znovu aktivovat zadáním aktivačního kódu zaslaného na váš e-mail.</string>
     <string name="show_ns">Měřič rychlosti internetu</string>
-    <string name="combined">Kombinovaný</string>
+    <string name="combined">Kombinovaná</string>
     <string name="upload">Nahrávání</string>
     <string name="download">Stahování</string>
     <string name="font_size">Velikost písma</string>
@@ -39,7 +39,7 @@
     <string name="statusbar">Stavový řádek</string>
     <string name="perm_appx">Pokud udělíte speciální oprávnění přes ADB, tak můžete rozšířit možnosti aplikace:\n- Rychle přepínat rozlišení obrazovky\n- Použít adaptivní nebo vysokou plynulost pohybu obrazovky v úsporném režimu\n- Když je obrazovka vypnutá, tak se automaticky aktivuje režim úspory energie\n- Využít rychlého spánkového režimu (premium verze)\n- Aplikovat režim adaptivní obnovovací frekvence i na zařízení, která nejsou podporována nativně (premium verze)\n- Vypnutí automatických sensorů (premium verze)</string>
     <string name="ac_none">Nezadali jste aktivační kód</string>
-    <string name="in_bd">Vložte aktivační kód</string>
+    <string name="in_bd">Vložit aktivační kód</string>
     <string name="apply">Potvrdit</string>
     <string name="psm_on">Úsporný režim je zapnut</string>
     <string name="chng_res">Změna rozlišení displeje</string>
@@ -58,19 +58,19 @@
         <item quantity="many">Prémiová zkušební verze aktivována: %d dny zbývají.</item>
         <item quantity="other">Prémiová zkušební verze aktivována: %d dny zbývají.</item>
     </plurals>
-    <string name="nlh">Na tomto zařízení nebyla nalezena žádná premiová licence:%s</string>
+    <string name="nlh">Na tomto zařízení nebyla nalezena premiová licence:%s</string>
     <string name="edit">Upravit</string>
     <string name="quick_doz_mod">Rychlý spánkový režim</string>
     <string name="quick_mod_inf">Tato funkce přepne zařízení s vypnutým displejem rychleji do spánkového režimu, aby se zvýšila výdrž zařízení.</string>
-    <string name="quick_doz_mod_mwi">Interval zahájení kontrolního režimu v minutách (0 = žádné)</string>
-    <string name="quick_doz_mod_inf2">Spánkový režim prodlužuje výdrž baterie tím, že omezí aktivitu procesoru a sítí na pozadí. Zatímco je telefon ve spánkovém režimu, tak zařízení pravidelně vstupuje do speciálního stavu, během kterého mohou aplikace dokončit čekající úkony (synchronizace, úkoly atd.). Zařízení bude v tomto cyklu pokračovat a pokaždé dvojnásobně prodlouží čas kontroly. Čím delší je interval, tím lepší je úspora baterie. Spánkový režim může v některých aplikacích způsobit zpoždění oznámení. Toto neovlivní SMS, prioritní FCM a aplikace, které mají vypnutou optimalizaci baterie. Po odemčení zařízení se režim spánku vypne.</string>
-    <string name="adp_min_hz">Adaptivní min. frekvence</string>
+    <string name="quick_doz_mod_mwi">Interval zahájení kontrolního režimu v minutách (0 = žádný)</string>
+    <string name="quick_doz_mod_inf2">Spánkový režim prodlužuje výdrž baterie tím, že omezí aktivitu procesoru a sítí na pozadí. Zatímco je telefon ve spánkovém režimu, tak zařízení pravidelně vstupuje do speciálního stavu, během kterého mohou aplikace dokončit čekající úkony (synchronizace, úkoly atd.). Zařízení bude v tomto cyklu pokračovat a pokaždé dvojnásobně prodlouží čas kontroly. Čím delší je interval, tím lepší je úspora energie. Spánkový režim může v některých aplikacích způsobit zpoždění oznámení. Toto neovlivní SMS, prioritní FCM a aplikace, které mají vypnutou optimalizaci baterie. Po odemčení zařízení se režim spánku automaticky vypne.</string>
+    <string name="adp_min_hz">Adaptivní Min. frekvence</string>
     <string name="enable_as_inf">V kontextové nabídce, která se zobrazí, klikněte na „Instalované služby“ a poté aktivujte službu „Galaxy Max Hz“</string>
     <string name="adp_delay">Adaptivní min. frekvence - zpoždění (sekundy)</string>
     <string name="cur_rr_h">Aktuální obnovovací frekvence: %s Hz</string>
     <string name="show_ns_card">Zobrazit nástroj Netspeed</string>
     <string name="lbl_rrm">Režimy obnovovací frekvence</string>
-    <string name="prr_psm">Udržovat plynulost pohybu v režimu úspory energie</string>
+    <string name="prr_psm">Udržovat plynulý pohyb displeje v režimu úspory energie</string>
     <string name="actvt_trial">Aktivovat bezplatnou zkušební verzi</string>
     <string name="auto_psm">Režim úspory energie při vypnutí obrazovky</string>
     <string name="reso_opts">Možnosti přepínání rozlišení obrazovky</string>
@@ -97,7 +97,7 @@
     <string name="apps_bat_opt_settings"><u>Nastavení optimalizace baterie</u></string>
     <string name="brightness_threshold">Minimální jas pro adaptivní režim</string>
     <string name="sensor_off_info">Senzory zařízení se automaticky deaktivují, když je obrazovka vypnutá. Toto trvá do doby odemčení zařízení.</string>
-    <string name="sensors_off_note">Důležitá poznámka: Když je zástupce SensorsOff v rychlém nastavení aktivován, tak jsou kamera, mikrofon zařízení a další senzory nedostupné. Mezi ovlivněné funkce patří např. odemykání obličejem, hlasové hovory, zapnutí oprazovky telefonu zvednutím apod. Funkci používejte pouze s vědomím rizik uvedených výše.\n\nFunkce nemusí být funkční v případě, že používáte nezabezpečenou obrazovku  v systému Android 12; alternativně lze oprávnění WRITE_SECURE_SETTINGS udělit u předchozích verzí systému Android.</string>
+    <string name="sensors_off_note">Důležitá poznámka: Když je zástupce SensorsOff v rychlém nastavení aktivován, tak jsou kamera, mikrofon zařízení a další senzory nedostupné. Mezi ovlivněné funkce patří např. odemykání obličejem, hlasové hovory, zapnutí oprazovky telefonu zvednutím apod. Funkci používejte pouze s vědomím rizik uvedených výše.</string>
     <string name="auto_sensors_off_exp">Auto SENSORS OFF</string>
     <string name="sensor_off_setup_info">Nejprve: Povolte dlaždici \'Sensors Off\' v Nastavení > Vývojářské možnosti > Dlaždice vývojáře s rych. nast. ></string>
     <string name="dev_opt_setup_info">Chcete-li povolit možnosti vývojáře, tak přejděte do Nastavení > O telefonu > Informace o softwaru a 7x klepněte na „Číslo sestavení“.</string>
