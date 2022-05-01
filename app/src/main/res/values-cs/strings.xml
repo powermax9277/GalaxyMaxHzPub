@@ -11,9 +11,6 @@
     <string name="adaptive">Adaptivní</string>
     <string name="high">Vysoký</string>
     <string name="refresh_rate_mon">Monitor obnovovací frekvence</string>
-    <string name="left">Vlevo</string>
-    <string name="right">Vpravo</string>
-
     <!-- <string name="left">Left</string>
  <string name="right">Right</string> -->
     <string name="top">Nahoře</string>
@@ -56,6 +53,7 @@
     <plurals name="aha">
         <item quantity="one">Premiová zkušební verze aktivována: %d den zbývá.</item>
         <item quantity="few">Prémiová zkušební verze aktivována: %d dny zbývají.</item>
+        <item quantity="many">Prémiová zkušební verze aktivována: %d dny zbývají.</item>
         <item quantity="other">Prémiová zkušební verze aktivována: %d dny zbývají.</item>
     </plurals>
     <string name="nlh">Na tomto zařízení nebyla nalezena premiová licence:%s</string>
@@ -90,11 +88,11 @@
     <string name="help">Pomoc</string>
     <string name="reload_profiles">Znovu načíst profily</string>
     <string name="options">Možnosti</string>
-    <string name="data_usage">&lt;u>Využití dat&lt;/u></string>
-    <string name="psm_options">&lt;u>Možnosti režimu úspory energie&lt;/u></string>
+    <string name="data_usage"><u>Využití dat</u></string>
+    <string name="psm_options"><u>Možnosti režimu úspory energie</u></string>
     <string name="disable_sync_on_so">Zakázat automatickou synchronizaci, když je obrazovka vypnutá</string>
-    <string name="autosync_settings">&lt;u>Nastavení automatické synchronizace&lt;/u></string>
-    <string name="apps_bat_opt_settings">&lt;u>Nastavení optimalizace baterie&lt;/u></string>
+    <string name="autosync_settings"><u>Nastavení automatické synchronizace</u></string>
+    <string name="apps_bat_opt_settings"><u>Nastavení optimalizace baterie</u></string>
     <string name="brightness_threshold">Minimální jas pro adaptivní režim</string>
     <string name="sensor_off_info">Senzory zařízení se automaticky deaktivují, když je obrazovka vypnutá. Toto trvá do doby odemčení zařízení.</string>
     <string name="sensors_off_note">Důležitá poznámka: Když je zástupce SensorsOff v rychlém nastavení aktivován, tak jsou kamera, mikrofon zařízení a další senzory nedostupné. Mezi ovlivněné funkce patří např. odemykání obličejem, hlasové hovory, zapnutí oprazovky telefonu zvednutím apod. Funkci používejte pouze s vědomím rizik uvedených výše.</string>
@@ -110,6 +108,7 @@
     <plurals name="access_notif">
         <item quantity="one">Služba usnadnění přístupu je vyžadována pro následující – pokud chcete přístupnost deaktivovat, nejprve ji vypněte:: %s</item>
         <item quantity="few">Služby usnadnění přístupu jsou vyžadovány pro následující – pokud chcete přístupnost deaktivovat, nejprve ji vypněte: %s</item>
+        <item quantity="many">Služby usnadnění přístupu jsou vyžadovány pro následující – pokud chcete přístupnost deaktivovat, nejprve ji vypněte: %s</item>
         <item quantity="other">Služby usnadnění přístupu jsou vyžadovány pro následující – pokud chcete přístupnost deaktivovat, nejprve ji vypněte: %s</item>
     </plurals>
     <string name="no_access_notif">Zakázání služby usnadnění přístupu způsobí neočekávané chování pro následující povolené funkce: %s</string>

@@ -134,7 +134,8 @@ private val useStockAdaptiveList = listOf(
     "ss.android.ugc.", //tiktok
     "com.sec.android.mimage.photoretouching",
     "com.niksoftware.snapseed",
-    "com.google.android.googlequicksearchbox"
+    "com.google.android.googlequicksearchbox",
+    "com.tapnav.karma"
 )
 
 private val manualGameList = listOf(
