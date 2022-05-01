@@ -232,7 +232,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                     doAdaptiveJob?.cancel()
 
                     // Workaround for AOD Bug on some device????
-                    //mUtilsRefreshRate.clearPeakAndMinRefreshRate()//TODO check removal
+                    //mUtilsRefreshRate.clearPeakAndMinRefreshRate()
 
                     if (UtilsPrefsGmhSt.instance(applicationContext).gmhPrefForceLowestSoIsOn) {
                         mHandler.postDelayed(forceLowestRunnable,800)

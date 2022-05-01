@@ -1542,7 +1542,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                         }//dont return
                     }
 
-                   // Log.d("TESTEST", "gmhPrefMinHzAdapt2 to:${seekBar.progress}")
+                    // Log.d("TESTEST", "gmhPrefMinHzAdapt2 to:${seekBar.progress}")
                     UtilsPrefsGmhSt.instance(applicationContext).gmhPrefMinHzAdapt = seekBar.progress
 
                     mBinding.minHzAdaptive = seekBar.progress
@@ -1657,29 +1657,14 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
 
     private fun openPremiumLink() = launch {
         showLoading(true)
-        try{
-            startActivity(
-                Intent(
-                    Intent.ACTION_VIEW,
-                    Uri.parse("https://github.com/tribalfs/GalaxyMaxHzPub/blob/main/Premium.md")
-                )
-            )
-        }catch(_: Exception){
-            showSbMsg(R.string.cie, null, null, null)
-        }
+        openUrl(Uri.parse("https://github.com/tribalfs/GalaxyMaxHzPub/blob/main/Premium.md"))
         showLoading(false)
     }
 
 
     private fun openHelpLink() = launch {
         showLoading(true)
-        try{
-            startActivity(
-                Intent(Intent.ACTION_VIEW, Uri.parse(getHelpUrl()))
-            )
-        }catch(_: Exception){
-            showSbMsg(R.string.cie, null, null, null)
-        }
+        openUrl(Uri.parse(getHelpUrl()))
         showLoading(false)
     }
 
@@ -1715,21 +1700,26 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
     private fun openBuyAdFreeLink() = launch {
         showLoading(true)
         getBuyLink()?.let{
-            try {
-                startActivity(
-                    Intent(
-                        Intent.ACTION_VIEW,
-                        Uri.parse(it)
-                    )
-                )
-            }catch(_: ActivityNotFoundException){
-                showSbMsg("Unable to open link. Install an internet browser to open.", null, null, null)
-            }
+            openUrl(Uri.parse(it))
         }?: run{
             showSbMsg(R.string.cie, null, null, null)
         }
-
         showLoading(false)
+    }
+
+    private fun openUrl(uri: Uri) = launch {
+        try {
+            startActivity(
+                Intent(
+                    Intent.ACTION_VIEW,
+                    uri
+                )
+            )
+        }catch(_: ActivityNotFoundException){
+            showSbMsg("Unable to open link. Install an internet browser to open.", null, null, null)
+        }catch (_: Exception){
+            showSbMsg(R.string.cie, null, null, null)
+        }
     }
 
 
