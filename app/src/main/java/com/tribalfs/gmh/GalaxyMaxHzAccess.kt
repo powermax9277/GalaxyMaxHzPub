@@ -210,13 +210,13 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
             if (screenOffRefreshRateMode != currentRefreshRateMode.get()) {
                 ignoreRrmChange.set(true)
                 if (mUtilsRefreshRate.setRefreshRateMode(screenOffRefreshRateMode!!)) {
-                    mUtilsRefreshRate.setRefreshRate(lowestHzForAllMode, null)
+                    mUtilsRefreshRate.setRefreshRate(lowestHzForAllMode, 0)
                 } else {
-                    mUtilsRefreshRate.setRefreshRate(lowestHzCurMode, null)
+                    mUtilsRefreshRate.setRefreshRate(lowestHzCurMode, 0)
                     ignoreRrmChange.set(false)
                 }
             } else {
-                mUtilsRefreshRate.setRefreshRate(lowestHzCurMode, null)
+                mUtilsRefreshRate.setRefreshRate(lowestHzCurMode, 0)
             }
         }
     }
@@ -268,7 +268,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                             UtilsPrefsGmhSt.instance(applicationContext).gmhPrefMinHzAdapt
                         }
 
-                        mUtilsRefreshRate.setRefreshRate(prrActive.get()!!, null)
+                        mUtilsRefreshRate.setRefreshRate(prrActive.get()!!, mHz)
                         currentRefreshRateMode.get()?.let {
                             if (screenOffRefreshRateMode != it) {
                                 mUtilsRefreshRate.setRefreshRateMode(it)
@@ -506,7 +506,6 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         setupNotification()
     }
 
-    @SuppressLint("NewApi")
     private fun setupNotification() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && hznotificationChannel == null) {
             hznotificationChannel = NotificationChannel(
