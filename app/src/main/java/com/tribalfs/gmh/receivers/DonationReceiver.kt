@@ -24,7 +24,7 @@ class DonationReceiver : BroadcastReceiver() {
             "com.tribalfs.gmh.action_DONATED" -> {
                 CoroutineScope(Dispatchers.IO).launch {
 
-                    val mUtilsPrefsAct by lazy { UtilsPrefsAct(context) }
+                    val mUtilsPrefsAct by lazy { UtilsPrefsAct(context.applicationContext) }
 
                     val activationCode = intent.getStringExtra("dc")
 

@@ -130,7 +130,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
 
     private val viewModel: MyViewModel by viewModels()
     private lateinit var mBinding: ActivityMainBinding
-    private val mUtilsPrefsAct by lazy{ UtilsPrefsAct(this)}
+    private val mUtilsPrefsAct by lazy{ UtilsPrefsAct(applicationContext)}
     private val mUtilsRefreshRate by lazy{UtilRefreshRateSt.instance(applicationContext)}
     private val mNetspeedService by lazy {NetSpeedServiceHelperStn.instance(applicationContext)}
     private val hzOverlaySizes = listOf(10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40)

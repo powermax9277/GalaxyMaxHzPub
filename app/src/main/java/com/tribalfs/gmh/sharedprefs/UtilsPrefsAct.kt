@@ -25,6 +25,7 @@ internal const val LIC_TYPE_TRIAL_ACTIVE = 0x701//1793
 class UtilsPrefsAct(val context: Context) {
 
     private lateinit var actSharedPref: SharedPreferences
+    private lateinit var gmhSharedPrefEditor: SharedPreferences.Editor
 
     init{
         createSharedPreferences()
@@ -40,9 +41,10 @@ class UtilsPrefsAct(val context: Context) {
         EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
         EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
         )
+        gmhSharedPrefEditor = actSharedPref.edit()
     }
 
-    private val gmhSharedPrefEditor by lazy {actSharedPref.edit()}
+
 
 /*    var gmhPrefTileExpiryDays: Int
         get() { return actSharedPref.getInt(TILE_EXPIRY_DAYS, 0xA) }

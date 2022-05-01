@@ -65,7 +65,8 @@ internal class UtilNotifBarSt private constructor (val appCtx: Context) {
     fun checkQsTileInPlace(): Boolean? {
         val sysUiValues = Settings.Secure.getString(appCtx.contentResolver,
             SYSUI_QS_TILES
-        )
+        ) ?: return null
+
         val idx = sysUiValues.split(",").indexOf(sensorsOffVal)
 
         return when {
