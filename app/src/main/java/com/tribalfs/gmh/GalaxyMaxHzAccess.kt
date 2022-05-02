@@ -771,7 +771,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
             }
 
             TYPE_VIEW_SCROLLED/*4096 */ -> {
-                if (!pauseMinHz && (isOfficialAdaptive || !ignoreScrollOnNonNative)){
+                if (!pauseMinHz /*&& (isOfficialAdaptive || !ignoreScrollOnNonNative)*/){
                     doAdaptive()
                 }
                 return
@@ -877,7 +877,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     }
 
     private var pauseMinHz = false
-    private var ignoreScrollOnNonNative = false
+   // private var ignoreScrollOnNonNative = false
     private var currentMinHz = 60
     private var min60 = false
     private var volumePressed = false
@@ -920,7 +920,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
             isKeyboardOpen = false
             pauseMinHz = false
             min60 = false
-            ignoreScrollOnNonNative = false
+            //ignoreScrollOnNonNative = false
             windows.forEach {win ->
                 if (win.isInPictureInPictureMode) {
                     hasPip = true
@@ -979,7 +979,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                 || isPartOf(manualVideoAppList, packageName)
             ) {
                 min60 = true
-                ignoreScrollOnNonNative = true
+               // ignoreScrollOnNonNative = true
                 return
             }
         }
