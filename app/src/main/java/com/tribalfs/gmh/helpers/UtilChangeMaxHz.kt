@@ -142,8 +142,7 @@ class UtilChangeMaxHz (private val appCtx: Context) {
 
             if (UtilsDeviceInfoSt.instance(appCtx).isDisplayOn()) {
                 if (UtilsPrefsGmhSt.instance(appCtx).gmhPrefMinHzAdapt > UtilsDeviceInfoSt.instance(appCtx).regularMinHz) {
-                    UtilRefreshRateSt.instance(appCtx)
-                        .setRefreshRate(maxHzToApplyFinal.coerceAtLeast(lowestHzCurMode), UtilsPrefsGmhSt.instance(appCtx).gmhPrefMinHzAdapt)
+                    UtilRefreshRateSt.instance(appCtx).setRefreshRate(maxHzToApplyFinal.coerceAtLeast(lowestHzCurMode), UtilsPrefsGmhSt.instance(appCtx).gmhPrefMinHzAdapt)
                 }else{
                     UtilRefreshRateSt.instance(appCtx).setRefreshRate(maxHzToApplyFinal.coerceAtLeast(lowestHzCurMode),0)
                 }
