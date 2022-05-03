@@ -149,7 +149,8 @@ private val manualGameList = listOf(
     "com.distractionware",
     "supercell",
     "com.samsung.android.app.notes",
-    "com.epicgames"
+    "com.epicgames",
+    "com.tencent.tmgp"
 )
 
 
