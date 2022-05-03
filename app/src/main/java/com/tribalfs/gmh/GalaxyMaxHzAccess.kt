@@ -150,9 +150,9 @@ private val manualGameList = listOf(
     "supercell",
     "com.samsung.android.app.notes",
     "com.epicgames",
-    "com.tencent.tmgp",
     "org.jjcfbgzs",
-    "com.happyelements"
+    "com.happyelements"/*,
+    "com.tencent.tmgp"*/
 )
 
 
@@ -945,12 +945,18 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun updateFactors(packageName: String){
         //try catch required for Secure Folder apps
-        val category = try{
-            packageManager.getApplicationInfo(packageName, 0).category
+        val ai = try{
+            packageManager.getApplicationInfo(packageName, 0)
         }catch (_: PackageManager.NameNotFoundException){
             null
         }
 
+        if (ai == null){
+            pauseMinHz = true
+            return
+        }
+
+        val category = ai.category
 
         if (isOfficialAdaptive){
 
@@ -958,10 +964,10 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
             "com.niksoftware.snapseed" == packageName){
                 Log.d("TESTEST", "Catergory:$category")
             }*/
-
-            if(category == null
-                || category == CATEGORY_GAME
+            @Suppress("DEPRECATION")
+            if(category == CATEGORY_GAME
                 || category == CATEGORY_VIDEO
+                || (ai.flags and ApplicationInfo.FLAG_IS_GAME) == ApplicationInfo.FLAG_IS_GAME
                 || isPartOf(manualGameList, packageName)
                 || isPartOf(manualVideoAppList, packageName)
                 || (UtilsDeviceInfoSt.instance(applicationContext).isLowRefreshDevice
@@ -973,7 +979,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                 return
             }
         }else{ //!isOfficialAdaptive
-            if(category == null || category == CATEGORY_GAME || isPartOf(manualGameList, packageName)) {
+            if(category == CATEGORY_GAME || isPartOf(manualGameList, packageName)) {
                 pauseMinHz = true
                 return
             }
@@ -986,6 +992,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                 return
             }
         }
+
     }
 
     // private val mediaSessionManager by lazy {(getSystemService(MEDIA_SESSION_SERVICE) as MediaSessionManager)}
