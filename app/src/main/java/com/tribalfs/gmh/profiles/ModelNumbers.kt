@@ -5,6 +5,7 @@ internal object ModelNumbers {
     const val S20FE = "SM-G780"
     const val A725 = "SM-A725"
     const val A725G = "SM-A726"
+    const val A525 = "SM-A525"
     const val A525G = "SM-A526"
     const val A52S5G = "SM-A528"
     const val A52_D = "SC-53B"

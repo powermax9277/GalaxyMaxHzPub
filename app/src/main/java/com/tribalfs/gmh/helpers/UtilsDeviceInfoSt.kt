@@ -14,6 +14,7 @@ import android.util.Size
 import android.view.Display
 import androidx.annotation.RequiresApi
 import com.tribalfs.gmh.helpers.CacheSettings.displayId
+import com.tribalfs.gmh.profiles.ModelNumbers.A525
 import com.tribalfs.gmh.profiles.ModelNumbers.A525G
 import com.tribalfs.gmh.profiles.ModelNumbers.A52S5G
 import com.tribalfs.gmh.profiles.ModelNumbers.A52_D
@@ -103,7 +104,7 @@ class UtilsDeviceInfoSt private constructor(val appCtx: Context) {
     internal val isGoogleMapsTrickDevice: Boolean
         get() {
             return when (deviceModel) {
-                S20, S205G, S20P_E, S20FE, S20FE5G, S20U, S20P_S, A525G, A52S5G, A725, A725G, M25G, A52_D, A53 -> true
+                S20, S205G, S20P_E, S20FE, S20FE5G, S20U, S20P_S, A525G, A52S5G, A725, A725G, M25G, A52_D, A525, A53 -> true
                 else -> false
             }
         }
