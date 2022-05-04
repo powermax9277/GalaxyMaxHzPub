@@ -89,8 +89,7 @@ class UtilsDeviceInfoSt private constructor(val appCtx: Context) {
     internal val regularMinHz: Int
         get() {
             return when (deviceModel) {
-                S22, S22P, S22_JP, S22_D -> 48
-                S22U, S22U_JP, S22U_D -> 24
+                S22U, S22U_JP, S22U_D, S22, S22P, S22_JP, S22_D -> 24
                 else -> SIXTY_HZ
             }
         }
