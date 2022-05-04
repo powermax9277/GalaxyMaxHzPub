@@ -96,10 +96,7 @@ class UtilsDeviceInfoSt private constructor(val appCtx: Context) {
 
     internal val isLowRefreshDevice: Boolean
         get() {
-            return when (deviceModel) {
-                S22,S22P,S22U,S22U_JP,S22_JP,S22_D,S22U_D -> true
-                else -> false
-            }
+            return regularMinHz < 60
         }
 
     internal val isGoogleMapsTrickDevice: Boolean
