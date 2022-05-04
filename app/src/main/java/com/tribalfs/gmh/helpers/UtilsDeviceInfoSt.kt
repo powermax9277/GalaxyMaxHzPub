@@ -18,6 +18,7 @@ import com.tribalfs.gmh.profiles.ModelNumbers.A525G
 import com.tribalfs.gmh.profiles.ModelNumbers.A52S5G
 import com.tribalfs.gmh.profiles.ModelNumbers.A52_D
 import com.tribalfs.gmh.profiles.ModelNumbers.A53
+import com.tribalfs.gmh.profiles.ModelNumbers.A725
 import com.tribalfs.gmh.profiles.ModelNumbers.A725G
 import com.tribalfs.gmh.profiles.ModelNumbers.M25G
 import com.tribalfs.gmh.profiles.ModelNumbers.S20
@@ -102,7 +103,7 @@ class UtilsDeviceInfoSt private constructor(val appCtx: Context) {
     internal val isGoogleMapsTrickDevice: Boolean
         get() {
             return when (deviceModel) {
-                S20, S205G, S20P_E, S20FE, S20FE5G, S20U, S20P_S, A525G, A52S5G, A725G, M25G, A52_D, A53 -> true
+                S20, S205G, S20P_E, S20FE, S20FE5G, S20U, S20P_S, A525G, A52S5G, A725, A725G, M25G, A52_D, A53 -> true
                 else -> false
             }
         }
