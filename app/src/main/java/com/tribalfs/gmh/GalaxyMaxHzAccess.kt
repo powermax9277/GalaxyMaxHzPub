@@ -12,8 +12,7 @@ import android.content.Intent
 import android.content.Intent.*
 import android.content.IntentFilter
 import android.content.pm.ApplicationInfo
-import android.content.pm.ApplicationInfo.CATEGORY_GAME
-import android.content.pm.ApplicationInfo.CATEGORY_VIDEO
+import android.content.pm.ApplicationInfo.*
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.PixelFormat
@@ -968,8 +967,9 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
             }*/
             @Suppress("DEPRECATION")
             if(category == CATEGORY_GAME
+                || (ai.flags and FLAG_IS_GAME) == FLAG_IS_GAME
                 || category == CATEGORY_VIDEO
-                || (ai.flags and ApplicationInfo.FLAG_IS_GAME) == ApplicationInfo.FLAG_IS_GAME
+                || category == CATEGORY_IMAGE
                 || isPartOf(manualGameList, packageName)
                 || isPartOf(manualVideoAppList, packageName)
                 || (UtilsDeviceInfoSt.instance(applicationContext).isLowRefreshDevice
@@ -986,7 +986,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                 return
             }
 
-            if(category == CATEGORY_VIDEO
+            if(category == CATEGORY_VIDEO || category == CATEGORY_IMAGE
                 || isPartOf(manualVideoAppList, packageName)
             ) {
                 min60 = true
