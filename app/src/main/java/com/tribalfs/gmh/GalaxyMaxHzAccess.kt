@@ -974,6 +974,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                         && (category == CATEGORY_SOCIAL
                         || category == CATEGORY_MAPS
                         || category == CATEGORY_IMAGE
+                        || category == CATEGORY_MAPS
                         || isPartOf(useStockAdaptiveList, packageName)))
             ) {
                 pauseMinHz = true
