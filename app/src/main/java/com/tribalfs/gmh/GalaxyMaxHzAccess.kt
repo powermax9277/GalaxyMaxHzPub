@@ -132,6 +132,8 @@ private val useStockAdaptiveList = listOf(
     "com.twitter",
     "com.instagram",
     "ss.android.ugc.", //tiktok
+    "com.zhiliaoapp.musically",//tiktok
+    "snapchat",
     "com.sec.android.mimage.photoretouching",
     "com.niksoftware.snapseed",
     "com.google.android.googlequicksearchbox",
