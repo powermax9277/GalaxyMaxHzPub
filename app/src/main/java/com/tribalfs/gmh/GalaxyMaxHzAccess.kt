@@ -11,7 +11,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.Intent.*
 import android.content.IntentFilter
-import android.content.pm.ApplicationInfo
 import android.content.pm.ApplicationInfo.*
 import android.content.pm.PackageManager
 import android.graphics.Color
@@ -969,12 +968,12 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
             if(category == CATEGORY_GAME
                 || (ai.flags and FLAG_IS_GAME) == FLAG_IS_GAME
                 || category == CATEGORY_VIDEO
-                || category == CATEGORY_IMAGE
                 || isPartOf(manualGameList, packageName)
                 || isPartOf(manualVideoAppList, packageName)
                 || (UtilsDeviceInfoSt.instance(applicationContext).isLowRefreshDevice
-                        && (category == ApplicationInfo.CATEGORY_SOCIAL
-                        || category == ApplicationInfo.CATEGORY_MAPS
+                        && (category == CATEGORY_SOCIAL
+                        || category == CATEGORY_MAPS
+                        || category == CATEGORY_IMAGE
                         || isPartOf(useStockAdaptiveList, packageName)))
             ) {
                 pauseMinHz = true
@@ -986,7 +985,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                 return
             }
 
-            if(category == CATEGORY_VIDEO || category == CATEGORY_IMAGE
+            if(category == CATEGORY_VIDEO
                 || isPartOf(manualVideoAppList, packageName)
             ) {
                 min60 = true
