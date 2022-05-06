@@ -313,14 +313,12 @@
                         android:text="@string/limit_tp"
                         android:textColor="?android:attr/textColorSecondary"
                         android:textSize="12sp"
-                        android:visibility="@{(premium &amp;&amp; refreshRateMode.equals(&quot;1&quot;))  ? View.VISIBLE : View.GONE, default=visible}"
+                        android:visibility="@{(!adaptiveSupported &amp;&amp; premium &amp;&amp; refreshRateMode.equals(&quot;1&quot;))  ? View.VISIBLE : View.GONE, default=visible}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/sw_keep_mode"
                         tools:ignore="UseSwitchCompatOrMaterialXml,TouchTargetSizeCheck" />
-                    <!--//TODO-->
-               <!--     android:visibility="@{(!adaptiveSupported  &amp;&amp;  premium &amp;&amp; refreshRateMode.equals(&quot;1&quot;))  ? View.VISIBLE : View.GONE, default=visible}"
--->
+
                     <TextView
                         android:id="@+id/lbl_sb_peak_hz"
                         style="?android:attr/textColorPrimary"
