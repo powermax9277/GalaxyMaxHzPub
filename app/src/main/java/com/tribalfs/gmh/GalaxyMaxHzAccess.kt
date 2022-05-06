@@ -114,7 +114,6 @@ private val manualVideoAppList = listOf(
     "xbmc.kodi",
     "com.teamseries.lotus"
 )
-
 private val useStockAdaptiveList = listOf(
     "browser",
     "samsung.android.app.appsedge",
@@ -137,7 +136,6 @@ private val useStockAdaptiveList = listOf(
     "com.google.android.googlequicksearchbox",
     "com.tapnav.karma"
 )
-
 private val manualGameList = listOf(
     "com.google.stadia",
     "steamlink",
@@ -759,7 +757,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
         if (!(isScreenOn.get() && applyAdaptiveMod.get()!!)) return
 
-        /*Log.d("TESTEST", "$event")*/
+
         when (event?.eventType) {
             TYPE_WINDOW_STATE_CHANGED -> {//32
                 if (event.contentChangeTypes != CONTENT_CHANGE_TYPE_UNDEFINED) return
