@@ -80,6 +80,7 @@ import com.tribalfs.gmh.helpers.CacheSettings.isOnePlus
 import com.tribalfs.gmh.helpers.CacheSettings.isPowerSaveMode
 import com.tribalfs.gmh.helpers.CacheSettings.isPremium
 import com.tribalfs.gmh.helpers.CacheSettings.keepModeOnPowerSaving
+import com.tribalfs.gmh.helpers.CacheSettings.limitTyping
 import com.tribalfs.gmh.helpers.CacheSettings.lowestHzCurMode
 import com.tribalfs.gmh.helpers.CacheSettings.lowestHzForAllMode
 import com.tribalfs.gmh.helpers.CacheSettings.minHzListForAdp
@@ -750,6 +751,13 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                 }
             }
 
+            mBinding.swLimitTyping.id -> {
+                (v as Switch).isChecked.let { checked ->
+                    limitTyping = checked
+                    UtilsPrefsGmhSt.instance(applicationContext).gmhPrefLimitTyping = checked
+                }
+            }
+
         }
     }
 
@@ -836,10 +844,14 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
         }
 
 
-        if (!isOfficialAdaptive){
-            (UtilsPrefsGmhSt.instance(applicationContext).gmhPrefPreventHigh && isPremium.get() == true).let {
+        if (!isOfficialAdaptive && isPremium.get() == true){
+            (UtilsPrefsGmhSt.instance(applicationContext).gmhPrefPreventHigh).let {
                 preventHigh = it
                 mBinding.swPreventHigh.isChecked = it
+            }
+            (UtilsPrefsGmhSt.instance(applicationContext).gmhPrefLimitTyping).let {
+                limitTyping = it
+                mBinding.swLimitTyping.isChecked = it
             }
         }
 

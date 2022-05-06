@@ -27,6 +27,7 @@ object CacheSettings {
 
     internal var displayId: Int = DEFAULT_DISPLAY
 
+
     internal var isPremium = ObservableField(false)
     internal val prrActive = ObservableField(60)
     internal val lrrPref = ObservableField(60)
@@ -86,6 +87,7 @@ object CacheSettings {
 
     internal var turnOffAutoSensorsOff = false
     internal var preventHigh = false
+    internal var limitTyping = false
     internal var sensorOnKey: CharSequence? = null
 
     internal var defaultKeyboardName: String = ""
@@ -97,4 +99,5 @@ object CacheSettings {
                    .coerceAtMost(10000.0)
                 + animatorAdj).toLong()
     }
+
 }

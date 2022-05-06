@@ -135,4 +135,5 @@
     <plurals name="access_notif">
         <item quantity="other">以下情况需要辅助功能服务 - 首先关闭这些功能以禁用辅助功能：%s</item>
     </plurals>
+    <string name="limit_tp">Limit refresh rate when typing</string>
 </resources>

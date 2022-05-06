@@ -148,4 +148,5 @@
         <item quantity="other">Tillgänglighetsservice krävs för följande - stäng först av dessa för att avaktivera tillgänglighetshjälp: %s</item>
     </plurals>
     <string name="no_access_notif">Inaktivering av tillgänglighetstjänsten kan skapa problem för följande funktion(er): %s</string>
+    <string name="limit_tp">Limit refresh rate when typing</string>
 </resources>

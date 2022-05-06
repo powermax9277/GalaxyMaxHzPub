@@ -27,6 +27,7 @@ import com.tribalfs.gmh.helpers.CacheSettings.isOfficialAdaptive
 import com.tribalfs.gmh.helpers.CacheSettings.isPowerSaveMode
 import com.tribalfs.gmh.helpers.CacheSettings.isPremium
 import com.tribalfs.gmh.helpers.CacheSettings.keepModeOnPowerSaving
+import com.tribalfs.gmh.helpers.CacheSettings.limitTyping
 import com.tribalfs.gmh.helpers.CacheSettings.preventHigh
 import com.tribalfs.gmh.hertz.HzServiceHelperStn
 import com.tribalfs.gmh.netspeed.NetSpeedServiceHelperStn
@@ -194,6 +195,7 @@ class MyApplication : Application() {
         isProfilesLoaded = withContext(Dispatchers.IO) { UtilRefreshRateSt.instance(applicationContext).initProfiles() }
 
         preventHigh = UtilsPrefsGmhSt.instance(applicationContext).gmhPrefPreventHigh && isPremium.get() == true
+        limitTyping =  UtilsPrefsGmhSt.instance(applicationContext).gmhPrefLimitTyping && isPremium.get() == true
 
         hzNotifOn.set (UtilsPrefsGmhSt.instance(applicationContext).gmhPrefHzIsOn
                 && UtilsPrefsGmhSt.instance(applicationContext).gmhPrefHzNotifIsOn)

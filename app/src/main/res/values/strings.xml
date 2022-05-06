@@ -104,7 +104,7 @@
     <string name="cur_rr_h">Current Refresh Rate: %s Hz</string>
     <string name="show_ns_card">Show Netspeed Indicator Card</string>
     <string name="lbl_rrm">Refresh Rate Mods</string>
-    <string name="prr_psm">Keep Smoothness on Power Saving Mode</string>
+    <string name="prr_psm">Keep smoothness on power saving mode</string>
     <string name="actvt_trial">Activate free trial</string>
     <string name="auto_psm">Power Saving Mode on Screen-off</string>
     <string name="reso_opts">Enabled Options</string>
@@ -148,7 +148,7 @@
     <string name="as_desc">This service is required for most of galaxy max hz mods to work.</string>
     <string name="enable">Enable</string>
     <string name="premium_features">Premium Features</string>
-    <string name="prevent_high">Prevent switching to High Mode</string>
+    <string name="prevent_high">Prevent switching to high mode</string>
     <string name="acces_req">Enable Accessibility Service</string>
     <string name="is_prem_ft">%s is a premium feature</string>
     <string name="so_location_info">Ensure to put the SENSOR Off tile within the first 4 quick settings slots.</string>
@@ -158,5 +158,6 @@
     </plurals>
     <string name="no_access_notif">Disabling accessibility service will cause unexpected behavior for the following enabled feature(s): %s</string>
     <string name="aot_perm_inf">This app needs permission to appear on top in order to work properly. You can disable the notification by long-pressing it and turning off the toggle that will appear.</string>
-<!--    <string name="using_spay">SPay is failing</string>-->
+    <string name="limit_tp">Limit refresh rate when typing</string>
+    <!--    <string name="using_spay">SPay is failing</string>-->
 </resources>

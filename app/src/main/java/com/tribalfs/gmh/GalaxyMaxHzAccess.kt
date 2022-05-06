@@ -23,6 +23,7 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.os.PowerManager.ACTION_POWER_SAVE_MODE_CHANGED
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
@@ -56,6 +57,7 @@ import com.tribalfs.gmh.helpers.CacheSettings.isFakeAdaptiveValid
 import com.tribalfs.gmh.helpers.CacheSettings.isOfficialAdaptive
 import com.tribalfs.gmh.helpers.CacheSettings.isSamsung
 import com.tribalfs.gmh.helpers.CacheSettings.isScreenOn
+import com.tribalfs.gmh.helpers.CacheSettings.limitTyping
 import com.tribalfs.gmh.helpers.CacheSettings.lowestHzCurMode
 import com.tribalfs.gmh.helpers.CacheSettings.lowestHzForAllMode
 import com.tribalfs.gmh.helpers.CacheSettings.lrrPref
@@ -758,6 +760,9 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         if (!(isScreenOn.get() && applyAdaptiveMod.get()!!)) return
 
 
+        //TODO
+        Log.d("TESTEST", "$event")
+
         when (event?.eventType) {
             TYPE_WINDOW_STATE_CHANGED -> {//32
                 if (event.contentChangeTypes != CONTENT_CHANGE_TYPE_UNDEFINED) return
@@ -826,7 +831,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                                         }
                                     }
                                 }else{
-                                    isKeyboardOpen = true
+                                    isKeyboardOpen = limitTyping && true
                                     return
                                 }
 
@@ -928,7 +933,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                 }
 
                 if (win.type == AccessibilityWindowInfo.TYPE_INPUT_METHOD) {
-                    isKeyboardOpen = true
+                    isKeyboardOpen = true && limitTyping
                 }
 
                 win.root?.packageName?.let{

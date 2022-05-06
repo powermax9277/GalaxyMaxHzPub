@@ -153,6 +153,12 @@ internal class UtilsPrefsGmhSt private constructor(val context: Context) {
         }
         set(apply) {hzSharedPrefEditor.putBoolean(PREVENT_HIGH, apply).apply()}
 
+    var gmhPrefLimitTyping: Boolean
+        get() {
+            return hzSharedPref.getBoolean("limit_tp", true)
+        }
+        set(apply) {hzSharedPrefEditor.putBoolean("limit_tp", apply).apply()}
+
     var gmhPrefRefreshRateModePref: String?
         get() {
             return hzSharedPref.getString(REFRESH_RATE_MODE_PREF, null)

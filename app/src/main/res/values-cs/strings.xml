@@ -114,4 +114,5 @@
     <string name="no_access_notif">Zakázání služby usnadnění přístupu způsobí neočekávané chování pro následující povolené funkce: %s</string>
     <string name="acces_req">Povolit službu usnadnění přístupu</string>
     <string name="is_prem_ft">%s je premiová funkce</string>
+    <string name="limit_tp">Limit refresh rate when typing</string>
 </resources>

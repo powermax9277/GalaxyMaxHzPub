@@ -110,4 +110,5 @@
     <string name="no_access_notif">La disattivazione del servizio di accessibilità genererà un comportamento imprevisto per le seguente(i) funzionalità attive: %s</string>
     <string name="acces_req">Attiva Servizio di Accessibilità</string>
     <string name="is_prem_ft">%s è una funzionalità premium</string>
+    <string name="limit_tp">Limit refresh rate when typing</string>
 </resources>
