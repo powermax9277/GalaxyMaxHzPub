@@ -43,7 +43,6 @@
         <variable
             name="hasMinHzOptions"
             type="Boolean" />
-
         <variable
             name="sensorsOff"
             type="Boolean" />
