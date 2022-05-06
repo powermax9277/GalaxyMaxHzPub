@@ -141,5 +141,5 @@
         <item quantity="other">Erişilebilirlik hizmeti aşağıdakiler için gereklidir. Erişilebilirliği devre dışı bırakmak için şunları devre dışı bırakın: %s</item>
     </plurals>
     <string name="no_access_notif">Erişilebilirlik hizmetini devre dışı bırakmak aşağıdaki özelliklerin düzgün çalışmamasına yol açabilir: %s</string>
-    <string name="limit_tp">Limit refresh rate when typing</string>
+    <string name="limit_tp">Yazarken yenileme hızını sınırlayın</string>
 </resources>

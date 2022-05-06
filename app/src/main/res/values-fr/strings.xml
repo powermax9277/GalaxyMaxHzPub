@@ -163,5 +163,5 @@
         <item quantity="other">Accessibility service is required for the following - turn these off first to disable accessibility: %s</item>
         <item quantity="many">Accessibility service is required for the following - turn these off first to disable accessibility: %s</item>
     </plurals>
-    <string name="limit_tp">Limit refresh rate when typing</string>
+    <string name="limit_tp">Limiter le taux de rafraîchissement lors de l\'écriture</string>
 </resources>

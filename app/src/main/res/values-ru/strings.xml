@@ -115,5 +115,5 @@
     <string name="is_prem_ft">%s — это премиум-функция</string>
 <!--    <string name="using_spay">SPay вылетает</string>-->
     <string name="no_access_notif">Отключение службы специальных возможностей приведет к непредвиденному поведению следующих включенных функций: %s</string>
-    <string name="limit_tp">Limit refresh rate when typing</string>
+    <string name="limit_tp">Ограничить частоту обновления при наборе текста</string>
 </resources>

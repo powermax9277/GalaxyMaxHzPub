@@ -112,5 +112,5 @@
     <string name="is_prem_ft">%s es una opción premium</string>
     <string name="bit">Bits/seg(b/s)</string>
     <string name="byt">Bytes/seg(B/s)</string>
-    <string name="limit_tp">Limit refresh rate when typing</string>
+    <string name="limit_tp">Limite la frecuencia de actualización al escribir</string>
 </resources>
