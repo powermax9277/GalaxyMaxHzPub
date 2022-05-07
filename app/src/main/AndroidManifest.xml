@@ -4,11 +4,14 @@
     package="com.tribalfs.gmh">
 
     <uses-sdk tools:overrideLibrary="androidx.security" />
-    <queries> <package android:name="com.google.android.apps.maps" /> </queries>
 
-  <!--  <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
-    <uses-permission android:name="android.permission.WRITE_DEVICE_CONFIG" />-->
-
+    <queries>
+        <package android:name="com.google.android.apps.maps" />
+    </queries>
+    <!--
+  <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
+    <uses-permission android:name="android.permission.WRITE_DEVICE_CONFIG" />
+    -->
     <uses-permission
         android:name="android.permission.WRITE_SETTINGS"
         tools:ignore="ProtectedPermissions" />
@@ -37,7 +40,8 @@
         android:theme="@style/Theme.App.Starting"
         tools:ignore="GoogleAppIndexingWarning"
         tools:targetApi="n">
-        <!--<activity
+        <!--
+        <activity
             android:name=".resochanger.ResolutionActivity"
             android:exported="false"
             android:theme="@style/AppThemeTilePref"
@@ -46,8 +50,8 @@
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE_PREFERENCES" />
             </intent-filter>
-        </activity>-->
-
+        </activity>
+        -->
         <activity
             android:name=".PipActivity"
             android:exported="true"
@@ -61,9 +65,7 @@
             android:label="@string/app_name"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
             <intent-filter>
-                <action
-                    android:name="android.accessibilityservice.AccessibilityService"
-                    />
+                <action android:name="android.accessibilityservice.AccessibilityService" />
             </intent-filter>
 
             <meta-data
@@ -76,22 +78,25 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
+
                 <action android:name="android.service.quicksettings.action.QS_TILE_PREFERENCES" />
             </intent-filter>
         </activity>
 
         <service android:name=".hertz.HzService" />
         <service android:name=".netspeed.NetSpeedService" />
-
         <service
             android:name=".tiles.QSTileMaxHz"
             android:exported="true"
             android:icon="@drawable/ic_max_hz_circle"
             android:label="@string/max_hz"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
-            <meta-data android:name="android.service.quicksettings.ACTIVE_TILE"
+            <meta-data
+                android:name="android.service.quicksettings.ACTIVE_TILE"
                 android:value="true" />
+
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>
@@ -102,8 +107,10 @@
             android:icon="@drawable/ic_hz_24"
             android:label="@string/refresh_rate_mon"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
-            <meta-data android:name="android.service.quicksettings.ACTIVE_TILE"
+            <meta-data
+                android:name="android.service.quicksettings.ACTIVE_TILE"
                 android:value="true" />
+
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>
@@ -114,8 +121,10 @@
             android:icon="@drawable/ic_res_switch_24"
             android:label="@string/resolution"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
-            <meta-data android:name="android.service.quicksettings.ACTIVE_TILE"
+            <meta-data
+                android:name="android.service.quicksettings.ACTIVE_TILE"
                 android:value="true" />
+
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>
@@ -126,8 +135,10 @@
             android:icon="@drawable/ic_launcher_foreground"
             android:label="@string/adp_min_hz"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
-            <meta-data android:name="android.service.quicksettings.ACTIVE_TILE"
+            <meta-data
+                android:name="android.service.quicksettings.ACTIVE_TILE"
                 android:value="true" />
+
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>
@@ -152,7 +163,6 @@
                 android:resource="@xml/file_provider_paths" />
         </provider>
 
-
         <receiver
             android:name=".receivers.DonationReceiver"
             android:exported="true"
@@ -170,14 +180,6 @@
                 <action android:name="com.twofortyfouram.locale.intent.action.EDIT_SETTING" />
             </intent-filter>
         </activity>
-
-        <!--<service android:name=".mediasession.NotificationListener"
-            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="android.service.notification.NotificationListenerService" />
-            </intent-filter>
-        </service>-->
     </application>
 
 </manifest>

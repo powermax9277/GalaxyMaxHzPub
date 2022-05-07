@@ -1117,5 +1117,6 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         }
     }
 
+
 }
 

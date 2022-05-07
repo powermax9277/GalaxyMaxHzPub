@@ -67,6 +67,9 @@ android {
                 "-opt-in=kotlin.RequiresOptIn"]
 
     }
+    buildFeatures {
+        viewBinding true
+    }
 
 }
 

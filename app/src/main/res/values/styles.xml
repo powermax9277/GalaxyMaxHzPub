@@ -62,7 +62,8 @@
         <item name="android:textColor">?android:attr/textColorPrimary</item>
         <item name="android:layout_gravity">center_horizontal</item>
         <item name="android:layout_marginStart" tools:targetApi="o">12dp</item>
-        <item name="android:layout_marginEnd" tools:targetApi="o">20dp</item> <!--To offset icon width-->
+        <item name="android:layout_marginEnd" tools:targetApi="o">20dp
+        </item> <!--To offset icon width-->
         <item name="android:layout_marginVertical" tools:targetApi="o">8dp</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:textAlignment">center</item>
@@ -77,7 +78,7 @@
         <item name="android:textSize">12sp</item>
     </style>
 
-    <style name="MySeekBarTheme" parent="Widget.AppCompat.SeekBar" >
+    <style name="MySeekBarTheme" parent="Widget.AppCompat.SeekBar">
         <item name="android:colorAccent">@color/primary_color</item>
         <item name="android:progressTint">@color/primary_color</item>
         <item name="android:progressBackgroundTint">@color/primary_color</item>
@@ -89,7 +90,8 @@
         <item name="windowSplashScreenBackground">@color/ic_launcher_background</item>
         <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
         <item name="windowSplashScreenAnimationDuration">500</item>
-        <item name="postSplashScreenTheme">@style/AppTheme</item>  # Required.
+        <item name="postSplashScreenTheme">@style/AppTheme</item>
+        # Required.
     </style>
 
     <style name="Theme.AppCompat.NoActionBar">
@@ -97,4 +99,5 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-  </resources>
+
+</resources>

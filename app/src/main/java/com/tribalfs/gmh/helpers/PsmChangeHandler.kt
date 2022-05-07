@@ -52,6 +52,7 @@ internal class PsmChangeHandler private constructor(val appCtx: Context) {
     @OptIn(ExperimentalCoroutinesApi::class)
     fun startPipActivityIfS(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && isPowerSaveMode.get() == true) {
+
             if (UtilsDeviceInfoSt.instance(appCtx).isGoogleMapsTrickDevice){
                 CoroutineScope(Dispatchers.IO).launch {
                     val intent = appCtx.packageManager.getLaunchIntentForPackage("com.google.android.apps.maps")
