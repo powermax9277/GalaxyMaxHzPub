@@ -958,11 +958,6 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         val category = ai.category
 
         if (isOfficialAdaptive){
-
-            /*if (packageName == "com.sec.android.mimage.photoretouching" ||
-            "com.niksoftware.snapseed" == packageName){
-                Log.d("TESTEST", "Catergory:$category")
-            }*/
             @Suppress("DEPRECATION")
             if(category == CATEGORY_GAME
                 || (ai.flags and FLAG_IS_GAME) == FLAG_IS_GAME
