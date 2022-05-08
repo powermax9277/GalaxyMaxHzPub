@@ -23,7 +23,7 @@
 -keep class com.tribalfs.gmh.profiles.ResolutionDetails { *; }
 -keep class com.tribalfs.gmh.BuildConfig { *; }
 
--optimizationpasses 70
+-optimizationpasses 75
 -assumenosideeffects class android.util.Log {
     public static *** d(...);
     public static *** v(...);

@@ -118,22 +118,10 @@ private val manualVideoAppList = listOf(
 )
 private val useStockAdaptiveList = listOf(
     "browser",
+    "com.android.vending",
     "samsung.android.app.appsedge",
-    "com.opera",
-    "com.uc.",
-    "mozilla.firefox",
-    "duckduckgo",
-    "android.chrome",
-    "microsoft.emmx",
-    "microsoft.bing",
-    "android.apps.photos",
     "com.nbaimd",
-    "com.twitter",
-    "com.instagram",
-    "snapchat",
     "com.sec.android.mimage.photoretouching",
-    "com.niksoftware.snapseed",
-    "com.google.android.googlequicksearchbox",
     "com.tapnav.karma",
     "com.google.android.packageinstaller"
 )
@@ -969,6 +957,8 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                         || category == CATEGORY_MAPS
                         || category == CATEGORY_IMAGE
                         || category == CATEGORY_MAPS
+                        || category == CATEGORY_NEWS
+                        || category == CATEGORY_PRODUCTIVITY
                         || isPartOf(useStockAdaptiveList, packageName)))
             ) {
                 pauseMinHz = true
