@@ -125,6 +125,7 @@ private val useStockAdaptiveList = listOf(
     "com.tapnav.karma",
     "com.google.android.packageinstaller"
 )
+
 private val manualGameList = listOf(
     "com.google.stadia",
     "steamlink",
