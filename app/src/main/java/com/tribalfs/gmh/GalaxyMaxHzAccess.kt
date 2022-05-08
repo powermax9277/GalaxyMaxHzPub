@@ -94,6 +94,7 @@ private val manualVideoAppList = listOf(
     "amazon.avod",
     "youtube",
     "newpipe",
+    "com.zhiliaoapp.musically",//tiktok non-google
     "webex.meetings",
     "gallery",
     "tvplus",
@@ -129,13 +130,12 @@ private val useStockAdaptiveList = listOf(
     "com.nbaimd",
     "com.twitter",
     "com.instagram",
-    "ss.android.ugc.", //tiktok
-    "com.zhiliaoapp.musically",//tiktok
     "snapchat",
     "com.sec.android.mimage.photoretouching",
     "com.niksoftware.snapseed",
     "com.google.android.googlequicksearchbox",
-    "com.tapnav.karma"
+    "com.tapnav.karma",
+    "com.google.android.packageinstaller"
 )
 private val manualGameList = listOf(
     "com.google.stadia",
@@ -758,7 +758,6 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
         if (!(isScreenOn.get() && applyAdaptiveMod.get()!!)) return
 
-
         when (event?.eventType) {
             TYPE_WINDOW_STATE_CHANGED -> {//32
                 if (event.contentChangeTypes != CONTENT_CHANGE_TYPE_UNDEFINED) return
@@ -958,12 +957,13 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         val category = ai.category
 
         if (isOfficialAdaptive){
+
             @Suppress("DEPRECATION")
             if(category == CATEGORY_GAME
                 || (ai.flags and FLAG_IS_GAME) == FLAG_IS_GAME
                 || category == CATEGORY_VIDEO
-                || isPartOf(manualGameList, packageName)
                 || isPartOf(manualVideoAppList, packageName)
+                || isPartOf(manualGameList, packageName)
                 || (UtilsDeviceInfoSt.instance(applicationContext).isLowRefreshDevice
                         && (category == CATEGORY_SOCIAL
                         || category == CATEGORY_MAPS
@@ -984,7 +984,6 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                 || isPartOf(manualVideoAppList, packageName)
             ) {
                 min60 = true
-               // ignoreScrollOnNonNative = true
                 return
             }
         }
