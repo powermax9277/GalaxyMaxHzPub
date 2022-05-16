@@ -21,7 +21,7 @@
     <string name="info_qs_rtrr">Bietet eine Kachel zum Ein- und Ausschalten der Überwachung.</string>
     <string name="s_off_mod">Mods für ausgeschalteten Bildschrirm</string>
     <string name="force_hz_mod">Niedrigste Hz erzwingen</string>
-    <string name="s_off_hz_inf">Dadurch wird die Bildwiederholrate bei ausgeschaltetem Display auf %s hz eingestellt, um die Akkulaufzeit zu verbessern.</string>
+    <string name="s_off_hz_inf">Stellen Sie die Aktualisierungsrate auf die niedrigste Hz ein, wenn das Display aus- oder eingeschaltet ist AOD.\nBildwiederholfrequenz:%s</string>
     <string name="chng_res_stng">Die Einstellung für die %s -Auflösung unterstützt nicht die hohe/adaptive Bildwiederholrate. Ändern Sie zuerst die Auflösung in den Einstellungen.\n\nDiese App kann die Auflösungseinstellungen mithilfe der Schnelleinstellungskachel einfach ändern, sobald das ADB-Setup durchgeführt wurde.</string>
     <string name="chng_res_qs">Die Einstellung für die %s -Auflösung unterstützt nicht die hohe/adaptive Bildwiederholrate. Ändern Sie zuerst die Auflösung in den Einstellungen.\n\nSie können die Auflösung schnell ändern, indem Sie die in dieser App enthaltene Schnelleinstellungskachel verwenden.</string>
     <string name="psm_on_inf">Der Energiesparmodus ist derzeit aktiviert. Deaktivieren Sie diesen zuerst in den Einstellungen und stellen Sie die Bildwiederholrate auf Adaptiv/Hoch.\n\nDiese App kann die Bildwiederholrate auch im Energiesparmodus nach Abschluss des ADB-Setups problemlos auf Adaptive/Hoch ändern</string>
