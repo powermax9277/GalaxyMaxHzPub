@@ -723,6 +723,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
         if (!(isScreenOn.get() && applyAdaptiveMod.get()!!)) return
 
+
         when (event?.eventType) {
             TYPE_WINDOW_STATE_CHANGED -> {//32
                 if (event.contentChangeTypes != CONTENT_CHANGE_TYPE_UNDEFINED) return
@@ -783,6 +784,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                                 /*Note: "android.view.ViewGroup" for expanded toolbar scrolling
                                 "android.widget.FrameLayout" launcher vertical scrolling*/
                                 if (event.packageName != defaultKeyboardName) {
+
                                     if (!pauseMinHz ) {
 
                                         if (event.packageName == "com.ss.android.ugc.trill"
