@@ -786,8 +786,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                                     if (!pauseMinHz ) {
 
                                         if (event.packageName == "com.ss.android.ugc.trill"
-                                            || event.packageName == "com.zhiliaoapp.musically"
-                                            || event.packageName == "tv.twitch.android")
+                                            || event.packageName == "com.zhiliaoapp.musically")
                                         {
                                             return
                                         }
