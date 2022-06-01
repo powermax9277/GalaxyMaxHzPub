@@ -177,7 +177,6 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     private lateinit var autoSensorsOffRunnable: Runnable
     private lateinit var forceLowestRunnable: Runnable
 
-
     private val refreshRateModeChangeCallback by lazy{
         object : OnPropertyChangedCallback() {
             override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
@@ -1058,7 +1057,6 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    @RequiresApi(Build.VERSION_CODES.M)
     internal fun setupAdaptiveEnhancer(){
         launch {
             while (!isProfilesLoaded){
