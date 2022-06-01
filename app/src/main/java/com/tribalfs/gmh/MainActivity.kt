@@ -1445,7 +1445,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                     && isPremium.get()!!
                 ) {
                     keepModeOnPowerSaving = true
-                    UtilsPrefsGmhSt.instance(applicationContext).gmhPrefKmsOnPsm = true
+                    UtilsPrefsGmhSt.instance(applicationContext).gmhPrefKmsOnPsm = true && isPremium.get() == true
                 }
             }
             mBinding.swKeepMode.isChecked = keepModeOnPowerSaving
