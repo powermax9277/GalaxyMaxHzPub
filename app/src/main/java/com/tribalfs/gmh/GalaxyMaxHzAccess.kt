@@ -23,6 +23,7 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.os.PowerManager.ACTION_POWER_SAVE_MODE_CHANGED
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
@@ -90,6 +91,7 @@ private const val MAX_TRY = 8
 private const val SYSTEM_UI = "com.android.systemui"
 //private const val SAMSUNG_VIDEO = "com.samsung.android.video"
 private const val VOLUME_PANEL = "com.android.systemui.volume.view.VolumePanelView"
+
 private val manualVideoAppList = listOf(
     "amazon.avod",
     "youtube",
@@ -171,6 +173,11 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     private val mNotifIcon by lazy{ UtilNotifIcon() }
     private var mTransfyHzJob: Job? = null
     private var mPauseHzJob: Job? = null
+
+    private lateinit var autoSensorsOffRunnable: Runnable
+    private lateinit var forceLowestRunnable: Runnable
+
+
     private val refreshRateModeChangeCallback by lazy{
         object : OnPropertyChangedCallback() {
             override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
@@ -178,36 +185,6 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                     updateAdaptiveFactors()
                     updateNotif(mDisplay.refreshRate.toInt().toString())
                 }
-            }
-        }
-    }
-
-
-
-
-    private val autoSensorsOffRunnable: Runnable by lazy {
-        Runnable {
-            if (UtilsPrefsGmhSt.instance(applicationContext).gmhPrefSensorsOff) {
-                if (Power.isPlugged(applicationContext)) return@Runnable
-                switchSensorsOff(true)
-                //Workaround sensors off sometimes trigger action_SCREEN_ON
-                mHandler.postDelayed(forceLowestRunnable,1000)
-            }
-        }
-    }
-
-    private val forceLowestRunnable: Runnable by lazy {
-        Runnable {
-            if (screenOffRefreshRateMode != currentRefreshRateMode.get()) {
-                ignoreRrmChange.set(true)
-                if (mUtilsRefreshRate.setRefreshRateMode(screenOffRefreshRateMode!!)) {
-                    mUtilsRefreshRate.setRefreshRate(lowestHzForAllMode, 0)
-                } else {
-                    mUtilsRefreshRate.setRefreshRate(lowestHzCurMode, 0)
-                    ignoreRrmChange.set(false)
-                }
-            } else {
-                mUtilsRefreshRate.setRefreshRate(lowestHzCurMode, 0)
             }
         }
     }
@@ -495,6 +472,27 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     override fun onCreate() {
         setupScreenStatusReceiver()
         setupNotification()
+        autoSensorsOffRunnable = Runnable {
+            if (UtilsPrefsGmhSt.instance(applicationContext).gmhPrefSensorsOff) {
+                if (Power.isPlugged(applicationContext)) return@Runnable
+                switchSensorsOff(true)
+                //Workaround sensors off sometimes trigger action_SCREEN_ON
+                mHandler.postDelayed(forceLowestRunnable,1000)
+            }
+        }
+        forceLowestRunnable=  Runnable {
+            if (screenOffRefreshRateMode != currentRefreshRateMode.get()) {
+                ignoreRrmChange.set(true)
+                if (mUtilsRefreshRate.setRefreshRateMode(screenOffRefreshRateMode!!)) {
+                    mUtilsRefreshRate.setRefreshRate(lowestHzForAllMode, 0)
+                } else {
+                    mUtilsRefreshRate.setRefreshRate(lowestHzCurMode, 0)
+                    ignoreRrmChange.set(false)
+                }
+            } else {
+                mUtilsRefreshRate.setRefreshRate(lowestHzCurMode, 0)
+            }
+        }
     }
 
     private fun setupNotification() {
@@ -533,7 +531,6 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.M)
     override fun onServiceConnected() {
         gmhAccessInstance = this
         HzServiceHelperStn.instance(applicationContext).stopHzService()
@@ -747,6 +744,9 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
         if (!(isScreenOn.get() && applyAdaptiveMod.get()!!)) return
 
+        //TODO
+        Log.d("TESTEST", "$event")
+
         when (event?.eventType) {
             TYPE_WINDOW_STATE_CHANGED -> {//32
                 if (event.contentChangeTypes != CONTENT_CHANGE_TYPE_UNDEFINED) return
@@ -773,6 +773,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                     CONTENT_CHANGE_TYPE_SUBTREE -> {//1
                         when (event.packageName?.toString()) {
                             APPLICATION_ID ->{ return }
+
                             SYSTEM_UI -> {
                                 if (mKeyguardManager.isDeviceLocked) {
                                     if (pauseMinHz) {
@@ -795,6 +796,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                             }
 
                             else -> {
+
                                 if (UtilsDeviceInfoSt.instance(applicationContext).isLowRefreshDevice){
                                     if (!pauseMinHz) {
                                         doAdaptive()
@@ -806,6 +808,13 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                                 "android.widget.FrameLayout" launcher vertical scrolling*/
                                 if (event.packageName != defaultKeyboardName) {
                                     if (!pauseMinHz ) {
+
+                                        if (event.packageName == "com.ss.android.ugc.trill"
+                                            || event.packageName == "com.zhiliaoapp.musically")
+                                        {
+                                            return
+                                        }
+
                                         if (event.className == "android.widget.FrameLayout"
                                             || event.className == "android.view.ViewGroup"
                                             || (isOfficialAdaptive && min60)
@@ -867,7 +876,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     }
 
     private var pauseMinHz = false
-   // private var ignoreScrollOnNonNative = false
+    // private var ignoreScrollOnNonNative = false
     private var currentMinHz = 60
     private var min60 = false
     private var volumePressed = false
@@ -882,7 +891,6 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         currentMinHz = if (min60 || (hasPip && !isOfficialAdaptive)) lrrPref.get()!!.coerceAtLeast(60) else lrrPref.get()!!
     }
 
-    @RequiresApi(Build.VERSION_CODES.M)
     private fun doAdaptive() {
         //More efficient to check first
         if (mUtilsRefreshRate.getPeakRefreshRateFromSettings() != prrActive.get()!!) {
