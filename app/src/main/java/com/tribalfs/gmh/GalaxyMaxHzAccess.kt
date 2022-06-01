@@ -718,26 +718,6 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     }
 
 
-/*
-     private fun getActivityInfo(componentName: ComponentName): ActivityInfo? {
-         return try{
-             packageManager.getActivityInfo(componentName, 0)
-         } catch (_: PackageManager.NameNotFoundException) {
-             null
-         }
-     }*/
-
-
-/*override fun onKeyEvent(event: KeyEvent?): Boolean {
-    when (event?.keyCode) {
-        KEYCODE_VOLUME_UP, KEYCODE_VOLUME_DOWN -> {
-            handleVolumePressedJob()
-        }
-    }
-    return super.onKeyEvent(event)
-}*/
-
-
     @SuppressLint("SwitchIntDef")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
