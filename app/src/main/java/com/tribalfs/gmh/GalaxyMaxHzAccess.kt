@@ -23,7 +23,6 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.os.PowerManager.ACTION_POWER_SAVE_MODE_CHANGED
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
@@ -160,7 +159,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         get() = masterJob + Dispatchers.IO
 
     private val mConnectivityManager by lazy {applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager}
-    private val mKeyguardManager by lazy {applicationContext.getSystemService(KEYGUARD_SERVICE) as KeyguardManager}
+    private lateinit var mKeyguardManager: KeyguardManager
     private val mHandler by lazy {Handler(Looper.getMainLooper())}
     private val mCameraManager by lazy {getSystemService(CAMERA_SERVICE) as CameraManager}
     private val mUtilsRefreshRate by lazy {UtilRefreshRateSt.instance(applicationContext)}
@@ -471,6 +470,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     override fun onCreate() {
         setupScreenStatusReceiver()
         setupNotification()
+        mKeyguardManager = applicationContext.getSystemService(KEYGUARD_SERVICE) as KeyguardManager
         autoSensorsOffRunnable = Runnable {
             if (UtilsPrefsGmhSt.instance(applicationContext).gmhPrefSensorsOff) {
                 if (Power.isPlugged(applicationContext)) return@Runnable
@@ -742,9 +742,6 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
         if (!(isScreenOn.get() && applyAdaptiveMod.get()!!)) return
-
-        //TODO
-        Log.d("TESTEST", "$event")
 
         when (event?.eventType) {
             TYPE_WINDOW_STATE_CHANGED -> {//32
