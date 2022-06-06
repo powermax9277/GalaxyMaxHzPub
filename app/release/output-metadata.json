@@ -4,16 +4,16 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "com.tribalfs.gmh",
+  "applicationId": "com.tribalfs.siesta",
   "variantName": "release",
   "elements": [
     {
       "type": "SINGLE",
       "filters": [],
       "attributes": [],
-      "versionCode": 161,
-      "versionName": "7.14.54",
-      "outputFile": "galaxy_max_hz_v7.14.54-release.apk"
+      "versionCode": 1,
+      "versionName": "1.00a",
+      "outputFile": "galaxy_max_hz_v1.00a-release.apk"
     }
   ],
   "elementType": "File"
