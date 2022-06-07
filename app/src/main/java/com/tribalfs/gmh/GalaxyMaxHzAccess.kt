@@ -156,7 +156,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
     private val masterJob = SupervisorJob()
     override val coroutineContext: CoroutineContext
-        get() = masterJob + Dispatchers.IO
+        get() = masterJob + Dispatchers.Default
 
     private val mConnectivityManager by lazy {applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager}
     private lateinit var mKeyguardManager: KeyguardManager
