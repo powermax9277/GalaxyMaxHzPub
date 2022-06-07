@@ -171,10 +171,11 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     private val mNotificationContentView by lazy { RemoteViews(applicationContext.packageName, R.layout.hz_notification) }
     private val mNotifIcon by lazy{ UtilNotifIcon() }
     private var mTransfyHzJob: Job? = null
-    private var mPauseHzJob: Job? = null
+   // private var mPauseHzJob: Job? = null
 
     private lateinit var autoSensorsOffRunnable: Runnable
     private lateinit var forceLowestRunnable: Runnable
+    private lateinit var pauseHzRunnable: Runnable
 
     private val refreshRateModeChangeCallback by lazy{
         object : OnPropertyChangedCallback() {
@@ -195,7 +196,10 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                     restoreSync.set(false)
                     disablePsm.set(false)
 
-                    doAdaptiveJob?.cancel()
+                    //doAdaptiveJob?.cancel()
+                    switchDownRunnable?.apply {
+                        mHandler.removeCallbacks(this)
+                    }
 
                     // Workaround for AOD Bug on some device????
                     //mUtilsRefreshRate.clearPeakAndMinRefreshRate()
@@ -206,7 +210,8 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
                     mHandler.postDelayed(autoSensorsOffRunnable, 15000)
 
-                    if (hzStatus.get() == PLAYING) {
+                    mHandler.postDelayed(pauseHzRunnable, 10000)
+                    /*if (hzStatus.get() == PLAYING) {
                         mPauseHzJob?.cancel()
                         mPauseHzJob = launch(Dispatchers.Main) {
                             delay(10000)
@@ -215,13 +220,15 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                             }
                             mPauseHzJob = null
                         }
-                    }
+                    }*/
                 }
 
                 ACTION_SCREEN_ON ->{
                     isScreenOn.set(true)
 
-                    mHandler.removeCallbacksAndMessages(null)
+                    mHandler.removeCallbacks(autoSensorsOffRunnable)
+                    mHandler.removeCallbacks(forceLowestRunnable)
+                    mHandler.removeCallbacks(pauseHzRunnable)
 
                     launch {
                         val mHz = if (isSamsung){
@@ -242,7 +249,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                         }
                     }
 
-                    mPauseHzJob?.cancel()
+                    //mPauseHzJob?.cancel()
                     if(hzStatus.get() == PAUSE) {
                         startHz()
                     }
@@ -492,6 +499,13 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                 mUtilsRefreshRate.setRefreshRate(lowestHzCurMode, 0)
             }
         }
+
+        pauseHzRunnable = Runnable {
+                if (!isScreenOn.get()) {
+                    pauseHz()
+                }
+        }
+
     }
 
     private fun setupNotification() {
@@ -552,7 +566,9 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
     override fun onUnbind(intent: Intent?): Boolean {
         gmhAccessInstance = null
-        doAdaptiveJob?.cancel()
+        switchDownRunnable?.apply {
+            mHandler.removeCallbacks(this)
+        }
         mUtilsRefreshRate.setPeakRefreshRate(prrActive.get()!!)
         HzServiceHelperStn.instance(applicationContext).switchHz()
         return super.onUnbind(intent)
@@ -861,7 +877,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     private var cameraOpen: Boolean = false
     private var isKeyboardOpen = false
     private var hasPip = false
-    private var doAdaptiveJob: Job? = null
+    //private var doAdaptiveJob: Job? = null
 
     private var keepAdaptiveMod = false
     private fun updateAdaptiveFactors(){
@@ -869,7 +885,34 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         currentMinHz = if (min60 || (hasPip && !isOfficialAdaptive)) lrrPref.get()!!.coerceAtLeast(60) else lrrPref.get()!!
     }
 
+    @Volatile
+    private var _currentPeakRate: Int = 0
+    private var switchDownRunnable: Runnable? = null
+
     private fun doAdaptive() {
+        if (_currentPeakRate != prrActive.get()!!) {
+            mUtilsRefreshRate.setPeakRefreshRate(prrActive.get()!!)
+            _currentPeakRate = prrActive.get()!!
+        }
+
+        if (switchDownRunnable != null) {
+            mHandler.removeCallbacks(switchDownRunnable!!)
+        }
+
+        switchDownRunnable = kotlinx.coroutines.Runnable {
+            if (applyAdaptiveMod.get()!! && keepAdaptiveMod) {
+                mUtilsRefreshRate.setPeakRefreshRate(currentMinHz)
+                _currentPeakRate = currentMinHz
+            }
+
+        }
+
+        mHandler.postDelayed(
+            switchDownRunnable!!
+            , swithdownDelay)
+    }
+
+ /*   private fun doAdaptive() {
         //More efficient to check first
         if (mUtilsRefreshRate.getPeakRefreshRateFromSettings() != prrActive.get()!!) {
             mUtilsRefreshRate.setPeakRefreshRate(prrActive.get()!!)
@@ -884,7 +927,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
             doAdaptiveJob = null
         }
     }
-
+*/
 
 
     private var windowsScannerJob: Job? = null
@@ -1006,7 +1049,9 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         try {
             disableNetworkCallback()
         }catch (_: Exception){}
-        doAdaptiveJob?.cancel()
+        switchDownRunnable?.apply {
+            mHandler.removeCallbacks(this)
+        }
         masterJob.cancel()
         super.onDestroy()
     }
