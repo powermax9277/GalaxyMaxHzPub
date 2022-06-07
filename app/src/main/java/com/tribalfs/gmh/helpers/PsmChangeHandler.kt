@@ -10,14 +10,16 @@ import com.tribalfs.gmh.helpers.CacheSettings.isPremium
 import com.tribalfs.gmh.helpers.CacheSettings.keepModeOnPowerSaving
 import com.tribalfs.gmh.helpers.CacheSettings.prrActive
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 internal class PsmChangeHandler private constructor(val appCtx: Context) {
 
     companion object: SingletonMaker<PsmChangeHandler, Context>(::PsmChangeHandler)
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Synchronized
     @RequiresApi(Build.VERSION_CODES.M)
     fun handle() {
@@ -49,7 +51,7 @@ internal class PsmChangeHandler private constructor(val appCtx: Context) {
         }
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
+
     fun startPipActivityIfS(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && isPowerSaveMode.get() == true) {
 
