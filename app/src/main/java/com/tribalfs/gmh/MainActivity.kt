@@ -601,11 +601,12 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
 
             mBinding.swKeepMode.id -> {
                 (v as Switch).isChecked.let { isOn ->
-                    if (isOn && !checkAccessibilityPerm(hasWriteSecureSetPerm)) {
+                    if (isOn && (!checkAccessibilityPerm(hasWriteSecureSetPerm) || !confirmHasPipPermission())) {
                         keepModeOnPowerSaving = false
                         mBinding.swKeepMode.isChecked = false
                         return
                     }
+
                     keepModeOnPowerSaving = isOn
                     UtilsPrefsGmhSt.instance(applicationContext).gmhPrefPsmIsOffCache = (isPowerSaveMode.get() != true)
                     UtilsPrefsGmhSt.instance(applicationContext).gmhPrefKmsOnPsm = isOn
@@ -620,6 +621,11 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                     return
                 }
 
+
+                if (isPowerSaveMode.get() == true && !confirmHasPipPermission()){
+                    mBinding.chStandard.isChecked = true
+                    return
+                }
 
                 if (!mUtilsRefreshRate.tryThisRrm(REFRESH_RATE_MODE_ALWAYS, null)){
                     v.isChecked = false
@@ -653,18 +659,8 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                         Toast.LENGTH_LONG).show()
                 }
 
-                if (isPowerSaveMode.get() == true
-                    && SDK_INT >= VERSION_CODES.S
-                    && !UtilPermSt.instance(applicationContext).hasPipPermission()
-                ) {
+                if (isPowerSaveMode.get() == true && !confirmHasPipPermission()){
                     mBinding.chStandard.isChecked = true
-                    showSbMsg("Picture-in-Picture in $applicationName info settings needs to be enabled.",
-                        Snackbar.LENGTH_INDEFINITE, android.R.string.ok){
-                        val i = Intent(ACTION_APPLICATION_DETAILS_SETTINGS)
-                        i.data = Uri.parse("package:$packageName")
-                        i.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                        startActivity(i)
-                    }
                     return
                 }
 
@@ -759,6 +755,23 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                 }
             }
 
+        }
+    }
+
+    private fun confirmHasPipPermission(): Boolean{
+        if ( SDK_INT >= VERSION_CODES.S && !UtilPermSt.instance(applicationContext).hasPipPermission()
+        ) {
+            mBinding.chStandard.isChecked = true
+            showSbMsg("Picture-in-Picture in $applicationName info settings needs to be enabled.",
+                Snackbar.LENGTH_INDEFINITE, android.R.string.ok){
+                val i = Intent(ACTION_APPLICATION_DETAILS_SETTINGS)
+                i.data = Uri.parse("package:$packageName")
+                i.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                startActivity(i)
+            }
+            return false
+        }else{
+            return true
         }
     }
 
