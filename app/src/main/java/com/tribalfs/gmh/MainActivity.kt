@@ -55,6 +55,7 @@ import com.tribalfs.appupdater.interfaces.OnUpdateCheckedCallback
 import com.tribalfs.gmh.BuildConfig.APPLICATION_ID
 import com.tribalfs.gmh.BuildConfig.VERSION_NAME
 import com.tribalfs.gmh.GalaxyMaxHzAccess.Companion.gmhAccessInstance
+import com.tribalfs.gmh.MyApplication.Companion.appScopeIO
 import com.tribalfs.gmh.MyApplication.Companion.applicationName
 import com.tribalfs.gmh.UtilAccessibilityService.allowAccessibility
 import com.tribalfs.gmh.callbacks.LvlSbMsgCallback
@@ -114,6 +115,7 @@ import com.tribalfs.gmh.sharedprefs.*
 import com.tribalfs.gmh.viewmodels.MyViewModel
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
+import kotlin.system.exitProcess
 
 internal const val GMH_WEB_APP ="https://script.google.com/macros/s/AKfycbzlRKh4-YXyXLufXZfDqAs1xJEJK7BF8zmhEDGDpbP1luu97trI/exec"
 internal const val ACTION_HIDE_MAIN_ACTIVITY = "$APPLICATION_ID.ACTION_HIDE"
@@ -793,6 +795,14 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        if (SDK_INT < VERSION_CODES.M) {
+            Toast.makeText(applicationContext, "$applicationName is not compatible to this device android version", Toast.LENGTH_LONG).show()
+            appScopeIO.launch {
+                delay(2500)
+                android.os.Process.killProcess(android.os.Process.myPid())
+                exitProcess(1)
+            }
+        }
         val splashScreen = installSplashScreen()
         splashScreen.setOnExitAnimationListener{splashScreenView ->
             splashScreenView.view.background.alpha = 15
@@ -817,6 +827,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                 animator.start()
             }
         }
+
 
         inflateViews()
         updateDisplayId()
