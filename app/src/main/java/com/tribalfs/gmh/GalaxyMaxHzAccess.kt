@@ -77,6 +77,7 @@ import com.tribalfs.gmh.hertz.HzServiceHelperStn
 import com.tribalfs.gmh.netspeed.NetSpeedServiceHelperStn
 import com.tribalfs.gmh.profiles.ProfilesObj.isProfilesLoaded
 import com.tribalfs.gmh.receivers.GmhBroadcastReceivers
+import com.tribalfs.gmh.receivers.GmhBroadcastReceivers.Companion.triggerPsmHandlerOnScreenOn
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt
 import kotlinx.coroutines.*
 import java.lang.Runnable
@@ -267,6 +268,11 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                     if (turnOffAutoSensorsOff){
                         UtilsPrefsGmhSt.instance(applicationContext).gmhPrefSensorsOff = false
                         turnOffAutoSensorsOff = false
+                    }
+
+                    if (triggerPsmHandlerOnScreenOn){
+                        triggerPsmHandlerOnScreenOn = false
+                        PsmChangeHandler.instance(applicationContext).handle()
                     }
 
                 }

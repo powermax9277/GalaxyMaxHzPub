@@ -11,6 +11,7 @@ import android.os.Build
 import android.os.Handler
 import android.os.PowerManager.ACTION_POWER_SAVE_MODE_CHANGED
 import android.provider.Settings
+import androidx.annotation.RequiresApi
 import com.tribalfs.gmh.callbacks.GmhBroadcastCallback
 import com.tribalfs.gmh.helpers.*
 import com.tribalfs.gmh.helpers.CacheSettings.currentBrightness
@@ -38,13 +39,16 @@ import kotlinx.coroutines.launch
 //private const val PREF_NET_TYPE_5G_LTE_GSM_WCDMA = 26
 
 
-open class GmhBroadcastReceivers(private val appCtx: Context,
+class GmhBroadcastReceivers(private val appCtx: Context,
                                  private val gmhBroadcastCallback: GmhBroadcastCallback,
                                  private val scope: CoroutineScope,
                                  private val handler: Handler): BroadcastReceiver() {
 
    // private val handler by lazy { Handler(Looper.getMainLooper()) }
     private val connectivityManager by lazy { appCtx.getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager}
+    companion object {
+        var triggerPsmHandlerOnScreenOn = false
+    }
 
     init{
         UtilsDeviceInfoSt.instance(appCtx).isDisplayOn().let { screenOn ->
@@ -127,6 +131,7 @@ open class GmhBroadcastReceivers(private val appCtx: Context,
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onReceive(p0: Context, p1: Intent) {
 
         p1.action?.let{gmhBroadcastCallback.onIntentReceived(it)}
@@ -135,10 +140,11 @@ open class GmhBroadcastReceivers(private val appCtx: Context,
             ACTION_POWER_SAVE_MODE_CHANGED -> {
                 isPowerSaveMode.set(UtilsDeviceInfoSt.instance(appCtx).isPowerSavingsMode())
                 if (ignorePowerModeChange.getAndSet(false) || !hasWriteSecureSetPerm) return
-                UtilsPrefsGmhSt.instance(appCtx).gmhPrefPsmIsOffCache = isPowerSaveMode.get() != true
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    PsmChangeHandler.instance(appCtx).handle()
+                if (!isScreenOn.get() && isPowerSaveMode.get() == true){
+                    triggerPsmHandlerOnScreenOn = true
                 }
+                UtilsPrefsGmhSt.instance(appCtx).gmhPrefPsmIsOffCache = isPowerSaveMode.get() != true
+                PsmChangeHandler.instance(appCtx).handle()
             }
 
             ACTION_SCREEN_OFF -> {
