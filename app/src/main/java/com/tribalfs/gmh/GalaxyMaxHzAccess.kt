@@ -210,7 +210,10 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
                     mHandler.postDelayed(autoSensorsOffRunnable, 15000)
 
-                    mHandler.postDelayed(pauseHzRunnable, 10000)
+                    if (hzStatus.get() == PLAYING) {
+                        mHandler.removeCallbacks(pauseHzRunnable)
+                        mHandler.postDelayed(pauseHzRunnable, 10000)
+                    }
                     /*if (hzStatus.get() == PLAYING) {
                         mPauseHzJob?.cancel()
                         mPauseHzJob = launch(Dispatchers.Main) {

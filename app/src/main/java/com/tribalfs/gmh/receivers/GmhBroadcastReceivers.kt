@@ -145,7 +145,9 @@ open class GmhBroadcastReceivers(private val appCtx: Context,
 
                 handler.postDelayed(captureRrRunnable, 5000)
 
-                if (UtilsPrefsGmhSt.instance(appCtx).gmhPrefPsmOnSo) { handler.postDelayed(psmEnablerRunnable,8000) }
+                if (UtilsPrefsGmhSt.instance(appCtx).gmhPrefPsmOnSo) {
+                    handler.postDelayed(psmEnablerRunnable,8000)
+                }
 
                 if (UtilsPrefsGmhSt.instance(appCtx).gmhPrefDisableSyncIsOn) { handler.postDelayed(autosyncDisablerRunnable,12000) }
 
@@ -154,7 +156,7 @@ open class GmhBroadcastReceivers(private val appCtx: Context,
 
             ACTION_SCREEN_ON -> {
 
-               // handler.removeCallbacksAndMessages(null)
+                handler.removeCallbacks(psmEnablerRunnable)
 
                 scope.launch {
                     if (restoreSync.get()) ContentResolver.setMasterSyncAutomatically(true)
