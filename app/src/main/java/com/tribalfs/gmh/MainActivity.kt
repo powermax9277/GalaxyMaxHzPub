@@ -793,8 +793,6 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
 
     @RequiresApi(VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
         if (SDK_INT < VERSION_CODES.M) {
             Toast.makeText(applicationContext, "$applicationName is not compatible to this device android version", Toast.LENGTH_LONG).show()
             appScopeIO.launch {
@@ -803,6 +801,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                 exitProcess(1)
             }
         }
+        super.onCreate(savedInstanceState)
         val splashScreen = installSplashScreen()
         splashScreen.setOnExitAnimationListener{splashScreenView ->
             splashScreenView.view.background.alpha = 15
