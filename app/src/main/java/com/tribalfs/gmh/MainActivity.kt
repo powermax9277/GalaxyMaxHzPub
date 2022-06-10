@@ -1179,7 +1179,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
             R.id.menuUpd -> {
                 checkUpdate(true)
                 if (isPremium.get() == true) {
-                    syncLicense(true, trial = false)
+                    syncLicense(true, trial = true)
                 }
                 true
             }
