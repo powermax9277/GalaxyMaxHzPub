@@ -783,7 +783,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
             if (mBinding.hasWssPerm == false) mBinding.hasWssPerm = true
             Toast.makeText(
                 this@MainActivity,
-                "WRITE_SECURE_SETTINGS permission already granted.",
+                "WRITE_SECURE_SETTINGS permission successfully granted.",
                 Toast.LENGTH_SHORT
             ).show()
         }else{
