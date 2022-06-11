@@ -127,7 +127,7 @@ private val infosForTasker = InfosFromMainApp().apply {
 
 
     if (isPremium.get()!!) {
-        if (minHzListForAdp?.size ?: 0 > 1) {
+        if ((minHzListForAdp?.size ?: 0) > 1) {
             add(
                 InfoFromMainApp(
                     "Minimum Refresh Rate for Adaptive",
