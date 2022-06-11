@@ -78,7 +78,7 @@ android {
 dependencies {
     var lifecycle_version = "2.4.1"
     var activity_ktx_version = "1.4.0"
-    var constraint_layout_version = "2.1.3"
+    var constraint_layout_version = "2.1.4"
     var volley_version = "1.2.1"
     var acraVersion = '5.7.0'
 
@@ -90,7 +90,7 @@ dependencies {
 
     implementation project(path:':appupdater')
 
-    implementation 'androidx.core:core-splashscreen:1.0.0-beta02'
+    implementation 'androidx.core:core-splashscreen:1.0.0-rc01'
 
     // ViewModel
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"

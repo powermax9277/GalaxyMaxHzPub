@@ -23,6 +23,7 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.os.PowerManager.ACTION_POWER_SAVE_MODE_CHANGED
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
@@ -748,6 +749,8 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
         if (!(isScreenOn.get() && applyAdaptiveMod.get()!!)) return
 
+        //TODO
+        Log.d("TESTEST", "${event}")
 
         when (event?.eventType) {
             TYPE_WINDOW_STATE_CHANGED -> {//32
@@ -868,7 +871,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                             return
                         }
 
-                        WINDOWS_CHANGE_REMOVED, WINDOWS_CHANGE_ADDED, WINDOWS_CHANGE_PIP -> {
+                        WINDOWS_CHANGE_REMOVED, WINDOWS_CHANGE_ADDED, WINDOWS_CHANGE_LAYER, WINDOWS_CHANGE_PIP -> {
                             scanWindows()
                             return
                         }
@@ -943,7 +946,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun scanWindows(){
         windowsScannerJob?.cancel()
-        windowsScannerJob = launch {
+        windowsScannerJob = launch(Dispatchers.Default) {
             hasPip = false
             isKeyboardOpen = false
             pauseMinHz = false

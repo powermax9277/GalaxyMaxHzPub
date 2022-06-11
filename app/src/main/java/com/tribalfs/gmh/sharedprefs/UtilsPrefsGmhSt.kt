@@ -155,7 +155,7 @@ internal class UtilsPrefsGmhSt private constructor(val context: Context) {
 
     var gmhPrefLimitTyping: Boolean
         get() {
-            return hzSharedPref.getBoolean("limit_tp", true)
+            return hzSharedPref.getBoolean("limit_tp", false)
         }
         set(apply) {hzSharedPrefEditor.putBoolean("limit_tp", apply).apply()}
 
