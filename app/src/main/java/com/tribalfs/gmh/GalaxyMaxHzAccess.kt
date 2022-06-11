@@ -868,7 +868,6 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                         }
 
                         WINDOWS_CHANGE_REMOVED, WINDOWS_CHANGE_ADDED, WINDOWS_CHANGE_LAYER, WINDOWS_CHANGE_PIP -> {
-                            isKeyboardOpen = false
                             doAdaptive()
                             scanWindows()
                             return
@@ -930,10 +929,10 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     private fun scanWindows(){
         windowsScannerJob?.cancel()
         windowsScannerJob = launch(Dispatchers.Default) {
+            isKeyboardOpen = false
             hasPip = false
             pauseMinHz = false
             min60 = false
-            //ignoreScrollOnNonNative = false
             windows.forEach {win ->
                 if (win.isInPictureInPictureMode) {
                     hasPip = true
