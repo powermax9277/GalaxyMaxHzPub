@@ -1095,6 +1095,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                     updateSwitchDown()
                 } else {
                     currentBrightness.removeOnPropertyChangedCallback(brightnessCallback)
+                    mHandler.removeCallbacks(switchDownRunnable)
                     if (UtilPermSt.instance(applicationContext).hasWriteSystemPerm()) {
                         if (UtilsPrefsGmhSt.instance(applicationContext).gmhPrefMinHzAdapt > UtilsDeviceInfoSt.instance(applicationContext).regularMinHz) {
                             mUtilsRefreshRate.setRefreshRate(prrActive.get()!!, UtilsPrefsGmhSt.instance(applicationContext).gmhPrefMinHzAdapt)

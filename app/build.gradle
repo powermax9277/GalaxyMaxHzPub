@@ -115,5 +115,5 @@ dependencies {
 
     implementation 'eu.chainfire:libsuperuser:1.1.0+'
     //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.8.1'
-
+    implementation "com.jakewharton.timber:timber:4.7.1"
 }

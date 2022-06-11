@@ -44,6 +44,7 @@ import org.acra.config.limiter
 import org.acra.data.StringFormat
 import org.acra.ktx.initAcra
 import org.acra.sender.HttpSender
+import timber.log.Timber
 
 
 class MyApplication : Application() {
@@ -59,13 +60,20 @@ class MyApplication : Application() {
     private lateinit var mContentResolver: ContentResolver
     private lateinit var myBrightnessObserver: MyBrightnessObserver
 
-
+    internal class RefreshTree : Timber.DebugTree() {
+        override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
+            super.log(priority, "GMH_: $tag", message, t)
+        }
+    }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate() {
         //Log.d(TAG, "onCreate called")
         super.onCreate()
+
+        if (BuildConfig.DEBUG) Timber.plant(RefreshTree())
+
         applicationName = when (val stringId = applicationInfo.labelRes) {
             0 -> applicationInfo.nonLocalizedLabel.toString()
             else -> getString(stringId)
