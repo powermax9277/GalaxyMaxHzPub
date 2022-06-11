@@ -39,21 +39,13 @@ import com.tribalfs.gmh.sharedprefs.LIC_TYPE_TRIAL_ACTIVE
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsAct
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt
 import kotlinx.coroutines.*
-import org.acra.ACRA
-import org.acra.annotation.AcraCore
-import org.acra.annotation.AcraHttpSender
-import org.acra.annotation.AcraLimiter
+import org.acra.config.httpSender
+import org.acra.config.limiter
 import org.acra.data.StringFormat
+import org.acra.ktx.initAcra
 import org.acra.sender.HttpSender
 
 
-
-@AcraCore(reportFormat= StringFormat.JSON)
-@AcraHttpSender(uri = "https://script.google.com/macros/s/AKfycbybr-F6rCLr8fTk0jYvz_ohCOcNLwsSPCNxhYUlX-KtvLE9JT0/exec",
-    httpMethod = HttpSender.Method.POST,
-    basicAuthLogin = "",
-    basicAuthPassword = "")
-@AcraLimiter(stacktraceLimit = 1, failedReportLimit = 3)
 class MyApplication : Application() {
 
     companion object{
@@ -218,6 +210,21 @@ class MyApplication : Application() {
 
     override fun attachBaseContext(base: Context?) {
         super.attachBaseContext(base)
-        ACRA.init(this)
+        if (!BuildConfig.DEBUG) {
+            initAcra {
+                buildConfigClass = BuildConfig::class.java
+                reportFormat = StringFormat.JSON
+                httpSender {
+                    uri = "https://script.google.com/macros/s/AKfycbybr-F6rCLr8fTk0jYvz_ohCOcNLwsSPCNxhYUlX-KtvLE9JT0/exec"
+                    httpMethod = HttpSender.Method.POST
+                    basicAuthLogin = ""
+                    basicAuthPassword = ""
+                }
+                limiter {
+                    stacktraceLimit = 1
+                    failedReportLimit = 3
+                }
+            }
+        }
     }
 }
