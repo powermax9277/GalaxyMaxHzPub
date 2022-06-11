@@ -868,6 +868,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                         }
 
                         WINDOWS_CHANGE_REMOVED, WINDOWS_CHANGE_ADDED, WINDOWS_CHANGE_LAYER, WINDOWS_CHANGE_PIP -> {
+                            isKeyboardOpen = false
                             doAdaptive()
                             scanWindows()
                             return
@@ -879,14 +880,12 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     }
 
     private var pauseMinHz = false
-    // private var ignoreScrollOnNonNative = false
     private var currentMinHz = 60
     private var min60 = false
     private var volumePressed = false
     private var cameraOpen: Boolean = false
     private var isKeyboardOpen = false
     private var hasPip = false
-    //private var doAdaptiveJob: Job? = null
 
     private var keepAdaptiveMod = false
     private fun updateAdaptiveFactors(){
