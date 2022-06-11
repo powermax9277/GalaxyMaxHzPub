@@ -894,7 +894,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         currentMinHz = if (min60 || (hasPip && !isOfficialAdaptive)) lrrPref.get()!!.coerceAtLeast(60) else lrrPref.get()!!
     }
 
-    private var switchDownRunnable= Runnable {
+    private var switchDownRunnable = Runnable {
         mUtilsRefreshRate.setPeakRefreshRate(currentMinHz)
     }
 
