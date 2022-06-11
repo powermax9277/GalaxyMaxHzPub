@@ -80,7 +80,7 @@ dependencies {
     var activity_ktx_version = "1.4.0"
     var constraint_layout_version = "2.1.4"
     var volley_version = "1.2.1"
-    var acraVersion = '5.7.0'
+    var acraVersion = '5.9.3'
 
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
 
