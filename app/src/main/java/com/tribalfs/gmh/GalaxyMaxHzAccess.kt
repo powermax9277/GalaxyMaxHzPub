@@ -23,7 +23,6 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.os.PowerManager.ACTION_POWER_SAVE_MODE_CHANGED
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
@@ -749,9 +748,6 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
         if (!(isScreenOn.get() && applyAdaptiveMod.get()!!)) return
 
-        //TODO
-        Log.d("TESTEST", "${event}")
-
         when (event?.eventType) {
             TYPE_WINDOW_STATE_CHANGED -> {//32
                 if (event.contentChangeTypes != CONTENT_CHANGE_TYPE_UNDEFINED) return
@@ -872,6 +868,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                         }
 
                         WINDOWS_CHANGE_REMOVED, WINDOWS_CHANGE_ADDED, WINDOWS_CHANGE_LAYER, WINDOWS_CHANGE_PIP -> {
+                            doAdaptive()
                             scanWindows()
                             return
                         }
@@ -897,15 +894,13 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         currentMinHz = if (min60 || (hasPip && !isOfficialAdaptive)) lrrPref.get()!!.coerceAtLeast(60) else lrrPref.get()!!
     }
 
-    @Volatile
-    private var _currentPeakRate: Int = 0
     private var switchDownRunnable: Runnable? = null
 
     private fun doAdaptive() {
-        if (_currentPeakRate != prrActive.get()!!) {
+       // if (_currentPeakRate != prrActive.get()!!) {
             mUtilsRefreshRate.setPeakRefreshRate(prrActive.get()!!)
-            _currentPeakRate = prrActive.get()!!
-        }
+         //   _currentPeakRate = prrActive.get()!!
+       // }
 
         if (switchDownRunnable != null) {
             mHandler.removeCallbacks(switchDownRunnable!!)
@@ -914,7 +909,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         switchDownRunnable = kotlinx.coroutines.Runnable {
             if (applyAdaptiveMod.get()!! && keepAdaptiveMod) {
                 mUtilsRefreshRate.setPeakRefreshRate(currentMinHz)
-                _currentPeakRate = currentMinHz
+               // _currentPeakRate = currentMinHz
             }
 
         }
@@ -948,7 +943,6 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         windowsScannerJob?.cancel()
         windowsScannerJob = launch(Dispatchers.Default) {
             hasPip = false
-            isKeyboardOpen = false
             pauseMinHz = false
             min60 = false
             //ignoreScrollOnNonNative = false
