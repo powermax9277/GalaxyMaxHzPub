@@ -868,7 +868,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
         }
 
 
-        if (!isOfficialAdaptive && isPremium.get() == true){
+        if (/*!isOfficialAdaptive && */isPremium.get() == true){
             (UtilsPrefsGmhSt.instance(applicationContext).gmhPrefPreventHigh).let {
                 preventHigh = it
                 mBinding.swPreventHigh.isChecked = it

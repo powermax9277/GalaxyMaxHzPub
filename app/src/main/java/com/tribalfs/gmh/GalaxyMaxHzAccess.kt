@@ -894,29 +894,18 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         currentMinHz = if (min60 || (hasPip && !isOfficialAdaptive)) lrrPref.get()!!.coerceAtLeast(60) else lrrPref.get()!!
     }
 
-    private var switchDownRunnable: Runnable? = null
+    private var switchDownRunnable= Runnable {
+        mUtilsRefreshRate.setPeakRefreshRate(currentMinHz)
+    }
 
     private fun doAdaptive() {
-       // if (_currentPeakRate != prrActive.get()!!) {
-            mUtilsRefreshRate.setPeakRefreshRate(prrActive.get()!!)
-         //   _currentPeakRate = prrActive.get()!!
-       // }
-
-        if (switchDownRunnable != null) {
-            mHandler.removeCallbacks(switchDownRunnable!!)
+        mUtilsRefreshRate.setPeakRefreshRate(prrActive.get()!!)
+        mHandler.removeCallbacks(switchDownRunnable)
+        if (applyAdaptiveMod.get()!! && keepAdaptiveMod) {
+            mHandler.postDelayed(
+                switchDownRunnable, swithdownDelay
+            )
         }
-
-        switchDownRunnable = kotlinx.coroutines.Runnable {
-            if (applyAdaptiveMod.get()!! && keepAdaptiveMod) {
-                mUtilsRefreshRate.setPeakRefreshRate(currentMinHz)
-               // _currentPeakRate = currentMinHz
-            }
-
-        }
-
-        mHandler.postDelayed(
-            switchDownRunnable!!
-            , swithdownDelay)
     }
 
  /*   private fun doAdaptive() {
