@@ -51,6 +51,7 @@ import com.tribalfs.gmh.taskerplugin.TaskerKeys.motion_smoothness_mode
 import com.tribalfs.gmh.taskerplugin.TaskerKeys.protect_battery
 import com.tribalfs.gmh.taskerplugin.TaskerKeys.quick_doze_mod
 import kotlinx.coroutines.*
+import timber.log.Timber
 
 
 @ExperimentalCoroutinesApi
@@ -217,6 +218,7 @@ class DynamicInputRunner : TaskerPluginRunnerActionNoOutputOrInput() {
                             try {
                                 val mHz = (info.value as String).toInt()
                                 if (dm.getDisplay(displayId).state == STATE_ON) {
+                                    Timber.d("Setting max hz to $mHz")
                                     UtilChangeMaxHz(appCtx).changeMaxHz(mHz)
                                 } else {
                                     if (supportedHzIntCurMod?.indexOfFirst { hz -> hz == mHz } != -1) {
@@ -343,6 +345,7 @@ class DynamicInputRunner : TaskerPluginRunnerActionNoOutputOrInput() {
                             CoroutineScope(Dispatchers.IO).launch {
                                 val minHz = (info.value as String).toInt()
                                 if (minHzListForAdp?.indexOf(minHz) != -1){
+                                    Timber.d("Setting max hz to $minHz")
                                     if (isOfficialAdaptive && minHz < UtilsDeviceInfoSt.instance(context).regularMinHz) {
                                         if (gmhAccessInstance == null/*!isAccessibilityEnabled(appCtx, GalaxyMaxHzAccess::class.java)*/) {
                                             return@launch
@@ -372,6 +375,7 @@ class DynamicInputRunner : TaskerPluginRunnerActionNoOutputOrInput() {
                                         ).show()
                                     }
                                 }
+                                cancel()
                             }
                         }
 
