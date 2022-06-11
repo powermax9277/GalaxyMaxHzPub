@@ -23,6 +23,7 @@ import com.tribalfs.gmh.helpers.CacheSettings.ignoreRrmChange
 import com.tribalfs.gmh.helpers.CacheSettings.isFakeAdaptiveValid
 import com.tribalfs.gmh.helpers.CacheSettings.isPowerSaveMode
 import com.tribalfs.gmh.helpers.CacheSettings.isScreenOn
+import com.tribalfs.gmh.helpers.CacheSettings.keepModeOnPowerSaving
 import com.tribalfs.gmh.helpers.CacheSettings.offScreenRefreshRate
 import com.tribalfs.gmh.helpers.CacheSettings.restoreSync
 import com.tribalfs.gmh.helpers.CacheSettings.screenOffRefreshRateMode
@@ -140,7 +141,7 @@ class GmhBroadcastReceivers(private val appCtx: Context,
             ACTION_POWER_SAVE_MODE_CHANGED -> {
                 isPowerSaveMode.set(UtilsDeviceInfoSt.instance(appCtx).isPowerSavingsMode())
                 if (ignorePowerModeChange.getAndSet(false) || !hasWriteSecureSetPerm) return
-                if (!isScreenOn.get() && isPowerSaveMode.get() == true){
+                if (!isScreenOn.get() && isPowerSaveMode.get() == true && keepModeOnPowerSaving){
                     triggerPsmHandlerOnScreenOn = true
                 }
                 UtilsPrefsGmhSt.instance(appCtx).gmhPrefPsmIsOffCache = isPowerSaveMode.get() != true
