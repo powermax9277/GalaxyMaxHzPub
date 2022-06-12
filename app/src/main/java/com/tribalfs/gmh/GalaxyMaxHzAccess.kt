@@ -23,6 +23,7 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.os.PowerManager.ACTION_POWER_SAVE_MODE_CHANGED
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
@@ -198,7 +199,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                     disablePsm.set(false)
 
                     //doAdaptiveJob?.cancel()
-                    switchDownRunnable?.apply {
+                    switchDownRunnable.apply {
                         mHandler.removeCallbacks(this)
                     }
 
@@ -897,7 +898,9 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     }
 
     private fun doAdaptive() {
-        mUtilsRefreshRate.setPeakRefreshRate(prrActive.get()!!)
+        if (Settings.System.getString(contentResolver, PEAK_REFRESH_RATE)?.toInt() != prrActive.get()!!) {
+            mUtilsRefreshRate.setPeakRefreshRate(prrActive.get()!!)
+        }
         mHandler.removeCallbacks(switchDownRunnable)
         if (applyAdaptiveMod.get()!! && keepAdaptiveMod) {
             mHandler.postDelayed(
@@ -1042,7 +1045,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         try {
             disableNetworkCallback()
         }catch (_: Exception){}
-        switchDownRunnable?.apply {
+        switchDownRunnable.apply {
             mHandler.removeCallbacks(this)
         }
         masterJob.cancel()
