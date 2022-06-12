@@ -24,6 +24,9 @@ android {
         versionCode 168
         versionName "7.14.55"
         setProperty("archivesBaseName", "galaxy_max_hz_v${versionName}")
+
+        resConfigs "ca", "en", "cs", "de", "el", "es", "fr", "hi", "it", "ja-rJP", "nl", "pt", "ru", "sv", "tr", "vi", "zh-rCN", "zh-rHK", "zh-rSG", "zh-rTW"
+
     }
 
     buildTypes {
