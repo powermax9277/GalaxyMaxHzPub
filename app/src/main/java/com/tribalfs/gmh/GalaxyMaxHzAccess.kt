@@ -898,7 +898,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     }
 
     private fun doAdaptive() {
-        if (Settings.System.getString(contentResolver, PEAK_REFRESH_RATE)?.toInt() != prrActive.get()!!) {
+        if (Settings.System.getString(contentResolver, PEAK_REFRESH_RATE)?.toIntOrNull() != prrActive.get()!!) {
             mUtilsRefreshRate.setPeakRefreshRate(prrActive.get()!!)
         }
         mHandler.removeCallbacks(switchDownRunnable)
