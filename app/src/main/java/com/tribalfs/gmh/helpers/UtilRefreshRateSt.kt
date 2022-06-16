@@ -665,6 +665,7 @@ class UtilRefreshRateSt private constructor (val appCtx: Context) {
                     "Error! ${appCtx.getString(R.string.enable_write_settings)}",
                     Toast.LENGTH_SHORT
                 ).show()
+               cancel()
             }
         }
     }

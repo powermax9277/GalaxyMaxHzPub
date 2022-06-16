@@ -623,7 +623,6 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                     return
                 }
 
-
                 if (isPowerSaveMode.get() == true && !confirmHasPipPermission()){
                     mBinding.chStandard.isChecked = true
                     return
@@ -1128,13 +1127,11 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
 
     override fun onResume() {
         super.onResume()
-        // Log.d(TAG, "onResume() called")
         mBinding.tvSoRefresh.text = getString(
             R.string.s_off_hz_inf,
             offScreenRefreshRate ?: "-- Hz"
         )
-        //viewModel.isValidAdFree.value?.let { loadBannerAd(it) }
-        //checkOffAppRefreshRateChange()
+
 
         if (!hasWriteSecureSetPerm) {
             mHandler =  Handler(Looper.getMainLooper())
