@@ -164,6 +164,7 @@ class GmhBroadcastReceivers(private val appCtx: Context,
             ACTION_SCREEN_ON -> {
 
                 handler.removeCallbacks(psmEnablerRunnable)
+                handler.removeCallbacks(autosyncDisablerRunnable)
 
                 scope.launch {
                     if (restoreSync.get()) ContentResolver.setMasterSyncAutomatically(true)
