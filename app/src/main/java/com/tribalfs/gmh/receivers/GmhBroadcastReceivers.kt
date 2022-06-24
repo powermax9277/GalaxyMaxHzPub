@@ -219,30 +219,6 @@ class GmhBroadcastReceivers(private val appCtx: Context,
                 if (psmOn) POWER_SAVING_ON else POWER_SAVING_OFF
             )
         }
-
-        //not working
-       /* if (turnOff5GOnPsm == true) {
-            val pnm = (Settings.Global.getString(appCtx.contentResolver, PREFERRED_NETWORK_MODE)
-                ?: "$PREF_NET_TYPE_LTE_GSM_WCDMA,$PREF_NET_TYPE_LTE_GSM_WCDMA").split(",")
-
-            val idxOf5G = pnm.indexOf(PREF_NET_TYPE_5G_LTE_GSM_WCDMA.toString())
-
-            if (idxOf5G != -1) {
-                val alt = if (pnm.size == 2){
-                    if (idxOf5G == 0) pnm[1] else pnm[0]
-                }else{
-                    PREF_NET_TYPE_LTE_GSM_WCDMA.toString()
-                }
-                if (hasWriteSecureSetPerm) {
-                    Settings.Global.putString(
-                        appCtx.contentResolver,
-                        "$PREFERRED_NETWORK_MODE${idxOf5G + 1}",
-                        (if (psmOn) alt else PREF_NET_TYPE_5G_LTE_GSM_WCDMA).toString()
-                    )
-                }
-            }
-
-        }*/
     }
 
 
