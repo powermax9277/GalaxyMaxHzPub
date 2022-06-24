@@ -127,7 +127,9 @@ private val useStockAdaptiveList = listOf(
     "com.sec.android.mimage.photoretouching",
     "com.tapnav.karma",
     "com.google.android.packageinstaller",
-    "com.instander"
+    "com.instander",
+    "messenger",
+    "whatsapp"
 )
 
 private val manualGameList = listOf(
