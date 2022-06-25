@@ -129,7 +129,8 @@ private val useStockAdaptiveList = listOf(
     "com.google.android.packageinstaller",
     "com.instander",
     "messenger",
-    "whatsapp"
+    "whatsapp",
+    "snapchat"
 )
 
 private val manualGameList = listOf(
