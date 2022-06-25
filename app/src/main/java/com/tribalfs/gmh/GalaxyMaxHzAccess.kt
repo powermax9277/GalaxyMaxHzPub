@@ -48,7 +48,6 @@ import com.tribalfs.gmh.helpers.CacheSettings.applyAdaptiveMod
 import com.tribalfs.gmh.helpers.CacheSettings.currentBrightness
 import com.tribalfs.gmh.helpers.CacheSettings.currentRefreshRateMode
 import com.tribalfs.gmh.helpers.CacheSettings.defaultKeyboardName
-import com.tribalfs.gmh.helpers.CacheSettings.disablePsm
 import com.tribalfs.gmh.helpers.CacheSettings.displayId
 import com.tribalfs.gmh.helpers.CacheSettings.hzNotifOn
 import com.tribalfs.gmh.helpers.CacheSettings.hzStatus
@@ -62,7 +61,6 @@ import com.tribalfs.gmh.helpers.CacheSettings.lowestHzCurMode
 import com.tribalfs.gmh.helpers.CacheSettings.lowestHzForAllMode
 import com.tribalfs.gmh.helpers.CacheSettings.lrrPref
 import com.tribalfs.gmh.helpers.CacheSettings.prrActive
-import com.tribalfs.gmh.helpers.CacheSettings.restoreSync
 import com.tribalfs.gmh.helpers.CacheSettings.screenOffRefreshRateMode
 import com.tribalfs.gmh.helpers.CacheSettings.sensorOnKey
 import com.tribalfs.gmh.helpers.CacheSettings.swithdownDelay
@@ -130,7 +128,8 @@ private val useStockAdaptiveList = listOf(
     "com.instander",
     "messenger",
     "whatsapp",
-    "snapchat"
+    "snapchat",
+    "reddit"
 )
 
 private val manualGameList = listOf(
@@ -199,13 +198,11 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
             when (intent) {
                 ACTION_SCREEN_OFF -> {
                     isScreenOn.set(false)
-                    restoreSync.set(false)
-                    disablePsm.set(false)
+
 
                     //doAdaptiveJob?.cancel()
-                    switchDownRunnable.apply {
-                        mHandler.removeCallbacks(this)
-                    }
+                    mHandler.removeCallbacks(switchDownRunnable)
+
 
                     // Workaround for AOD Bug on some device????
                     //mUtilsRefreshRate.clearPeakAndMinRefreshRate()
@@ -235,9 +232,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                 ACTION_SCREEN_ON ->{
                     isScreenOn.set(true)
 
-                    mHandler.removeCallbacks(autoSensorsOffRunnable)
-                    mHandler.removeCallbacks(forceLowestRunnable)
-                    mHandler.removeCallbacks(pauseHzRunnable)
+                    mHandler.removeCallbacksAndMessages(null)
 
                     launch {
                         val mHz = if (isSamsung){

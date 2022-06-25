@@ -39,6 +39,7 @@ import com.tribalfs.gmh.helpers.CacheSettings.turnOffAutoSensorsOff
 import com.tribalfs.gmh.helpers.DozeUpdater.mwInterval
 import com.tribalfs.gmh.helpers.DozeUpdater.updateDozValues
 import com.tribalfs.gmh.helpers.UtilCommon.closestValue
+import com.tribalfs.gmh.hertz.HzServiceHelperStn
 import com.tribalfs.gmh.profiles.ProfilesObj
 import com.tribalfs.gmh.resochanger.ResolutionChangeUtil
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt
@@ -50,6 +51,7 @@ import com.tribalfs.gmh.taskerplugin.TaskerKeys.min_hertz
 import com.tribalfs.gmh.taskerplugin.TaskerKeys.motion_smoothness_mode
 import com.tribalfs.gmh.taskerplugin.TaskerKeys.protect_battery
 import com.tribalfs.gmh.taskerplugin.TaskerKeys.quick_doze_mod
+import com.tribalfs.gmh.taskerplugin.TaskerKeys.switch_on_refresh_rate_monitor
 import kotlinx.coroutines.*
 import timber.log.Timber
 
@@ -155,6 +157,12 @@ private val infosForTasker = InfosFromMainApp().apply {
                     auto_sensors_off,
                     "Valid value: 0, 1, 2 or 3" +
                             "\n[for disable auto sensors off, enable auto sensors off, turn on tile only or turn off tile only, respectively]"
+                ),
+                InfoFromMainApp(
+                    "Protect Battery",
+                    switch_on_refresh_rate_monitor,
+                    "Valid value: true or false" +
+                            "\n[Switch on (true) or off (false) the refresh rate monitor.]"
                 ),
                 InfoFromMainApp(
                     "Protect Battery",
@@ -388,6 +396,12 @@ class DynamicInputRunner : TaskerPluginRunnerActionNoOutputOrInput() {
                                 "protect_battery",
                                 if ((info.value as String).toBoolean()) "1" else "0"
                             )
+                        }catch(_:Exception){}
+                    }
+
+                    switch_on_refresh_rate_monitor ->{
+                        try {
+                        HzServiceHelperStn.instance(appCtx).switchHz((info.value as String).toBoolean(), null ,null)
                         }catch(_:Exception){}
                     }
 

@@ -101,7 +101,7 @@ internal class UtilsPrefsGmhSt private constructor(val context: Context) {
         }
         set(prefMaxRefreshRate) = hzSharedPref.edit().putInt(PREF_MAX_REFRESH_RATE_PSM, prefMaxRefreshRate).apply()
 
-    var gmhPrefPsmIsOffCache: Boolean
+    var prefDisablePsmOnStart: Boolean
         get() = hzSharedPref.getBoolean(PSM_CACHE, false)
         set(cache) =   hzSharedPrefEditor.putBoolean(PSM_CACHE, cache).apply()
 

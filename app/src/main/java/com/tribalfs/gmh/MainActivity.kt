@@ -610,7 +610,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
                     }
 
                     keepModeOnPowerSaving = isOn
-                    UtilsPrefsGmhSt.instance(applicationContext).gmhPrefPsmIsOffCache = (isPowerSaveMode.get() != true)
+                    UtilsPrefsGmhSt.instance(applicationContext).prefDisablePsmOnStart = (isPowerSaveMode.get() != true)
                     UtilsPrefsGmhSt.instance(applicationContext).gmhPrefKmsOnPsm = isOn
 
                     PsmChangeHandler.instance(applicationContext).handle()

@@ -9,4 +9,6 @@ object TaskerKeys {
     internal const val change_res = "res"
     internal const val auto_sensors_off = "aso"
     internal const val protect_battery = "pbc"
+    internal const val switch_on_refresh_rate_monitor = "hzm"
+
 }

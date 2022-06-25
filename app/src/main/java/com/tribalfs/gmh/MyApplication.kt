@@ -84,6 +84,18 @@ class MyApplication : Application() {
         isOfficialAdaptive = UtilRefreshRateSt.instance(applicationContext).isAdaptiveSupportedUpd()
         /***Required before checkAccessibility call**/
 
+        isPowerSaveMode.set(
+            if (UtilsPrefsGmhSt.instance(applicationContext).prefDisablePsmOnStart) {
+                Timber.d("isPowerSaveMode set to ${!UtilsPrefsGmhSt.instance(applicationContext).prefDisablePsmOnStart}" )
+
+                !UtilsPrefsGmhSt.instance(applicationContext).prefDisablePsmOnStart
+
+            } else {
+                Timber.d("isPowerSaveMode set to ${UtilsDeviceInfoSt.instance(applicationContext).isPowerSavingsMode()}")
+                UtilsDeviceInfoSt.instance(applicationContext).isPowerSavingsMode()
+            }
+        )
+
         checkAccessibility(null, applicationContext)
 
         mContentResolver = applicationContext.contentResolver
@@ -156,13 +168,13 @@ class MyApplication : Application() {
     @OptIn(ExperimentalCoroutinesApi::class)
     private suspend fun cacheSettings() {
 
-        isPowerSaveMode.set(
-            if (UtilsPrefsGmhSt.instance(applicationContext).gmhPrefPsmIsOffCache)
-                !UtilsPrefsGmhSt.instance(applicationContext).gmhPrefPsmIsOffCache
+        /*isPowerSaveMode.set(
+            if (UtilsPrefsGmhSt.instance(applicationContext).prefDisablePsmOnStart)
+                !UtilsPrefsGmhSt.instance(applicationContext).prefDisablePsmOnStart
             else
                 UtilsDeviceInfoSt.instance(applicationContext).isPowerSavingsMode()
         )
-
+*/
         //turnOff5GOnPsm = UtilsDeviceInfoSt.instance(applicationContext).isTurnOff5GOnPsm()
 
         UtilPermSt.instance(applicationContext).apply{

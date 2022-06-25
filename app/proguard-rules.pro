@@ -30,6 +30,12 @@
     public static *** i(...);
     public static *** e(...);
 }
+-assumenosideeffects class timber.log.Timber {
+    public static *** d(...);
+    public static *** v(...);
+    public static *** i(...);
+    public static *** e(...);
+}
 #-overloadaggressively
 -allowaccessmodification
 -flattenpackagehierarchy

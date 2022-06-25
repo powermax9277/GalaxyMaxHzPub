@@ -34,6 +34,7 @@ import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Runnable
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 
 //private const val PREF_NET_TYPE_LTE_GSM_WCDMA    = 9 /* LTE, GSM/WCDMA */
@@ -81,8 +82,11 @@ class GmhBroadcastReceivers(private val appCtx: Context,
                         ContentResolver.setMasterSyncAutomatically(true)
                     }
                 }
+
                 scope.launch {
-                    if (UtilsPrefsGmhSt.instance(appCtx).gmhPrefPsmIsOffCache) {
+                    Timber.d("init UtilsPrefsGmhSt.instance(appCtx).prefDisablePsmOnStart ${UtilsPrefsGmhSt.instance(appCtx).prefDisablePsmOnStart}" )
+                    if (UtilsPrefsGmhSt.instance(appCtx).prefDisablePsmOnStart) {
+                        Timber.d("ACTION_SCREEN_ON setPowerSaving to false" )
                         //Not ignored
                             if (hasWriteSecureSetPerm) {
                                 Settings.Global.putString(
@@ -95,8 +99,10 @@ class GmhBroadcastReceivers(private val appCtx: Context,
                 }
             } else {
                 //Screen is off
+                Timber.d("init Screen is off  disablePsm.set( ${UtilsPrefsGmhSt.instance(appCtx).prefDisablePsmOnStart}" )
+
                 restoreSync.set(UtilsPrefsGmhSt.instance(appCtx).gmhPrefRestoreSyncIsOn)
-                disablePsm.set(UtilsPrefsGmhSt.instance(appCtx).gmhPrefPsmIsOffCache)
+                disablePsm.set(UtilsPrefsGmhSt.instance(appCtx).prefDisablePsmOnStart)
             }
         }
     }
@@ -117,7 +123,8 @@ class GmhBroadcastReceivers(private val appCtx: Context,
 
     private val psmEnablerRunnable: Runnable by lazy {
         Runnable {
-            if (isPowerSaveMode.get() == false) {
+            if (isPowerSaveMode.get() == false/* || UtilsPrefsGmhSt.instance(appCtx).prefDisablePsmOnStart*/) {
+                Timber.d("psmEnablerRunnable disablePsm set to${isPowerSaveMode.get() != true}" )
                 disablePsm.set(true)
                 setPowerSaving(true)
             }
@@ -144,11 +151,14 @@ class GmhBroadcastReceivers(private val appCtx: Context,
                 if (!isScreenOn.get() && isPowerSaveMode.get() == true && keepModeOnPowerSaving){
                     triggerPsmHandlerOnScreenOn = true
                 }
-                UtilsPrefsGmhSt.instance(appCtx).gmhPrefPsmIsOffCache = isPowerSaveMode.get() != true
+                UtilsPrefsGmhSt.instance(appCtx).prefDisablePsmOnStart = isPowerSaveMode.get() != true
                 PsmChangeHandler.instance(appCtx).handle()
             }
 
             ACTION_SCREEN_OFF -> {
+                restoreSync.set(false)
+                Timber.d("ACTION_SCREEN_OFF disablePsm set to${isPowerSaveMode.get() != true}" )
+                disablePsm.set(isPowerSaveMode.get() != true)
 
                 handler.postDelayed(captureRrRunnable, 5000)
 
@@ -162,12 +172,9 @@ class GmhBroadcastReceivers(private val appCtx: Context,
 
 
             ACTION_SCREEN_ON -> {
-
-                handler.removeCallbacks(psmEnablerRunnable)
-                handler.removeCallbacks(autosyncDisablerRunnable)
-
                 scope.launch {
                     if (restoreSync.get()) ContentResolver.setMasterSyncAutomatically(true)
+                    Timber.d("ACTION_SCREEN_ON setPowerSaving to false" )
                     if (disablePsm.get()) setPowerSaving(false)
 
                     if (netSpeedService == null && UtilsPrefsGmhSt.instance(appCtx).gmhPrefNetSpeedIsOn) {
