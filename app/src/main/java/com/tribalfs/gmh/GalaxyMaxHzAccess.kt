@@ -126,6 +126,7 @@ private val useStockAdaptiveList = listOf(
     "com.tapnav.karma",
     "com.google.android.packageinstaller",
     "com.instander",
+    "instagram",
     "messenger",
     "whatsapp",
     "snapchat",
