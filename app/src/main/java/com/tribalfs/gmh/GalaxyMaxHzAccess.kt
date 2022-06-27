@@ -146,7 +146,8 @@ private val manualGameList = listOf(
     "com.samsung.android.app.notes",
     "com.epicgames",
     "org.jjcfbgzs",
-    "com.happyelements"/*,
+    "com.happyelements",
+    "com.sec.penup"/*
     "com.tencent.tmgp"*/
 )
 
