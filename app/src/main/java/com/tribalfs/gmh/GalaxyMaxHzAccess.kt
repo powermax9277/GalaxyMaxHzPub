@@ -147,7 +147,8 @@ private val manualGameList = listOf(
     "com.epicgames",
     "org.jjcfbgzs",
     "com.happyelements",
-    "com.sec.penup"/*
+    "com.sec.penup",
+    "sketchbook"/*
     "com.tencent.tmgp"*/
 )
 
