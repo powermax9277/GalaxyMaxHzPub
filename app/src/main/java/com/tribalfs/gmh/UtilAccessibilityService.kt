@@ -52,7 +52,7 @@ object UtilAccessibilityService {
                         )
 
                         if (add) {
-                            delay(1800)
+                            delay(2000)
                             //needed as first call above will set this to false
                             ignoreAccessibilityChange = true
                             Settings.Secure.putString(
