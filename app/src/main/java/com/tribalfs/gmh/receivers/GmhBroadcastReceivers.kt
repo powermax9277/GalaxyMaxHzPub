@@ -217,9 +217,8 @@ class GmhBroadcastReceivers(private val appCtx: Context,
     @Synchronized
     private fun setPowerSaving(psmOn: Boolean){
 
-        ignorePowerModeChange.set(true)
-
         if (hasWriteSecureSetPerm) {
+            ignorePowerModeChange.set(true)
             Settings.Global.putString(
                 appCtx.contentResolver,
                 POWER_SAVING_MODE,
