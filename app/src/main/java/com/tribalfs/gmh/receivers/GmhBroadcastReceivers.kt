@@ -42,11 +42,11 @@ import timber.log.Timber
 
 
 class GmhBroadcastReceivers(private val appCtx: Context,
-                                 private val gmhBroadcastCallback: GmhBroadcastCallback,
-                                 private val scope: CoroutineScope,
-                                 private val handler: Handler): BroadcastReceiver() {
+                            private val gmhBroadcastCallback: GmhBroadcastCallback,
+                            private val scope: CoroutineScope,
+                            private val handler: Handler): BroadcastReceiver() {
 
-   // private val handler by lazy { Handler(Looper.getMainLooper()) }
+    // private val handler by lazy { Handler(Looper.getMainLooper()) }
     private val connectivityManager by lazy { appCtx.getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager}
     companion object {
         var triggerPsmHandlerOnScreenOn = false
@@ -88,13 +88,13 @@ class GmhBroadcastReceivers(private val appCtx: Context,
                     if (UtilsPrefsGmhSt.instance(appCtx).prefDisablePsmOnStart) {
                         Timber.d("ACTION_SCREEN_ON setPowerSaving to false" )
                         //Not ignored
-                            if (hasWriteSecureSetPerm) {
-                                Settings.Global.putString(
-                                    appCtx.contentResolver,
-                                    POWER_SAVING_MODE,
-                                    POWER_SAVING_OFF
-                                )
-                            }
+                        if (hasWriteSecureSetPerm) {
+                            Settings.Global.putString(
+                                appCtx.contentResolver,
+                                POWER_SAVING_MODE,
+                                POWER_SAVING_OFF
+                            )
+                        }
                     }
                 }
             } else {
@@ -146,7 +146,9 @@ class GmhBroadcastReceivers(private val appCtx: Context,
 
         when (p1.action) {
             ACTION_POWER_SAVE_MODE_CHANGED -> {
+
                 isPowerSaveMode.set(UtilsDeviceInfoSt.instance(appCtx).isPowerSavingsMode())
+
                 if (ignorePowerModeChange.getAndSet(false) || !hasWriteSecureSetPerm) return
                 if (!isScreenOn.get() && isPowerSaveMode.get() == true && keepModeOnPowerSaving){
                     triggerPsmHandlerOnScreenOn = true
@@ -157,7 +159,7 @@ class GmhBroadcastReceivers(private val appCtx: Context,
 
             ACTION_SCREEN_OFF -> {
                 restoreSync.set(false)
-                Timber.d("ACTION_SCREEN_OFF disablePsm set to${isPowerSaveMode.get() != true}" )
+
                 disablePsm.set(isPowerSaveMode.get() != true)
 
                 handler.postDelayed(captureRrRunnable, 5000)
@@ -174,7 +176,7 @@ class GmhBroadcastReceivers(private val appCtx: Context,
             ACTION_SCREEN_ON -> {
                 scope.launch {
                     if (restoreSync.get()) ContentResolver.setMasterSyncAutomatically(true)
-                    Timber.d("ACTION_SCREEN_ON setPowerSaving to false" )
+
                     if (disablePsm.get()) setPowerSaving(false)
 
                     if (netSpeedService == null && UtilsPrefsGmhSt.instance(appCtx).gmhPrefNetSpeedIsOn) {
@@ -201,22 +203,22 @@ class GmhBroadcastReceivers(private val appCtx: Context,
 
 
     private fun isInternetConnected(): Boolean {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                if (connectivityManager.activeNetwork != null && connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork) != null) {
-                    return  true
-                }
-            } else {
-                @Suppress("DEPRECATION")
-                if (connectivityManager.activeNetworkInfo != null && connectivityManager.activeNetworkInfo!!.isConnectedOrConnecting) {
-                    return true
-                }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (connectivityManager.activeNetwork != null && connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork) != null) {
+                return  true
             }
+        } else {
+            @Suppress("DEPRECATION")
+            if (connectivityManager.activeNetworkInfo != null && connectivityManager.activeNetworkInfo!!.isConnectedOrConnecting) {
+                return true
+            }
+        }
         return false
     }
 
     @Synchronized
     private fun setPowerSaving(psmOn: Boolean){
-
+        if (isPowerSaveMode.get() == psmOn) return
         if (hasWriteSecureSetPerm) {
             ignorePowerModeChange.set(true)
             Settings.Global.putString(

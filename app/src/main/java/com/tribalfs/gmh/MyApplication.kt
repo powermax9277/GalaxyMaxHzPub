@@ -86,12 +86,8 @@ class MyApplication : Application() {
 
         isPowerSaveMode.set(
             if (UtilsPrefsGmhSt.instance(applicationContext).prefDisablePsmOnStart) {
-                Timber.d("isPowerSaveMode set to ${!UtilsPrefsGmhSt.instance(applicationContext).prefDisablePsmOnStart}" )
-
                 !UtilsPrefsGmhSt.instance(applicationContext).prefDisablePsmOnStart
-
             } else {
-                Timber.d("isPowerSaveMode set to ${UtilsDeviceInfoSt.instance(applicationContext).isPowerSavingsMode()}")
                 UtilsDeviceInfoSt.instance(applicationContext).isPowerSavingsMode()
             }
         )
