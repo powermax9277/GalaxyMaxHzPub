@@ -150,8 +150,11 @@ class GmhBroadcastReceivers(private val appCtx: Context,
                 isPowerSaveMode.set(UtilsDeviceInfoSt.instance(appCtx).isPowerSavingsMode())
 
                 if (ignorePowerModeChange.getAndSet(false) || !hasWriteSecureSetPerm) return
-                if (!isScreenOn.get() && isPowerSaveMode.get() == true && keepModeOnPowerSaving){
-                    triggerPsmHandlerOnScreenOn = true
+                if (!isScreenOn.get() && isPowerSaveMode.get() == true) {
+                    disablePsm.set(false)
+                    if (keepModeOnPowerSaving) {
+                        triggerPsmHandlerOnScreenOn = true
+                    }
                 }
                 UtilsPrefsGmhSt.instance(appCtx).prefDisablePsmOnStart = isPowerSaveMode.get() != true
                 PsmChangeHandler.instance(appCtx).handle()
