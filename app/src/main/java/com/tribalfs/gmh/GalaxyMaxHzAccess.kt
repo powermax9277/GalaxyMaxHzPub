@@ -179,7 +179,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
     private val mNotificationContentView by lazy { RemoteViews(applicationContext.packageName, R.layout.hz_notification) }
     private val mNotifIcon by lazy{ UtilNotifIcon() }
     private var mTransfyHzJob: Job? = null
-   // private var mPauseHzJob: Job? = null
+    // private var mPauseHzJob: Job? = null
 
     private lateinit var autoSensorsOffRunnable: Runnable
     private lateinit var forceLowestRunnable: Runnable
@@ -503,9 +503,9 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         }
 
         pauseHzRunnable = Runnable {
-                if (!isScreenOn.get()) {
-                    pauseHz()
-                }
+            if (!isScreenOn.get()) {
+                pauseHz()
+            }
         }
 
     }
@@ -682,26 +682,24 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
             hznotificationBuilder?.apply {
                 setSmallIcon(mNotifIcon.getIcon(hzStr, "Hz"))
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                    setCustomContentView(
-                        RemoteViews(mNotificationContentView).apply {
-                            setTextViewText(R.id.tvHz,
-                                "${
-                                    when (currentRefreshRateMode.get()){
-                                        REFRESH_RATE_MODE_SEAMLESS ->{
-                                            getString(R.string.adp_mode)+ ": " + lrrPref.get()+"-"+prrActive.get()
-                                        }
-                                        REFRESH_RATE_MODE_ALWAYS ->{
-                                            getString(R.string.high_mode)+":"+prrActive.get()
-                                        }
-                                        else ->{
-                                            getString(R.string.std_mode)
-                                        } }
-                                }  |  ${
-                                    getString(R.string.cur_rr_h, hzStr)
-                                }"
-                            )
-                        }
-                    )
+                    mNotificationContentView.apply {
+                        setTextViewText(R.id.tvHz,
+                            "${
+                                when (currentRefreshRateMode.get()){
+                                    REFRESH_RATE_MODE_SEAMLESS ->{
+                                        getString(R.string.adp_mode)+ ": " + lrrPref.get()+"-"+prrActive.get()
+                                    }
+                                    REFRESH_RATE_MODE_ALWAYS ->{
+                                        getString(R.string.high_mode)+":"+prrActive.get()
+                                    }
+                                    else ->{
+                                        getString(R.string.std_mode)
+                                    } }
+                            }  |  ${
+                                getString(R.string.cur_rr_h, hzStr)
+                            }"
+                        )
+                    }
                 }
                 ignoreSysUI = false
                 notificationManagerCompat.notify(NOTIFICATION_ID_HZ, build())
@@ -903,22 +901,22 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         }
     }
 
- /*   private fun doAdaptive() {
-        //More efficient to check first
-        if (mUtilsRefreshRate.getPeakRefreshRateFromSettings() != prrActive.get()!!) {
-            mUtilsRefreshRate.setPeakRefreshRate(prrActive.get()!!)
-        }
-        doAdaptiveJob?.cancel()
-        doAdaptiveJob = launch(Dispatchers.IO) {
-            delay(swithdownDelay)
-            if (applyAdaptiveMod.get()!! && keepAdaptiveMod) {
-                mUtilsRefreshRate.setPeakRefreshRate(currentMinHz)
-            }
-            //For efficiency of cancel()
-            doAdaptiveJob = null
-        }
-    }
-*/
+    /*   private fun doAdaptive() {
+           //More efficient to check first
+           if (mUtilsRefreshRate.getPeakRefreshRateFromSettings() != prrActive.get()!!) {
+               mUtilsRefreshRate.setPeakRefreshRate(prrActive.get()!!)
+           }
+           doAdaptiveJob?.cancel()
+           doAdaptiveJob = launch(Dispatchers.IO) {
+               delay(swithdownDelay)
+               if (applyAdaptiveMod.get()!! && keepAdaptiveMod) {
+                   mUtilsRefreshRate.setPeakRefreshRate(currentMinHz)
+               }
+               //For efficiency of cancel()
+               doAdaptiveJob = null
+           }
+       }
+   */
 
 
     private var windowsScannerJob: Job? = null

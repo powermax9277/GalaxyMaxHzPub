@@ -269,7 +269,7 @@ class NetSpeedService : Service(), CoroutineScope {
             }
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                setCustomContentView(RemoteViews(mNotificationContentView).apply {
+                mNotificationContentView.apply {
                     setTextViewText(
                         R.id.notificationTextDl,
                         format(
@@ -298,7 +298,6 @@ class NetSpeedService : Service(), CoroutineScope {
                         )
                     )
                 }
-                )
             }
 
             notificationManagerCompat.notify(

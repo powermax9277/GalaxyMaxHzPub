@@ -95,7 +95,7 @@ internal class HzService : Service(), CoroutineScope{
         }
     }}
 
-   // private val displayListener by lazy { MyDisplayListener(mDisplayChangeCallback)}
+    // private val displayListener by lazy { MyDisplayListener(mDisplayChangeCallback)}
 
     private val stageView by lazy {LayoutInflater.from(application).inflate(
         R.layout.hz_overlay, RelativeLayout(application)
@@ -268,11 +268,9 @@ internal class HzService : Service(), CoroutineScope{
                     setSmallIcon(mNotifIcon.getIcon(hzStr, "Hz"))
                 }
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                    setCustomContentView(
-                        RemoteViews(mNotificationContentView).apply {
-                            setTextViewText(R.id.tvHz, getString(R.string.cur_rr_h, hzStr))
-                        }
-                    )
+                    mNotificationContentView.apply {
+                        setTextViewText(R.id.tvHz, getString(R.string.cur_rr_h, hzStr))
+                    }
                 }
                 notificationManagerCompat.notify(
                     NOTIFICATION_ID_HZ,
