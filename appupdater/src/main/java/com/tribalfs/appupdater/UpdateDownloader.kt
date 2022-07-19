@@ -85,7 +85,7 @@ class UpdateDownloader(
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             val contentUri = FileProvider.getUriForFile(
                 context,
-                context.applicationContext.packageName + PROVIDER_PATH,
+                context.packageName + PROVIDER_PATH,
                 File(destination)
             )
             install.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
