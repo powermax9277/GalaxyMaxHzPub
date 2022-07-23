@@ -79,8 +79,8 @@ android {
 
 
 dependencies {
-    var lifecycle_version = "2.4.1"
-    var activity_ktx_version = "1.4.0"
+    var lifecycle_version = "2.5.0"
+    var activity_ktx_version = "1.5.0"
     var constraint_layout_version = "2.1.4"
     var volley_version = "1.2.1"
     var acraVersion = '5.9.3'
@@ -114,7 +114,7 @@ dependencies {
     //implementation "ch.acra:acra-toast:$acraVersion"
     implementation "ch.acra:acra-http:$acraVersion"
 
-    implementation 'com.joaomgcd:taskerpluginlibrary:0.4.1'
+    implementation 'com.joaomgcd:taskerpluginlibrary:0.4.2'
 
     implementation 'eu.chainfire:libsuperuser:1.1.0+'
     //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.8.1'

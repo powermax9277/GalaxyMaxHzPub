@@ -76,7 +76,15 @@ class DynamicInputHelper(config: TaskerPluginConfig<Unit>) : TaskerPluginConfigH
 class DynamicInputActivity : ActivityConfigTaskerNoOutputOrInput<DynamicInputRunner, DynamicInputHelper>() {
     override fun getNewHelper(config: TaskerPluginConfig<Unit>) = DynamicInputHelper(config)
     override val inputForTasker = TaskerInput(Unit, TaskerInputInfos().apply {
-        infosForTasker.forEach { add(TaskerInputInfo(it.key,it.name,it.desc,true, "%${it.key}")) }
+        infosForTasker.forEach { add(
+            TaskerInputInfo(
+                it.key,
+                it.name,
+                it.desc,
+                true,
+                "%${it.key}")
+        )
+        }
     })
 }
 
@@ -268,8 +276,6 @@ class DynamicInputRunner : TaskerPluginRunnerActionNoOutputOrInput() {
                             // success = false
                         }
                     }
-
-
 
 
                     quick_doze_mod -> {
