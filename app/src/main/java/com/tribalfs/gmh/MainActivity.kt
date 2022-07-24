@@ -362,12 +362,12 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
         }
     }
 
-
     private fun showAppearOnTopRequest(){
         if (SDK_INT >= VERSION_CODES.M) {
             startForResult.launch(getOverlaySettingIntent(this@MainActivity))
         }
     }
+
 
     @RequiresApi(VERSION_CODES.M)
     fun onClickView(v: View) {
