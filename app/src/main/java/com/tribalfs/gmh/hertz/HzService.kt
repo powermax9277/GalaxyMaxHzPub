@@ -268,9 +268,9 @@ internal class HzService : Service(), CoroutineScope{
                     setSmallIcon(mNotifIcon.getIcon(hzStr, "Hz"))
                 }
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                    mNotificationContentView.apply {
+                    setCustomContentView(RemoteViews(mNotificationContentView).apply {
                         setTextViewText(R.id.tvHz, getString(R.string.cur_rr_h, hzStr))
-                    }
+                    })
                 }
                 notificationManagerCompat.notify(
                     NOTIFICATION_ID_HZ,

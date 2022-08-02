@@ -13,7 +13,7 @@ android {
             storePassword 'Ge0ltp1986'
         }
     }
-    compileSdkVersion 31
+    compileSdkVersion 32
 
     defaultConfig {
 
@@ -21,7 +21,7 @@ android {
         minSdkVersion 22
         //noinspection ExpiredTargetSdkVersion
         targetSdkVersion 22
-        versionCode 178
+        versionCode 179
         versionName "7.14.58"
         setProperty("archivesBaseName", "galaxy_max_hz_v${versionName}")
 

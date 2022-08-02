@@ -23,7 +23,6 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.os.PowerManager.ACTION_POWER_SAVE_MODE_CHANGED
-import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
@@ -293,7 +292,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
         override fun onDisplayRemoved(displayId: Int) {}
         override fun onDisplayChanged(displayId: Int) {
             launch(Dispatchers.Main) {
-                val curHz = mDisplay.refreshRate.toInt()
+                val curHz = mDisplay.mode.refreshRate.toInt()
                 if (prevHz != curHz) {
                     prevHz = curHz
                     updateRefreshRateViews(curHz)
@@ -682,7 +681,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
             hznotificationBuilder?.apply {
                 setSmallIcon(mNotifIcon.getIcon(hzStr, "Hz"))
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                    mNotificationContentView.apply {
+                    setCustomContentView(RemoteViews(mNotificationContentView).apply {
                         setTextViewText(R.id.tvHz,
                             "${
                                 when (currentRefreshRateMode.get()){
@@ -700,6 +699,7 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
                             }"
                         )
                     }
+                    )
                 }
                 ignoreSysUI = false
                 notificationManagerCompat.notify(NOTIFICATION_ID_HZ, build())
@@ -890,10 +890,10 @@ class GalaxyMaxHzAccess : AccessibilityService(), CoroutineScope {
 
     private fun doAdaptive() {
         //Keep toIntOrNull() to handling decimal
-        if (Settings.System.getString(contentResolver, PEAK_REFRESH_RATE)?.toIntOrNull() != prrActive.get()!!) {
-            mUtilsRefreshRate.setPeakRefreshRate(prrActive.get()!!)
-        }
         mHandler.removeCallbacks(switchDownRunnable)
+        //if (Settings.System.getString(contentResolver, PEAK_REFRESH_RATE)?.toIntOrNull() != prrActive.get()!!) {
+        mUtilsRefreshRate.setPeakRefreshRate(prrActive.get()!!)
+        //}
         if (applyAdaptiveMod.get()!! && keepAdaptiveMod) {
             mHandler.postDelayed(
                 switchDownRunnable, swithdownDelay

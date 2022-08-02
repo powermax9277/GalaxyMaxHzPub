@@ -140,9 +140,9 @@ class NetSpeedService : Service(), CoroutineScope {
         }
     }
 
-    
+
     private fun setupScreenStatusReceiver(){
-         IntentFilter().let {
+        IntentFilter().let {
             it.addAction(Intent.ACTION_SCREEN_OFF)
             it.addAction(Intent.ACTION_SCREEN_ON)
             it.priority = 999
@@ -269,7 +269,8 @@ class NetSpeedService : Service(), CoroutineScope {
             }
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                mNotificationContentView.apply {
+                setCustomContentView(RemoteViews(
+                    mNotificationContentView).apply {
                     setTextViewText(
                         R.id.notificationTextDl,
                         format(
@@ -298,6 +299,7 @@ class NetSpeedService : Service(), CoroutineScope {
                         )
                     )
                 }
+                )
             }
 
             notificationManagerCompat.notify(
