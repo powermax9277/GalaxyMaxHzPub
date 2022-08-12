@@ -36,6 +36,7 @@ import com.tribalfs.gmh.profiles.ModelNumbers.S22U_D
 import com.tribalfs.gmh.profiles.ModelNumbers.S22U_JP
 import com.tribalfs.gmh.profiles.ModelNumbers.S22_D
 import com.tribalfs.gmh.profiles.ModelNumbers.S22_JP
+import com.tribalfs.gmh.profiles.ModelNumbers.ZF4
 import com.tribalfs.gmh.resochanger.SizeDensity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -91,7 +92,7 @@ class UtilsDeviceInfoSt private constructor(val appCtx: Context) {
     internal val regularMinHz: Int
         get() {
             return when (deviceModel) {
-                S22U, S22U_JP, S22U_D, S22P, S22, S22_JP, S22_D -> 24
+                S22U, S22U_JP, S22U_D, S22P, S22, S22_JP, S22_D, ZF4 -> 24
                 else -> SIXTY_HZ
             }
         }

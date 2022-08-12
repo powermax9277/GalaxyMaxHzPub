@@ -110,7 +110,8 @@ internal object PredefinedProfiles {
             TS8U ->{
                 raw = context.resources.openRawResource(R.raw.x2960_1848_60_120)
             }
-            
+
+
             else -> return null
         }
 
