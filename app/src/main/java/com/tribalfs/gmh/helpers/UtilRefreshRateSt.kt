@@ -59,6 +59,7 @@ import com.tribalfs.gmh.profiles.ModelNumbers.TS8
 import com.tribalfs.gmh.profiles.ModelNumbers.TS8P
 import com.tribalfs.gmh.profiles.ModelNumbers.TS8U
 import com.tribalfs.gmh.profiles.ModelNumbers.ZF3
+import com.tribalfs.gmh.profiles.ModelNumbers.ZF4
 import com.tribalfs.gmh.profiles.ModelNumbers.ZFp3
 import com.tribalfs.gmh.profiles.ModelNumbers.adaptiveModelsLocal
 import com.tribalfs.gmh.profiles.ModelNumbers.fordableWithHrrExternal
@@ -84,7 +85,7 @@ class UtilRefreshRateSt private constructor (val appCtx: Context) {
             return when (UtilsDeviceInfoSt.instance(appCtx).deviceModel) {
                 S20FE5G, S20FE, S21_U, TS7P, TS7W, TS7L, TS75G, TS7LW,
                 ZF3, ZFp3, S22, S22_JP, S22P, S22U, S22U_JP, S22U_D,
-                S21FE, TS8, TS8P, TS8U,S22_D -> 120f
+                S21FE, TS8, TS8P, TS8U,S22_D, ZF4 -> 120f
                 else -> null
             }
         }
@@ -144,7 +145,7 @@ class UtilRefreshRateSt private constructor (val appCtx: Context) {
                 currentRefreshRateMode.set(it) //should be after updating the variables above
                 screenOffRefreshRateMode =
                     if (UtilsPrefsGmhSt.instance(appCtx).gmhPrefForceLowestSoIsOn
-                        && modesWithLowestHz?.size ?: 0 > 0
+                        && (modesWithLowestHz?.size ?: 0) > 0
                         && !modesWithLowestHz!!.contains(it)
                     ) {
                         modesWithLowestHz!![0]
