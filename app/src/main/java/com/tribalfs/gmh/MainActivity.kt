@@ -57,6 +57,7 @@ import com.tribalfs.gmh.BuildConfig.VERSION_NAME
 import com.tribalfs.gmh.GalaxyMaxHzAccess.Companion.gmhAccessInstance
 import com.tribalfs.gmh.MyApplication.Companion.appScopeIO
 import com.tribalfs.gmh.MyApplication.Companion.applicationName
+import com.tribalfs.gmh.MyApplication.Companion.getBaseUrl
 import com.tribalfs.gmh.UtilAccessibilityService.allowAccessibility
 import com.tribalfs.gmh.callbacks.LvlSbMsgCallback
 import com.tribalfs.gmh.databinding.ActivityMainBinding
@@ -117,7 +118,7 @@ import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 import kotlin.system.exitProcess
 
-internal const val GMH_WEB_APP ="https://script.google.com/macros/s/AKfycbzlRKh4-YXyXLufXZfDqAs1xJEJK7BF8zmhEDGDpbP1luu97trI/exec"
+//internal const val GMH_WEB_APP ="https://script.google.com/macros/s/AKfycbzlRKh4-YXyXLufXZfDqAs1xJEJK7BF8zmhEDGDpbP1luu97trI/exec"
 internal const val ACTION_HIDE_MAIN_ACTIVITY = "$APPLICATION_ID.ACTION_HIDE"
 internal const val ACTION_CLOSE_MAIN_ACTIVITY = "$APPLICATION_ID.ACTION_CLOSE"
 internal const val KEY_JSON_LIC_TYPE = "0x11"
@@ -1234,7 +1235,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
         }
         // Log.d(TAG, "MainActivity: checkUpdate called")
         with(AppUpdaterLite(this)) {
-            setUpdateJSON("$GMH_WEB_APP?Rq=$REQUEST_LATEST_UPDATE")
+            setUpdateJSON("${getBaseUrl()}?Rq=$REQUEST_LATEST_UPDATE")
             setUpdateForce(force)
             if (force) {
                 setCallback(
@@ -1756,9 +1757,15 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
     }
 
 
-
-    //@RequiresApi(VERSION_CODES.M)
     fun syncLicense(silent: Boolean, trial: Boolean) = launch {
+        if (SDK_INT >= VERSION_CODES.M) {
+            if (!applicationContext.isOnline()) {
+                if (!silent) showSbMsg(R.string.cie, null, null, null)
+                return@launch
+            }
+        }
+
+
         if (!silent) showLoading(true)
 
         val resultJson = mUtilsRefreshRate.mSyncer.syncLicense(mUtilsPrefsAct.gmhPrefActivationCode?:"", trial)
@@ -1834,7 +1841,7 @@ class MainActivity : AppCompatActivity()/*, OnUserEarnedRewardListener, MyClickH
         } else {
             //  Log.d(TAG, "License check server response Error")
             showLoading(false)
-            if (!silent) showSbMsg(R.string.cie, null, null, null)
+            if (!silent) showSbMsg(R.string.server_oor, null, null, null)
         }
     }
 

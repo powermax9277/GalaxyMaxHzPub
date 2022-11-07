@@ -4,17 +4,19 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.provider.Settings
 import android.provider.Settings.Secure.ANDROID_ID
+import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.tribalfs.gmh.BuildConfig
-import com.tribalfs.gmh.GMH_WEB_APP
+import com.tribalfs.gmh.MyApplication.Companion.getBaseUrl
 import com.tribalfs.gmh.helpers.PackageInfo
 import com.tribalfs.gmh.helpers.UtilsDeviceInfoSt
 import com.tribalfs.gmh.sharedprefs.UtilsPrefsGmhSt
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
+import timber.log.Timber
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -60,7 +62,7 @@ internal class Syncer(private val context: Context) {
             put(KEY_JSON_APP_VERSION_CODE, BuildConfig.VERSION_CODE)
         }
 
-        val result = postDataVolley(REQUEST_DISPLAY_MODES_FETCH, GMH_WEB_APP, jsonBody)
+        val result = postDataVolley(REQUEST_DISPLAY_MODES_FETCH, getBaseUrl(), jsonBody)
         return@withContext if (result != null && result[KEY_JSON_RESULT] == JSON_RESPONSE_OK && result[KEY_JSON_REFRESH_RATES_PROFILE] != "") {
             result
         } else {
@@ -77,7 +79,7 @@ internal class Syncer(private val context: Context) {
             put(KEY_JSON_REFRESH_RATES_PROFILE, UtilsPrefsGmhSt.instance(context.applicationContext).gmhPrefDisplayModesObjectInJson)
         }
 
-        val result = postDataVolley(REQUEST_DISPLAY_MODES_POST, GMH_WEB_APP, jsonBody)
+        val result = postDataVolley(REQUEST_DISPLAY_MODES_POST, getBaseUrl(), jsonBody)
         return@withContext if (result != null && result[KEY_JSON_RESULT] == JSON_RESPONSE_OK) {
             result
         } else {
@@ -95,7 +97,12 @@ internal class Syncer(private val context: Context) {
             put(KEY_JSON_SIGNATURE, PackageInfo.getSignatureString(context.applicationContext))
             put(KEY_JSON_TRIAL, trial)
         }
-        val result = postDataVolley(REQUEST_VERIFY_LICENSE, GMH_WEB_APP, jsonObject)
+        Timber.d("jsonObject:$jsonObject")
+
+        val result = postDataVolley(REQUEST_VERIFY_LICENSE, getBaseUrl(), jsonObject)
+
+        Timber.d("result:$result")
+
         return@withContext if (result != null && result[KEY_JSON_RESULT] == JSON_RESPONSE_OK) {
             result
         } else {
@@ -110,7 +117,7 @@ internal class Syncer(private val context: Context) {
             put(KEY_JSON_MODEL_NUMBER, UtilsDeviceInfoSt.instance(context.applicationContext).deviceModelVariant)
         }
 
-        val result = postDataVolley(REQUEST_BUY_LINK, GMH_WEB_APP, jsonBody)
+        val result = postDataVolley(REQUEST_BUY_LINK, getBaseUrl(), jsonBody)
         return@withContext if (result != null && result[KEY_JSON_RESULT] == JSON_RESPONSE_OK){
             result
         } else {
@@ -124,7 +131,7 @@ internal class Syncer(private val context: Context) {
             put(KEY_JSON_MODEL_NUMBER, UtilsDeviceInfoSt.instance(context.applicationContext).deviceModelVariant)
         }
 
-        val result = postDataVolley(REQUEST_HELP_URL, GMH_WEB_APP, jsonBody)
+        val result = postDataVolley(REQUEST_HELP_URL, getBaseUrl(), jsonBody)
         return@withContext if (result != null && result[KEY_JSON_RESULT] == JSON_RESPONSE_OK){
             result
         } else {
@@ -173,6 +180,7 @@ internal class Syncer(private val context: Context) {
             { _ ->
                 it.resume(null)
             }
+            jsonObjReq.retryPolicy = DefaultRetryPolicy(DefaultRetryPolicy.DEFAULT_TIMEOUT_MS * 5, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
             queue.add(jsonObjReq)
         } catch (_: Exception) {
             it.resume(null)

@@ -160,5 +160,6 @@
         <item quantity="other">Accessibility service is required for the following - turn these off first to disable accessibility: %s</item>
     </plurals>
     <string name="limit_tp">Limiteu la freqüència d\'actualització quan escriviu</string>
+    <string name="server_oor">El servidor remot està ocupat. Siusplau, intenta-ho més tard.</string>
 <!--    <string name="using_spay">SPay falla</string>-->
 </resources>

@@ -159,5 +159,6 @@
     <string name="no_access_notif">Disabling accessibility service will cause unexpected behavior for the following enabled feature(s): %s</string>
     <string name="aot_perm_inf">This app needs permission to appear on top in order to work properly. You can disable the notification by long-pressing it and turning off the toggle that will appear.</string>
     <string name="limit_tp">Limit refresh rate when typing</string>
+    <string name="server_oor">Remote server is busy. Please try again later.</string>
     <!--    <string name="using_spay">SPay is failing</string>-->
 </resources>

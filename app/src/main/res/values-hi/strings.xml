@@ -157,4 +157,5 @@
         <item quantity="other">Accessibility service is required for the following - turn these off first to disable accessibility: %s</item>
     </plurals>
     <string name="limit_tp">टाइप करते समय ताज़ा दर सीमित करें</string>
+    <string name="server_oor">रिमोट सर्वर व्यस्त है। बाद में पुन: प्रयास करें।</string>
 </resources>

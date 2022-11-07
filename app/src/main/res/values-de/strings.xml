@@ -111,4 +111,5 @@
     <string name="acces_req">Barrierefreiheitsdienst aktivieren</string>
     <string name="is_prem_ft">%s ist eine premium-funktion</string>
     <string name="limit_tp">Begrenzen sie die aktualisierungsrate während der eingabe</string>
+    <string name="server_oor">Remote-Server ist beschäftigt. Bitte versuchen Sie es später erneut.</string>
 </resources>

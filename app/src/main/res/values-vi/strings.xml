@@ -155,4 +155,5 @@
         <item quantity="other">Dịch vụ hỗ trợ tiếp cận là bắt buộc đối với những trường hợp sau - hãy tắt các dịch vụ này trước để tắt khả năng tiếp cận: %s</item>
     </plurals>
     <string name="limit_tp">Giới hạn tốc độ làm mới trong khi nhập</string>
+    <string name="server_oor">Máy chủ từ xa đang bận. Vui lòng thử lại sau.</string>
 </resources>

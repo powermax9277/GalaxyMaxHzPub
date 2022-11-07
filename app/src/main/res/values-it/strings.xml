@@ -111,4 +111,5 @@
     <string name="acces_req">Attiva Servizio di Accessibilità</string>
     <string name="is_prem_ft">%s è una funzionalità premium</string>
     <string name="limit_tp">Limita la frequenza di aggiornamento durante la digitazione</string>
+    <string name="server_oor">Il server remoto è occupato. Per favore riprova più tardi.</string>
 </resources>

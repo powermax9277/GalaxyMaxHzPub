@@ -142,4 +142,5 @@
     </plurals>
     <string name="no_access_notif">Erişilebilirlik hizmetini devre dışı bırakmak aşağıdaki özelliklerin düzgün çalışmamasına yol açabilir: %s</string>
     <string name="limit_tp">Yazarken yenileme hızını sınırlayın</string>
+    <string name="server_oor">Uzak sunucu meşgul. Lütfen daha sonra tekrar deneyin.</string>
 </resources>

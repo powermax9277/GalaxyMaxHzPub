@@ -116,4 +116,5 @@
 <!--    <string name="using_spay">SPay вылетает</string>-->
     <string name="no_access_notif">Отключение службы специальных возможностей приведет к непредвиденному поведению следующих включенных функций: %s</string>
     <string name="limit_tp">Ограничить частоту обновления при наборе текста</string>
+    <string name="server_oor">Удаленный сервер занят. Пожалуйста, попробуйте позже.</string>
 </resources>

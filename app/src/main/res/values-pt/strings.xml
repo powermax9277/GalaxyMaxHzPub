@@ -155,4 +155,5 @@
         <item quantity="other">Accessibility service is required for the following - turn these off first to disable accessibility: %s</item>
     </plurals>
     <string name="limit_tp">Limitar a atualização ao digitar</string>
+    <string name="server_oor">O servidor remoto está ocupado. Por favor, tente novamente mais tarde.</string>
 </resources>

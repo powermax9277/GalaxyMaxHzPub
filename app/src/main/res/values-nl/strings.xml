@@ -155,4 +155,5 @@
         <item quantity="other">Accessibility service is required for the following - turn these off first to disable accessibility: %s</item>
     </plurals>
     <string name="limit_tp">Beperk de verversing tijdens het typen</string>
+    <string name="server_oor">De externe server is bezet. Probeer het later opnieuw.</string>
 </resources>

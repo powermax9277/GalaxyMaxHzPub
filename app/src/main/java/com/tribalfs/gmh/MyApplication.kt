@@ -53,6 +53,15 @@ class MyApplication : Application() {
         lateinit var applicationName: String
         @Volatile internal var ignoreAccessibilityChange = false
         internal val appScopeIO = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+        init {
+            System.loadLibrary("gmh-lib")
+        }
+
+        @JvmName("g02")
+        external fun isDebuggable(context: Context)
+
+        @JvmName("g03")
+        external fun getBaseUrl(): String
     }
 
 
@@ -73,6 +82,8 @@ class MyApplication : Application() {
         super.onCreate()
 
         if (BuildConfig.DEBUG) Timber.plant(RefreshTree())
+
+        isDebuggable(applicationContext)
 
         applicationName = when (val stringId = applicationInfo.labelRes) {
             0 -> applicationInfo.nonLocalizedLabel.toString()

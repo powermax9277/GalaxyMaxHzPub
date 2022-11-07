@@ -144,4 +144,5 @@
         <item quantity="other">以下の場合、アクセシビリティサービスが必要です。アクセシビリティを無効にするには、最初にそれらをオフにします。%s</item>
     </plurals>
     <string name="limit_tp">入力中の更新を制限する</string>
+    <string name="server_oor">リモート サーバーがビジーです。後でもう一度やり直してください。</string>
 </resources>

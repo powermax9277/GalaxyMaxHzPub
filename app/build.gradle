@@ -25,7 +25,7 @@ android {
         versionName "7.14.58"
         setProperty("archivesBaseName", "galaxy_max_hz_v${versionName}")
 
-        resConfigs "ca", "en", "cs", "de", "el", "es", "fr", "hi", "it", "ja-rJP", "nl", "pt", "ru", "sv", "tr", "vi", "zh-rCN", "zh-rHK", "zh-rSG", "zh-rTW"
+        resConfigs "ca", "en", "cs", "de", "el", "es", "fr", "hi", "it", "ja-rJP", "nl", "pt", "ru", "sv", "tr", "vi", "zh-rCN", "zh-rHK"
 
     }
 
@@ -74,6 +74,12 @@ android {
         viewBinding true
     }
 
+    externalNativeBuild {
+        cmake {
+            path "CMakeLists.txt"
+            version "3.22.1"
+        }
+    }
 }
 
 

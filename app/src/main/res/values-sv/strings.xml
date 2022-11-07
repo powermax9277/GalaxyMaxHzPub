@@ -149,4 +149,5 @@
     </plurals>
     <string name="no_access_notif">Inaktivering av tillgänglighetstjänsten kan skapa problem för följande funktion(er): %s</string>
     <string name="limit_tp">Begränsa uppdateringsfrekvensen när du skriver</string>
+    <string name="server_oor">Fjärrservern är upptagen. Vänligen försök igen senare.</string>
 </resources>

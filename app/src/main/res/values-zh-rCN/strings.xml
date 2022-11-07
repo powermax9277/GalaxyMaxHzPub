@@ -130,4 +130,5 @@
         <item quantity="other">以下情況需要輔助功能服務 - 首先關閉這些功能以禁用輔助功能：%s</item>
     </plurals>
     <string name="limit_tp">打字时限制刷新率</string>
+    <string name="server_oor">远程服务器正忙。请稍后再试。</string>
 </resources>

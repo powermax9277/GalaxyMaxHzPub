@@ -164,4 +164,5 @@
         <item quantity="many">Accessibility service is required for the following - turn these off first to disable accessibility: %s</item>
     </plurals>
     <string name="limit_tp">Limiter le taux de rafraîchissement lors de l\'écriture</string>
+    <string name="server_oor">Le serveur distant est occupé. Veuillez réessayer plus tard.</string>
 </resources>
